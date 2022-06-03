@@ -1,0 +1,63 @@
+plugins {
+	id 'babric-loom' version '0.12-SNAPSHOT'
+	id 'maven-publish'
+}
+
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
+loom {
+	gluedMinecraftJar()
+	customMinecraftManifest.set("https://babric.github.io/manifest-polyfill/${minecraft_version}.json")
+}
+
+repositories {
+	maven {
+		name = 'Babric'
+		url = 'https://maven.glass-launcher.net/babric'
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "babric:barn:${project.yarn_mappings}"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	implementation "org.slf4j:slf4j-api:1.8.0-beta4"
+	implementation "org.apache.logging.log4j:log4j-slf4j18-impl:2.16.0"
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+
+	withSourcesJar()
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}" }
+	}
+	from("FORGE_LICENSE")
+}
+
+// configure the maven publication
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+
+	repositories {
+	}
+}
