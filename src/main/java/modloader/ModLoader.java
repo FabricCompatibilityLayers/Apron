@@ -440,7 +440,7 @@ public class ModLoader {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void AddSpawn(String entityName, int weightedProb, SpawnGroup spawnGroup, Biome... biomes) {
-		Class<? extends Entity> entityClass = EntityRegistry.STRING_ID_TO_CLASS.get(entityName);
+		Class<? extends Entity> entityClass = (Class<? extends Entity>) EntityRegistry.STRING_ID_TO_CLASS.get(entityName);
 		if (entityClass != null && LivingEntity.class.isAssignableFrom(entityClass)) {
 			AddSpawn((Class<? extends LivingEntity>) entityClass, weightedProb, spawnGroup, biomes);
 		}
@@ -971,7 +971,7 @@ public class ModLoader {
 	 * @param block
 	 * @param itemClass
 	 */
-	public static void RegisterBlock(Block block, Class<? extends Block> itemClass) {
+	public static void RegisterBlock(Block block, Class<? extends Item> itemClass) {
 		try {
 			if (block == null) {
 				throw new IllegalArgumentException("block parameter cannot be null.");
@@ -980,13 +980,13 @@ public class ModLoader {
 			List<Block> v1 = (List<Block>) field_blockList.get(null);
 			v1.add(block);
 			
-			Block item;
+			Item item;
 			int blockID = block.id;
 			if (itemClass != null) {
 				item = itemClass.getConstructor(Integer.TYPE).newInstance(blockID - 256);
 			}
 			else {
-				item = new Block(blockID - 256, Material.AIR);
+				item = new Item(blockID - 256);
 			}
 			if ((Block.BY_ID[blockID] != null) && (Item.byId[blockID] == null)) {
 				Item.byId[blockID] = item;
@@ -1112,7 +1112,7 @@ public class ModLoader {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void RemoveSpawn(String entityName, SpawnGroup spawnGroup, Biome... biomes) {
-		Class<? extends Entity> entityClass = EntityRegistry.STRING_ID_TO_CLASS.get(entityName);
+		Class<? extends Entity> entityClass = (Class<? extends Entity>) EntityRegistry.STRING_ID_TO_CLASS.get(entityName);
 		if (entityClass != null && LivingEntity.class.isAssignableFrom(entityClass)) {
 			RemoveSpawn((Class<? extends LivingEntity>) entityClass, spawnGroup, biomes);
 		}

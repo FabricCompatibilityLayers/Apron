@@ -1,6 +1,7 @@
 accessWidener	v1	named
 
 accessible method net/minecraft/entity/BlockEntity register (Ljava/lang/Class;Ljava/lang/String;)V
+accessible method net/minecraft/item/Item <init> (I)V
 
 accessible method net/minecraft/recipe/RecipeRegistry addShapedRecipe (Lnet/minecraft/item/ItemStack;[Ljava/lang/Object;)V
 accessible method net/minecraft/recipe/RecipeRegistry addShapelessRecipe (Lnet/minecraft/item/ItemStack;[Ljava/lang/Object;)V
@@ -9,5 +10,7 @@ accessible field net/minecraft/entity/EntityRegistry STRING_ID_TO_CLASS Ljava/ut
 accessible field net/minecraft/entity/EntityRegistry CLASS_TO_STRING_ID Ljava/util/Map;
 accessible field net/minecraft/entity/EntityRegistry ID_TO_CLASS Ljava/util/Map;
 accessible field net/minecraft/entity/EntityRegistry CLASS_TO_ID Ljava/util/Map;
+
+accessible method net/minecraft/entity/EntityRegistry register (Ljava/lang/Class;Ljava/lang/String;I)V
 
 accessible field net/minecraft/stat/Stats idMap Ljava/util/Map;
