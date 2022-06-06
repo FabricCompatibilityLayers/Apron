@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Babricated Forge",
-  "description": "A compatibility layer to load Forge mods on FabricLoader.",
+  "description": "A compatibility layer to load Forge mods with Fabric.",
   "authors": [
     {
       "name": "CatCore",
@@ -26,12 +26,13 @@
     "issues": "https://github.com/Better-Than-Updates-MC/babricated-forge/issues"
   },
 
-  "license": "MCFPL",
+  "license": "MIT",
   "icon": "assets/forge/icon.png",
 
   "environment": "*",
   "entrypoints": {
   },
+  "accesswidener": "forge.accesswidener",
   "mixins": [
     "forge.mixins.json"
   ],

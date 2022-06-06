@@ -8,6 +8,7 @@ version = project.mod_version
 group = project.maven_group
 
 loom {
+	accessWidenerPath = file("src/main/resources/forge.accesswidener")
 	gluedMinecraftJar()
 	customMinecraftManifest.set("https://babric.github.io/manifest-polyfill/${minecraft_version}.json")
 }
@@ -17,11 +18,12 @@ repositories {
 		name = 'Babric'
 		url = 'https://maven.glass-launcher.net/babric'
 	}
+	mavenLocal()
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "babric:barn:${project.yarn_mappings}"
+	mappings "com.halotroop:yarn:b1.7.3-build.local"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	implementation "org.slf4j:slf4j-api:1.8.0-beta4"
