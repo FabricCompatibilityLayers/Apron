@@ -56,16 +56,19 @@ public class ModTextureAnimation extends TextureBinder {
 			}
 		}
 	}
-	
-	public void update() {
+
+	@Override
+	public void updateTexture() {
 		if (this.ticks >= this.tickRate) {
 			++this.index;
 			if (this.index >= this.images.length) {
 				this.index = 0;
 			}
+
 			this.grid = this.images[this.index];
 			this.ticks = 0;
 		}
+
 		++this.ticks;
 	}
 }

@@ -31,6 +31,9 @@
 
   "environment": "*",
   "entrypoints": {
+    "mod-remapper-api:modremapper": [
+      "io.github.betterthanupdates.forge.ForgeModRemapper"
+    ]
   },
   "accesswidener": "forge.accesswidener",
   "mixins": [
