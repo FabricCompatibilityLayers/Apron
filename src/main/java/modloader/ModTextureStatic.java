@@ -38,29 +38,35 @@ public class ModTextureStatic extends TextureBinder {
 		}
 		this.update();
 	}
-    
-    @Override
+
 	public void update() {
-        if (this.oldanaglyph != this.render3d) {
-            for (int v1 = 0; v1 < this.pixels.length; ++v1) {
-                final int v2 = this.pixels[v1] >> 24 & 0xFF;
-                int r = this.pixels[v1] >> 16 & 0xFF;
-                int g = this.pixels[v1] >> 8 & 0xFF;
-                int b = this.pixels[v1] >> 0 & 0xFF;
-                
-                if (this.render3d) {
-                    final int v6 = (r + g + b) / 3;
-                    g = (r = (b = v6));
-                }
-                
-                this.grid[v1 * 4 + 0] = (byte) r;
-                this.grid[v1 * 4 + 1] = (byte) g;
-                this.grid[v1 * 4 + 2] = (byte) b;
-                this.grid[v1 * 4 + 3] = (byte) v2;
-            }
-    
-            this.oldanaglyph = this.render3d;
-        }
+		for(int i = 0; i < this.pixels.length; ++i) {
+			int a = this.pixels[i] >> 24 & 0xFF;
+			int r = this.pixels[i] >> 16 & 0xFF;
+			int g = this.pixels[i] >> 8 & 0xFF;
+			int b = this.pixels[i] >> 0 & 0xFF;
+			if (this.render3d) {
+				int grey = (r + g + b) / 3;
+				b = grey;
+				g = grey;
+				r = grey;
+			}
+
+			this.grid[i * 4 + 0] = (byte)r;
+			this.grid[i * 4 + 1] = (byte)g;
+			this.grid[i * 4 + 2] = (byte)b;
+			this.grid[i * 4 + 3] = (byte)a;
+		}
+
+		this.oldanaglyph = this.render3d;
+	}
+
+	@Override
+	public void updateTexture() {
+		if (this.oldanaglyph != this.render3d) {
+			this.update();
+		}
+
 	}
 	
 	public static BufferedImage scale2x(BufferedImage image) {

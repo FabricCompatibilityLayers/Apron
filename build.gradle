@@ -19,15 +19,33 @@ repositories {
 		url = 'https://maven.glass-launcher.net/babric'
 	}
 	mavenLocal()
+
+	maven {
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
+		content {
+			includeGroup "maven.modrinth"
+		}
+	}
+
+	flatDir {
+		dirs "./remapped/client"
+	}
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "com.halotroop:yarn:b1.7.3-build.local"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modApi "babric:fabric-loader:${project.loader_version}"
 
 	implementation "org.slf4j:slf4j-api:1.8.0-beta4"
-	implementation "org.apache.logging.log4j:log4j-slf4j18-impl:2.16.0"
+	implementation "org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2"
+
+	modApi("maven.modrinth:mod-remapping-api:1.1.0")
+
+	modRuntimeOnly(group: "remapped.client", name: "modloader", version: "b1.7.3")
+	modRuntimeOnly(group: "remapped.client", name: "modloadermp-1.7.3-unofficial", version: "v2")
+	modRuntimeOnly(group: "remapped.client", name: "minecraftforge-client", version: "1.0.7-20110907")
 }
 
 processResources {
