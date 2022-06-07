@@ -64,7 +64,6 @@ public class ForgeModRemapper implements ModRemapper {
     @Override
     public void getMappingList(RemapUtil.MappingList list) {
         list.add("ModLoader", "modloader/ModLoader");
-
     }
 
     @Override

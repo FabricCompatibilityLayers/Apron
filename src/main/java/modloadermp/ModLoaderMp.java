@@ -163,7 +163,7 @@ public class ModLoaderMp {
 	}
 	
 	public static void Log(final String aString1) {
-		System.out.println(aString1);
+		ModLoaderMp.Log(aString1);
 		ModLoader.getLogger().fine(aString1);
 	}
 	

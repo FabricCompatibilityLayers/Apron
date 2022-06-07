@@ -1,5 +1,6 @@
 package forge;
 
+import io.github.betterthanupdates.forge.BabricatedForge;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -11,6 +12,8 @@ import java.util.*;
 
 import io.github.betterthanupdates.forge.ForgeBlock;
 import io.github.betterthanupdates.forge.ForgePlayerEntity;
+
+import static forge.MinecraftForge.LOGGER;
 
 public class ForgeHooks {
     static LinkedList<ICraftingHandler> craftingHandlers;
@@ -122,8 +125,8 @@ public class ForgeHooks {
         MinecraftForge.setBlockHarvestLevel(Block.REDSTONE_ORE_LIT, "pickaxe", 2);
         MinecraftForge.removeBlockEffectiveness(Block.REDSTONE_ORE, "pickaxe");
         MinecraftForge.removeBlockEffectiveness(Block.REDSTONE_ORE_LIT, "pickaxe");
-        final Block[] pickeff = new Block[] { Block.COBBLESTONE, Block.DOUBLE_STONE_SLAB, Block.STONE_SLAB, Block.STONE, Block.SANDSTONE, Block.MOSSY_COBBLESTONE, Block.IRON_ORE, Block.IRON_BLOCK, Block.COAL_ORE, Block.GOLD_BLOCK, Block.GOLD_ORE, Block.DIAMOND_ORE, Block.DIAMOND_BLOCK, Block.ICE, Block.NETHERRACK, Block.LAPIS_LAZULI_ORE, Block.LAPIS_LAZULI_BLOCK };
-        for (final Block bl : pickeff) {
+        final Block[] pickEffective = new Block[] { Block.COBBLESTONE, Block.DOUBLE_STONE_SLAB, Block.STONE_SLAB, Block.STONE, Block.SANDSTONE, Block.MOSSY_COBBLESTONE, Block.IRON_ORE, Block.IRON_BLOCK, Block.COAL_ORE, Block.GOLD_BLOCK, Block.GOLD_ORE, Block.DIAMOND_ORE, Block.DIAMOND_BLOCK, Block.ICE, Block.NETHERRACK, Block.LAPIS_LAZULI_ORE, Block.LAPIS_LAZULI_BLOCK };
+        for (final Block bl : pickEffective) {
             MinecraftForge.setBlockHarvestLevel(bl, "pickaxe", 0);
         }
     }
@@ -132,7 +135,7 @@ public class ForgeHooks {
         ForgeHooks.craftingHandlers = new LinkedList<>();
         ForgeHooks.destroyToolHandlers = new LinkedList<>();
         ForgeHooks.sleepHandlers = new LinkedList<>();
-        System.out.printf("MinecraftForge V%d.%d.%d Initialized\n",majorVersion,minorVersion,revisionVersion);
+        LOGGER.info("MinecraftForge V%d.%d.%d Initialized\n", majorVersion, minorVersion, revisionVersion);
         ForgeHooks.toolInit = false;
         ForgeHooks.toolClasses = new HashMap<>();
         ForgeHooks.toolHarvestLevels = new HashMap<>();

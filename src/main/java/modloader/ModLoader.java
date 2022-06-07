@@ -1,44 +1,8 @@
 package modloader;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Properties;
-import java.util.Random;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
-
-import javax.imageio.ImageIO;
-
-import org.lwjgl.input.Keyboard;
-
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.achievement.Achievement;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.GameStartupError;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.StatEntity;
@@ -54,10 +18,7 @@ import net.minecraft.client.render.entity.block.BlockEntityRenderer;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.Session;
-import net.minecraft.entity.EntityEntry;
-import net.minecraft.entity.EntityRegistry;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -66,14 +27,28 @@ import net.minecraft.recipe.RecipeRegistry;
 import net.minecraft.recipe.SmeltingRecipeRegistry;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
-import net.minecraft.entity.BlockEntity;
-import net.minecraft.entity.Entity;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.HellBiome;
 import net.minecraft.world.biome.SkyBiome;
 import net.minecraft.world.source.WorldSource;
+import org.lwjgl.input.Keyboard;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
+import static forge.MinecraftForge.LOGGER;
 
 public class ModLoader {
 //	private static final List<TextureBinder> animList = new LinkedList<>();
@@ -83,7 +58,6 @@ public class ModLoader {
 	private static final File cfgfile = new File(cfgdir, "ModLoader.cfg");
 	public static Level cfgLoggingWorld = Level.FINER;
 	private static long clock = 0L;
-	public static final boolean DEBUG = false;
 	private static Field field_animList = null;
 	private static Field field_armorList = null;
 	private static Field field_blockList = null;
@@ -108,9 +82,9 @@ public class ModLoader {
 	
 	/**
 	 * Used to give your achievement a readable name and description.
-	 * @param achievement
-	 * @param name
-	 * @param description
+	 * @param achievement the entry to be described
+	 * @param name the name of the entry
+	 * @param description the description of the entry
 	 */
 	public static void AddAchievementDesc(Achievement achievement, String name, String description) {
 		try {
@@ -141,14 +115,14 @@ public class ModLoader {
 	
 	/**
 	 * Used for adding new sources of fuel to the furnace.
-	 * @param id
-	 * @return
+	 * @param itemId the item to be used as fuel.
+	 * @return the fuel ID assigned to the item.
 	 */
-	public static int AddAllFuel(int id) {
-		LOGGER.finest("Finding fuel for " + id);
+	public static int AddAllFuel(int itemId) {
+		LOGGER.finest("Finding fuel for " + itemId);
 		int fuelID = 0;
 		for (Iterator<BaseMod> iterator = modList.iterator(); iterator.hasNext() && fuelID == 0; ) {
-			fuelID = iterator.next().AddFuel(id);
+			fuelID = iterator.next().AddFuel(itemId);
 		}
 		if (fuelID != 0) {
 			LOGGER.finest("Returned " + fuelID);
@@ -172,7 +146,7 @@ public class ModLoader {
 	 */
 	public static void addAnimation(TextureBinder animation) {
 		LOGGER.finest("Adding animation " + animation.toString());
-		BLTexturesManager.addAnimation(animation);
+//		TexturesManager.addAnimation(animation); // TODO
 	}
 	
 	/**
@@ -217,38 +191,42 @@ public class ModLoader {
 			properties.put(key, value);
 		}
 	}
-	
-	/**
-	 * Add mod into loader. Changed from original. Original args were loader and mod class name.
-	 * @param loader current {@link ClassLoader} to load mods.
-	 * @param modEntry {@link ModEntry} for the mod.
-	 */
-	private static void addMod(ClassLoader loader, ModEntry modEntry) {
-		ModsStorage.loadingMod = modEntry;
-		String modID = modEntry.getModID().toString();
-		File modFile = modEntry.getModConvertedFile();
-		String modClassName = modEntry.getClasspath() + "." + modEntry.getMainClass();
-		Class<? extends BaseMod> modClass = JavassistUtil.getModClass(loader, modFile, modClassName);
+
+	private static void addMod(ClassLoader loader, String filename) {
 		try {
-			setupProperties(modClass);
-			BaseMod mod = modClass.getDeclaredConstructor().newInstance();
-			modList.add(mod);
-			String message = "Mod Loaded: \"" + mod + "\" from " + modID;
-			LOGGER.fine(message);
-			System.out.println(message);
-			// TODO separate mod loading and texture loading
-			mod.RegisterAnimation(getMinecraftInstance());
-		}
-		catch (Exception e) {
-			LOGGER.fine("Failed to load mod from \"" + modID + "\"");
-			LOGGER.fine("Reason: " + e);
-			System.out.println("Failed to load mod from \"" + modID + "\"");
-			System.out.println("Reason: " + e);
-			LOGGER.throwing("ModLoader", "addMod", e);
-			//ThrowException(e);
+			String name = filename.split("\\.")[0];
+			if (name.contains("$")) {
+				return;
+			}
+
+			if (props.containsKey(name) && (props.getProperty(name).equalsIgnoreCase("no") || props.getProperty(name).equalsIgnoreCase("off"))) {
+				return;
+			}
+
+			Package pack = ModLoader.class.getPackage();
+			if (pack != null) {
+				name = pack.getName() + "." + name;
+			}
+
+			Class<?> modClass = loader.loadClass(name);
+			if (!BaseMod.class.isAssignableFrom(modClass)) {
+				return;
+			}
+
+			setupProperties((Class<? extends BaseMod>) modClass);
+			BaseMod mod = (BaseMod)modClass.newInstance();
+			if (mod != null) {
+				modList.add(mod);
+				LOGGER.fine("Mod Loaded: \"" + mod.toString() + "\" from " + filename);
+				LOGGER.info("Mod Loaded: " + mod.toString());
+			}
+		} catch (Throwable var6) {
+			LOGGER.fine("Failed to load mod from \"" + filename + "\"");
+			LOGGER.throwing("ModLoader", "addMod", var6);
+			ThrowException(var6);
 		}
 	}
-	
+
 	/**
 	 * This method will allow adding name to item in inventory.
 	 * @param instance
@@ -288,7 +266,7 @@ public class ModLoader {
 			ThrowException(e);
 		}
 	}
-	
+
 	/**
 	 * Use this to add custom images for your items and blocks.
 	 * @param fileToOverride
@@ -299,10 +277,10 @@ public class ModLoader {
 		try {
 			int spriteIndex = -1;
 			if (fileToOverride.equals("/terrain.png")) {
-				spriteIndex = BLTexturesManager.getBlockTexture(fileToAdd);
+//				spriteIndex = TexturesManager.getBlockTexture(fileToAdd); // TODO
 			}
 			else if (fileToOverride.equals("/gui/items.png")) {
-				spriteIndex = BLTexturesManager.getItemTexture(fileToAdd);
+//				spriteIndex = TexturesManager.getBlockTexture(fileToAdd);
 			}
 			addOverride(fileToOverride, fileToAdd, spriteIndex);
 			return spriteIndex;
@@ -313,7 +291,7 @@ public class ModLoader {
 			throw new RuntimeException(t);
 		}
 	}
-	
+
 	/**
 	 * Registers one texture override to be done.
 	 * @param path
@@ -323,13 +301,13 @@ public class ModLoader {
 	public static void addOverride(String path, String overlayPath, int index) {
 		// TODO: Textures manager
 		if (path.equals("/terrain.png")) {
-			BLTexturesManager.setBlockTexture(index, overlayPath);
+//			TexturesManager.setBlockTexture(index, overlayPath); // TODO
 		}
 		else if (path.equals("/gui/items.png")) {
-			BLTexturesManager.setItemTexture(index, overlayPath);
+//			TexturesManager.setItemTexture(index, overlayPath); // TODO
 		}
 	}
-	
+
 	/**
 	 * Gets next available index for this sprite map.
 	 * @param path
@@ -337,17 +315,17 @@ public class ModLoader {
 	 */
 	public static int getUniqueSpriteIndex(String path) {
 		if (path.equals("/gui/items.png")) {
-			return BLTexturesManager.pollItemTextureID();
+//			return TexturesManager.pollItemTextureID(); // TODO
 		}
 		if (path.equals("/terrain.png")) {
-			return BLTexturesManager.pollBlockTextureID();
+//			return TexturesManager.pollBlockTextureID(); // TODO
 		}
 		Exception v1 = new Exception("No registry for this texture: " + path);
 		LOGGER.throwing("ModLoader", "getUniqueItemSpriteIndex", v1);
 		ThrowException(v1);
 		return 0;
 	}
-	
+
 	/**
 	 * Add recipe to crafting list.
 	 * @param output
@@ -356,7 +334,7 @@ public class ModLoader {
 	public static void AddRecipe(ItemStack output, Object... ingredients) {
 		RecipeRegistry.getInstance().addShapedRecipe(output, ingredients);
 	}
-	
+
 	/**
 	 * Add recipe to crafting list.
 	 * @param output
@@ -365,7 +343,7 @@ public class ModLoader {
 	public static void AddShapelessRecipe(ItemStack output, Object... ingredients) {
 		RecipeRegistry.getInstance().addShapelessRecipe(output, ingredients);
 	}
-	
+
 	/**
 	 * Used to add smelting recipes to the furnace.
 	 * @param input
@@ -374,7 +352,7 @@ public class ModLoader {
 	public static void AddSmelting(int input, ItemStack output) {
 		SmeltingRecipeRegistry.getInstance().addSmeltingRecipe(input, output);
 	}
-	
+
 	/**
 	 * Add entity to spawn list for all biomes except Hell.
 	 * @param entityClass
@@ -384,7 +362,7 @@ public class ModLoader {
 	public static void AddSpawn(Class<? extends LivingEntity> entityClass, int weightedProb, SpawnGroup spawnGroup) {
 		AddSpawn(entityClass, weightedProb, spawnGroup, (Biome[]) null);
 	}
-	
+
 	/**
 	 * Add entity to spawn list for selected biomes.
 	 * @param entityClass
@@ -425,7 +403,7 @@ public class ModLoader {
 	 * Add entity to spawn list for all biomes except Hell.
 	 * @param entityName
 	 * @param weightedProb
-	 * @param entityType
+	 * @param spawnGroup
 	 */
 	public static void AddSpawn(String entityName, int weightedProb, SpawnGroup spawnGroup) {
 		AddSpawn(entityName, weightedProb, spawnGroup, (Biome[]) null);
@@ -435,7 +413,7 @@ public class ModLoader {
 	 * Add entity to spawn list for selected biomes.
 	 * @param entityName
 	 * @param weightedProb
-	 * @param entityType
+	 * @param spawnGroup
 	 * @param biomes
 	 */
 	@SuppressWarnings("unchecked")
@@ -533,21 +511,15 @@ public class ModLoader {
 	 * @throws NoSuchFieldException
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T, E> T getPrivateValue(Class<? super E> instanceClass, E instance, String fieldName) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
-		fieldName = RemapUtil.getFieldName(instanceClass, fieldName);
-		if (fieldName.isEmpty()) {
-			return null;
-		}
+	public static <T, E> T getPrivateValue(Class<? super E> instanceClass, E instance, String fieldName) throws IllegalArgumentException, SecurityException, NoSuchFieldException, IllegalAccessException {
 		try {
-			Field field = instanceClass.getDeclaredField(fieldName);
-			field.setAccessible(true);
-			return (T) field.get(instance);
+			Field f = instanceClass.getDeclaredField(fieldName);
+			f.setAccessible(true);
+			return (T) f.get(instance);
+		} catch (IllegalAccessException e) {
+			LOGGER.log(Level.SEVERE, "There was a problem getting field %s from %s", new Object[]{fieldName, instanceClass.getName()});
+			throw e;
 		}
-		catch (IllegalAccessException e) {
-			LOGGER.throwing("ModLoader", "getPrivateValue", e);
-			ThrowException("An impossible error has occurred!", e);
-		}
-		return null;
 	}
 	
 	/**
@@ -605,7 +577,7 @@ public class ModLoader {
 				}
 			}
 			standardBiomes = biomeList.toArray(new Biome[0]);
-			ModsStorage.loadingMod = null;
+//			ModsStorage.loadingMod = null;
 		}
 		catch (SecurityException | IllegalAccessException | IllegalArgumentException | NoSuchFieldException e) {
 			LOGGER.throwing("ModLoader", "init", e);
@@ -617,9 +589,6 @@ public class ModLoader {
 			if (props.containsKey("loggingWorld")) {
 				cfgLoggingWorld = Level.parse(props.getProperty("loggingLevel"));
 			}
-			if (props.containsKey("grassFix")) {
-				BlockRendererData.cfgGrassFix = Boolean.parseBoolean(props.getProperty("grassFix"));
-			}
 			LOGGER.setLevel(cfgLoggingWorld);
 			if (((LOG_FILE.exists()) || (LOG_FILE.createNewFile())) && (LOG_FILE.canWrite()) && (logHandler == null)) {
 				logHandler = new FileHandler(LOG_FILE.getPath());
@@ -627,20 +596,19 @@ public class ModLoader {
 				LOGGER.addHandler(logHandler);
 			}
 			LOGGER.fine(VERSION + " Initializing...");
-			
-			System.out.println(VERSION + " Initializing...");
-			readFromModFolder();
-			System.out.println("Done.");
+
+			LOGGER.info(VERSION + " Initializing...");
+//			readFromModFolder(); // TODO
+			LOGGER.info("Done.");
 			
 			props.setProperty("loggingWorld", cfgLoggingWorld.getName());
-			props.setProperty("grassFix", Boolean.toString(BlockRendererData.cfgGrassFix));
 			for (BaseMod mod : modList) {
 				mod.ModsLoaded();
 				if (!props.containsKey(mod.getClass().getName())) {
 					props.setProperty(mod.getClass().getName(), "on");
 				}
 			}
-			System.out.println("Instance: " + instance);
+			LOGGER.info("Instance: " + instance);
 			instance.options.keyBindings = RegisterAllKeys(instance.options.keyBindings);
 			instance.options.load();
 			
@@ -871,45 +839,6 @@ public class ModLoader {
 			else if (worldSource.toString().equals("HellRandomWorldSource")) {
 				mod.GenerateNether(world, random, chunkX << 4, chunkZ << 4);
 			}
-		}
-	}
-	
-	/**
-	 * Load mods from folder. Changed from original. Original had folder (File) argument.
-	 * @throws IOException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 * @throws SecurityException
-	 * @throws NoSuchMethodException
-	 */
-	private static void readFromModFolder() throws IOException, IllegalArgumentException, SecurityException, NoSuchMethodException {
-		ClassLoader loader = Minecraft.class.getClassLoader();
-		Method method = loader.getClass().getDeclaredMethod("addURL", URL.class);
-		method.setAccessible(true);
-		
-		ModsStorage.getMods().stream().map(entry -> {
-			try {
-				return entry.getModConvertedFile().toURI().toURL();
-			}
-			catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}).filter(Objects::nonNull).forEach(url -> {
-			try {
-				method.invoke(loader, url);
-			}
-			catch (IllegalAccessException | InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		});
-		
-		List<ModEntry> files = ModsStorage.getMods();
-		for (ModEntry entry: files) {
-			LOGGER.finer("Adding mods from " + entry.getModOriginalFile().getCanonicalPath());
-			LOGGER.finer("Jar found.");
-			addMod(loader, entry);
 		}
 	}
 	

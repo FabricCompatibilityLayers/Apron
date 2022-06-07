@@ -1,10 +1,11 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "io.betterthanupdates.forge.mixin",
+  "package": "io.github.betterthanupdates.forge.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-  	"PlayerEntityMixin"
+  	"PlayerEntityMixin",
+    "BlockMixin"
   ],
   "client": [
   ],

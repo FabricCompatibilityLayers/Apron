@@ -1,15 +1,20 @@
 package forge;
 
+import io.github.betterthanupdates.forge.BabricatedForge;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class MinecraftForge {
+    public static final Logger LOGGER = LogManager.getLogger(MinecraftForge.class);
+
     private static LinkedList<IBucketHandler> bucketHandlers;
     
     @Deprecated
@@ -95,7 +100,7 @@ public class MinecraftForge {
                 killMinecraft(modName, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
             }
             else {
-                System.out.println(modName + ": MinecraftForge minor version mismatch, expecting " + major + "." + minor + ".x, may lead to unexpected behavior");
+                LOGGER.info(modName + ": MinecraftForge minor version mismatch, expecting " + major + "." + minor + ".x, may lead to unexpected behavior");
             }
         }
         else if (revision > 6) {

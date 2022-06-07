@@ -1,5 +1,6 @@
 plugins {
 	id 'babric-loom' version '0.12-SNAPSHOT'
+//	id 'io.github.juuxel.loom-quiltflower' version '1.7.2'
 	id 'maven-publish'
 }
 
@@ -8,9 +9,9 @@ version = project.mod_version
 group = project.maven_group
 
 loom {
-	accessWidenerPath = file("src/main/resources/forge.accesswidener")
 	gluedMinecraftJar()
 	customMinecraftManifest.set("https://babric.github.io/manifest-polyfill/${minecraft_version}.json")
+	accessWidenerPath = file("src/main/resources/forge.accesswidener")
 }
 
 repositories {
@@ -43,9 +44,9 @@ dependencies {
 
 	modApi("maven.modrinth:mod-remapping-api:1.1.0")
 
-	modRuntimeOnly(group: "remapped.client", name: "modloader", version: "b1.7.3")
-	modRuntimeOnly(group: "remapped.client", name: "modloadermp-1.7.3-unofficial", version: "v2")
-	modRuntimeOnly(group: "remapped.client", name: "minecraftforge-client", version: "1.0.7-20110907")
+//	runtimeOnly(group: "remapped.client", name: "modloader", version: "b1.7.3")
+//	runtimeOnly(group: "remapped.client", name: "modloadermp-1.7.3-unofficial", version: "v2")
+//	runtimeOnly(group: "remapped.client", name: "minecraftforge-client", version: "1.0.7-20110907")
 }
 
 processResources {
