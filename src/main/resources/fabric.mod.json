@@ -35,7 +35,7 @@
       "io.github.betterthanupdates.forge.ForgeModRemapper"
     ]
   },
-  "accesswidener": "forge.accesswidener",
+  "accessWidener": "forge.accesswidener",
   "mixins": [
     "forge.mixins.json"
   ],
