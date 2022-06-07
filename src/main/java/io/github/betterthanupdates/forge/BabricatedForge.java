@@ -1,9 +1,12 @@
 package io.github.betterthanupdates.forge;
 
 import forge.MinecraftForge;
+import fr.catcore.modremapperapi.utils.Constants;
 import modloader.ModLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.File;
 
 public class BabricatedForge {
     // FIXME: Downloads should not be used! At the very least, they should not be hardcoded!
@@ -17,4 +20,10 @@ public class BabricatedForge {
     public static final Logger LOGGER = LogManager.getLogger(BabricatedForge.class);
     public static final java.util.logging.Logger MOD_LOADER_LOGGER = ModLoader.getLogger();
     public static final Logger FORGE_LOGGER = MinecraftForge.LOGGER;
+
+    public static final File MOD_CACHE_FOLDER = new File(Constants.VERSIONED_FOLDER, "mods");
+
+    static {
+        MOD_CACHE_FOLDER.mkdirs();
+    }
 }
