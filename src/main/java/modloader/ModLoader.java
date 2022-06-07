@@ -48,8 +48,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import static forge.MinecraftForge.LOGGER;
-
 public class ModLoader {
 //	private static final List<TextureBinder> animList = new LinkedList<>();
 	private static final Map<Integer, BaseMod> blockModels = new HashMap<>();
@@ -58,11 +56,8 @@ public class ModLoader {
 	private static final File cfgfile = new File(cfgdir, "ModLoader.cfg");
 	public static Level cfgLoggingWorld = Level.FINER;
 	private static long clock = 0L;
-	private static Field field_animList = null;
-	private static Field field_armorList = null;
 	private static Field field_blockList = null;
 	private static Field field_modifiers = null;
-	private static Field field_TileEntityRenderers = null;
 	private static boolean hasInit = false;
 	private static int highestEntityId = 3000;
 	private static final Map<BaseMod, Boolean> inGameHooks = new HashMap<>();
@@ -156,17 +151,17 @@ public class ModLoader {
 	 */
 	public static int AddArmor(String armor) {
 		try {
-			String[] parts = (String[]) field_armorList.get(null);
+			String[] parts = (String[]) PlayerRenderer.armorTypes;
 			List<String> stringList = Arrays.asList(parts);
 			List<String> resultList = new ArrayList<>(stringList);
 			if (!resultList.contains(armor)) {
 				resultList.add(armor);
 			}
 			int armorIndex = resultList.indexOf(armor);
-			field_armorList.set(null, resultList.toArray(new String[0]));
+			PlayerRenderer.armorTypes = resultList.toArray(new String[0]);
 			return armorIndex;
 		}
-		catch (IllegalArgumentException | IllegalAccessException e) {
+		catch (IllegalArgumentException e) {
 			LOGGER.throwing("ModLoader", "AddArmor", e);
 			ThrowException("An impossible error has occurred!", e);
 		}
@@ -556,14 +551,7 @@ public class ModLoader {
 			field_modifiers.setAccessible(true);
 			field_blockList = Session.class.getDeclaredFields()[0];
 			field_blockList.setAccessible(true);
-			field_TileEntityRenderers = BlockEntityRenderDispatcher.class.getDeclaredFields()[0];
-			field_TileEntityRenderers.setAccessible(true);
-			field_armorList = PlayerRenderer.class.getDeclaredFields()[3];
-			field_modifiers.setInt(field_armorList, field_armorList.getModifiers() & 0xFFFFFFEF);
-			field_armorList.setAccessible(true);
-			field_animList = TextureManager.class.getDeclaredFields()[6];
-			field_animList.setAccessible(true);
-			
+
 			Field[] biomeFields = Biome.class.getDeclaredFields();
 			
 			List<Biome> biomeList = new LinkedList<>();
@@ -597,7 +585,6 @@ public class ModLoader {
 			}
 			LOGGER.fine(VERSION + " Initializing...");
 
-			LOGGER.info(VERSION + " Initializing...");
 //			readFromModFolder(); // TODO
 			LOGGER.info("Done.");
 			
@@ -979,12 +966,12 @@ public class ModLoader {
 			if (renderer != null) {
 				BlockEntityRenderDispatcher dispatcher = BlockEntityRenderDispatcher.INSTANCE;
 				@SuppressWarnings("unchecked")
-				Map<Class<? extends BlockEntity>, BlockEntityRenderer> v2 = (Map<Class<? extends BlockEntity>, BlockEntityRenderer>) field_TileEntityRenderers.get(dispatcher);
+				Map<Class<? extends BlockEntity>, BlockEntityRenderer> v2 = (Map<Class<? extends BlockEntity>, BlockEntityRenderer>) dispatcher.customRenderers;
 				v2.put(blockEntityClass, renderer);
 				renderer.setRenderDispatcher(dispatcher);
 			}
 		}
-		catch (IllegalArgumentException | IllegalAccessException e) {
+		catch (IllegalArgumentException e) {
 			LOGGER.throwing("ModLoader", "RegisterTileEntity", e);
 			ThrowException(e);
 		}
