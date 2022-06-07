@@ -4,10 +4,27 @@
   "package": "io.github.betterthanupdates.forge.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-  	"PlayerEntityMixin",
-    "BlockMixin"
+    "BlockMixin",
+    "PlayerEntityMixin",
+    "babricated.achievement.AchievementMixin",
+    "babricated.client.resource.language.TranslationStorageMixin",
+    "babricated.entity.BlockEntityAccessor",
+    "babricated.entity.EntityRegistryAccessor",
+    "babricated.recipe.RecipeRegistryAccessor",
+    "babricated.stat.StatMixin",
+    "babricated.stat.StatsAccessor",
+    "modloader.block.DispenserBlockMixin",
+    "modloader.entity.ItemEntityMixin",
+    "modloader.entity.block.FurnaceBlockEntityMixin",
+    "modloader.world.chunk.ServerChunkCacheMixin"
   ],
   "client": [
+    "babricated.client.render.entity.BlockEntityRenderDispatcherAccessor",
+    "babricated.client.render.entity.PlayerRendererAccessor",
+    "modloader.applet.GameStartupErrorPanelMixin",
+    "modloader.client.render.entity.EntityRenderDispatcherMixin",
+    "modloader.container.slot.FurnaceOutputSlotMixin",
+    "babricated.client.texture.TextureManagerAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
