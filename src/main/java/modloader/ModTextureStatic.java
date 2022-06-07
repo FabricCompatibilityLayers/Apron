@@ -8,34 +8,33 @@ import java.awt.image.BufferedImage;
 
 public class ModTextureStatic extends TextureBinder {
 	private boolean oldanaglyph;
-	private int[] pixels;
-	
-	public ModTextureStatic(final int index, final int renderMode, final BufferedImage image) {
-		this(index, 1, renderMode, image);
+	private int[] pixels = null;
+
+	public ModTextureStatic(int slot, int dst, BufferedImage source) {
+		this(slot, 1, dst, source);
 	}
-	
-	public ModTextureStatic(final int index, final int textureSize, final int renderMode, final BufferedImage image) {
-		super(index);
-		this.pixels = null;
-		this.textureSize = textureSize;
-		this.renderMode = renderMode;
+
+	public ModTextureStatic(int slot, int size, int dst, BufferedImage source) {
+		super(slot);
+		this.textureSize = size;
+		this.renderMode = dst;
 		this.bindTexture(ModLoader.getMinecraftInstance().textureManager);
-		final int targetWidth = GL11.glGetTexLevelParameteri(3553, 0, 4096) / 16;
-		final int targetHeight = GL11.glGetTexLevelParameteri(3553, 0, 4097) / 16;
-		final int width = image.getWidth();
-		final int height = image.getHeight();
+		int targetWidth = GL11.glGetTexLevelParameteri(3553, 0, 4096) / 16;
+		int targetHeight = GL11.glGetTexLevelParameteri(3553, 0, 4097) / 16;
+		int width = source.getWidth();
+		int height = source.getHeight();
 		this.pixels = new int[targetWidth * targetHeight];
 		this.grid = new byte[targetWidth * targetHeight * 4];
-		if (width != height || width != targetWidth) {
-			final BufferedImage bufferedImage = new BufferedImage(targetWidth, targetHeight, 6);
-			final Graphics2D g = bufferedImage.createGraphics();
-			g.drawImage(image, 0, 0, targetWidth, targetHeight, 0, 0, width, height, null);
-			bufferedImage.getRGB(0, 0, targetWidth, targetHeight, this.pixels, 0, targetWidth);
-			g.dispose();
+		if (width == height && width == targetWidth) {
+			source.getRGB(0, 0, width, height, this.pixels, 0, width);
+		} else {
+			BufferedImage img = new BufferedImage(targetWidth, targetHeight, 6);
+			Graphics2D gfx = img.createGraphics();
+			gfx.drawImage(source, 0, 0, targetWidth, targetHeight, 0, 0, width, height, null);
+			img.getRGB(0, 0, targetWidth, targetHeight, this.pixels, 0, targetWidth);
+			gfx.dispose();
 		}
-		else {
-			image.getRGB(0, 0, width, height, this.pixels, 0, width);
-		}
+
 		this.update();
 	}
 
@@ -68,65 +67,66 @@ public class ModTextureStatic extends TextureBinder {
 		}
 
 	}
-	
-	public static BufferedImage scale2x(BufferedImage image) {
-		int width = image.getWidth();
-		final int height = image.getHeight();
-		final BufferedImage bufferedImage = new BufferedImage(width * 2, height * 2, 2);
-        
-        int a, b, c, rgb1, rgb2, rgb3, rgb4;
-        for (int x = 0; x < height; ++x) {
-            for (int y = 0; y < width; ++y) {
-                int rgb = image.getRGB(y, x);
-                
-                if (x == 0) {
-                    a = rgb;
-                }
-				else {
-                    a = image.getRGB(y, x - 1);
-                }
-                
-                if (y == 0) {
-                    b = rgb;
-                }
-				else {
-                    b = image.getRGB(y - 1, x);
-                }
-				
-				if (y >= width - 1) {
-					c = rgb;
+
+	public static BufferedImage scale2x(BufferedImage in) {
+		int width = in.getWidth();
+		int height = in.getHeight();
+		BufferedImage out = new BufferedImage(width * 2, height * 2, 2);
+
+		for(int y = 0; y < height; ++y) {
+			for(int x = 0; x < width; ++x) {
+				int E = in.getRGB(x, y);
+				int B;
+				if (y == 0) {
+					B = E;
+				} else {
+					B = in.getRGB(x, y - 1);
 				}
-				else {
-					c = image.getRGB(y + 1, x);
+
+				int D;
+				if (x == 0) {
+					D = E;
+				} else {
+					D = in.getRGB(x - 1, y);
 				}
-				
-				if (x >= height - 1) {
-					width = rgb;
+
+				int F;
+				if (x >= width - 1) {
+					F = E;
+				} else {
+					F = in.getRGB(x + 1, y);
 				}
-				else {
-					width = image.getRGB(y, x + 1);
+
+				int H;
+				if (y >= height - 1) {
+					H = E;
+				} else {
+					H = in.getRGB(x, y + 1);
 				}
-				
-				if (a != width && b != c) {
-					rgb1 = ((b == a) ? b : rgb);
-					rgb2 = ((a == c) ? c : rgb);
-					rgb3 = ((b == width) ? b : rgb);
-					rgb4 = ((width == c) ? c : rgb);
+
+				int E0;
+				int E1;
+				int E2;
+				int E3;
+				if (B != H && D != F) {
+					E0 = D == B ? D : E;
+					E1 = B == F ? F : E;
+					E2 = D == H ? D : E;
+					E3 = H == F ? F : E;
+				} else {
+					E0 = E;
+					E1 = E;
+					E2 = E;
+					E3 = E;
 				}
-				else {
-					rgb1 = rgb;
-					rgb2 = rgb;
-					rgb3 = rgb;
-					rgb4 = rgb;
-				}
-				
-				bufferedImage.setRGB(y * 2, x * 2, rgb1);
-				bufferedImage.setRGB(y * 2 + 1, x * 2, rgb2);
-				bufferedImage.setRGB(y * 2, x * 2 + 1, rgb3);
-				bufferedImage.setRGB(y * 2 + 1, x * 2 + 1, rgb4);
+
+				out.setRGB(x * 2, y * 2, E0);
+				out.setRGB(x * 2 + 1, y * 2, E1);
+				out.setRGB(x * 2, y * 2 + 1, E2);
+				out.setRGB(x * 2 + 1, y * 2 + 1, E3);
 			}
 		}
-		
-		return bufferedImage;
+
+		return out;
 	}
 }

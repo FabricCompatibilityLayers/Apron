@@ -13,6 +13,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 		super(arg);
 	}
 
+	@Override
 	public float getCurrentPlayerStrVsBlock(Block block, int meta) {
 		return 0f;
 	}

@@ -16,6 +16,9 @@ import java.util.Map;
 import java.util.Random;
 
 public abstract class BaseMod {
+
+	public BaseMod() {}
+
 	/**
 	 * Used for adding new sources of fuel to the furnace.
 	 * @param id
@@ -29,46 +32,46 @@ public abstract class BaseMod {
 	 * Used to add entity renderers.
 	 * @param rendererMap
 	 */
-	public void AddRenderer(Map<Class<? extends Entity>, ? extends EntityRenderer> rendererMap) {}
+	public void AddRenderer(Map<Class<? extends Entity>, EntityRenderer> rendererMap) {}
 	
 	/**
 	 * Dispenses the entity associated with the selected item.
-	 * @param level
+	 * @param world
 	 * @param x
 	 * @param y
 	 * @param z
 	 * @param xVel
-	 * @param yVel
+	 * @param zVel
 	 * @param item
 	 * @return
 	 */
-	public boolean DispenseEntity(World level, double x, double y, double z, int xVel, int yVel, ItemStack item) {
+	public boolean DispenseEntity(World world, double x, double y, double z, int xVel, int zVel, ItemStack item) {
 		return false;
 	}
 	
 	/**
 	 * Used for generating new blocks (veins) in Nether.
-	 * @param level
+	 * @param world
 	 * @param random
 	 * @param chunkX
 	 * @param chunkZ
 	 */
-	public void GenerateNether(World level, Random random, int chunkX, int chunkZ) {}
+	public void GenerateNether(World world, Random random, int chunkX, int chunkZ) {}
 	
 	/**
 	 * Used for generating new blocks (veins) on the surface world.
-	 * @param level
+	 * @param world
 	 * @param random
 	 * @param chunkX
 	 * @param chunkZ
 	 */
-	public void GenerateSurface(World level, Random random, int chunkX, int chunkZ) {}
+	public void GenerateSurface(World world, Random random, int chunkX, int chunkZ) {}
 	
 	/**
 	 * This method will be called when the register key has been pressed, or held down.
-	 * @param keyBinding
+	 * @param event
 	 */
-	public void KeyboardEvent(KeyBinding keyBinding) {}
+	public void KeyboardEvent(KeyBinding event) {}
 	
 	/**
 	 * Called after all mods are loaded.
@@ -77,77 +80,77 @@ public abstract class BaseMod {
 	
 	/**
 	 * Called when enabled, and in game.
-	 * @param minecraft
+	 * @param game
 	 * @return
 	 */
-	public boolean OnTickInGame(Minecraft minecraft) {
+	public boolean OnTickInGame(Minecraft game) {
 		return false;
 	}
 	
 	/**
 	 * Called when enabled, and a GUI is open.
-	 * @param minecraft
-	 * @param Screen
+	 * @param game
+	 * @param gui
 	 * @return
 	 */
-	public boolean OnTickInGUI(Minecraft minecraft, Screen Screen) {
+	public boolean OnTickInGUI(Minecraft game, Screen gui) {
 		return false;
 	}
 	
 	/**
 	 * Used for registering animations for items and blocks.
-	 * @param minecraft
+	 * @param game
 	 */
-	public void RegisterAnimation(Minecraft minecraft) {}
+	public void RegisterAnimation(Minecraft game) {}
 	
 	/**
 	 * Renders a block in inventory.
-	 * @param blockRenderer
-	 * @param blockBase
-	 * @param meta
+	 * @param renderer
+	 * @param block
+	 * @param metadata
 	 * @param modelID
 	 */
-	public void RenderInvBlock(BlockRenderer blockRenderer, Block blockBase, int meta, int modelID) {}
+	public void RenderInvBlock(BlockRenderer renderer, Block block, int metadata, int modelID) {}
 	
 	/**
 	 * Renders a block in the world.
-	 * @param blockRenderer
-	 * @param blockView
+	 * @param renderer
+	 * @param world
 	 * @param x
 	 * @param y
 	 * @param z
-	 * @param blockBase
+	 * @param block
 	 * @param modelID
 	 * @return
 	 */
-	public boolean RenderWorldBlock(BlockRenderer blockRenderer, BlockView blockView, int x, int y, int z, Block blockBase, int modelID) {
+	public boolean RenderWorldBlock(BlockRenderer renderer, BlockView world, int x, int y, int z, Block block, int modelID) {
 		return false;
 	}
 	
 	/**
 	 * Is called when an item is picked up from crafting result slot.
-	 * @param playerBase
-	 * @param itemInstance
+	 * @param player
+	 * @param item
 	 */
-	public void TakenFromCrafting(PlayerEntity playerBase, ItemStack itemInstance) {}
+	public void TakenFromCrafting(PlayerEntity player, ItemStack item) {}
 	
 	/**
 	 * Is called when an item is picked up from furnace result slot.
-	 * @param playerBase
-	 * @param itemInstance
+	 * @param player
+	 * @param item
 	 */
-	public void TakenFromFurnace(PlayerEntity playerBase, ItemStack itemInstance) {}
+	public void TakenFromFurnace(PlayerEntity player, ItemStack item) {}
 	
 	/**
 	 * Is called when an item is picked up from the world.
-	 * @param playerBase
-	 * @param itemInstance
+	 * @param player
+	 * @param item
 	 */
-	public void OnItemPickup(PlayerEntity playerBase, ItemStack itemInstance) {}
+	public void OnItemPickup(PlayerEntity player, ItemStack item) {}
 	
 	@Override
 	public String toString() {
-		return getClass().getName() + " " + Version();
+		return this.getClass().getName() + " " + this.Version();
 	}
 	
 	/**
