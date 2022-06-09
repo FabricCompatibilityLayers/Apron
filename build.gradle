@@ -88,5 +88,9 @@ publishing {
 	}
 
 	repositories {
+		maven {
+			name 'halotroop-blucobalt.dev'
+			url 'https://repo.blucobalt.dev/repository/maven-halotroop'
+		}
 	}
 }
