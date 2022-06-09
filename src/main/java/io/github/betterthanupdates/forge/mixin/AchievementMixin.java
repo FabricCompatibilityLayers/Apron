@@ -11,17 +11,17 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Achievement.class)
 public abstract class AchievementMixin extends Stat implements BabricatedAchievement {
-    @Mutable
-    @Shadow
-    @Final
-    private String description;
+	@Mutable
+	@Shadow
+	@Final
+	private String description;
 
-    public AchievementMixin(int statId, String string, StatFormatter statFormatter) {
-        super(statId, string, statFormatter);
-    }
+	public AchievementMixin(int statId, String string, StatFormatter statFormatter) {
+		super(statId, string, statFormatter);
+	}
 
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	@Override
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

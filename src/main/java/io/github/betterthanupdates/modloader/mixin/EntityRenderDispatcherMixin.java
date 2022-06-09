@@ -12,10 +12,10 @@ import java.util.Map;
 
 @Mixin(EntityRenderDispatcher.class)
 public class EntityRenderDispatcherMixin {
-    @Shadow private Map renderers;
+	@Shadow private Map renderers;
 
-    @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/util/Map;values()Ljava/util/Collection;", shift = At.Shift.BEFORE))
-    private void modloader$ctr(CallbackInfo ci) {
-        ModLoader.AddAllRenderers(this.renderers);
-    }
+	@Inject(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/util/Map;values()Ljava/util/Collection;", shift = At.Shift.BEFORE))
+	private void modloader$ctr(CallbackInfo ci) {
+		ModLoader.AddAllRenderers(this.renderers);
+	}
 }

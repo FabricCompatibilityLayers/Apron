@@ -9,10 +9,10 @@ import java.util.Properties;
 
 @Mixin(TranslationStorage.class)
 public class TranslationStorageMixin implements ModLoaderTranslationStorage {
-    @Shadow private Properties translations;
+	@Shadow private Properties translations;
 
-    @Override
-    public Properties getTranslations() {
-        return this.translations;
-    }
+	@Override
+	public Properties getTranslations() {
+		return this.translations;
+	}
 }

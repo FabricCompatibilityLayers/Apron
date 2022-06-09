@@ -9,11 +9,11 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Stat.class)
 public class StatMixin implements BabricatedStat {
-    @Mutable
-    @Shadow @Final public String name;
+	@Mutable
+	@Shadow @Final public String name;
 
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
 }

@@ -12,10 +12,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FurnaceOutputSlot.class)
 public class FurnaceOutputSlotMixin {
-    @Shadow private PlayerEntity player;
+	@Shadow private PlayerEntity player;
 
-    @Inject(method = "onCrafted", at = @At(value = "INVOKE", target = "Lnet/minecraft/container/slot/Slot;onCrafted(Lnet/minecraft/item/ItemStack;)V"))
-    private void modloader$onCrafted(ItemStack par1, CallbackInfo ci) {
-        ModLoader.TakenFromFurnace(this.player, par1);
-    }
+	@Inject(method = "onCrafted", at = @At(value = "INVOKE", target = "Lnet/minecraft/container/slot/Slot;onCrafted(Lnet/minecraft/item/ItemStack;)V"))
+	private void modloader$onCrafted(ItemStack par1, CallbackInfo ci) {
+		ModLoader.TakenFromFurnace(this.player, par1);
+	}
 }
