@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge;
+package io.github.betterthanupdates.babricated;
 
 import forge.MinecraftForge;
 import fr.catcore.modremapperapi.utils.Constants;

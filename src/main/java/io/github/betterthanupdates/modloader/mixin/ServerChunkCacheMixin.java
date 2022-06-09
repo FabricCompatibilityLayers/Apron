@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin.modloader;
+package io.github.betterthanupdates.modloader.mixin;
 
 import modloader.ModLoader;
 import net.minecraft.world.World;
@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerChunkCache.class)
 public abstract class ServerChunkCacheMixin implements WorldSource {
-
     @Shadow private WorldSource worldSource;
 
     @Shadow private World world;

@@ -1,6 +1,6 @@
-package io.github.betterthanupdates.forge.mixin.babricated;
+package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.ForgePlayerEntity;
+import io.github.betterthanupdates.forge.entity.player.ForgePlayerEntity;
 import net.minecraft.block.Block;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge;
+package io.github.betterthanupdates.babricated;
 
 import fr.catcore.modremapperapi.api.ModRemapper;
 import fr.catcore.modremapperapi.api.RemapLibrary;
@@ -8,7 +8,7 @@ import net.fabricmc.tinyremapper.TinyRemapper;
 
 import java.util.*;
 
-public class ForgeModRemapper implements ModRemapper {
+public class BabricatedModRemapper implements ModRemapper {
     @Override
     public String[] getJarFolders() {
         return new String[0];

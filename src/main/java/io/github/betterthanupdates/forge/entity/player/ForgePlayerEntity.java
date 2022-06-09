@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge;
+package io.github.betterthanupdates.forge.entity.player;
 
 import net.minecraft.block.Block;
 

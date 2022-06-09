@@ -1,6 +1,5 @@
 package forge;
 
-import io.github.betterthanupdates.forge.BabricatedForge;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -10,8 +9,8 @@ import net.minecraft.util.SleepStatus;
 
 import java.util.*;
 
-import io.github.betterthanupdates.forge.ForgeBlock;
-import io.github.betterthanupdates.forge.ForgePlayerEntity;
+import io.github.betterthanupdates.forge.block.ForgeBlock;
+import io.github.betterthanupdates.forge.entity.player.ForgePlayerEntity;
 
 import static forge.MinecraftForge.LOGGER;
 
@@ -72,10 +71,8 @@ public class ForgeHooks {
     }
     
     public static float blockStrength(final Block block, final PlayerEntity player, final int meta) {
-        final float bh = ((ForgeBlock) (block)).getHardness(meta);
-        if (bh < 0.0f) {
-            return 0.0f;
-        }
+        final float bh = ((ForgeBlock) block).getHardness(meta);
+        if (bh < 0.0f) return 0.0f;
         if (!canHarvestBlock(block, player, meta)) {
             return 1.0f / bh / 100.0f;
         }

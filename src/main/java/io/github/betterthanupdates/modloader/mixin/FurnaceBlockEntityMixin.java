@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin.modloader;
+package io.github.betterthanupdates.modloader.mixin;
 
 import modloader.ModLoader;
 import net.minecraft.block.FurnaceBlock;
@@ -16,7 +16,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FurnaceBlockEntity.class)
 public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inventory {
-
     @Shadow public int burnTime;
 
     @Shadow protected abstract boolean canAcceptRecipeOutput();
@@ -34,6 +33,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
     /**
      * @author Risugami
      * @reason idk
+     * TODO(halotroop2288): rewrite as an {@link Inject} Mixin
      */
     @Overwrite
     public void tick() {
@@ -82,12 +82,12 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
         if (k != 0) {
             this.markDirty();
         }
-
     }
 
     /**
      * @author Risugami
      * @reason idk
+     * TODO(halotroop2288): rewrite as an {@link Inject} Mixin
      */
     @Overwrite
     public void craftRecipe() {

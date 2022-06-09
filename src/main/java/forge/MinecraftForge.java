@@ -1,6 +1,5 @@
 package forge;
 
-import io.github.betterthanupdates.forge.BabricatedForge;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin.modloader;
+package io.github.betterthanupdates.modloader.mixin;
 
 import modloader.ModLoader;
 import net.minecraft.container.slot.FurnaceOutputSlot;
@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FurnaceOutputSlot.class)
 public class FurnaceOutputSlotMixin {
-
     @Shadow private PlayerEntity player;
 
     @Inject(method = "onCrafted", at = @At(value = "INVOKE", target = "Lnet/minecraft/container/slot/Slot;onCrafted(Lnet/minecraft/item/ItemStack;)V"))
