@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "forge",
+  "id": "babricated-forge",
   "version": "${version}",
 
   "name": "Babricated Forge",
