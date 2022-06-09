@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin.modloader;
+package io.github.betterthanupdates.modloader.mixin;
 
 import modloader.ModLoader;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
@@ -12,7 +12,6 @@ import java.util.Map;
 
 @Mixin(EntityRenderDispatcher.class)
 public class EntityRenderDispatcherMixin {
-
     @Shadow private Map renderers;
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/util/Map;values()Ljava/util/Collection;", shift = At.Shift.BEFORE))

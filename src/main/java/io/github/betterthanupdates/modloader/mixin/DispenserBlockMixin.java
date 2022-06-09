@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin.modloader;
+package io.github.betterthanupdates.modloader.mixin;
 
 import modloader.ModLoader;
 import net.minecraft.block.DispenserBlock;
@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.Inject;
 
 import java.util.Random;
 
@@ -22,6 +23,7 @@ public class DispenserBlockMixin {
     /**
      * @author Risugami
      * @reason idk
+     * TODO(halotroop2288): Rewrite as an {@link Inject} Mixin.
      */
     @Overwrite
     private void dispense(World paramfd, int paramInt1, int paramInt2, int paramInt3, Random paramRandom) {

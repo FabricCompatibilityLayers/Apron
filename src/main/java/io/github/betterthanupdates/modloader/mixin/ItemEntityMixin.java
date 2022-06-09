@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin.modloader;
+package io.github.betterthanupdates.modloader.mixin;
 
 import modloader.ModLoader;
 import net.minecraft.block.Block;
@@ -18,7 +18,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityMixin extends Entity {
-
     @Shadow public int pickupDelay;
 
     @Shadow private int field_568;

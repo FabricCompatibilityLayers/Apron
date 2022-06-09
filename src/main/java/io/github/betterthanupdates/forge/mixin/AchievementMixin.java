@@ -1,6 +1,6 @@
-package io.github.betterthanupdates.forge.mixin.babricated;
+package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.BabricatedAchievement;
+import io.github.betterthanupdates.forge.stat.achievement.BabricatedAchievement;
 import net.minecraft.achievement.Achievement;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatFormatter;
@@ -16,8 +16,8 @@ public abstract class AchievementMixin extends Stat implements BabricatedAchieve
     @Final
     private String description;
 
-    public AchievementMixin(int i, String string, StatFormatter arg) {
-        super(i, string, arg);
+    public AchievementMixin(int statId, String string, StatFormatter statFormatter) {
+        super(statId, string, statFormatter);
     }
 
     @Override

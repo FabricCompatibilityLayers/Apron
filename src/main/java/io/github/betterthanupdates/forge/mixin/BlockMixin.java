@@ -1,6 +1,6 @@
-package io.github.betterthanupdates.forge.mixin.babricated;
+package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.ForgeBlock;
+import io.github.betterthanupdates.forge.block.ForgeBlock;
 import net.minecraft.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
 

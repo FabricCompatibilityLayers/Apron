@@ -1,6 +1,6 @@
-package io.github.betterthanupdates.forge.mixin.babricated;
+package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.BabricatedStat;
+import io.github.betterthanupdates.forge.stat.BabricatedStat;
 import net.minecraft.stat.Stat;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

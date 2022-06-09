@@ -32,7 +32,7 @@
   "environment": "*",
   "entrypoints": {
     "mod-remapper-api:modremapper": [
-      "io.github.betterthanupdates.forge.ForgeModRemapper"
+      "io.github.betterthanupdates.babricated.BabricatedModRemapper"
     ]
   },
   "accessWidener": "forge.accesswidener",
