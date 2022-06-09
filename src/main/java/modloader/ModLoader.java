@@ -1,16 +1,9 @@
 package modloader;
 
+import io.github.betterthanupdates.forge.BabricatedAchievement;
 import io.github.betterthanupdates.forge.BabricatedForge;
-import io.github.betterthanupdates.forge.mixin.babricated.client.render.entity.BlockEntityRenderDispatcherAccessor;
-import io.github.betterthanupdates.forge.mixin.babricated.client.render.entity.PlayerRendererAccessor;
-import io.github.betterthanupdates.forge.mixin.babricated.client.texture.TextureManagerAccessor;
-import io.github.betterthanupdates.forge.mixin.babricated.entity.BlockEntityAccessor;
-import io.github.betterthanupdates.forge.mixin.babricated.entity.EntityRegistryAccessor;
-import io.github.betterthanupdates.forge.mixin.babricated.recipe.RecipeRegistryAccessor;
-import io.github.betterthanupdates.forge.mixin.babricated.stat.StatsAccessor;
-import io.github.betterthanupdates.forge.mixininterface.AchievementAccessor;
-import io.github.betterthanupdates.forge.mixininterface.StatAccessor;
-import io.github.betterthanupdates.forge.mixininterface.TranslationStorageAccessor;
+import io.github.betterthanupdates.forge.BabricatedStat;
+import io.github.betterthanupdates.forge.BabricatedTranslationStorage;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
 import net.minecraft.achievement.Achievement;
@@ -25,6 +18,7 @@ import net.minecraft.client.render.TextureBinder;
 import net.minecraft.client.render.block.BlockRenderer;
 import net.minecraft.client.render.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.PlayerRenderer;
 import net.minecraft.client.render.entity.block.BlockEntityRenderer;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.client.texture.TextureManager;
@@ -48,7 +42,10 @@ import org.lwjgl.input.Keyboard;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
@@ -65,11 +62,10 @@ public class ModLoader {
 	private static final List<TextureBinder> animList = new LinkedList<>();
 	private static final Map<Integer, BaseMod> blockModels = new HashMap<>();
 	private static final Map<Integer, Boolean> blockSpecialInv = new HashMap<>();
-	private static final File cfgdir = new File(Minecraft.getGameDirectory(), "/config/");
-	private static final File cfgfile = new File(cfgdir, "ModLoader.cfg");
+	private static final File cfgDir = new File(Minecraft.getGameDirectory(), "/config/");
+	private static final File cfgFile = new File(cfgDir, "ModLoader.cfg");
 	public static Level cfgLoggingLevel = Level.FINER;
 	private static long clock = 0L;
-	public static final boolean DEBUG = false;
 	private static Field field_modifiers = null;
 	private static boolean hasInit = false;
 	private static int highestEntityId = 3000;
@@ -102,6 +98,7 @@ public class ModLoader {
 	 * @param name the name of the entry
 	 * @param description the description of the entry
 	 */
+	@SuppressWarnings("unused")
 	public static void AddAchievementDesc(Achievement achievement, String name, String description) {
 		try {
 			if (achievement.name.contains(".")) {
@@ -110,15 +107,15 @@ public class ModLoader {
 					String key = split[1];
 					AddLocalization("achievement." + key, name);
 					AddLocalization("achievement." + key + ".desc", description);
-					((StatAccessor)achievement).setName(TranslationStorage.getInstance().translate("achievement." + key));
-					((AchievementAccessor)achievement).setDescription(TranslationStorage.getInstance().translate("achievement." + key + ".desc"));
+					((BabricatedStat)achievement).setName(TranslationStorage.getInstance().translate("achievement." + key));
+					((BabricatedAchievement)achievement).setDescription(TranslationStorage.getInstance().translate("achievement." + key + ".desc"));
 				} else {
-					((StatAccessor)achievement).setName(name);
-					((AchievementAccessor)achievement).setDescription(description);
+					((BabricatedStat)achievement).setName(name);
+					((BabricatedAchievement)achievement).setDescription(description);
 				}
 			} else {
-				((StatAccessor)achievement).setName(name);
-				((AchievementAccessor)achievement).setDescription(description);
+				((BabricatedStat)achievement).setName(name);
+				((BabricatedAchievement)achievement).setDescription(description);
 			}
 		} catch (IllegalArgumentException | SecurityException var5) {
 			logger.throwing("ModLoader", "AddAchievementDesc", var5);
@@ -149,7 +146,7 @@ public class ModLoader {
 	
 	/**
 	 * Used to add all mod entity renderers.
-	 * @param rendererMap
+	 * @param rendererMap renderers to add
 	 */
 	public static void AddAllRenderers(Map<Class<? extends Entity>, EntityRenderer> rendererMap) {
 		if (!hasInit) {
@@ -164,19 +161,19 @@ public class ModLoader {
 	
 	/**
 	 * Registers one animation instance.
-	 * @param anim
+	 * @param textureBinder animation instance to register
 	 */
-	public static void addAnimation(TextureBinder anim) {
-		logger.finest("Adding animation " + anim.toString());
+	public static void addAnimation(TextureBinder textureBinder) {
+		logger.finest("Adding animation " + textureBinder.toString());
 
 		for(TextureBinder oldAnim : animList) {
-			if (oldAnim.renderMode == anim.renderMode && oldAnim.index == anim.index) {
-				animList.remove(anim);
+			if (oldAnim.renderMode == textureBinder.renderMode && oldAnim.index == textureBinder.index) {
+				animList.remove(textureBinder);
 				break;
 			}
 		}
 
-		animList.add(anim);
+		animList.add(textureBinder);
 	}
 	
 	/**
@@ -184,18 +181,18 @@ public class ModLoader {
 	 * @param armor
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	public static int AddArmor(String armor) {
 		try {
-			String[] existingArmor = PlayerRendererAccessor.getArmorTypes();
+			String[] existingArmor = PlayerRenderer.armorTypes;
 			List<String> existingArmorList = Arrays.asList(existingArmor);
-			List<String> combinedList = new ArrayList();
-			combinedList.addAll(existingArmorList);
+			List<String> combinedList = new ArrayList<>(existingArmorList);
 			if (!combinedList.contains(armor)) {
 				combinedList.add(armor);
 			}
 
 			int index = combinedList.indexOf(armor);
-			PlayerRendererAccessor.setArmorTypes(combinedList.toArray(new String[0]));
+			PlayerRenderer.armorTypes = combinedList.toArray(new String[0]);
 			return index;
 		} catch (IllegalArgumentException var5) {
 			logger.throwing("ModLoader", "AddArmor", var5);
@@ -211,7 +208,7 @@ public class ModLoader {
 	 * @param value
 	 */
 	public static void AddLocalization(String key, String value) {
-		Properties props = ((TranslationStorageAccessor)TranslationStorage.getInstance()).getTranslations();
+		Properties props = ((BabricatedTranslationStorage)TranslationStorage.getInstance()).getTranslations();
 
 		if (props != null) {
 			props.put(key, value);
@@ -229,23 +226,22 @@ public class ModLoader {
 				return;
 			}
 
+			// TODO
 //			Package pack = ModLoader.class.getPackage();
 //			if (pack != null) {
 //				name = pack.getName() + "." + name;
 //			}
 
-			Class<?> instclass = loader.loadClass(name);
-			if (!BaseMod.class.isAssignableFrom(instclass)) {
+			Class<?> modClass = loader.loadClass(name);
+			if (!BaseMod.class.isAssignableFrom(modClass)) {
 				return;
 			}
 
-			setupProperties((Class<? extends BaseMod>) instclass);
-			BaseMod mod = (BaseMod)instclass.newInstance();
-			if (mod != null) {
-				modList.add(mod);
-				logger.fine("Mod Loaded: \"" + mod.toString() + "\" from " + filename);
-				System.out.println("Mod Loaded: " + mod.toString());
-			}
+			setupProperties((Class<? extends BaseMod>) modClass);
+			BaseMod mod = (BaseMod)modClass.getDeclaredConstructor().newInstance();
+			modList.add(mod);
+			logger.fine("Mod Loaded: \"" + mod + "\" from " + filename);
+			System.out.println("Mod Loaded: " + mod);
 		} catch (Throwable var6) {
 			logger.fine("Failed to load mod from \"" + filename + "\"");
 			System.out.println("Failed to load mod from \"" + filename + "\"");
@@ -260,6 +256,7 @@ public class ModLoader {
 	 * @param instance
 	 * @param name
 	 */
+	@SuppressWarnings("unused")
 	public static void AddName(Object instance, String name) {
 		String tag = null;
 		if (instance instanceof Item) {
@@ -294,10 +291,11 @@ public class ModLoader {
 
 	/**
 	 * Use this to add custom images for your items and blocks.
-	 * @param fileToOverride
-	 * @param fileToAdd
-	 * @return
+	 * @param fileToOverride file to override
+	 * @param fileToAdd file to add
+	 * @return unique sprite index
 	 */
+	@SuppressWarnings("unused")
 	public static int addOverride(String fileToOverride, String fileToAdd) {
 		try {
 			int i = getUniqueSpriteIndex(fileToOverride);
@@ -339,48 +337,52 @@ public class ModLoader {
 	}
 
 	/**
-	 * Add recipe to crafting list.
-	 * @param output
-	 * @param ingredients
+	 * Add a shaped recipe to crafting list.
+	 * @param output the result of the crafting recipe
+	 * @param ingredients the ingredients for the crafting recipe from top left to bottom right.
 	 */
+	@SuppressWarnings("unused")
 	public static void AddRecipe(ItemStack output, Object... ingredients) {
-		((RecipeRegistryAccessor)RecipeRegistry.getInstance()).callAddShapedRecipe(output, ingredients);
+		RecipeRegistry.getInstance().addShapedRecipe(output, ingredients);
 	}
 
 	/**
 	 * Add recipe to crafting list.
-	 * @param output
-	 * @param ingredients
+	 * @param output the result of the crafting recipe
+	 * @param ingredients ingredients for the recipe in any order
 	 */
+	@SuppressWarnings("unused")
 	public static void AddShapelessRecipe(ItemStack output, Object... ingredients) {
-		((RecipeRegistryAccessor)RecipeRegistry.getInstance()).callAddShapelessRecipe(output, ingredients);
+		RecipeRegistry.getInstance().addShapelessRecipe(output, ingredients);
 	}
 
 	/**
 	 * Used to add smelting recipes to the furnace.
-	 * @param input
-	 * @param output
+	 * @param input ingredient for the recipe
+	 * @param output the result of the furnace recipe
 	 */
+	@SuppressWarnings("unused")
 	public static void AddSmelting(int input, ItemStack output) {
 		SmeltingRecipeRegistry.getInstance().addSmeltingRecipe(input, output);
 	}
 
 	/**
 	 * Add entity to spawn list for all biomes except Hell.
-	 * @param entityClass
-	 * @param weightedProb
-	 * @param spawnGroup
+	 * @param entityClass entity to spawn
+	 * @param weightedProb chance of spawning for every try
+	 * @param spawnGroup group to spawn the entity in
 	 */
+	@SuppressWarnings("unused")
 	public static void AddSpawn(Class<? extends LivingEntity> entityClass, int weightedProb, SpawnGroup spawnGroup) {
 		AddSpawn(entityClass, weightedProb, spawnGroup, (Biome) null);
 	}
 
 	/**
 	 * Add entity to spawn list for selected biomes.
-	 * @param entityClass
-	 * @param weightedProb
-	 * @param spawnGroup
-	 * @param biomes
+	 * @param entityClass entity to spawn
+	 * @param weightedProb chance of spawning for every try
+	 * @param spawnGroup group to spawn the entity in
+	 * @param biomes biomes to spawn the entity in
 	 */
 	public static void AddSpawn(Class<? extends LivingEntity> entityClass, int weightedProb, SpawnGroup spawnGroup, Biome... biomes) {
 		if (entityClass == null) {
@@ -419,6 +421,7 @@ public class ModLoader {
 	 * @param weightedProb
 	 * @param spawnGroup
 	 */
+	@SuppressWarnings("unused")
 	public static void AddSpawn(String entityName, int weightedProb, SpawnGroup spawnGroup) {
 		AddSpawn(entityName, weightedProb, spawnGroup, (Biome) null);
 	}
@@ -430,9 +433,9 @@ public class ModLoader {
 	 * @param spawnGroup
 	 * @param biomes
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "unused"})
 	public static void AddSpawn(String entityName, int weightedProb, SpawnGroup spawnGroup, Biome... biomes) {
-		Class<? extends Entity> entityClass = EntityRegistryAccessor.getSTRING_ID_TO_CLASS().get(entityName);
+		Class<? extends Entity> entityClass = (Class<? extends Entity>) EntityRegistry.STRING_ID_TO_CLASS.get(entityName);
 		if (entityClass != null && LivingEntity.class.isAssignableFrom(entityClass)) {
 			AddSpawn((Class<? extends LivingEntity>) entityClass, weightedProb, spawnGroup, biomes);
 		}
@@ -440,14 +443,14 @@ public class ModLoader {
 	
 	/**
 	 * Dispenses the entity associated with the selected item.
-	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @param xVel
-	 * @param zVel
-	 * @param stack
-	 * @return
+	 * @param world world to spawn in
+	 * @param x x position
+	 * @param y y position
+	 * @param z z position
+	 * @param xVel x velocity
+	 * @param zVel z velocity
+	 * @param stack item inside the dispenser to dispense
+	 * @return whether dispensing was successful
 	 */
 	public static boolean DispenseEntity(World world, double x, double y, double z, int xVel, int zVel, ItemStack stack) {
 		boolean result = false;
@@ -545,6 +548,7 @@ public class ModLoader {
 	 * @param full3DItem
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	public static int getUniqueBlockModelID(BaseMod mod, boolean full3DItem) {
 		int id = nextBlockModelID++;
 		blockModels.put(id, mod);
@@ -556,6 +560,7 @@ public class ModLoader {
 	 * Gets next Entity ID to use.
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	public static int getUniqueEntityId() {
 		return highestEntityId++;
 	}
@@ -701,7 +706,7 @@ public class ModLoader {
 	@SuppressWarnings("unchecked")
 	private static void initStats() {
 		for(int id = 0; id < Block.BY_ID.length; ++id) {
-			if (!StatsAccessor.getIdMap().containsKey(16777216 + id) && Block.BY_ID[id] != null && Block.BY_ID[id].isStatEnabled()) {
+			if (!Stats.idMap.containsKey(16777216 + id) && Block.BY_ID[id] != null && Block.BY_ID[id].isStatEnabled()) {
 				String str = TranslationStorage.getInstance().translate("stat.mineBlock", Block.BY_ID[id].getTranslatedName());
 				Stats.mineBlock[id] = new StatEntity(16777216 + id, str, id).register();
 				Stats.blocksMinedList.add(Stats.mineBlock[id]);
@@ -709,7 +714,7 @@ public class ModLoader {
 		}
 
 		for(int id = 0; id < Item.byId.length; ++id) {
-			if (!StatsAccessor.getIdMap().containsKey(16908288 + id) && Item.byId[id] != null) {
+			if (!Stats.idMap.containsKey(16908288 + id) && Item.byId[id] != null) {
 				String str = TranslationStorage.getInstance().translate("stat.useItem", Item.byId[id].getTranslatedName());
 				Stats.useItem[id] = new StatEntity(16908288 + id, str, id).register();
 				if (id >= Block.BY_ID.length) {
@@ -717,7 +722,7 @@ public class ModLoader {
 				}
 			}
 
-			if (!StatsAccessor.getIdMap().containsKey(16973824 + id) && Item.byId[id] != null && Item.byId[id].hasDurability()) {
+			if (!Stats.idMap.containsKey(16973824 + id) && Item.byId[id] != null && Item.byId[id].hasDurability()) {
 				String str = TranslationStorage.getInstance().translate("stat.breakItem", Item.byId[id].getTranslatedName());
 				Stats.breakItem[id] = new StatEntity(16973824 + id, str, id).register();
 			}
@@ -734,7 +739,7 @@ public class ModLoader {
 		}
 
 		for(int id : idHashSet) {
-			if (!StatsAccessor.getIdMap().containsKey(16842752 + id) && Item.byId[id] != null) {
+			if (!Stats.idMap.containsKey(16842752 + id) && Item.byId[id] != null) {
 				String str = TranslationStorage.getInstance().translate("stat.craftItem", Item.byId[id].getTranslatedName());
 				Stats.timesCrafted[id] = new StatEntity(16842752 + id, str, id).register();
 			}
@@ -785,10 +790,10 @@ public class ModLoader {
 	 * @throws IOException
 	 */
 	public static void loadConfig() throws IOException {
-		cfgdir.mkdir();
-		if (cfgfile.exists() || cfgfile.createNewFile()) {
-			if (cfgfile.canRead()) {
-				InputStream in = Files.newInputStream(cfgfile.toPath());
+		cfgDir.mkdir();
+		if (cfgFile.exists() || cfgFile.createNewFile()) {
+			if (cfgFile.canRead()) {
+				InputStream in = Files.newInputStream(cfgFile.toPath());
 				props.load(in);
 				in.close();
 			}
@@ -804,8 +809,8 @@ public class ModLoader {
 	 * @throws Exception
 	 */
 	public static BufferedImage loadImage(TextureManager textureManager, String path) throws Exception {
-		TexturePackManager pack = ((TextureManagerAccessor)textureManager).getTexturePackManager();
-		InputStream input = pack.texturePack.getResourceAsStream(path);
+		TexturePackManager packManager = textureManager.texturePackManager;
+		InputStream input = packManager.texturePack.getResourceAsStream(path);
 		if (input == null) {
 			throw new Exception("Image not found: " + path);
 		} else {
@@ -1106,7 +1111,7 @@ public class ModLoader {
 				throw new IllegalArgumentException("block parameter cannot be null.");
 			}
 
-			List<Block> list = Session.defaultCreativeInventory;
+			List<Block> list = (List<Block>) Session.defaultCreativeInventory;
 			list.add(block);
 			int id = block.id;
 			BlockItem item = null;
@@ -1128,13 +1133,13 @@ public class ModLoader {
 	
 	/**
 	 * Registers an entity ID.
-	 * @param entityClass
-	 * @param entityName
-	 * @param id
+	 * @param entityClass type of entity to register
+	 * @param entityName name of entity
+	 * @param entityId an arbitrary number that <b>cannot</b> be reused for other entities
 	 */
-	public static void RegisterEntityID(Class<? extends Entity> entityClass, String entityName, int id) {
+	public static void RegisterEntityID(Class<? extends Entity> entityClass, String entityName, int entityId) {
 		try {
-			EntityRegistryAccessor.callRegister(entityClass, entityName, id);
+			EntityRegistry.register(entityClass, entityName, entityId);
 		} catch (IllegalArgumentException var4) {
 			logger.throwing("ModLoader", "RegisterEntityID", var4);
 			ThrowException(var4);
@@ -1174,10 +1179,10 @@ public class ModLoader {
 	 */
 	public static void RegisterTileEntity(Class<? extends BlockEntity> blockEntityClass, String id, BlockEntityRenderer renderer) {
 		try {
-			BlockEntityAccessor.callRegister(blockEntityClass, id);
+			BlockEntity.register(blockEntityClass, id);
 			if (renderer != null) {
 				BlockEntityRenderDispatcher ref = BlockEntityRenderDispatcher.INSTANCE;
-				Map<Class<? extends BlockEntity>, BlockEntityRenderer> renderers = ((BlockEntityRenderDispatcherAccessor)ref).getCustomRenderers();
+				Map<Class<? extends BlockEntity>, BlockEntityRenderer> renderers = ref.customRenderers;
 				renderers.put(blockEntityClass, renderer);
 				renderer.setRenderDispatcher(ref);
 			}
@@ -1238,7 +1243,7 @@ public class ModLoader {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void RemoveSpawn(String entityName, SpawnGroup spawnGroup, Biome... biomes) {
-		Class<? extends Entity> entityClass = EntityRegistryAccessor.getSTRING_ID_TO_CLASS().get(entityName);
+		Class<? extends Entity> entityClass = (Class<? extends Entity>) EntityRegistry.STRING_ID_TO_CLASS.get(entityName);
 		if (entityClass != null && LivingEntity.class.isAssignableFrom(entityClass)) {
 			RemoveSpawn((Class<? extends LivingEntity>) entityClass, spawnGroup, biomes);
 		}
@@ -1292,10 +1297,10 @@ public class ModLoader {
 	 * @throws IOException
 	 */
 	public static void saveConfig() throws IOException {
-		cfgdir.mkdir();
-		if (cfgfile.exists() || cfgfile.createNewFile()) {
-			if (cfgfile.canWrite()) {
-				OutputStream out = Files.newOutputStream(cfgfile.toPath());
+		cfgDir.mkdir();
+		if (cfgFile.exists() || cfgFile.createNewFile()) {
+			if (cfgFile.canWrite()) {
+				OutputStream out = Files.newOutputStream(cfgFile.toPath());
 				props.store(out, "ModLoader Config");
 				out.close();
 			}
@@ -1341,6 +1346,7 @@ public class ModLoader {
 	 * @throws IllegalArgumentException
 	 * @throws SecurityException
 	 */
+	@SuppressWarnings("unused")
 	public static <T, E> void setPrivateValue(Class<? super T> instanceClass, T instance, int fieldIndex, E value) throws IllegalArgumentException, SecurityException {
 		try {
 			Field f = instanceClass.getDeclaredFields()[fieldIndex];
@@ -1389,7 +1395,7 @@ public class ModLoader {
 
 	private static void setupProperties(Class<? extends BaseMod> mod) throws IllegalArgumentException, IllegalAccessException, IOException, SecurityException {
 		Properties modprops = new Properties();
-		File modcfgfile = new File(cfgdir, mod.getName() + ".cfg");
+		File modcfgfile = new File(cfgDir, mod.getName() + ".cfg");
 		if (modcfgfile.exists() && modcfgfile.canRead()) {
 			modprops.load(Files.newInputStream(modcfgfile.toPath()));
 		}
