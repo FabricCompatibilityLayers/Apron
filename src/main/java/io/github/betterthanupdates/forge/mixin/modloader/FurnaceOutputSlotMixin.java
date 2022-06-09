@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin.modloader.container.slot;
+package io.github.betterthanupdates.forge.mixin.modloader;
 
 import modloader.ModLoader;
 import net.minecraft.container.slot.FurnaceOutputSlot;

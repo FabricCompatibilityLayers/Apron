@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.forge.mixin.babricated;
 
 import io.github.betterthanupdates.forge.ForgeBlock;
 import net.minecraft.block.Block;

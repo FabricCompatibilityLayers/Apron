@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin.modloader.entity;
+package io.github.betterthanupdates.forge.mixin.modloader;
 
 import modloader.ModLoader;
 import net.minecraft.block.Block;

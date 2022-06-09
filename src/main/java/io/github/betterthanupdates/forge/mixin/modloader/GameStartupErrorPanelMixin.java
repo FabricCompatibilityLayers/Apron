@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin.modloader.applet;
+package io.github.betterthanupdates.forge.mixin.modloader;
 
 import modloader.BaseMod;
 import modloader.ModLoader;
