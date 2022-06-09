@@ -1,11 +1,12 @@
 # Babricated Forge
 
-The Forge Mod Loader, Forge API, Mod Loader MP, and several other useful APIs implemented in the Babric toolchain.
+Risugami's ModLoader and ModLoaderMP, Forge API, Forge patches,
+and several other useful APIs and patches implemented in the Babric toolchain.
 
 ## Setup
 
 For setup instructions please see the
-[Fabric wiki page](https://fabricmc.net/wiki/tutorial:setup "Fabric Wiki: Setup Developement Workspace")
+[Fabric wiki page](https://fabricmc.net/wiki/tutorial:setup "Fabric Wiki: Setup Development Workspace")
 that relates to the IDE that you are using.
 
 ## License

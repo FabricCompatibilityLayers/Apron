@@ -4,6 +4,7 @@
   "package": "io.github.betterthanupdates.modloader.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "DisconnectPacketMixin",
     "DispenserBlockMixin",
     "ItemEntityMixin",
     "FurnaceBlockEntityMixin",
