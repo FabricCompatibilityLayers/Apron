@@ -17,11 +17,19 @@ loom {
 repositories {
 	mavenCentral()
 	maven {
-		name = 'Babric'
-		url = 'https://maven.glass-launcher.net/babric'
+		name 'Babric'
+		url 'https://maven.glass-launcher.net/babric'
 		content {
 			includeGroup 'babric'
 			includeGroup 'org.lwjgl.lwjgl'
+		}
+	}
+	maven {
+		name 'halotroop'
+		url 'https://repo.blucobalt.dev/repository/maven-halotroop'
+		content {
+			includeGroup 'com.halotroop'
+			includeGroup 'io.github.betterthanupdates'
 		}
 	}
 	mavenLocal()
@@ -88,9 +96,15 @@ publishing {
 	}
 
 	repositories {
-		maven {
-			name 'halotroop-blucobalt.dev'
-			url 'https://repo.blucobalt.dev/repository/maven-halotroop'
+		if (ENV.MAVEN_URL) {
+			maven {
+				name 'halotroop-blucobalt.dev'
+				url 'https://repo.blucobalt.dev/repository/maven-halotroop'
+				credentials {
+					username ENV.MAVEN_USERNAME
+					password ENV.MAVEN_PASSWORD
+				}
+			}
 		}
 	}
 }
