@@ -1,6 +1,6 @@
 # Babricated Forge
 
-Risugami's ModLoader and ModLoaderMP, Forge API, Forge patches,
+Risugami's ModLoader and ModLoaderMP, Minecraft Forge, ShockAhPI, AudioMod,
 and several other useful APIs and patches implemented in the Babric toolchain.
 
 ## Setup
