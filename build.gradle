@@ -4,8 +4,12 @@ plugins {
 	id 'maven-publish'
 }
 
+// Fetch build number from Github Actions
+def ENV = System.getenv()
+def build_number = ENV.BUILD_NUMBER ?: "local"
+version = "b1.7.3+build." + build_number
+
 archivesBaseName = project.archives_base_name
-version = project.mod_version
 group = project.maven_group
 
 loom {
@@ -41,16 +45,18 @@ repositories {
 			includeGroup 'maven.modrinth'
 		}
 	}
-
 	maven {
 		name 'JitPack'
 		url 'https://jitpack.io'
+		content {
+			includeGroup 'com.github.*'
+		}
 	}
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "com.halotroop:yarn:b1.7.3-build.${project.mappings}"
+	mappings "io.github.betterthanupdates:yarn:b1.7.3+build.${project.mappings}"
 	modApi "babric:fabric-loader:${project.loader_version}"
 
 	implementation "org.slf4j:slf4j-api:1.8.0-beta4"
@@ -105,6 +111,8 @@ publishing {
 					password ENV.MAVEN_PASSWORD
 				}
 			}
+		} else {
+			mavenLocal()
 		}
 	}
 }
