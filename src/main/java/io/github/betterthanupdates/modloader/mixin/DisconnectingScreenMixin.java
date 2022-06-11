@@ -13,6 +13,11 @@ public abstract class DisconnectingScreenMixin extends Screen {
 	@Shadow
 	private String line2;
 
+	/**
+	 * @author Risugami
+	 * @reason ModLoaderMP expects multi-line disconnect messages,
+	 * and they need to be displayed correctly.
+	 */
 	@Inject(method = "render", cancellable = true, at = @At(value = "INVOKE", shift = At.Shift.BEFORE,
 			target = "Lnet/minecraft/client/gui/screen/DisconnectingScreen;drawTextWithShadowCentred(Lnet/minecraft/client/render/TextRenderer;Ljava/lang/String;III)V"))
 	private void modloader$render(int j, int f, float delta, CallbackInfo ci) {
