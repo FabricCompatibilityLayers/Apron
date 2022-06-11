@@ -7,8 +7,7 @@ plugins {
 
 // Fetch build number from Github Actions
 final def ENV = System.getenv()
-def build_number = ENV.GITHUB_ACTIONS ? ENV.BUILD_NUMBER : "local"
-version = "1.7.3+build." + build_number
+version = "1.7.3+build." + ENV.GITHUB_ACTIONS ? ENV.BUILD_NUMBER : "local"
 
 archivesBaseName = project.archives_base_name
 group = project.maven_group
@@ -81,9 +80,6 @@ dependencies {
 //	modRuntimeOnly(group: "remapped.client", name: "modloadermp-1.7.3-unofficial", version: "v2")
 	// Todo
 //	modRuntimeOnly(group: "remapped.client", name: "minecraftforge-client", version: "1.0.7-20110907")
-//	modRuntimeOnly(group: "remapped.server", name: "modloadermp-1.7.3-unofficial-server", version: "v2")
-//	modRuntimeOnly(group: "remapped.server", name: "minecraftforge-server", version: "1.0.7-20110907")
-//	modRuntimeOnly(group: "remapped.client", name: "shockahpi", version: "r8")
 }
 
 processResources {
