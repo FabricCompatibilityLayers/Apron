@@ -52,6 +52,10 @@ repositories {
 			includeGroup 'com.github.*'
 		}
 	}
+
+	flatDir {
+		dirs "./remapped/client"
+	}
 }
 
 dependencies {
@@ -66,8 +70,8 @@ dependencies {
 
 	// Done
 //	modRuntimeOnly(group: "remapped.client", name: "modloader", version: "b1.7.3")
-	// Todo
 //	modRuntimeOnly(group: "remapped.client", name: "modloadermp-1.7.3-unofficial", version: "v2")
+	// Todo
 //	modRuntimeOnly(group: "remapped.client", name: "minecraftforge-client", version: "1.0.7-20110907")
 }
 

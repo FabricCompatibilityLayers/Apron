@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Environment(value= EnvType.CLIENT)
+@Environment(EnvType.CLIENT)
 @Mixin(DisconnectingScreen.class)
 public abstract class DisconnectingScreenMixin extends Screen {
 	@Shadow
@@ -21,7 +21,7 @@ public abstract class DisconnectingScreenMixin extends Screen {
 	 * @reason ModLoaderMP expects multi-line disconnect messages,
 	 * and they need to be displayed correctly.
 	 */
-	@Inject(method = "render", cancellable = true, at = @At(value = "INVOKE", shift = At.Shift.BY, by = 1,
+	@Inject(method = "render", cancellable = true, at = @At(value = "INVOKE", ordinal = 0,
 			target = "Lnet/minecraft/client/gui/screen/DisconnectingScreen;drawTextWithShadowCentred(Lnet/minecraft/client/render/TextRenderer;Ljava/lang/String;III)V"))
 	private void modloader$render(int j, int f, float delta, CallbackInfo ci) {
 		String[] descriptionSplit = this.line2.split("\n");

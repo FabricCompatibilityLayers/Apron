@@ -5,14 +5,18 @@ import modloadermp.ModLoaderMp;
 import modloadermp.NetClientHandlerEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.block.Block;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.*;
+import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.FireballEntity;
+import net.minecraft.entity.projectile.SnowballEntity;
+import net.minecraft.entity.projectile.ThrownEggEntity;
 import net.minecraft.network.ClientPlayPacketHandler;
-import net.minecraft.packet.play.EntitySpawnS2CPacket;
-import net.minecraft.packet.play.OpenContainerS2CPacket;
+import net.minecraft.packet.play.*;
 import net.minecraft.world.World;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,51 +24,134 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.lang.reflect.Field;
 
-@Environment(value= EnvType.CLIENT)
+@Environment(EnvType.CLIENT)
 @Mixin(ClientPlayPacketHandler.class)
 public abstract class ClientPlayPacketHandlerMixin {
 	@Shadow private ClientWorld world;
 
-	@Shadow protected abstract Entity method_1645(int i);
+	@Shadow protected abstract Entity getEntity(int i);
 
 	/**
 	 * @author Risugami
 	 * @reason ModLoaderMP can handle spawning custom entities
+	 * TODO: yeet Overwrite
 	 */
-	@Inject(method = "onEntitySpawn", at = @At(value = "FIELD", opcode = Opcodes.GETFIELD, ordinal = 0,
-			shift = At.Shift.BEFORE, target = "Lnet/minecraft/packet/play/EntitySpawnS2CPacket;type:I"))
-	private void modloader$spawnEntity(EntitySpawnS2CPacket packet, CallbackInfo ci) {
-		double xVelocity = (double)packet.x / 32.0;
-		double yVelocity = (double)packet.y / 32.0;
-		double zVelocity = (double)packet.z / 32.0;
-		Entity entity;
+	@Overwrite
+	public void onEntitySpawn(EntitySpawnS2CPacket packet23vehiclespawn) {
+		double d = (double)packet23vehiclespawn.x / 32.0;
+		double d1 = (double)packet23vehiclespawn.y / 32.0;
+		double d2 = (double)packet23vehiclespawn.z / 32.0;
+		Entity obj = null;
+		if (packet23vehiclespawn.type == 10) {
+			obj = new ChestMinecartEntity(this.world, d, d1, d2, 0);
+		}
 
-		NetClientHandlerEntity entityHandler = ModLoaderMp.HandleNetClientHandlerEntities(packet.type);
-		if (entityHandler != null) {
+		if (packet23vehiclespawn.type == 11) {
+			obj = new ChestMinecartEntity(this.world, d, d1, d2, 1);
+		}
+
+		if (packet23vehiclespawn.type == 12) {
+			obj = new ChestMinecartEntity(this.world, d, d1, d2, 2);
+		}
+
+		if (packet23vehiclespawn.type == 90) {
+			obj = new FishHookEntity(this.world, d, d1, d2);
+		}
+
+		if (packet23vehiclespawn.type == 60) {
+			obj = new ArrowEntity(this.world, d, d1, d2);
+		}
+
+		if (packet23vehiclespawn.type == 61) {
+			obj = new SnowballEntity(this.world, d, d1, d2);
+		}
+
+		if (packet23vehiclespawn.type == 63) {
+			obj = new FireballEntity(
+					this.world,
+					d,
+					d1,
+					d2,
+					(double)packet23vehiclespawn.field_1667 / 8000.0,
+					(double)packet23vehiclespawn.field_1668 / 8000.0,
+					(double)packet23vehiclespawn.field_1669 / 8000.0
+			);
+			packet23vehiclespawn.flag = 0;
+		}
+
+		if (packet23vehiclespawn.type == 62) {
+			obj = new ThrownEggEntity(this.world, d, d1, d2);
+		}
+
+		if (packet23vehiclespawn.type == 1) {
+			obj = new BoatEntity(this.world, d, d1, d2);
+		}
+
+		if (packet23vehiclespawn.type == 50) {
+			obj = new PrimedTntEntity(this.world, d, d1, d2);
+		}
+
+		if (packet23vehiclespawn.type == 70) {
+			obj = new FallingBlockEntity(this.world, d, d1, d2, Block.SAND.id);
+		}
+
+		if (packet23vehiclespawn.type == 71) {
+			obj = new FallingBlockEntity(this.world, d, d1, d2, Block.GRAVEL.id);
+		}
+
+		NetClientHandlerEntity netclienthandlerentity = ModLoaderMp.HandleNetClientHandlerEntities(packet23vehiclespawn.type);
+		if (netclienthandlerentity != null) {
 			try {
-				entity = entityHandler.entityClass
+				obj = netclienthandlerentity.entityClass
 						.getConstructor(World.class, Double.TYPE, Double.TYPE, Double.TYPE)
-						.newInstance(this.world, xVelocity, yVelocity, zVelocity);
-				if (entityHandler.entityHasOwner) {
-					Field field = entityHandler.entityClass.getField("owner");
+						.newInstance(this.world, d, d1, d2);
+				if (netclienthandlerentity.entityHasOwner) {
+					Field field = netclienthandlerentity.entityClass.getField("owner");
 					if (!Entity.class.isAssignableFrom(field.getType())) {
 						throw new Exception(String.format("Entity's owner field must be of type Entity, but it is of type %s.", field.getType()));
 					}
 
-					Entity entity1 = this.method_1645(packet.flag);
+					Entity entity1 = this.getEntity(packet23vehiclespawn.flag);
 					if (entity1 == null) {
 						ModLoaderMp.Log("Received spawn packet for entity with owner, but owner was not found.");
 					} else {
 						if (!field.getType().isAssignableFrom(entity1.getClass())) {
-							throw new Exception(String.format("Tried to assign an entity of type %s to entity owner, which is of type %s.", entity1.getClass(), field.getType()));
+							throw new Exception(
+									String.format("Tried to assign an entity of type %s to entity owner, which is of type %s.", entity1.getClass(), field.getType())
+							);
 						}
-						entity = entity1;
+
+						field.set(obj, entity1);
 					}
 				}
-			} catch (Exception e) {
-				ModLoader.getLogger().throwing("NetClientHandler", "handleVehicleSpawn", e);
-				ModLoader.ThrowException("Error initializing entity of type " + packet.type + '.', e);
-				// Don't cancel/return. Continue with vanilla procedure
+			} catch (Exception var12) {
+				ModLoader.getLogger().throwing("NetClientHandler", "handleVehicleSpawn", var12);
+				ModLoader.ThrowException(String.format("Error initializing entity of type %s.", packet23vehiclespawn.type), var12);
+				return;
+			}
+		}
+
+		if (obj != null) {
+			obj.clientX = packet23vehiclespawn.x;
+			obj.clientY = packet23vehiclespawn.y;
+			obj.clientZ = packet23vehiclespawn.z;
+			obj.yaw = 0.0F;
+			obj.pitch = 0.0F;
+			obj.entityId = packet23vehiclespawn.entityId;
+			this.world.method_1495(packet23vehiclespawn.entityId, obj);
+			if (packet23vehiclespawn.flag > 0) {
+				if (packet23vehiclespawn.type == 60) {
+					Entity entity = this.getEntity(packet23vehiclespawn.flag);
+					if (entity instanceof LivingEntity) {
+						((ArrowEntity)obj).owner = (LivingEntity)entity;
+					}
+				}
+
+				obj.setVelocity(
+						(double)packet23vehiclespawn.field_1667 / 8000.0,
+						(double)packet23vehiclespawn.field_1668 / 8000.0,
+						(double)packet23vehiclespawn.field_1669 / 8000.0
+				);
 			}
 		}
 	}

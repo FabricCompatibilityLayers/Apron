@@ -4,6 +4,7 @@ import modloader.BaseMod;
 import net.minecraft.client.gui.screen.Screen;
 
 public abstract class BaseModMp extends BaseMod {
+	public BaseModMp() {}
 	public final int getId() {
 		return this.toString().hashCode();
 	}
