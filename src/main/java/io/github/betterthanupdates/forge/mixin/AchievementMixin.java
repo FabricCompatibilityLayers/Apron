@@ -1,9 +1,9 @@
 package io.github.betterthanupdates.forge.mixin;
 
 import io.github.betterthanupdates.forge.stat.achievement.ForgeAchievement;
-import net.minecraft.achievement.Achievement;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatFormatter;
+import net.minecraft.stat.achievement.Achievement;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
