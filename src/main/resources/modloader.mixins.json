@@ -5,16 +5,18 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "DisconnectPacketMixin",
-    "DisconnectingScreenMixin",
     "DispenserBlockMixin",
     "ItemEntityMixin",
     "FurnaceBlockEntityMixin",
     "ServerChunkCacheMixin"
   ],
   "client": [
+    "ClientPlayPacketHandlerMixin",
+    "DisconnectingScreenMixin",
     "GameStartupErrorPanelMixin",
     "EntityRenderDispatcherMixin",
-    "FurnaceOutputSlotMixin"
+    "FurnaceOutputSlotMixin",
+    "TranslationStorageMixin"
   ],
   "injectors": {
     "defaultRequire": 1

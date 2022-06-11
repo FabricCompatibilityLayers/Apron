@@ -1,6 +1,6 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.stat.achievement.BabricatedAchievement;
+import io.github.betterthanupdates.forge.stat.achievement.ForgeAchievement;
 import net.minecraft.achievement.Achievement;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.StatFormatter;
@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Achievement.class)
-public abstract class AchievementMixin extends Stat implements BabricatedAchievement {
+public abstract class AchievementMixin extends Stat implements ForgeAchievement {
 	@Mutable
 	@Shadow
 	@Final

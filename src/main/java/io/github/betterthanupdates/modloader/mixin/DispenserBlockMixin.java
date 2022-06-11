@@ -18,69 +18,70 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import java.util.Random;
 
 @Mixin(DispenserBlock.class)
-public class DispenserBlockMixin {
+public abstract class DispenserBlockMixin {
 
 	/**
 	 * @author Risugami
-	 * @reason idk
-	 * TODO(halotroop2288): Rewrite as an {@link Inject} Mixin.
+	 * @reason Implements {@link ModLoader#DispenseEntity(World, double, double, double, int, int, ItemStack)
+	 * ModLoader's dispense entity callback}
 	 */
+	// TODO(halotroop2288): Rewrite as an {@link Inject} Mixin.
 	@Overwrite
-	private void dispense(World paramfd, int paramInt1, int paramInt2, int paramInt3, Random paramRandom) {
-		int i = paramfd.getBlockMeta(paramInt1, paramInt2, paramInt3);
+	private void dispense(World world, int x, int y, int z, Random random) {
+		int meta = world.getBlockMeta(x, y, z);
 		int j = 0;
 		int k = 0;
-		if (i == 3) {
+		if (meta == 3) {
 			k = 1;
-		} else if (i == 2) {
+		} else if (meta == 2) {
 			k = -1;
-		} else if (i == 5) {
+		} else if (meta == 5) {
 			j = 1;
 		} else {
 			j = -1;
 		}
 
-		DispenserBlockEntity localaz = (DispenserBlockEntity)paramfd.getBlockEntity(paramInt1, paramInt2, paramInt3);
-		ItemStack localiz = localaz.getItemToDispense();
-		double d1 = (double)paramInt1 + (double)j * 0.6 + 0.5;
-		double d2 = (double)paramInt2 + 0.5;
-		double d3 = (double)paramInt3 + (double)k * 0.6 + 0.5;
-		if (localiz == null) {
-			paramfd.playWorldEvent(1001, paramInt1, paramInt2, paramInt3, 0);
+		DispenserBlockEntity dispenser = (DispenserBlockEntity)world.getBlockEntity(x, y, z);
+		ItemStack itemStack = dispenser.getItemToDispense();
+		double posX = (double)x + (double)j * 0.6 + 0.5;
+		double posY = (double)y + 0.5;
+		double posZ = (double)z + (double)k * 0.6 + 0.5;
+		if (itemStack == null) {
+			world.playWorldEvent(1001, x, y, z, 0);
 		} else {
-			boolean handled = ModLoader.DispenseEntity(paramfd, d1, d2, d3, j, k, localiz);
+			boolean handled = ModLoader.DispenseEntity(world, posX, posY, posZ, j, k, itemStack);
 			if (!handled) {
-				if (localiz.itemId == Item.ARROW.id) {
-					Entity localObject = new ArrowEntity(paramfd, d1, d2, d3);
-					((ArrowEntity)localObject).method_1291((double)j, 0.1000000014901161, (double)k, 1.1F, 6.0F);
-					((ArrowEntity)localObject).spawnedByPlayer = true;
-					paramfd.spawnEntity(localObject);
-					paramfd.playWorldEvent(1002, paramInt1, paramInt2, paramInt3, 0);
-				} else if (localiz.itemId == Item.EGG.id) {
-					Entity localObject = new ThrownEggEntity(paramfd, d1, d2, d3);
-					((ThrownEggEntity)localObject).method_1682((double)j, 0.1000000014901161, (double)k, 1.1F, 6.0F);
-					paramfd.spawnEntity(localObject);
-					paramfd.playWorldEvent(1002, paramInt1, paramInt2, paramInt3, 0);
-				} else if (localiz.itemId == Item.SNOWBALL.id) {
-					Entity localObject = new SnowballEntity(paramfd, d1, d2, d3);
-					((SnowballEntity)localObject).method_1656((double)j, 0.1000000014901161, (double)k, 1.1F, 6.0F);
-					paramfd.spawnEntity(localObject);
-					paramfd.playWorldEvent(1002, paramInt1, paramInt2, paramInt3, 0);
+				if (itemStack.itemId == Item.ARROW.id) {
+					ArrowEntity arrow = new ArrowEntity(world, posX, posY, posZ);
+					arrow.method_1291(j, 0.1f, k, 1.1f, 6.0f);
+					arrow.spawnedByPlayer = true;
+					world.spawnEntity(arrow);
+					world.playWorldEvent(1002, x, y, z, 0);
+				} else if (itemStack.itemId == Item.EGG.id) {
+					ThrownEggEntity thrownEgg = new ThrownEggEntity(world, posX, posY, posZ);
+					thrownEgg.method_1682(j, 0.1f, k, 1.1f, 6.0f);
+					world.spawnEntity(thrownEgg);
+					world.playWorldEvent(1002, x, y, z, 0);
+				} else if (itemStack.itemId == Item.SNOWBALL.id) {
+					SnowballEntity snowball = new SnowballEntity(world, posX, posY, posZ);
+					snowball.method_1656(j, 0.1f, k, 1.1f, 6.0f);
+					world.spawnEntity(snowball);
+					world.playWorldEvent(1002, x, y, z, 0);
 				} else {
-					Entity localObject = new ItemEntity(paramfd, d1, d2 - 0.3, d3, localiz);
-					double d4 = paramRandom.nextDouble() * 0.1 + 0.2;
-					localObject.xVelocity = (double)j * d4;
-					localObject.yVelocity = 0.2000000029802322;
-					localObject.zVelocity = (double)k * d4;
-					localObject.xVelocity += paramRandom.nextGaussian() * 0.0075F * 6.0;
-					localObject.yVelocity += paramRandom.nextGaussian() * 0.0075F * 6.0;
-					localObject.zVelocity += paramRandom.nextGaussian() * 0.0075F * 6.0;
-					paramfd.spawnEntity(localObject);
-					paramfd.playWorldEvent(1000, paramInt1, paramInt2, paramInt3, 0);
+					ItemEntity itemEntity = new ItemEntity(world, posX, posY - 0.3d, posZ, itemStack);
+					double d4 = random.nextDouble() * 0.1d + 0.2d;
+					itemEntity.xVelocity = (double)j * d4;
+					itemEntity.yVelocity = 0.2d;
+					itemEntity.zVelocity = (double)k * d4;
+					itemEntity.xVelocity += random.nextGaussian() * 0.0075f * 6.0f;
+					itemEntity.yVelocity += random.nextGaussian() * 0.0075f * 6.0f;
+					itemEntity.zVelocity += random.nextGaussian() * 0.0075f * 6.0f;
+					world.spawnEntity(itemEntity);
+					world.playWorldEvent(1000, x, y, z, 0);
 				}
 			}
 
-			paramfd.playWorldEvent(2000, paramInt1, paramInt2, paramInt3, j + 1 + (k + 1) * 3);
+			world.playWorldEvent(2000, x, y, z, j + 1 + (k + 1) * 3);
 		}
 
 	}

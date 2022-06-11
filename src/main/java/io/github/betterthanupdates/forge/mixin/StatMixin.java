@@ -1,6 +1,6 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.stat.BabricatedStat;
+import io.github.betterthanupdates.forge.stat.ForgeStat;
 import net.minecraft.stat.Stat;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Stat.class)
-public class StatMixin implements BabricatedStat {
+public abstract class StatMixin implements ForgeStat {
 	@Mutable
 	@Shadow @Final public String name;
 

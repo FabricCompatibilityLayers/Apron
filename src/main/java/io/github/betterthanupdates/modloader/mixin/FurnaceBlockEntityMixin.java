@@ -92,11 +92,11 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 	@Overwrite
 	public void craftRecipe() {
 		if (this.canAcceptRecipeOutput()) {
-			ItemStack localiz = SmeltingRecipeRegistry.getInstance().getResult(this.inventory[0].getItem().id);
+			ItemStack result = SmeltingRecipeRegistry.getInstance().getResult(this.inventory[0].getItem().id);
 			if (this.inventory[2] == null) {
-				this.inventory[2] = localiz.copy();
-			} else if (this.inventory[2].itemId == localiz.itemId) {
-				this.inventory[2].count += localiz.count;
+				this.inventory[2] = result.copy();
+			} else if (this.inventory[2].itemId == result.itemId) {
+				this.inventory[2].count += result.count;
 			}
 
 			if (this.inventory[0].getItem().hasContainerItemType()) {

@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Mixin(GameStartupErrorPanel.class)
-public class GameStartupErrorPanelMixin extends Panel {
+public abstract class GameStartupErrorPanelMixin extends Panel {
 	private static StringWriter stringWriter = new StringWriter();
 
 	@ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/io/PrintWriter;<init>(Ljava/io/Writer;)V"))

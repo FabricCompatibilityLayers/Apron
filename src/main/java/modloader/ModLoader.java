@@ -1,8 +1,8 @@
 package modloader;
 
-import io.github.betterthanupdates.forge.stat.achievement.BabricatedAchievement;
+import io.github.betterthanupdates.forge.stat.achievement.ForgeAchievement;
 import io.github.betterthanupdates.babricated.BabricatedForge;
-import io.github.betterthanupdates.forge.stat.BabricatedStat;
+import io.github.betterthanupdates.forge.stat.ForgeStat;
 import io.github.betterthanupdates.modloader.client.resource.language.ModLoaderTranslationStorage;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
@@ -108,15 +108,15 @@ public class ModLoader {
 					String key = split[1];
 					AddLocalization("achievement." + key, name);
 					AddLocalization("achievement." + key + ".desc", description);
-					((BabricatedStat)achievement).setName(TranslationStorage.getInstance().translate("achievement." + key));
-					((BabricatedAchievement)achievement).setDescription(TranslationStorage.getInstance().translate("achievement." + key + ".desc"));
+					((ForgeStat)achievement).setName(TranslationStorage.getInstance().translate("achievement." + key));
+					((ForgeAchievement)achievement).setDescription(TranslationStorage.getInstance().translate("achievement." + key + ".desc"));
 				} else {
-					((BabricatedStat)achievement).setName(name);
-					((BabricatedAchievement)achievement).setDescription(description);
+					((ForgeStat)achievement).setName(name);
+					((ForgeAchievement)achievement).setDescription(description);
 				}
 			} else {
-				((BabricatedStat)achievement).setName(name);
-				((BabricatedAchievement)achievement).setDescription(description);
+				((ForgeStat)achievement).setName(name);
+				((ForgeAchievement)achievement).setDescription(description);
 			}
 		} catch (IllegalArgumentException | SecurityException var5) {
 			LOGGER.throwing("ModLoader", "AddAchievementDesc", var5);
