@@ -15,8 +15,7 @@
     "DisconnectingScreenMixin",
     "GameStartupErrorPanelMixin",
     "EntityRenderDispatcherMixin",
-    "FurnaceOutputSlotMixin",
-    "TranslationStorageMixin"
+    "FurnaceOutputSlotMixin"
   ],
   "injectors": {
     "defaultRequire": 1

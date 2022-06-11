@@ -23,3 +23,12 @@ accessible field net/minecraft/client/render/entity/BlockEntityRenderDispatcher 
 mutable field net/minecraft/client/render/entity/BlockEntityRenderDispatcher customRenderers Ljava/util/Map;
 
 accessible field net/minecraft/stat/Stats idMap Ljava/util/Map;
+
+accessible field net/minecraft/client/resource/language/TranslationStorage translations Ljava/util/Properties;
+
+accessible field net/minecraft/stat/achievement/Achievement description Ljava/lang/String;
+mutable field net/minecraft/stat/achievement/Achievement description Ljava/lang/String;
+
+mutable field net/minecraft/stat/Stat name Ljava/lang/String;
+
+accessible method net/minecraft/packet/AbstractPacket register (IZZLjava/lang/Class;)V

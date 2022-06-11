@@ -1,9 +1,6 @@
 package modloader;
 
-import io.github.betterthanupdates.forge.stat.achievement.ForgeAchievement;
 import io.github.betterthanupdates.babricated.BabricatedForge;
-import io.github.betterthanupdates.forge.stat.ForgeStat;
-import io.github.betterthanupdates.modloader.client.resource.language.ModLoaderTranslationStorage;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
 import net.minecraft.block.Block;
@@ -108,15 +105,15 @@ public class ModLoader {
 					String key = split[1];
 					AddLocalization("achievement." + key, name);
 					AddLocalization("achievement." + key + ".desc", description);
-					((ForgeStat)achievement).setName(TranslationStorage.getInstance().translate("achievement." + key));
-					((ForgeAchievement)achievement).setDescription(TranslationStorage.getInstance().translate("achievement." + key + ".desc"));
+					achievement.name = TranslationStorage.getInstance().translate("achievement." + key);
+					achievement.description = TranslationStorage.getInstance().translate("achievement." + key + ".desc");
 				} else {
-					((ForgeStat)achievement).setName(name);
-					((ForgeAchievement)achievement).setDescription(description);
+					achievement.name = name;
+					achievement.description = description;
 				}
 			} else {
-				((ForgeStat)achievement).setName(name);
-				((ForgeAchievement)achievement).setDescription(description);
+				achievement.name = name;
+				achievement.description = description;
 			}
 		} catch (IllegalArgumentException | SecurityException var5) {
 			LOGGER.throwing("ModLoader", "AddAchievementDesc", var5);
@@ -209,7 +206,7 @@ public class ModLoader {
 	 * @param value
 	 */
 	public static void AddLocalization(String key, String value) {
-		Properties props = ((ModLoaderTranslationStorage)TranslationStorage.getInstance()).getTranslations();
+		Properties props = TranslationStorage.getInstance().translations;
 
 		if (props != null) {
 			props.put(key, value);
