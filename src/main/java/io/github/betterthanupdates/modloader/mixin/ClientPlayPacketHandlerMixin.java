@@ -37,69 +37,69 @@ public abstract class ClientPlayPacketHandlerMixin {
 	 * TODO(halotroop2288): rewrite as an {@link Inject} Mixin
 	 */
 	@Overwrite
-	public void onEntitySpawn(EntitySpawnS2CPacket packet23vehiclespawn) {
-		double d = (double)packet23vehiclespawn.x / 32.0;
-		double d1 = (double)packet23vehiclespawn.y / 32.0;
-		double d2 = (double)packet23vehiclespawn.z / 32.0;
+	public void onEntitySpawn(EntitySpawnS2CPacket packet) {
+		double d = (double)packet.x / 32.0;
+		double d1 = (double)packet.y / 32.0;
+		double d2 = (double)packet.z / 32.0;
 		Entity obj = null;
-		if (packet23vehiclespawn.type == 10) {
+		if (packet.type == 10) {
 			obj = new ChestMinecartEntity(this.world, d, d1, d2, 0);
 		}
 
-		if (packet23vehiclespawn.type == 11) {
+		if (packet.type == 11) {
 			obj = new ChestMinecartEntity(this.world, d, d1, d2, 1);
 		}
 
-		if (packet23vehiclespawn.type == 12) {
+		if (packet.type == 12) {
 			obj = new ChestMinecartEntity(this.world, d, d1, d2, 2);
 		}
 
-		if (packet23vehiclespawn.type == 90) {
+		if (packet.type == 90) {
 			obj = new FishHookEntity(this.world, d, d1, d2);
 		}
 
-		if (packet23vehiclespawn.type == 60) {
+		if (packet.type == 60) {
 			obj = new ArrowEntity(this.world, d, d1, d2);
 		}
 
-		if (packet23vehiclespawn.type == 61) {
+		if (packet.type == 61) {
 			obj = new SnowballEntity(this.world, d, d1, d2);
 		}
 
-		if (packet23vehiclespawn.type == 63) {
+		if (packet.type == 63) {
 			obj = new FireballEntity(
 					this.world,
 					d,
 					d1,
 					d2,
-					(double)packet23vehiclespawn.field_1667 / 8000.0,
-					(double)packet23vehiclespawn.field_1668 / 8000.0,
-					(double)packet23vehiclespawn.field_1669 / 8000.0
+					(double)packet.field_1667 / 8000.0,
+					(double)packet.field_1668 / 8000.0,
+					(double)packet.field_1669 / 8000.0
 			);
-			packet23vehiclespawn.flag = 0;
+			packet.flag = 0;
 		}
 
-		if (packet23vehiclespawn.type == 62) {
+		if (packet.type == 62) {
 			obj = new ThrownEggEntity(this.world, d, d1, d2);
 		}
 
-		if (packet23vehiclespawn.type == 1) {
+		if (packet.type == 1) {
 			obj = new BoatEntity(this.world, d, d1, d2);
 		}
 
-		if (packet23vehiclespawn.type == 50) {
+		if (packet.type == 50) {
 			obj = new PrimedTntEntity(this.world, d, d1, d2);
 		}
 
-		if (packet23vehiclespawn.type == 70) {
+		if (packet.type == 70) {
 			obj = new FallingBlockEntity(this.world, d, d1, d2, Block.SAND.id);
 		}
 
-		if (packet23vehiclespawn.type == 71) {
+		if (packet.type == 71) {
 			obj = new FallingBlockEntity(this.world, d, d1, d2, Block.GRAVEL.id);
 		}
 
-		NetClientHandlerEntity netclienthandlerentity = ModLoaderMp.HandleNetClientHandlerEntities(packet23vehiclespawn.type);
+		NetClientHandlerEntity netclienthandlerentity = ModLoaderMp.HandleNetClientHandlerEntities(packet.type);
 		if (netclienthandlerentity != null) {
 			try {
 				obj = netclienthandlerentity.entityClass
@@ -111,7 +111,7 @@ public abstract class ClientPlayPacketHandlerMixin {
 						throw new Exception(String.format("Entity's owner field must be of type Entity, but it is of type %s.", field.getType()));
 					}
 
-					Entity entity1 = this.getEntity(packet23vehiclespawn.flag);
+					Entity entity1 = this.getEntity(packet.flag);
 					if (entity1 == null) {
 						ModLoaderMp.Log("Received spawn packet for entity with owner, but owner was not found.");
 					} else {
@@ -126,31 +126,31 @@ public abstract class ClientPlayPacketHandlerMixin {
 				}
 			} catch (Exception var12) {
 				ModLoader.getLogger().throwing("NetClientHandler", "handleVehicleSpawn", var12);
-				ModLoader.ThrowException(String.format("Error initializing entity of type %s.", packet23vehiclespawn.type), var12);
+				ModLoader.ThrowException(String.format("Error initializing entity of type %s.", packet.type), var12);
 				return;
 			}
 		}
 
 		if (obj != null) {
-			obj.clientX = packet23vehiclespawn.x;
-			obj.clientY = packet23vehiclespawn.y;
-			obj.clientZ = packet23vehiclespawn.z;
+			obj.clientX = packet.x;
+			obj.clientY = packet.y;
+			obj.clientZ = packet.z;
 			obj.yaw = 0.0F;
 			obj.pitch = 0.0F;
-			obj.entityId = packet23vehiclespawn.entityId;
-			this.world.method_1495(packet23vehiclespawn.entityId, obj);
-			if (packet23vehiclespawn.flag > 0) {
-				if (packet23vehiclespawn.type == 60) {
-					Entity entity = this.getEntity(packet23vehiclespawn.flag);
+			obj.entityId = packet.entityId;
+			this.world.method_1495(packet.entityId, obj);
+			if (packet.flag > 0) {
+				if (packet.type == 60) {
+					Entity entity = this.getEntity(packet.flag);
 					if (entity instanceof LivingEntity) {
 						((ArrowEntity)obj).owner = (LivingEntity)entity;
 					}
 				}
 
 				obj.setVelocity(
-						(double)packet23vehiclespawn.field_1667 / 8000.0,
-						(double)packet23vehiclespawn.field_1668 / 8000.0,
-						(double)packet23vehiclespawn.field_1669 / 8000.0
+						(double)packet.field_1667 / 8000.0,
+						(double)packet.field_1668 / 8000.0,
+						(double)packet.field_1669 / 8000.0
 				);
 			}
 		}

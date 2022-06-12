@@ -39,11 +39,12 @@
   "mixins": [
     "babricated.mixins.json",
     "forge.mixins.json",
-    "modloader.mixins.json"
+    "modloader.mixins.json",
+    "shockahpi.mixins.json"
   ],
 
   "depends": {
-    "fabricloader": ">=0.13.3",
+    "fabricloader": ">=0.14.6-babric.1",
     "minecraft": "1.0.0-beta.7.3",
     "mod-remapping-api": "*"
   }

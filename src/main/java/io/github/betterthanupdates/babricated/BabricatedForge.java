@@ -8,9 +8,10 @@ import net.fabricmc.loader.api.ModContainer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.ApiStatus;
+import org.spongepowered.include.com.google.common.collect.ImmutableList;
 
 import java.io.File;
-import java.nio.file.FileSystemException;
+import java.util.List;
 
 @ApiStatus.Internal
 public final class BabricatedForge {
@@ -21,5 +22,13 @@ public final class BabricatedForge {
 
 	public static final File MOD_CACHE_FOLDER = new File(Constants.VERSIONED_FOLDER, "mods");
 
+	public static final List<String> BUILT_IN_MOD_LOADER_MOD_CLASSES = ImmutableList.of("ShockAhPI");
+
 	public static final ModContainer MOD_CONTAINER = FabricLoader.getInstance().getModContainer("babricated-forge").get();
+
+	static {
+		if (!MOD_CACHE_FOLDER.mkdirs()) {
+			LOGGER.debug("Could not create mod cache directory. It may already exist.");
+		}
+	}
 }

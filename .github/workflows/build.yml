@@ -3,8 +3,12 @@
 # certain platforms or Java versions, and provides a first line of defence
 # against bad commits.
 
-name: build
-on: [pull_request, push]
+name: Build and Upload
+on:
+  pull_request:
+  push:
+    branches:
+      - b1.7.3
 
 jobs:
   build:
@@ -19,10 +23,8 @@ jobs:
         with:
           distribution: temurin
           java-version: 17 # Current Java LTS, minimum supported by Loom
-      - name: Make Gradle Wrapper Executable
-        run: chmod +x ./gradlew
       - name: Build with Gradle
-        run: ./gradlew build
+        run: chmod +x ./gradlew && ./gradlew build
       - name: Capture Build Artifacts
         uses: actions/upload-artifact@v2
         with:

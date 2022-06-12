@@ -1,15 +1,13 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "io.github.betterthanupdates.forge.mixin",
+  "package": "io.github.betterthanupdates.shockahpi.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "BlockMixin",
-    "PlayerEntityMixin"
+    "ClientPlayerEntityMixin",
+    "PortalBlockMixin"
   ],
   "client": [
-  ],
-  "server": [
   ],
   "injectors": {
     "defaultRequire": 1

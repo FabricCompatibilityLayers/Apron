@@ -56,7 +56,7 @@ import java.util.logging.SimpleFormatter;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "ResultOfMethodCallIgnored"})
 public class ModLoader {
 	private static final List<TextureBinder> ANIM_LIST = new LinkedList<>();
 	private static final Map<Integer, BaseMod> BLOCK_MODELS = new HashMap<>();
@@ -116,9 +116,9 @@ public class ModLoader {
 				achievement.name = name;
 				achievement.description = description;
 			}
-		} catch (IllegalArgumentException | SecurityException var5) {
-			LOGGER.throwing("ModLoader", "AddAchievementDesc", var5);
-			ThrowException(var5);
+		} catch (IllegalArgumentException | SecurityException e) {
+			LOGGER.throwing("ModLoader", "AddAchievementDesc", e);
+			ThrowException(e);
 		}
 	}
 	
@@ -130,10 +130,10 @@ public class ModLoader {
 	public static int AddAllFuel(int id) {
 		LOGGER.finest("Finding fuel for " + id);
 		int result = 0;
-		Iterator<BaseMod> iter = MOD_LIST.iterator();
+		Iterator<BaseMod> modIterator = MOD_LIST.iterator();
 
-		while(iter.hasNext() && result == 0) {
-			result = iter.next().AddFuel(id);
+		while(modIterator.hasNext() && result == 0) {
+			result = modIterator.next().AddFuel(id);
 		}
 
 		if (result != 0) {
@@ -193,9 +193,9 @@ public class ModLoader {
 			int index = combinedList.indexOf(armor);
 			PlayerRenderer.armorTypes = combinedList.toArray(new String[0]);
 			return index;
-		} catch (IllegalArgumentException var5) {
-			LOGGER.throwing("ModLoader", "AddArmor", var5);
-			ThrowException("An impossible error has occured!", var5);
+		} catch (IllegalArgumentException e) {
+			LOGGER.throwing("ModLoader", "AddArmor", e);
+			ThrowException("An impossible error has occurred!", e);
 		}
 
 		return -1;
@@ -214,6 +214,7 @@ public class ModLoader {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private static void addMod(ClassLoader loader, String filename) {
 		try {
 			String name = filename.split("\\.")[0];
@@ -228,15 +229,14 @@ public class ModLoader {
 			Class<?> modClass = loader.loadClass(name);
 			if (!BaseMod.class.isAssignableFrom(modClass)) return;
 
-			//noinspection unchecked
 			setupProperties((Class<? extends BaseMod>) modClass);
 			BaseMod mod = (BaseMod)modClass.getDeclaredConstructor().newInstance();
 			MOD_LIST.add(mod);
 			LOGGER.fine("Mod Loaded: \"" + mod + "\" from " + filename);
-		} catch (Throwable var6) {
+		} catch (Throwable e) {
 			LOGGER.fine("Failed to load mod from \"" + filename + "\"");
-			LOGGER.throwing("ModLoader", "addMod", var6);
-			ThrowException(var6);
+			LOGGER.throwing("ModLoader", "addMod", e);
+			ThrowException(e);
 		}
 
 	}
@@ -291,10 +291,10 @@ public class ModLoader {
 			int i = getUniqueSpriteIndex(fileToOverride);
 			addOverride(fileToOverride, fileToAdd, i);
 			return i;
-		} catch (Throwable var3) {
-			LOGGER.throwing("ModLoader", "addOverride", var3);
-			ThrowException(var3);
-			throw new RuntimeException(var3);
+		} catch (Throwable e) {
+			LOGGER.throwing("ModLoader", "addOverride", e);
+			ThrowException(e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -440,10 +440,10 @@ public class ModLoader {
 	 */
 	public static boolean DispenseEntity(World world, double x, double y, double z, int xVel, int zVel, ItemStack stack) {
 		boolean result = false;
-		Iterator<BaseMod> iter = MOD_LIST.iterator();
+		Iterator<BaseMod> modIterator = MOD_LIST.iterator();
 
-		while(iter.hasNext() && !result) {
-			result = iter.next().DispenseEntity(world, x, y, z, xVel, zVel, stack);
+		while(modIterator.hasNext() && !result) {
+			result = modIterator.next().DispenseEntity(world, x, y, z, xVel, zVel, stack);
 		}
 
 		return result;
@@ -496,9 +496,9 @@ public class ModLoader {
 			Field f = instanceClass.getDeclaredFields()[fieldIndex];
 			f.setAccessible(true);
 			return (T)f.get(instance);
-		} catch (IllegalAccessException var4) {
-			LOGGER.throwing("ModLoader", "getPrivateValue", var4);
-			ThrowException("An impossible error has occured!", var4);
+		} catch (IllegalAccessException e) {
+			LOGGER.throwing("ModLoader", "getPrivateValue", e);
+			ThrowException("An impossible error has occurred!", e);
 			return null;
 		}
 	}
@@ -521,9 +521,9 @@ public class ModLoader {
 			Field f = instanceClass.getDeclaredField(fieldName);
 			f.setAccessible(true);
 			return (T)f.get(instance);
-		} catch (IllegalAccessException var4) {
-			LOGGER.throwing("ModLoader", "getPrivateValue", var4);
-			ThrowException("An impossible error has occured!", var4);
+		} catch (IllegalAccessException e) {
+			LOGGER.throwing("ModLoader", "getPrivateValue", e);
+			ThrowException("An impossible error has occurred!", e);
 			return null;
 		}
 	}
@@ -637,10 +637,10 @@ public class ModLoader {
 			}
 
 			standardBiomes = biomes.toArray(new Biome[0]);
-		} catch (SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException var10) {
-			LOGGER.throwing("ModLoader", "init", var10);
-			ThrowException(var10);
-			throw new RuntimeException(var10);
+		} catch (SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+			LOGGER.throwing("ModLoader", "init", e);
+			ThrowException(e);
+			throw new RuntimeException(e);
 		}
 
 		try {
@@ -678,14 +678,14 @@ public class ModLoader {
 			instance.options.load();
 			initStats();
 			saveConfig();
-		} catch (Throwable var9) {
-			LOGGER.throwing("ModLoader", "init", var9);
-			ThrowException("ModLoader has failed to initialize.", var9);
+		} catch (Throwable e) {
+			LOGGER.throwing("ModLoader", "init", e);
+			ThrowException("ModLoader has failed to initialize.", e);
 			if (logHandler != null) {
 				logHandler.close();
 			}
 
-			throw new RuntimeException(var9);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -756,7 +756,7 @@ public class ModLoader {
 
 		try {
 			chk = Class.forName(modName);
-		} catch (ClassNotFoundException var4) {
+		} catch (ClassNotFoundException e) {
 			return false;
 		}
 
@@ -771,7 +771,6 @@ public class ModLoader {
 	
 	/**
 	 * Reads the config file and stores the contents in props.
-	 * @throws IOException
 	 */
 	public static void loadConfig()  {
 		CONFIG_DIR.mkdir();
@@ -857,12 +856,12 @@ public class ModLoader {
 		}
 
 		if (minecraft.currentScreen != null) {
-			Iterator<Entry<BaseMod, Boolean>> iter = inGUIHooks.entrySet().iterator();
+			Iterator<Entry<BaseMod, Boolean>> iterator = inGUIHooks.entrySet().iterator();
 
-			while(iter.hasNext()) {
-				Entry<BaseMod, Boolean> modSet = iter.next();
+			while(iterator.hasNext()) {
+				Entry<BaseMod, Boolean> modSet = iterator.next();
 				if ((clock != newClock || !(modSet.getValue() & minecraft.world != null)) && !modSet.getKey().OnTickInGUI(minecraft, minecraft.currentScreen)) {
-					iter.remove();
+					iterator.remove();
 				}
 			}
 		}
@@ -939,27 +938,28 @@ public class ModLoader {
 			ZipInputStream zip = new ZipInputStream(input);
 			ZipEntry entry;
 
-			while(true) {
-				entry = zip.getNextEntry();
-				if (entry == null) {
-					input.close();
-					break;
-				}
-
+			while ((entry = zip.getNextEntry()) != null) {
 				String name = entry.getName();
-				if (!entry.isDirectory() && name.startsWith("mod_") && name.endsWith(".class")) {
-					addMod(loader, name);
+
+				if (!entry.isDirectory() && name.endsWith(".class")) {
+					if (name.startsWith("mod_") || BabricatedForge.BUILT_IN_MOD_LOADER_MOD_CLASSES.contains(name)) {
+						addMod(loader, name);
+					}
 				}
 			}
+
+			input.close();
+
 		} else if (source.isDirectory()) {
 			Package pkg = ModLoader.class.getPackage();
 			if (pkg != null) {
-				String pkgdir = pkg.getName().replace('.', File.separatorChar);
-				source = new File(source, pkgdir);
+				String packageDir = pkg.getName().replace('.', File.separatorChar);
+				source = new File(source, packageDir);
 			}
 
 			LOGGER.finer("Directory found.");
 			File[] files = source.listFiles();
+
 			if (files != null) {
 				for (File file : files) {
 					String name = file.getName();
@@ -971,7 +971,7 @@ public class ModLoader {
 		}
 	}
 
-	@SuppressWarnings("SameParameterValue")
+	@SuppressWarnings({"SameParameterValue", "BulkFileAttributesRead"})
 	private static void readFromModFolder(File folder) throws IOException, IllegalArgumentException, SecurityException {
 		ClassLoader loader = Minecraft.class.getClassLoader();
 		if (!folder.isDirectory()) {
@@ -1077,10 +1077,9 @@ public class ModLoader {
 					BufferedImage im = loadImage(manager, overlayPath);
 					TextureBinder anim = new ModTextureStatic(index, dst, im);
 					manager.addTextureBinder(anim);
-				} catch (Exception var11) {
-					LOGGER.throwing("ModLoader", "RegisterAllTextureOverrides", var11);
-					ThrowException(var11);
-					throw new RuntimeException(var11);
+				} catch (Exception e) {
+					LOGGER.throwing("ModLoader", "RegisterAllTextureOverrides", e);
+					ThrowException(e);
 				}
 			}
 		}
@@ -1117,9 +1116,9 @@ public class ModLoader {
 				Item.byId[id] = item;
 			}
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException | InstantiationException |
-				 InvocationTargetException | NoSuchMethodException var5) {
-			LOGGER.throwing("ModLoader", "RegisterBlock", var5);
-			ThrowException(var5);
+				 InvocationTargetException | NoSuchMethodException e) {
+			LOGGER.throwing("ModLoader", "RegisterBlock", e);
+			ThrowException(e);
 		}
 	}
 	
@@ -1132,43 +1131,42 @@ public class ModLoader {
 	public static void RegisterEntityID(Class<? extends Entity> entityClass, String entityName, int entityId) {
 		try {
 			EntityRegistry.register(entityClass, entityName, entityId);
-		} catch (IllegalArgumentException var4) {
-			LOGGER.throwing("ModLoader", "RegisterEntityID", var4);
-			ThrowException(var4);
+		} catch (IllegalArgumentException e) {
+			LOGGER.throwing("ModLoader", "RegisterEntityID", e);
+			ThrowException(e);
 		}
 	}
 	
 	/**
-	 * Use this to add an assignable key to the options menu.
-	 * @param mod
-	 * @param keyBinding
-	 * @param allowRepeat
+	 * Use this to add an assignable key to the options screen.
+	 * @param mod The mod which will use this. 99% of the time you should pass <code>this</code>
+	 * @param keyBinding reference to the key to register. Define this in your mod file
+	 * @param allowRepeat when true the command will repeat. When false, only called once per press
 	 */
 	public static void RegisterKey(BaseMod mod, KeyBinding keyBinding, boolean allowRepeat) {
 		Map<KeyBinding, boolean[]> keyMap = keyList.get(mod);
-		if (keyMap == null) {
-			keyMap = new HashMap<>();
-		}
+		if (keyMap == null) keyMap = new HashMap<>();
 
 		keyMap.put(keyBinding, new boolean[]{allowRepeat, false});
 		keyList.put(mod, keyMap);
 	}
 	
 	/**
-	 * Registers a tile entity.
-	 * @param blockEntityClass
-	 * @param id
+	 * Registers a block entity.
+	 * @param blockEntityClass Class of block entity to register
+	 * @param id The given name of entity. Used for saving
 	 */
 	public static void RegisterTileEntity(Class<? extends BlockEntity> blockEntityClass, String id) {
 		RegisterTileEntity(blockEntityClass, id, null);
 	}
 	
 	/**
-	 * Registers a tile entity.
-	 * @param blockEntityClass
-	 * @param id
-	 * @param renderer
+	 * Registers a block entity.
+	 * @param blockEntityClass Class of block entity to register
+	 * @param id The given name of entity. Used for saving
+	 * @param renderer Block entity renderer to assign this block entity
 	 */
+	@SuppressWarnings("unchecked")
 	public static void RegisterTileEntity(Class<? extends BlockEntity> blockEntityClass, String id, BlockEntityRenderer renderer) {
 		try {
 			BlockEntity.register(blockEntityClass, id);
@@ -1178,16 +1176,16 @@ public class ModLoader {
 				renderers.put(blockEntityClass, renderer);
 				renderer.setRenderDispatcher(ref);
 			}
-		} catch (IllegalArgumentException var5) {
-			LOGGER.throwing("ModLoader", "RegisterTileEntity", var5);
-			ThrowException(var5);
+		} catch (IllegalArgumentException e) {
+			LOGGER.throwing("ModLoader", "RegisterTileEntity", e);
+			ThrowException(e);
 		}
 	}
 	
 	/**
 	 * Remove entity from spawn list for all biomes except Hell.
-	 * @param entityClass
-	 * @param spawnGroup
+	 * @param entityClass Class of entity to spawn
+	 * @param spawnGroup The spawn group to remove entity from. (Monster, Creature, or Water)
 	 */
 	public static void RemoveSpawn(Class<? extends LivingEntity> entityClass, SpawnGroup spawnGroup) {
 		RemoveSpawn(entityClass, spawnGroup, (Biome) null);
@@ -1195,10 +1193,11 @@ public class ModLoader {
 	
 	/**
 	 * Remove entity from spawn list for selected biomes.
-	 * @param entityClass
-	 * @param spawnGroup
-	 * @param biomes
+	 * @param entityClass Class of entity to spawn
+	 * @param spawnGroup The spawn group to remove the entity from (Monster, Creature, or Water)
+	 * @param biomes Array of biomes to remove entity spawning from
 	 */
+	@SuppressWarnings("unchecked")
 	public static void RemoveSpawn(Class<? extends LivingEntity> entityClass, SpawnGroup spawnGroup, Biome... biomes) {
 		if (entityClass == null) {
 			throw new IllegalArgumentException("entityClass cannot be null");
@@ -1220,8 +1219,8 @@ public class ModLoader {
 	
 	/**
 	 * Remove entity from spawn list for all biomes except Hell.
-	 * @param entityName
-	 * @param spawnGroup
+	 * @param entityName Name of entity to remove
+	 * @param spawnGroup The spawn group to remove the entity from (Monster, Creature, or Water)
 	 */
 	public static void RemoveSpawn(String entityName, SpawnGroup spawnGroup) {
 		RemoveSpawn(entityName, spawnGroup, (Biome) null);
@@ -1229,9 +1228,9 @@ public class ModLoader {
 	
 	/**
 	 * Remove entity from spawn list for selected biomes.
-	 * @param entityName
-	 * @param spawnGroup
-	 * @param biomes
+	 * @param entityName Name of entity to remove
+	 * @param spawnGroup The spawn group to remove the entity from (Monster, Creature, or Water)
+	 * @param biomes Array of biomes to remove entity spawning from
 	 */
 	@SuppressWarnings("unchecked")
 	public static void RemoveSpawn(String entityName, SpawnGroup spawnGroup, Biome... biomes) {
@@ -1243,8 +1242,8 @@ public class ModLoader {
 	
 	/**
 	 * Determines how the block should be rendered.
-	 * @param modelID
-	 * @return
+	 * @param modelID ID of block model
+	 * @return true if block should be rendered using {@link #RenderInvBlock(BlockRenderer, Block, int, int)}
 	 */
 	public static boolean RenderBlockIsItemFull3D(int modelID) {
 		if (!BLOCK_SPECIAL_INV.containsKey(modelID)) {
@@ -1256,10 +1255,10 @@ public class ModLoader {
 	
 	/**
 	 * Renders a block in inventory.
-	 * @param renderer
-	 * @param block
-	 * @param metadata
-	 * @param modelID
+	 * @param renderer parent renderer; Methods and fields may be referenced from here.
+	 * @param block reference to block to render
+	 * @param metadata of block; Damage on an item
+	 * @param modelID ID of block model to render
 	 */
 	public static void RenderInvBlock(BlockRenderer renderer, Block block, int metadata, int modelID) {
 		BaseMod mod = BLOCK_MODELS.get(modelID);
@@ -1270,23 +1269,23 @@ public class ModLoader {
 	
 	/**
 	 * Renders a block in the world.
-	 * @param renderer
-	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @param block
-	 * @param modelID
-	 * @return
+	 * @param renderer parent renderer; Methods and fields may be referenced from here
+	 * @param world to render block in
+	 * @param x x position in world
+	 * @param y y position in world
+	 * @param z z position in world
+	 * @param block reference to block to render
+	 * @param modelID ID of block model to render
+	 * @return true if model was rendered
 	 */
 	public static boolean RenderWorldBlock(BlockRenderer renderer, BlockView world, int x, int y, int z, Block block, int modelID) {
-		BaseMod mod = (BaseMod) BLOCK_MODELS.get(modelID);
+		BaseMod mod = BLOCK_MODELS.get(modelID);
 		return mod != null && mod.RenderWorldBlock(renderer, world, x, y, z, block, modelID);
 	}
 	
 	/**
 	 * Saves props to the config file.
-	 * @throws IOException
+	 * @throws IOException if any filesystem error occurs while saving
 	 */
 	public static void saveConfig() throws IOException {
 		CONFIG_DIR.mkdir();
@@ -1301,9 +1300,9 @@ public class ModLoader {
 	
 	/**
 	 * Enable or disable BaseMod.OnTickInGame(net.minecraft.client.Minecraft)
-	 * @param mod
-	 * @param enable
-	 * @param useClock
+	 * @param mod to set
+	 * @param enable whether to add or remove from list
+	 * @param useClock if true will only run once each tick on game clock, if false once every render frame
 	 */
 	public static void SetInGameHook(BaseMod mod, boolean enable, boolean useClock) {
 		if (enable) {
@@ -1315,9 +1314,9 @@ public class ModLoader {
 	
 	/**
 	 * Enable or disable BaseMod.OnTickInGUI(net.minecraft.client.Minecraft, da)
-	 * @param mod
-	 * @param enable
-	 * @param useClock
+	 * @param mod to set
+	 * @param enable whether to add or remove from list
+	 * @param useClock if true will only run once each tick on game clock, if false once every render frame
 	 */
 	public static void SetInGUIHook(BaseMod mod, boolean enable, boolean useClock) {
 		if (enable) {
@@ -1329,14 +1328,14 @@ public class ModLoader {
 	
 	/**
 	 * Used for setting value of private fields.
-	 * @param instanceClass
-	 * @param instance
-	 * @param fieldIndex
-	 * @param value
-	 * @param <T>
-	 * @param <E>
-	 * @throws IllegalArgumentException
-	 * @throws SecurityException
+	 * @param instanceClass Class to use with instance
+	 * @param instance Object to get private field from
+	 * @param fieldIndex Offset of field in class
+	 * @param value Value to set
+	 * @param <T> Type of instance
+	 * @param <E> Type of value
+	 * @throws IllegalArgumentException if instance isn't compatible with instanceClass
+	 * @throws SecurityException if the thread is not allowed to access field
 	 */
 	@SuppressWarnings("unused")
 	public static <T, E> void setPrivateValue(Class<? super T> instanceClass, T instance, int fieldIndex, E value) throws IllegalArgumentException, SecurityException {
@@ -1349,24 +1348,23 @@ public class ModLoader {
 			}
 
 			f.set(instance, value);
-		} catch (IllegalAccessException var6) {
-			LOGGER.throwing("ModLoader", "setPrivateValue", var6);
-			ThrowException("An impossible error has occured!", var6);
+		} catch (IllegalAccessException e) {
+			LOGGER.throwing("ModLoader", "setPrivateValue", e);
+			ThrowException("An impossible error has occurred!", e);
 		}
-
 	}
 	
 	/**
 	 * Used for setting value of private fields.
-	 * @param instanceClass
-	 * @param instance
-	 * @param fieldName
-	 * @param value
-	 * @param <T>
-	 * @param <E>
-	 * @throws IllegalArgumentException
-	 * @throws SecurityException
-	 * @throws NoSuchFieldException
+	 * @param instanceClass Class to use with instance
+	 * @param instance Object to get private field from
+	 * @param fieldName Name of the field
+	 * @param value Value to set
+	 * @param <T> Type of instance
+	 * @param <E> Type of value
+	 * @throws IllegalArgumentException if instance isn't compatible with instanceClass
+	 * @throws SecurityException if the thread is not allowed to access field
+	 * @throws NoSuchFieldException if field does not exist
 	 */
 	public static <T, E> void setPrivateValue(Class<? super T> instanceClass, T instance, String fieldName, E value) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
 		try {
@@ -1378,29 +1376,27 @@ public class ModLoader {
 
 			f.setAccessible(true);
 			f.set(instance, value);
-		} catch (IllegalAccessException var6) {
-			LOGGER.throwing("ModLoader", "setPrivateValue", var6);
-			ThrowException("An impossible error has occured!", var6);
+		} catch (IllegalAccessException e) {
+			LOGGER.throwing("ModLoader", "setPrivateValue", e);
+			ThrowException("An impossible error has occurred!", e);
 		}
-
 	}
 
 	private static void setupProperties(Class<? extends BaseMod> mod) throws IllegalArgumentException, IllegalAccessException, IOException, SecurityException {
-		Properties modprops = new Properties();
-		File modcfgfile = new File(CONFIG_DIR, mod.getName() + ".cfg");
-		if (modcfgfile.exists() && modcfgfile.canRead()) {
-			modprops.load(Files.newInputStream(modcfgfile.toPath()));
+		Properties modProperties = new Properties();
+		File modConfigFile = new File(CONFIG_DIR, mod.getName() + ".cfg");
+		if (modConfigFile.exists() && modConfigFile.canRead()) {
+			modProperties.load(Files.newInputStream(modConfigFile.toPath()));
 		}
 
-		StringBuilder helptext = new StringBuilder();
+		StringBuilder helpText = new StringBuilder();
 
-		Field[] var7;
-		for(Field field : var7 = mod.getFields()) {
+		for(Field field : mod.getFields()) {
 			if ((field.getModifiers() & 8) != 0 && field.isAnnotationPresent(MLProp.class)) {
 				Class<?> type = field.getType();
 				MLProp annotation = field.getAnnotation(MLProp.class);
 				String key = annotation.name().length() == 0 ? field.getName() : annotation.name();
-				Object currentvalue = field.get(null);
+				Object currentVal = field.get(null);
 				StringBuilder range = new StringBuilder();
 				if (annotation.min() != Double.NEGATIVE_INFINITY) {
 					range.append(String.format(",>=%.1f", annotation.min()));
@@ -1416,24 +1412,24 @@ public class ModLoader {
 					info.append(annotation.info());
 				}
 
-				helptext.append(String.format("%s (%s:%s%s)%s\n", key, type.getName(), currentvalue, range, info));
-				if (modprops.containsKey(key)) {
-					String strvalue = modprops.getProperty(key);
+				helpText.append(String.format("%s (%s:%s%s)%s\n", key, type.getName(), currentVal, range, info));
+				if (modProperties.containsKey(key)) {
+					String strVal = modProperties.getProperty(key);
 					Object value = null;
 					if (type.isAssignableFrom(String.class)) {
-						value = strvalue;
+						value = strVal;
 					} else if (type.isAssignableFrom(Integer.TYPE)) {
-						value = Integer.parseInt(strvalue);
+						value = Integer.parseInt(strVal);
 					} else if (type.isAssignableFrom(Short.TYPE)) {
-						value = Short.parseShort(strvalue);
+						value = Short.parseShort(strVal);
 					} else if (type.isAssignableFrom(Byte.TYPE)) {
-						value = Byte.parseByte(strvalue);
+						value = Byte.parseByte(strVal);
 					} else if (type.isAssignableFrom(Boolean.TYPE)) {
-						value = Boolean.parseBoolean(strvalue);
+						value = Boolean.parseBoolean(strVal);
 					} else if (type.isAssignableFrom(Float.TYPE)) {
-						value = Float.parseFloat(strvalue);
+						value = Float.parseFloat(strVal);
 					} else if (type.isAssignableFrom(Double.TYPE)) {
-						value = Double.parseDouble(strvalue);
+						value = Double.parseDouble(strVal);
 					}
 
 					if (value != null) {
@@ -1446,26 +1442,27 @@ public class ModLoader {
 						}
 
 						LOGGER.finer(key + " set to " + value);
-						if (!value.equals(currentvalue)) {
+
+						if (!value.equals(currentVal)) {
 							field.set(null, value);
 						}
 					}
 				} else {
-					LOGGER.finer(key + " not in config, using default: " + currentvalue);
-					modprops.setProperty(key, currentvalue.toString());
+					LOGGER.finer(key + " not in config, using default: " + currentVal);
+					modProperties.setProperty(key, currentVal.toString());
 				}
 			}
 		}
 
-		if (!modprops.isEmpty() && (modcfgfile.exists() || modcfgfile.createNewFile()) && modcfgfile.canWrite()) {
-			modprops.store(Files.newOutputStream(modcfgfile.toPath()), helptext.toString());
+		if (!modProperties.isEmpty() && (modConfigFile.exists() || modConfigFile.createNewFile()) && modConfigFile.canWrite()) {
+			modProperties.store(Files.newOutputStream(modConfigFile.toPath()), helpText.toString());
 		}
 	}
 	
 	/**
 	 * Is called when an item is picked up from crafting result slot.
-	 * @param player
-	 * @param item
+	 * @param player that took the item
+	 * @param item that was taken
 	 */
 	public static void TakenFromCrafting(PlayerEntity player, ItemStack item) {
 		for(BaseMod mod : MOD_LIST) {
@@ -1475,8 +1472,8 @@ public class ModLoader {
 	
 	/**
 	 * Is called when an item is picked up from furnace result slot.
-	 * @param player
-	 * @param item
+	 * @param player that took the item
+	 * @param item that was taken
 	 */
 	public static void TakenFromFurnace(PlayerEntity player, ItemStack item) {
 		for(BaseMod mod : MOD_LIST) {
@@ -1486,20 +1483,16 @@ public class ModLoader {
 	
 	/**
 	 * Used for catching an error and generating an error report.
-	 * @param message
-	 * @param e
+	 * @param message Title of error report
+	 * @param e Exception to report
 	 */
 	public static void ThrowException(String message, Throwable e) {
 		Minecraft game = getMinecraftInstance();
-		if (game != null) {
-			game.showGameStartupError(new GameStartupError(message, e));
-		} else {
-			throw new RuntimeException(e);
-		}
+		game.showGameStartupError(new GameStartupError(message, e));
 	}
 
 	private static void ThrowException(Throwable e) {
-		ThrowException("Exception occured in ModLoader", e);
+		ThrowException("Exception occurred in ModLoader", e);
 	}
 
 	private ModLoader() {
