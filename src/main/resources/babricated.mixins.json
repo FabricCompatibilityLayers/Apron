@@ -4,6 +4,10 @@
   "package": "io.github.betterthanupdates.babricated.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "BlockMixin",
+    "ItemEntityMixin",
+    "ItemMixin",
+    "ItemStackMixin"
   ],
   "client": [
   ],
