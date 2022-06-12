@@ -5,10 +5,12 @@ import fr.catcore.modremapperapi.api.RemapLibrary;
 import fr.catcore.modremapperapi.remapping.RemapUtil;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.tinyremapper.TinyRemapper;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.*;
 
-public class BabricatedModRemapper implements ModRemapper {
+@ApiStatus.Internal
+public final class BabricatedModRemapper implements ModRemapper {
 	@Override
 	public String[] getJarFolders() {
 		return new String[0];
@@ -20,35 +22,16 @@ public class BabricatedModRemapper implements ModRemapper {
 		switch (FabricLoader.getInstance().getEnvironmentType()) {
 			case CLIENT:
 				libraries = new RemapLibrary[] {
-						new RemapLibrary(
-								BabricatedForge.MODLOADER_URL,
-								new ArrayList<>(),
-								"modloader.zip"
-						),
-						new RemapLibrary(
-								BabricatedForge.MODLOADERMP_CLIENT_URL,
-								new ArrayList<>(),
-								"modloadermp-client.zip"
-						),
-						new RemapLibrary(
-								BabricatedForge.FORGE_CLIENT_URL,
-								new ArrayList<>(),
-								"forge-client.zip"
-						)
+						new RemapLibrary("", new ArrayList<>(), "modloader.zip"),
+						new RemapLibrary("", new ArrayList<>(), "modloadermp-client.zip"),
+						new RemapLibrary("", new ArrayList<>(), "forge-client.zip"),
+						new RemapLibrary("", new ArrayList<>(), "shockahpi.zip")
 				};
 				break;
 			case SERVER:
 				libraries = new RemapLibrary[] {
-						new RemapLibrary(
-								BabricatedForge.MODLOADERMP_SERVER_URL,
-								new ArrayList<>(),
-								"modloadermp-server.zip"
-						),
-						new RemapLibrary(
-								BabricatedForge.FORGE_SERVER_URL,
-								new ArrayList<>(),
-								"forge-server.zip"
-						)
+						new RemapLibrary("", new ArrayList<>(), "modloadermp-server.zip"),
+						new RemapLibrary("", new ArrayList<>(), "forge-server.zip")
 				};
 				break;
 		}
@@ -77,6 +60,22 @@ public class BabricatedModRemapper implements ModRemapper {
 		list.add("ModLoaderMp", "modloadermp/ModLoaderMp");
 		list.add("NetClientHandlerEntity", "modloadermp/NetClientHandlerEntity");
 		list.add("Packet230ModLoader", "modloadermp/Packet230ModLoader");
+
+		// ShockAhPI
+		// TODO: Rename classes on right side to fit Yarn standards
+		list.add("ACPage", "shockahpi/ACPage");
+		list.add("AnimBase", "shockahpi/AnimBase");
+		list.add("AnimPulse", "shockahpi/AnimPulse");
+		list.add("AnimShift", "shockahpi/AnimShift");
+		list.add("BlockHarvestPower", "shockahpi/BlockHarvestPower");
+		list.add("DimensionBase", "shockahpi/DimensionBase");
+		list.add("IInterceptBlockSet", "shockahpi/IInterceptBlockSet");
+		list.add("IInterceptHarvest", "shockahpi/IInterceptHarvest");
+		list.add("INBT", "shockahpi/INBT");
+		list.add("IReachBlock", "shockahpi/IReachBlock");
+		list.add("IReachEntity", "shockahpi/IReachEntity");
+		list.add("mod_SAPI", "shockahpi/mod_SAPI");
+		list.add("SAPI", "shockahpi/SAPI");
 	}
 
 	@Override

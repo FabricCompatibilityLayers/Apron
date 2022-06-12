@@ -5,24 +5,13 @@ import fr.catcore.modremapperapi.utils.Constants;
 import modloader.ModLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.io.File;
+import java.nio.file.FileSystemException;
 
-public class BabricatedForge {
-	// FIXME: Downloads should not be used! At the very least, they should not be hardcoded!
-	@Deprecated
-	protected static final String MODLOADER_URL = "";
-	@Deprecated
-	protected static final String MODLOADERMP_CLIENT_URL = "";
-	@Deprecated
-	protected static final String MODLOADERMP_SERVER_URL = "";
-	@Deprecated
-	protected static final String FORGE_CLIENT_URL = "";
-	@Deprecated
-	protected static final String FORGE_SERVER_URL = "";
-	@Deprecated
-	protected static final String SHOCKAHPI_CLIENT_URL = "";
-
+@ApiStatus.Internal
+public final class BabricatedForge {
 	// Logging
 	public static final Logger LOGGER = LogManager.getLogger(BabricatedForge.class);
 	public static final java.util.logging.Logger MOD_LOADER_LOGGER = ModLoader.getLogger();
@@ -31,6 +20,8 @@ public class BabricatedForge {
 	public static final File MOD_CACHE_FOLDER = new File(Constants.VERSIONED_FOLDER, "mods");
 
 	static {
-		MOD_CACHE_FOLDER.mkdirs();
+		if (!MOD_CACHE_FOLDER.mkdirs()) {
+			LOGGER.debug("Could not create mod cache directory. It may already exist.");
+		}
 	}
 }
