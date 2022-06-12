@@ -34,7 +34,7 @@ public abstract class ClientPlayPacketHandlerMixin {
 	/**
 	 * @author Risugami
 	 * @reason ModLoaderMP can handle spawning custom entities
-	 * TODO: yeet Overwrite
+	 * TODO(halotroop2288): rewrite as an {@link Inject} Mixin
 	 */
 	@Overwrite
 	public void onEntitySpawn(EntitySpawnS2CPacket packet23vehiclespawn) {
