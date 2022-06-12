@@ -12,8 +12,8 @@ public class EntityRendererProxy extends GameRenderer {
     }
 
     @Override
-    public void method_1844(float f1) {
-        super.method_1844(f1);
+    public void tick(float delta) {
+        super.tick(delta);
         ModLoader.OnTick(this.game);
     }
 }
