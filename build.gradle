@@ -1,3 +1,4 @@
+//file:noinspection GradlePackageVersionRange
 plugins {
 	id 'babric-loom' version '0.12-SNAPSHOT'
 //	id 'io.github.juuxel.loom-quiltflower' version '1.7.2'
@@ -36,7 +37,6 @@ repositories {
 			includeGroup 'io.github.betterthanupdates'
 		}
 	}
-	mavenLocal()
 
 	maven {
 		name 'Modrinth'
