@@ -1,27 +1,25 @@
 package modloadermp;
 
-import java.util.List;
 import modloader.BaseMod;
 import modloader.ModLoader;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
-import net.minecraft.world.World;
 import net.minecraft.packet.AbstractPacket;
 import net.minecraft.packet.play.OpenContainerS2CPacket;
+import net.minecraft.world.World;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class ModLoaderMp {
 	public static final String NAME = "ModLoaderMP";
 	public static final String VERSION = "Babric 1.7.3";
 	private static boolean hasInit = false;
 	private static boolean packet230Received = false;
-	private static Map<Integer, NetClientHandlerEntity> netClientHandlerEntityMap = new HashMap<>();
-	private static Map<Integer, BaseModMp> guiModMap = new HashMap<>();
+	private static final Map<Integer, NetClientHandlerEntity> NET_CLIENT_HANDLER_MAP = new HashMap<>();
+	private static final Map<Integer, BaseModMp> GUI_MOD_MAP = new HashMap<>();
 	
 	public static void Init() {
 		if (!ModLoaderMp.hasInit) {
@@ -75,8 +73,8 @@ public class ModLoaderMp {
 		if (!ModLoaderMp.hasInit) {
 			init();
 		}
-		if (ModLoaderMp.netClientHandlerEntityMap.containsKey(aInteger1)) {
-			return ModLoaderMp.netClientHandlerEntityMap.get(aInteger1);
+		if (ModLoaderMp.NET_CLIENT_HANDLER_MAP.containsKey(aInteger1)) {
+			return ModLoaderMp.NET_CLIENT_HANDLER_MAP.get(aInteger1);
 		}
 		return null;
 	}
@@ -100,11 +98,11 @@ public class ModLoaderMp {
 		if (!ModLoaderMp.hasInit) {
 			init();
 		}
-		if (ModLoaderMp.guiModMap.containsKey(i)) {
+		if (ModLoaderMp.GUI_MOD_MAP.containsKey(i)) {
 			Log("RegisterGUI error: inventoryType already registered.");
 		}
 		else {
-			ModLoaderMp.guiModMap.put(i, basemodmp);
+			ModLoaderMp.GUI_MOD_MAP.put(i, basemodmp);
 		}
 	}
 	
@@ -112,7 +110,7 @@ public class ModLoaderMp {
 		if (!ModLoaderMp.hasInit) {
 			init();
 		}
-		final BaseModMp basemodmp = ModLoaderMp.guiModMap.get(packet.inventoryType);
+		final BaseModMp basemodmp = ModLoaderMp.GUI_MOD_MAP.get(packet.inventoryType);
 		final Screen guiScreen = basemodmp.HandleGUI(packet.inventoryType);
 		if (guiScreen != null) {
 			ModLoader.OpenGUI(ModLoader.getMinecraftInstance().player, guiScreen);
@@ -131,14 +129,14 @@ public class ModLoaderMp {
 
 		if (i > 255) {
 			Log("RegisterNetClientHandlerEntity error: entityId cannot be greater than 255.");
-		} else if (netClientHandlerEntityMap.containsKey(i)) {
+		} else if (NET_CLIENT_HANDLER_MAP.containsKey(i)) {
 			Log("RegisterNetClientHandlerEntity error: entityId already registered.");
 		} else {
 			if (i > 127) {
 				i -= 256;
 			}
 
-			netClientHandlerEntityMap.put(i, new NetClientHandlerEntity(class1, flag));
+			NET_CLIENT_HANDLER_MAP.put(i, new NetClientHandlerEntity(class1, flag));
 		}
 	}
 	
