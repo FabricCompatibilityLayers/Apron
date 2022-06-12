@@ -10,11 +10,18 @@ import java.io.File;
 
 public class BabricatedForge {
 	// FIXME: Downloads should not be used! At the very least, they should not be hardcoded!
+	@Deprecated
 	protected static final String MODLOADER_URL = "";
+	@Deprecated
 	protected static final String MODLOADERMP_CLIENT_URL = "";
+	@Deprecated
 	protected static final String MODLOADERMP_SERVER_URL = "";
+	@Deprecated
 	protected static final String FORGE_CLIENT_URL = "";
+	@Deprecated
 	protected static final String FORGE_SERVER_URL = "";
+	@Deprecated
+	protected static final String SHOCKAHPI_CLIENT_URL = "";
 
 	// Logging
 	public static final Logger LOGGER = LogManager.getLogger(BabricatedForge.class);
