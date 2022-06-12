@@ -32,3 +32,23 @@ mutable field net/minecraft/stat/achievement/Achievement description Ljava/lang/
 mutable field net/minecraft/stat/Stat name Ljava/lang/String;
 
 accessible method net/minecraft/packet/AbstractPacket register (IZZLjava/lang/Class;)V
+
+accessible class net/minecraft/block/RailBlock$RailMagicStuff
+
+accessible method net/minecraft/block/RailBlock$RailMagicStuff <init> (Lnet/minecraft/block/RailBlock;Lnet/minecraft/world/World;III)V
+
+accessible field net/minecraft/client/render/block/BlockRenderer blockView Lnet/minecraft/world/BlockView;
+accessible field net/minecraft/client/render/block/BlockRenderer textureOverride I
+accessible field net/minecraft/client/render/block/BlockRenderer eastFaceRotation I
+accessible field net/minecraft/client/render/block/BlockRenderer westFaceRotation I
+accessible field net/minecraft/client/render/block/BlockRenderer southFaceRotation I
+accessible field net/minecraft/client/render/block/BlockRenderer northFaceRotation I
+accessible field net/minecraft/client/render/block/BlockRenderer topFaceRotation I
+accessible field net/minecraft/client/render/block/BlockRenderer bottomFaceRotation I
+accessible field net/minecraft/client/render/block/BlockRenderer mirrorTexture Z
+accessible field net/minecraft/client/render/block/BlockRenderer renderAllSides Z
+accessible method net/minecraft/client/render/block/BlockRenderer renderBed (Lnet/minecraft/block/Block;III)Z
+accessible method net/minecraft/client/render/block/BlockRenderer renderRedstoneRepeater (Lnet/minecraft/block/Block;III)Z
+accessible method net/minecraft/client/render/block/BlockRenderer renderPiston (Lnet/minecraft/block/Block;IIIZ)Z
+accessible method net/minecraft/client/render/block/BlockRenderer renderPistonHead (Lnet/minecraft/block/Block;IIIZ)Z
+accessible method net/minecraft/client/render/block/BlockRenderer method_43 (IIILnet/minecraft/block/material/Material;)F
