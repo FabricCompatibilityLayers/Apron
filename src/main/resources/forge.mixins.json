@@ -17,7 +17,8 @@
     "RedstoneRepeaterMixin",
     "TorchBlockMixin",
     "TrapdoorBlockMixin",
-    "ParticleManagerMixin"
+    "ParticleManagerMixin",
+    "BlockRendererMixin"
   ],
   "client": [
   ],
