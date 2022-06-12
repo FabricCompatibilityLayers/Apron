@@ -24,8 +24,7 @@ public final class BabricatedModRemapper implements ModRemapper {
 				libraries = new RemapLibrary[] {
 						new RemapLibrary("", new ArrayList<>(), "modloader.zip"),
 						new RemapLibrary("", new ArrayList<>(), "modloadermp-client.zip"),
-						new RemapLibrary("", new ArrayList<>(), "forge-client.zip"),
-						new RemapLibrary("", new ArrayList<>(), "shockahpi.zip")
+						new RemapLibrary("", new ArrayList<>(), "forge-client.zip")
 				};
 				break;
 			case SERVER:
@@ -60,22 +59,6 @@ public final class BabricatedModRemapper implements ModRemapper {
 		list.add("ModLoaderMp", "modloadermp/ModLoaderMp");
 		list.add("NetClientHandlerEntity", "modloadermp/NetClientHandlerEntity");
 		list.add("Packet230ModLoader", "modloadermp/Packet230ModLoader");
-
-		// ShockAhPI
-		// TODO: Rename classes on right side to fit Yarn standards
-		list.add("ACPage", "shockahpi/ACPage");
-		list.add("AnimBase", "shockahpi/AnimBase");
-		list.add("AnimPulse", "shockahpi/AnimPulse");
-		list.add("AnimShift", "shockahpi/AnimShift");
-		list.add("BlockHarvestPower", "shockahpi/BlockHarvestPower");
-		list.add("DimensionBase", "shockahpi/DimensionBase");
-		list.add("IInterceptBlockSet", "shockahpi/IInterceptBlockSet");
-		list.add("IInterceptHarvest", "shockahpi/IInterceptHarvest");
-		list.add("INBT", "shockahpi/INBT");
-		list.add("IReachBlock", "shockahpi/IReachBlock");
-		list.add("IReachEntity", "shockahpi/IReachEntity");
-		list.add("mod_SAPI", "shockahpi/mod_SAPI");
-		list.add("SAPI", "shockahpi/SAPI");
 	}
 
 	@Override

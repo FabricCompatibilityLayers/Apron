@@ -51,4 +51,8 @@ accessible method net/minecraft/client/render/block/BlockRenderer renderBed (Lne
 accessible method net/minecraft/client/render/block/BlockRenderer renderRedstoneRepeater (Lnet/minecraft/block/Block;III)Z
 accessible method net/minecraft/client/render/block/BlockRenderer renderPiston (Lnet/minecraft/block/Block;IIIZ)Z
 accessible method net/minecraft/client/render/block/BlockRenderer renderPistonHead (Lnet/minecraft/block/Block;IIIZ)Z
-accessible method net/minecraft/client/render/block/BlockRenderer method_43 (IIILnet/minecraft/block/material/Material;)F
+
+accessible field net/minecraft/client/entity/player/AbstractClientPlayerEntity client Lnet/minecraft/client/Minecraft;
+
+accessible field net/minecraft/world/World autoSaveInterval I
+accessible method net/minecraft/world/dimension/DimensionFile getParentFolder ()Ljava/io/File;
