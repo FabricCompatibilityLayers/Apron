@@ -1,7 +1,9 @@
 package modloader;
 
 import io.github.betterthanupdates.babricated.BabricatedForge;
-import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
 import net.minecraft.block.Block;
 import net.minecraft.client.GameStartupError;
@@ -35,14 +37,13 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.HellBiome;
 import net.minecraft.world.biome.SkyBiome;
 import net.minecraft.world.source.WorldSource;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
@@ -176,8 +177,8 @@ public class ModLoader {
 	
 	/**
 	 * Use this when you need the player to have new armor skin.
-	 * @param armor
-	 * @return
+	 * @param armor Name of the armor skin
+	 * @return index assign for the armor skin
 	 */
 	@SuppressWarnings("unused")
 	public static int AddArmor(String armor) {
@@ -202,8 +203,8 @@ public class ModLoader {
 	
 	/**
 	 * Method for adding raw strings to the translation table.
-	 * @param key
-	 * @param value
+	 * @param key tag for string
+	 * @param value string to add
 	 */
 	public static void AddLocalization(String key, String value) {
 		Properties props = TranslationStorage.getInstance().translations;
@@ -250,8 +251,8 @@ public class ModLoader {
 
 	/**
 	 * This method will allow adding name to item in inventory.
-	 * @param instance
-	 * @param name
+	 * @param instance A block, item, or item stack reference to name
+	 * @param name The name to give
 	 */
 	@SuppressWarnings("unused")
 	public static void AddName(Object instance, String name) {
@@ -288,8 +289,8 @@ public class ModLoader {
 
 	/**
 	 * Use this to add custom images for your items and blocks.
-	 * @param fileToOverride file to override
-	 * @param fileToAdd file to add
+	 * @param fileToOverride file to override ("/terrain.png" or "/gui/items.png")
+	 * @param fileToAdd path to the image you want to add
 	 * @return unique sprite index
 	 */
 	@SuppressWarnings("unused")
@@ -307,13 +308,13 @@ public class ModLoader {
 
 	/**
 	 * Registers one texture override to be done.
-	 * @param path
-	 * @param overlayPath
-	 * @param index
+	 * @param path Path to the texture file to modify ("/terrain.png" or "/gui/items.png")
+	 * @param overlayPath Path to the texture file which is to be overlaid
+	 * @param index Sprite index into the texture to be modified
 	 */
 	public static void addOverride(String path, String overlayPath, int index) {
-		int dst = -1;
-		int left = 0;
+		int dst;
+		int left;
 		if (path.equals("/terrain.png")) {
 			dst = 0;
 			left = terrainSpritesLeft;
@@ -348,7 +349,6 @@ public class ModLoader {
 	 * @param output the result of the crafting recipe
 	 * @param ingredients ingredients for the recipe in any order
 	 */
-	@SuppressWarnings("unused")
 	public static void AddShapelessRecipe(ItemStack output, Object... ingredients) {
 		RecipeRegistry.getInstance().addShapelessRecipe(output, ingredients);
 	}
@@ -358,7 +358,6 @@ public class ModLoader {
 	 * @param input ingredient for the recipe
 	 * @param output the result of the furnace recipe
 	 */
-	@SuppressWarnings("unused")
 	public static void AddSmelting(int input, ItemStack output) {
 		SmeltingRecipeRegistry.getInstance().addSmeltingRecipe(input, output);
 	}
@@ -369,7 +368,6 @@ public class ModLoader {
 	 * @param weightedProb chance of spawning for every try
 	 * @param spawnGroup group to spawn the entity in
 	 */
-	@SuppressWarnings("unused")
 	public static void AddSpawn(Class<? extends LivingEntity> entityClass, int weightedProb, SpawnGroup spawnGroup) {
 		AddSpawn(entityClass, weightedProb, spawnGroup, (Biome) null);
 	}
@@ -381,6 +379,7 @@ public class ModLoader {
 	 * @param spawnGroup group to spawn the entity in
 	 * @param biomes biomes to spawn the entity in
 	 */
+	@SuppressWarnings("unchecked")
 	public static void AddSpawn(Class<? extends LivingEntity> entityClass, int weightedProb, SpawnGroup spawnGroup, Biome... biomes) {
 		if (entityClass == null) {
 			throw new IllegalArgumentException("entityClass cannot be null");
@@ -414,23 +413,22 @@ public class ModLoader {
 	
 	/**
 	 * Add entity to spawn list for all biomes except Hell.
-	 * @param entityName
-	 * @param weightedProb
-	 * @param spawnGroup
+	 * @param entityName Name of entity to spawn
+	 * @param chance Higher number means more likely to spawn
+	 * @param spawnGroup The spawn group to add entity to (Monster, Creature, or Water)
 	 */
-	@SuppressWarnings("unused")
-	public static void AddSpawn(String entityName, int weightedProb, SpawnGroup spawnGroup) {
-		AddSpawn(entityName, weightedProb, spawnGroup, (Biome) null);
+	public static void AddSpawn(String entityName, int chance, SpawnGroup spawnGroup) {
+		AddSpawn(entityName, chance, spawnGroup, (Biome) null);
 	}
 	
 	/**
 	 * Add entity to spawn list for selected biomes.
-	 * @param entityName
-	 * @param weightedProb
-	 * @param spawnGroup
-	 * @param biomes
+	 * @param entityName Name of entity to spawn
+	 * @param weightedProb Higher number means more likely to spawn
+	 * @param spawnGroup The spawn group to add entity to (Monster, Creature, or Water)
+	 * @param biomes Array of biomes to add entity spawning to
 	 */
-	@SuppressWarnings({"unchecked", "unused"})
+	@SuppressWarnings("unchecked")
 	public static void AddSpawn(String entityName, int weightedProb, SpawnGroup spawnGroup, Biome... biomes) {
 		Class<? extends Entity> entityClass = (Class<? extends Entity>) EntityRegistry.STRING_ID_TO_CLASS.get(entityName);
 		if (entityClass != null && LivingEntity.class.isAssignableFrom(entityClass)) {
@@ -462,7 +460,7 @@ public class ModLoader {
 	
 	/**
 	 * Use this method if you need a list of loaded mods.
-	 * @return
+	 * @return the list of loaded {@link BaseMod ModLoader mods}
 	 */
 	public static List<BaseMod> getLoadedMods() {
 		return Collections.unmodifiableList(MOD_LIST);
@@ -470,7 +468,8 @@ public class ModLoader {
 	
 	/**
 	 * Use this to get a reference to the logger ModLoader uses.
-	 * @return
+	 * (Or just reference {@link #LOGGER})
+	 * @return the logger instance
 	 */
 	public static Logger getLogger() {
 		return LOGGER;
@@ -478,31 +477,30 @@ public class ModLoader {
 	
 	/**
 	 * Use this method to get a reference to Minecraft instance.
-	 * Method was changed from original.
-	 * @return
+	 * @return Minecraft client instance
 	 */
-	@SuppressWarnings("deprecation")
+	@NotNull
+	@Environment(EnvType.CLIENT)
 	public static Minecraft getMinecraftInstance() {
 		if (instance == null) {
-			instance = (Minecraft) FabricLoader.getInstance().getGameInstance();
+			instance = (Minecraft) FabricLoaderImpl.INSTANCE.getGameInstance();
 		}
 		return instance;
 	}
 	
 	/**
 	 * Used for getting value of private fields.
-	 * @param instanceClass
-	 * @param instance
-	 * @param fieldIndex
-	 * @param <T>
-	 * @param <E>
-	 * @return
-	 * @throws IllegalArgumentException
-	 * @throws SecurityException
-	 * @throws NoSuchFieldException
+	 * @param instanceClass Class to use with instance.
+	 * @param instance Object to get private field from.
+	 * @param fieldIndex Name of the field.
+	 * @param <T> Return type
+	 * @param <E> Type of instance
+	 * @return Value of private field
+	 * @throws IllegalArgumentException if instance isn't compatible with instanceClass
+	 * @throws SecurityException if the thread is not allowed to access field
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T, E> T getPrivateValue(Class<? super E> instanceClass, E instance, int fieldIndex) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
+	public static <T, E> T getPrivateValue(Class<? super E> instanceClass, E instance, int fieldIndex) throws IllegalArgumentException, SecurityException {
 		try {
 			Field f = instanceClass.getDeclaredFields()[fieldIndex];
 			f.setAccessible(true);
@@ -516,15 +514,15 @@ public class ModLoader {
 	
 	/**
 	 * Used for getting value of private fields.
-	 * @param instanceClass
-	 * @param instance
-	 * @param fieldName
-	 * @param <T>
-	 * @param <E>
-	 * @return
-	 * @throws IllegalArgumentException
-	 * @throws SecurityException
-	 * @throws NoSuchFieldException
+	 * @param instanceClass Class to use with instance
+	 * @param instance Object to get private field from
+	 * @param fieldName Name of the field
+	 * @param <T> Return type
+	 * @param <E> Type of instance
+	 * @return Value of private field
+	 * @throws IllegalArgumentException if instance isn't compatible with instanceClass
+	 * @throws SecurityException if the thread is not allowed to access field
+	 * @throws NoSuchFieldException if field does not exist
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T, E> T getPrivateValue(Class<? super E> instanceClass, E instance, String fieldName) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
@@ -541,11 +539,10 @@ public class ModLoader {
 	
 	/**
 	 * Assigns a model id for blocks to use for the given mod.
-	 * @param mod
-	 * @param full3DItem
-	 * @return
+	 * @param mod to assign id to
+	 * @param full3DItem if true the item will have 3D model created from {@link #RenderInvBlock(BlockRenderer, Block, int, int)}, if false will be a flat image
+	 * @return assigned block model id
 	 */
-	@SuppressWarnings("unused")
 	public static int getUniqueBlockModelID(BaseMod mod, boolean full3DItem) {
 		int id = nextBlockModelID++;
 		BLOCK_MODELS.put(id, mod);
@@ -555,9 +552,8 @@ public class ModLoader {
 	
 	/**
 	 * Gets next Entity ID to use.
-	 * @return
+	 * @return Assigned ID
 	 */
-	@SuppressWarnings("unused")
 	public static int getUniqueEntityId() {
 		return highestEntityId++;
 	}
@@ -581,8 +577,8 @@ public class ModLoader {
 
 	/**
 	 * Gets next available index for this sprite map.
-	 * @param path
-	 * @return
+	 * @param path path to sprite sheet to get available index from
+	 * @return Assigned sprite index to use
 	 */
 	public static int getUniqueSpriteIndex(String path) {
 		if (path.equals("/gui/items.png")) {
@@ -669,8 +665,7 @@ public class ModLoader {
 				LOGGER.addHandler(logHandler);
 			}
 
-			LOGGER.fine("ModLoader Beta 1.7.3 Initializing...");
-			System.out.println("ModLoader Beta 1.7.3 Initializing...");
+			LOGGER.fine(VERSION + " Initializing...");
 			File source = new File(ModLoader.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 			MOD_DIR.mkdirs();
 			readFromModFolder(BabricatedForge.MOD_CACHE_FOLDER);
@@ -745,25 +740,25 @@ public class ModLoader {
 	
 	/**
 	 * Use this method to check if GUI is opened for the player.
-	 * @param gui
-	 * @return
+	 * @param gui The type of GUI to check for. If null, will check for any GUI
+	 * @return true if GUI is open
 	 */
-	public static boolean isGUIOpen(Class<? extends Screen> gui) {
+	public static boolean isGUIOpen(@Nullable Class<? extends Screen> gui) {
 		Minecraft game = getMinecraftInstance();
 		if (gui == null) {
 			return game.currentScreen == null;
 		} else {
-			return game.currentScreen == null && gui != null ? false : gui.isInstance(game.currentScreen);
+			return gui.isInstance(game.currentScreen);
 		}
 	}
 	
 	/**
 	 * Checks if a mod is loaded.
-	 * @param modName
-	 * @return
+	 * @param modName name of the mod to check for
+	 * @return true if a mod with supplied name exists in the mod list
 	 */
 	public static boolean isModLoaded(String modName) {
-		Class<?> chk = null;
+		Class<?> chk;
 
 		try {
 			chk = Class.forName(modName);
@@ -771,11 +766,9 @@ public class ModLoader {
 			return false;
 		}
 
-		if (chk != null) {
-			for(BaseMod mod : MOD_LIST) {
-				if (chk.isInstance(mod)) {
-					return true;
-				}
+		for(BaseMod mod : MOD_LIST) {
+			if (chk.isInstance(mod)) {
+				return true;
 			}
 		}
 
@@ -786,30 +779,35 @@ public class ModLoader {
 	 * Reads the config file and stores the contents in props.
 	 * @throws IOException
 	 */
-	public static void loadConfig() throws IOException {
+	public static void loadConfig()  {
 		CONFIG_DIR.mkdir();
-		if (CONFIG_FILE.exists() || CONFIG_FILE.createNewFile()) {
-			if (CONFIG_FILE.canRead()) {
-				InputStream in = Files.newInputStream(CONFIG_FILE.toPath());
-				props.load(in);
-				in.close();
+		try {
+			if (CONFIG_FILE.exists() || CONFIG_FILE.createNewFile()) {
+				if (CONFIG_FILE.canRead()) {
+					InputStream in = Files.newInputStream(CONFIG_FILE.toPath());
+					props.load(in);
+					in.close();
+				}
 			}
-
+		} catch (IOException e) {
+			LOGGER.log(Level.CONFIG, "Config could not be loaded!", e);
 		}
 	}
 	
 	/**
 	 * Loads an image from a file in the jar into a BufferedImage.
-	 * @param textureManager
-	 * @param path
-	 * @return
-	 * @throws Exception
+	 * @param textureManager Reference to texture cache
+	 * @param path Path inside the jar to the image (starts with /)
+	 * @return Loaded image to override with
+	 * @throws FileNotFoundException if the image is not found
+	 * @throws Exception if the image is corrupted
 	 */
-	public static BufferedImage loadImage(TextureManager textureManager, String path) throws Exception {
+	public static BufferedImage loadImage(TextureManager textureManager, String path)
+			throws FileNotFoundException, Exception {
 		TexturePackManager packManager = textureManager.texturePackManager;
 		InputStream input = packManager.texturePack.getResourceAsStream(path);
 		if (input == null) {
-			throw new Exception("Image not found: " + path);
+			throw new FileNotFoundException("Image not found: " + path);
 		} else {
 			BufferedImage image = ImageIO.read(input);
 			if (image == null) {
@@ -822,8 +820,8 @@ public class ModLoader {
 	
 	/**
 	 * Is called when an item is picked up from the world.
-	 * @param player
-	 * @param item
+	 * @param player that picked up item
+	 * @param item that was picked up
 	 */
 	public static void OnItemPickup(PlayerEntity player, ItemStack item) {
 		for(BaseMod mod : MOD_LIST) {
@@ -833,7 +831,7 @@ public class ModLoader {
 	
 	/**
 	 * This method is called every tick while minecraft is running.
-	 * @param minecraft
+	 * @param minecraft instance of the game class
 	 */
 	public static void OnTick(Minecraft minecraft) {
 		if (!hasInit) {
@@ -851,15 +849,15 @@ public class ModLoader {
 			texturesAdded = true;
 		}
 
-		long newclock = 0L;
+		long newClock = 0L;
 		if (minecraft.world != null) {
-			newclock = minecraft.world.getWorldTime();
-			Iterator<Entry<BaseMod, Boolean>> iter = inGameHooks.entrySet().iterator();
+			newClock = minecraft.world.getWorldTime();
+			Iterator<Entry<BaseMod, Boolean>> iterator = inGameHooks.entrySet().iterator();
 
-			while(iter.hasNext()) {
-				Entry<BaseMod, Boolean> modSet = iter.next();
-				if ((clock != newclock || !modSet.getValue()) && !modSet.getKey().OnTickInGame(minecraft)) {
-					iter.remove();
+			while(iterator.hasNext()) {
+				Entry<BaseMod, Boolean> modSet = iterator.next();
+				if ((clock != newClock || !modSet.getValue()) && !modSet.getKey().OnTickInGame(minecraft)) {
+					iterator.remove();
 				}
 			}
 		}
@@ -869,13 +867,13 @@ public class ModLoader {
 
 			while(iter.hasNext()) {
 				Entry<BaseMod, Boolean> modSet = iter.next();
-				if ((clock != newclock || !(modSet.getValue() & minecraft.world != null)) && !modSet.getKey().OnTickInGUI(minecraft, minecraft.currentScreen)) {
+				if ((clock != newClock || !(modSet.getValue() & minecraft.world != null)) && !modSet.getKey().OnTickInGUI(minecraft, minecraft.currentScreen)) {
 					iter.remove();
 				}
 			}
 		}
 
-		if (clock != newclock) {
+		if (clock != newClock) {
 			for(Entry<BaseMod, Map<KeyBinding, boolean[]>> modSet : keyList.entrySet()) {
 				for(Entry<KeyBinding, boolean[]> keySet : modSet.getValue().entrySet()) {
 					boolean state = Keyboard.isKeyDown(keySet.getKey().key);
@@ -889,13 +887,13 @@ public class ModLoader {
 			}
 		}
 
-		clock = newclock;
+		clock = newClock;
 	}
 	
 	/**
 	 * Opens GUI for use with mods.
-	 * @param player
-	 * @param screen
+	 * @param player instance to open GUI for
+	 * @param screen instance of GUI to open for player
 	 */
 	public static void OpenGUI(PlayerEntity player, Screen screen) {
 		if (!hasInit) {
@@ -913,12 +911,12 @@ public class ModLoader {
 	
 	/**
 	 * Used for generating new blocks in the world.
-	 * @param worldSource
-	 * @param chunkX
-	 * @param chunkZ
-	 * @param world
+	 * @param source Generator to pair with
+	 * @param chunkX X coordinate of chunk
+	 * @param chunkZ Z coordinate of chunk
+	 * @param world World to generate blocks in
 	 */
-	public static void PopulateChunk(WorldSource worldSource, int chunkX, int chunkZ, World world) {
+	public static void PopulateChunk(WorldSource source, int chunkX, int chunkZ, World world) {
 		if (!hasInit) {
 			init();
 			LOGGER.fine("Initialized");
@@ -930,9 +928,9 @@ public class ModLoader {
 		rnd.setSeed((long)chunkX * xSeed + (long)chunkZ * zSeed ^ world.getSeed());
 
 		for(BaseMod mod : MOD_LIST) {
-			if (worldSource.toString().equals("RandomLevelSource")) {
+			if (source.toString().equals("RandomLevelSource")) {
 				mod.GenerateSurface(world, rnd, chunkX << 4, chunkZ << 4);
-			} else if (worldSource.toString().equals("HellRandomLevelSource")) {
+			} else if (source.toString().equals("HellRandomLevelSource")) {
 				mod.GenerateNether(world, rnd, chunkX << 4, chunkZ << 4);
 			}
 		}
@@ -945,7 +943,7 @@ public class ModLoader {
 			LOGGER.finer("Zip found.");
 			InputStream input = Files.newInputStream(source.toPath());
 			ZipInputStream zip = new ZipInputStream(input);
-			ZipEntry entry = null;
+			ZipEntry entry;
 
 			while(true) {
 				entry = zip.getNextEntry();
@@ -979,58 +977,63 @@ public class ModLoader {
 		}
 	}
 
+	@SuppressWarnings("SameParameterValue")
 	private static void readFromModFolder(File folder) throws IOException, IllegalArgumentException, SecurityException {
 		ClassLoader loader = Minecraft.class.getClassLoader();
 		if (!folder.isDirectory()) {
 			throw new IllegalArgumentException("folder must be a Directory.");
 		} else {
-			File[] sourcefiles = folder.listFiles();
-			for (File source : sourcefiles) {
-				if (source.isDirectory() || source.isFile() && (source.getName().endsWith(".jar") || source.getName().endsWith(".zip"))) {
-					FabricLauncherBase.getLauncher().addToClassPath(source.toPath());
+			File[] sourceFiles = folder.listFiles();
+			if (sourceFiles != null && sourceFiles.length > 0) {
+				for (File source : sourceFiles) {
+					if (source.isDirectory() || source.isFile() && (source.getName().endsWith(".jar") || source.getName().endsWith(".zip"))) {
+						FabricLauncherBase.getLauncher().addToClassPath(source.toPath());
+					}
 				}
 			}
 
-			for (File sourcefile : sourcefiles) {
-				File source = sourcefile;
-				if (source.isDirectory() || source.isFile() && (source.getName().endsWith(".jar") || source.getName().endsWith(".zip"))) {
-					LOGGER.finer("Adding mods from " + source.getCanonicalPath());
-					if (!source.isFile()) {
-						if (source.isDirectory()) {
-							Package pkg = ModLoader.class.getPackage();
-							if (pkg != null) {
-								String pkgdir = pkg.getName().replace('.', File.separatorChar);
-								source = new File(source, pkgdir);
-							}
+			if (sourceFiles != null && sourceFiles.length > 0) {
+				for (File sourceFile : sourceFiles) {
+					File source = sourceFile;
+					if (source.isDirectory() || source.isFile() && (source.getName().endsWith(".jar") || source.getName().endsWith(".zip"))) {
+						LOGGER.finer("Adding mods from " + source.getCanonicalPath());
+						if (!source.isFile()) {
+							if (source.isDirectory()) {
+								Package pkg = ModLoader.class.getPackage();
+								if (pkg != null) {
+									String packageDirectory = pkg.getName().replace('.', File.separatorChar);
+									source = new File(source, packageDirectory);
+								}
 
-							LOGGER.finer("Directory found.");
-							File[] dirfiles = source.listFiles();
-							if (dirfiles != null) {
-								for (File dirfile : dirfiles) {
-									String name = dirfile.getName();
-									if (dirfile.isFile() && name.startsWith("mod_") && name.endsWith(".class")) {
-										addMod(loader, name);
+								LOGGER.finer("Directory found.");
+								File[] directoryFiles = source.listFiles();
+								if (directoryFiles != null) {
+									for (File directoryFile : directoryFiles) {
+										String name = directoryFile.getName();
+										if (directoryFile.isFile() && name.startsWith("mod_") && name.endsWith(".class")) {
+											addMod(loader, name);
+										}
 									}
 								}
 							}
-						}
-					} else {
-						LOGGER.finer("Zip found.");
-						InputStream input = Files.newInputStream(source.toPath());
-						ZipInputStream zip = new ZipInputStream(input);
-						ZipEntry entry = null;
+						} else {
+							LOGGER.finer("Zip found.");
+							InputStream input = Files.newInputStream(source.toPath());
+							ZipInputStream zip = new ZipInputStream(input);
+							ZipEntry entry;
 
-						while (true) {
-							entry = zip.getNextEntry();
-							if (entry == null) {
-								zip.close();
-								input.close();
-								break;
-							}
+							while (true) {
+								entry = zip.getNextEntry();
+								if (entry == null) {
+									zip.close();
+									input.close();
+									break;
+								}
 
-							String name = entry.getName();
-							if (!entry.isDirectory() && name.startsWith("mod_") && name.endsWith(".class")) {
-								addMod(loader, name);
+								String name = entry.getName();
+								if (!entry.isDirectory() && name.startsWith("mod_") && name.endsWith(".class")) {
+									addMod(loader, name);
+								}
 							}
 						}
 					}
@@ -1041,8 +1044,8 @@ public class ModLoader {
 	
 	/**
 	 * Appends all mod key handlers to the given array and returns it.
-	 * @param keyBindings
-	 * @return
+	 * @param keyBindings Array of the original keys
+	 * @return the appended array
 	 */
 	public static KeyBinding[] RegisterAllKeys(KeyBinding[] keyBindings) {
 		List<KeyBinding> combinedList = new LinkedList<>(Arrays.asList(keyBindings));
@@ -1051,12 +1054,12 @@ public class ModLoader {
 			combinedList.addAll(keyMap.keySet());
 		}
 
-		return (KeyBinding[])combinedList.toArray(new KeyBinding[0]);
+		return combinedList.toArray(new KeyBinding[0]);
 	}
 	
 	/**
 	 * Processes all registered texture overrides.
-	 * @param manager
+	 * @param manager Reference to texture cache
 	 */
 	public static void RegisterAllTextureOverrides(TextureManager manager) {
 		ANIM_LIST.clear();
@@ -1091,29 +1094,27 @@ public class ModLoader {
 	
 	/**
 	 * Adds block to list of blocks the player can use.
-	 * @param block
+	 * @param block to add
 	 */
 	public static void RegisterBlock(Block block) {
 		RegisterBlock(block, null);
 	}
 	
 	/**
-	 * Adds block to list of blocks the player can use.
-	 * @param block
-	 * @param itemClass
+	 * Adds block to list of blocks the player can use. Includes the item to use for block (unsafely).
+	 * @param block to add
+	 * @param itemClass class to use for block item
 	 */
-	public static void RegisterBlock(Block block, Class<? extends BlockItem> itemClass) {
+	@SuppressWarnings("unchecked")
+	public static void RegisterBlock(@NotNull Block block, Class<? extends BlockItem> itemClass) {
 		try {
-			if (block == null) {
-				throw new IllegalArgumentException("block parameter cannot be null.");
-			}
-
 			List<Block> list = (List<Block>) Session.defaultCreativeInventory;
 			list.add(block);
 			int id = block.id;
-			BlockItem item = null;
+			BlockItem item;
 			if (itemClass != null) {
-				item = (BlockItem)itemClass.getConstructor(Integer.TYPE).newInstance(id - 256);
+				item = itemClass.getConstructor(Integer.TYPE)
+						.newInstance(id - 256);
 			} else {
 				item = new BlockItem(id - 256);
 			}
