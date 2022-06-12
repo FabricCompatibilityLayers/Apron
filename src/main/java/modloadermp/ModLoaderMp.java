@@ -161,7 +161,6 @@ public class ModLoaderMp {
 	}
 	
 	public static void Log(final String s) {
-		System.out.println(s);
 		ModLoader.getLogger().fine(s);
 	}
 

@@ -239,10 +239,8 @@ public class ModLoader {
 			BaseMod mod = (BaseMod)modClass.getDeclaredConstructor().newInstance();
 			MOD_LIST.add(mod);
 			LOGGER.fine("Mod Loaded: \"" + mod + "\" from " + filename);
-			System.out.println("Mod Loaded: " + mod);
 		} catch (Throwable var6) {
 			LOGGER.fine("Failed to load mod from \"" + filename + "\"");
-			System.out.println("Failed to load mod from \"" + filename + "\"");
 			LOGGER.throwing("ModLoader", "addMod", var6);
 			ThrowException(var6);
 		}
@@ -327,7 +325,6 @@ public class ModLoader {
 			left = itemSpritesLeft;
 		}
 
-		System.out.println("Overriding " + path + " with " + overlayPath + " @ " + index + ". " + left + " left.");
 		LOGGER.finer("addOverride(" + path + "," + overlayPath + "," + index + "). " + left + " left.");
 		Map<String, Integer> overlays = overrides.computeIfAbsent(dst, k -> new HashMap<>());
 
@@ -670,7 +667,7 @@ public class ModLoader {
 			MOD_DIR.mkdirs();
 			readFromModFolder(BabricatedForge.MOD_CACHE_FOLDER);
 			readFromClassPath(source);
-			System.out.println("Done.");
+			LOGGER.log(Level.INFO, "Done initializing.");
 			props.setProperty("loggingLevel", cfgLoggingLevel.getName());
 
 			for(BaseMod mod : MOD_LIST) {
