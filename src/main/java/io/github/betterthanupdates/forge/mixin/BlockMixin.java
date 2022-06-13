@@ -20,15 +20,23 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(Block.class)
 public abstract class BlockMixin implements ForgeBlock {
 
-	@Shadow protected float hardness;
+	@Shadow
+	protected float hardness;
 
-	@Shadow @Final public static int[] EMITTANCE;
+	@Shadow
+	@Final
+	public static int[] EMITTANCE;
 
-	@Shadow @Final public int id;
+	@Shadow
+	@Final
+	public int id;
 
-	@Shadow @Final public Material material;
+	@Shadow
+	@Final
+	public Material material;
 
-	@Shadow public abstract boolean isFullCube();
+	@Shadow
+	public abstract boolean isFullCube();
 
 	/**
 	 * @author Forge
@@ -85,6 +93,7 @@ public abstract class BlockMixin implements ForgeBlock {
 	/**
 	 * Gets hardness for a block, taking into account its hardness.<br>
 	 * By default, this has the same behavior as {@link Block#getHardness()}
+	 *
 	 * @param meta the meta value of the block state
 	 * @return the hardness (time to break) of the block
 	 */
@@ -101,12 +110,12 @@ public abstract class BlockMixin implements ForgeBlock {
 
 	@Override
 	public float blockStrength(PlayerEntity player, int md) {
-		return ForgeHooks.blockStrength((Block)(Object) this, player, md);
+		return ForgeHooks.blockStrength((Block) (Object) this, player, md);
 	}
 
 	@Override
 	public boolean canHarvestBlock(PlayerEntity player, int md) {
-		return ForgeHooks.canHarvestBlock((Block)(Object) this, player, md);
+		return ForgeHooks.canHarvestBlock((Block) (Object) this, player, md);
 	}
 
 	// Idk it was there.

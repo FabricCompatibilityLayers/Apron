@@ -1,10 +1,11 @@
 package modloadermp;
 
+import net.minecraft.network.PacketHandler;
+import net.minecraft.packet.AbstractPacket;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import net.minecraft.network.PacketHandler;
-import net.minecraft.packet.AbstractPacket;
 
 public class Packet230ModLoader extends AbstractPacket {
 	private static final int MAX_DATA_LENGTH = 65535;

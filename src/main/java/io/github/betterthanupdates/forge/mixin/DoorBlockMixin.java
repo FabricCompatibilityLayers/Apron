@@ -10,62 +10,63 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(DoorBlock.class)
 public abstract class DoorBlockMixin extends Block {
-    @Shadow public abstract void method_837(World arg, int i, int j, int k, boolean bl);
+	@Shadow
+	public abstract void method_837(World arg, int i, int j, int k, boolean bl);
 
-    protected DoorBlockMixin(int i, Material arg) {
-        super(i, arg);
-    }
+	protected DoorBlockMixin(int i, Material arg) {
+		super(i, arg);
+	}
 
-    /**
-     * @author Forge
-     */
-    @Overwrite
-    public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {
-        int i1 = world.getBlockMeta(i, j, k);
-        if ((i1 & 8) != 0) {
-            if (world.getBlockId(i, j - 1, k) != this.id) {
-                world.setBlock(i, j, k, 0);
-            }
+	/**
+	 * @author Forge
+	 */
+	@Overwrite
+	public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {
+		int i1 = world.getBlockMeta(i, j, k);
+		if ((i1 & 8) != 0) {
+			if (world.getBlockId(i, j - 1, k) != this.id) {
+				world.setBlock(i, j, k, 0);
+			}
 
-            if (l > 0 && Block.BY_ID[l].getEmitsRedstonePower()) {
-                this.onAdjacentBlockUpdate(world, i, j - 1, k, l);
-            }
-        } else {
-            boolean flag = false;
-            if (world.getBlockId(i, j + 1, k) != this.id) {
-                world.setBlock(i, j, k, 0);
-                flag = true;
-            }
+			if (l > 0 && Block.BY_ID[l].getEmitsRedstonePower()) {
+				this.onAdjacentBlockUpdate(world, i, j - 1, k, l);
+			}
+		} else {
+			boolean flag = false;
+			if (world.getBlockId(i, j + 1, k) != this.id) {
+				world.setBlock(i, j, k, 0);
+				flag = true;
+			}
 
-            if (!world.isBlockSolidOnSide(i, j - 1, k, 1)) {
-                world.setBlock(i, j, k, 0);
-                flag = true;
-                if (world.getBlockId(i, j + 1, k) == this.id) {
-                    world.setBlock(i, j + 1, k, 0);
-                }
-            }
+			if (!world.isBlockSolidOnSide(i, j - 1, k, 1)) {
+				world.setBlock(i, j, k, 0);
+				flag = true;
+				if (world.getBlockId(i, j + 1, k) == this.id) {
+					world.setBlock(i, j + 1, k, 0);
+				}
+			}
 
-            if (flag) {
-                if (!world.isClient) {
-                    this.drop(world, i, j, k, i1);
-                }
-            } else if (l > 0 && Block.BY_ID[l].getEmitsRedstonePower()) {
-                boolean flag1 = world.hasRedstonePower(i, j, k) || world.hasRedstonePower(i, j + 1, k);
-                this.method_837(world, i, j, k, flag1);
-            }
-        }
+			if (flag) {
+				if (!world.isClient) {
+					this.drop(world, i, j, k, i1);
+				}
+			} else if (l > 0 && Block.BY_ID[l].getEmitsRedstonePower()) {
+				boolean flag1 = world.hasRedstonePower(i, j, k) || world.hasRedstonePower(i, j + 1, k);
+				this.method_837(world, i, j, k, flag1);
+			}
+		}
 
-    }
+	}
 
-    /**
-     * @author Forge
-     */
-    @Overwrite
-    public boolean canPlaceAt(World world, int i, int j, int k) {
-        if (j >= 127) {
-            return false;
-        } else {
-            return world.isBlockSolidOnSide(i, j - 1, k, 1) && super.canPlaceAt(world, i, j, k) && super.canPlaceAt(world, i, j + 1, k);
-        }
-    }
+	/**
+	 * @author Forge
+	 */
+	@Overwrite
+	public boolean canPlaceAt(World world, int i, int j, int k) {
+		if (j >= 127) {
+			return false;
+		} else {
+			return world.isBlockSolidOnSide(i, j - 1, k, 1) && super.canPlaceAt(world, i, j, k) && super.canPlaceAt(world, i, j + 1, k);
+		}
+	}
 }
