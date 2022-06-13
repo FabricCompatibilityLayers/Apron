@@ -8,7 +8,8 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin implements ItemConvertible {
-	@Shadow public abstract Item getItem();
+	@Shadow
+	public abstract Item getItem();
 
 	@Override
 	public Item asItem() {

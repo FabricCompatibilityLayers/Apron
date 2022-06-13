@@ -128,7 +128,9 @@ public class MinecraftForge {
 	public MinecraftForge() {
 	}
 
-	/** @deprecated */
+	/**
+	 * @deprecated
+	 */
 	public static void registerCustomBucketHander(IBucketHandler handler) {
 		bucketHandlers.add(handler);
 	}
