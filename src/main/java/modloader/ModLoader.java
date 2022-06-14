@@ -225,12 +225,6 @@ public class ModLoader {
 				return;
 			}
 
-			// TODO
-//			Package pack = ModLoader.class.getPackage();
-//			if (pack != null) {
-//				name = pack.getName() + "." + name;
-//			}
-
 			Class<?> modClass = loader.loadClass(name);
 			if (!BaseMod.class.isAssignableFrom(modClass)) return;
 
