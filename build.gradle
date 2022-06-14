@@ -67,7 +67,7 @@ dependencies {
 	implementation "org.slf4j:slf4j-api:1.8.0-beta4"
 	implementation "org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2"
 
-	include modApi("maven.modrinth:mod-remapping-api:1.1.0")
+	include modApi("maven.modrinth:mod-remapping-api:1.2.0")
 
 	// Done
 //	modRuntimeOnly(group: "remapped.client", name: "modloader", version: "b1.7.3")
