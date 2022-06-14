@@ -22,10 +22,4 @@ public final class BabricatedForge {
 	public static final File MOD_CACHE_FOLDER = new File(Constants.VERSIONED_FOLDER, "mods");
 
 	public static final ModContainer MOD_CONTAINER = FabricLoader.getInstance().getModContainer("babricated-forge").get();
-
-	static {
-		if (!MOD_CACHE_FOLDER.mkdirs()) {
-			LOGGER.debug("Could not create mod cache directory. It may already exist.");
-		}
-	}
 }

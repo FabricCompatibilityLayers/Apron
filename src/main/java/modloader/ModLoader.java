@@ -665,6 +665,9 @@ public class ModLoader {
 			LOGGER.fine(VERSION + " Initializing...");
 			File source = new File(ModLoader.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 			MOD_DIR.mkdirs();
+			if (!BabricatedForge.MOD_CACHE_FOLDER.mkdirs()) {
+				BabricatedForge.LOGGER.debug("Could not create mod cache directory. It may already exist.");
+			}
 			readFromModFolder(BabricatedForge.MOD_CACHE_FOLDER);
 			readFromClassPath(source);
 			LOGGER.log(Level.INFO, "Done initializing.");
