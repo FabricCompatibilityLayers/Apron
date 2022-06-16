@@ -47,5 +47,8 @@
     "fabricloader": ">=0.14.6-babric.1",
     "minecraft": "1.0.0-beta.7.3",
     "mod-remapping-api": "*"
+  },
+  "breaks": {
+    "modmenu": "<2.0.0"
   }
 }
