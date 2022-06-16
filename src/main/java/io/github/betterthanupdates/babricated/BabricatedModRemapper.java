@@ -6,6 +6,7 @@ import fr.catcore.modremapperapi.remapping.RemapUtil;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.tinyremapper.TinyRemapper;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -17,30 +18,35 @@ public final class BabricatedModRemapper implements ModRemapper {
 		return new String[0];
 	}
 
-	private Path getLibPath(String name) {
-		return BabricatedForge.MOD_CONTAINER.findPath("./libs/" + name + ".zip").get();
+	private Path getLibPath(@NotNull String name) {
+		if (!name.isEmpty()) {
+			return BabricatedForge.MOD_CONTAINER
+					.orElseThrow(RuntimeException::new)
+					.findPath("/libs/" + name + ".zip")
+					.orElseThrow(RuntimeException::new);
+		} else {
+			throw new IllegalStateException("No library name is provided.");
+		}
 	}
 
 	@Override
 	public RemapLibrary[] getRemapLibraries() {
-		RemapLibrary[] libraries = new RemapLibrary[0];
 		switch (FabricLoader.getInstance().getEnvironmentType()) {
+			default:
 			case CLIENT:
-				libraries = new RemapLibrary[] {
+				return new RemapLibrary[] {
 						new RemapLibrary(getLibPath("modloader-b1.7.3"), new ArrayList<>(), "modloader.zip"),
 						new RemapLibrary(getLibPath("modloadermp-1.7.3-unofficial-v2"), new ArrayList<>(), "modloadermp-client.zip"),
-						new RemapLibrary(getLibPath("minecraftforge-client-1.0.7-20110907"), new ArrayList<>(), "forge-client.zip")
+						new RemapLibrary(getLibPath("minecraftforge-client-1.0.7-20110907"), new ArrayList<>(), "forge-client.zip"),
+						new RemapLibrary(getLibPath("shockahpi-r8"), new ArrayList<>(), "shockahpi.zip")
 				};
-				break;
 			case SERVER:
-				libraries = new RemapLibrary[] {
+				return new RemapLibrary[] {
 						new RemapLibrary(getLibPath("modloadermp-1.7.3-unofficial-server-v2"), new ArrayList<>(), "modloadermp-server.zip"),
-						new RemapLibrary(getLibPath("minecraftforge-server-1.0.7-20110907"), new ArrayList<>(), "forge-server.zip")
+						new RemapLibrary(getLibPath("minecraftforge-server-1.0.7-20110907"), new ArrayList<>(), "forge-server.zip"),
+						new RemapLibrary(getLibPath("shockahpi-r8"), new ArrayList<>(), "shockahpi.zip")
 				};
-				break;
 		}
-
-		return libraries;
 	}
 
 	@Override

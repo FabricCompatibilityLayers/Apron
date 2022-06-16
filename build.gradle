@@ -7,7 +7,7 @@ plugins {
 
 // Fetch build number from Github Actions
 def ENV = System.getenv()
-version = "b1.7.3+build." + ENV.BUILD_NUMBER ?: "local"
+version = "1.7.3+build." + (ENV.GITHUB_ACTIONS ? ENV.BUILD_NUMBER : "local")
 
 archivesBaseName = project.archives_base_name
 group = project.maven_group
@@ -68,14 +68,12 @@ dependencies {
 
 	include modApi("maven.modrinth:mod-remapping-api:1.2.0")
 
-	// Done
-//	modRuntimeOnly(group: "remapped.client", name: "modloader", version: "b1.7.3")
-//	modRuntimeOnly(group: "remapped.client", name: "modloadermp-1.7.3-unofficial", version: "v2")
+	modRuntimeOnly(group: "remapped.client", name: "modloader", version: "b1.7.3")
 	// Todo
 //	modRuntimeOnly(group: "remapped.client", name: "minecraftforge-client", version: "1.0.7-20110907")
 //	modRuntimeOnly(group: "remapped.server", name: "minecraftforge-server", version: "1.0.7-20110907")
 //	modRuntimeOnly(group: "remapped.server", name: "modloadermp-1.7.3-unofficial-server", version: "v2")
-	modRuntimeOnly(group: "remapped.client", name: "shockahpi", version: "r8")
+//	modRuntimeOnly(group: "remapped.client", name: "shockahpi", version: "r8")
 }
 
 processResources {
@@ -91,6 +89,7 @@ java {
 	targetCompatibility = JavaVersion.VERSION_1_8
 
 	withSourcesJar()
+//	withJavadocJar() // Won't build because javadoc generator doesn't recognize mixin tags
 }
 
 jar {
