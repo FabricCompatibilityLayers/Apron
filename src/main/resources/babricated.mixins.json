@@ -7,7 +7,9 @@
     "BlockMixin",
     "ItemEntityMixin",
     "ItemMixin",
-    "ItemStackMixin"
+    "ItemStackMixin",
+    "InGameHudMixin",
+    "TitleScreenMixin"
   ],
   "client": [
   ],
