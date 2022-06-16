@@ -74,7 +74,7 @@ public abstract class BaseMod {
 	public void KeyboardEvent(KeyBinding event) {}
 	
 	/**
-	 * Called after all mods are loaded.
+	 * Called after all ModLoader mods are loaded.
 	 */
 	public void ModsLoaded() {}
 	

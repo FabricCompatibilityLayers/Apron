@@ -13,9 +13,10 @@
   "client": [
     "ClientPlayPacketHandlerMixin",
     "DisconnectingScreenMixin",
-    "GameStartupErrorPanelMixin",
     "EntityRenderDispatcherMixin",
-    "FurnaceOutputSlotMixin"
+    "FurnaceOutputSlotMixin",
+    "GameStartupErrorPanelMixin",
+    "GameRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

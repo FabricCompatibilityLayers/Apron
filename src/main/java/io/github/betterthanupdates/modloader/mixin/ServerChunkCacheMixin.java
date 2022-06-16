@@ -17,7 +17,7 @@ public abstract class ServerChunkCacheMixin implements WorldSource {
 	@Shadow private World world;
 
 	@Inject(method = "decorate", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;method_885()V"))
-	private void modloader$decorate(WorldSource i, int j, int par3, CallbackInfo ci) {
-		ModLoader.PopulateChunk(this.worldSource, j, par3, this.world);
+	private void modloader$decorate(WorldSource source, int x, int y, CallbackInfo ci) {
+		ModLoader.PopulateChunk(this.worldSource, x, y, this.world);
 	}
 }
