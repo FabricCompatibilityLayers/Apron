@@ -4,19 +4,18 @@
  */
 package forge;
 
+import net.legacyfabric.fabric.api.logger.v1.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class MinecraftForge {
-	public static final Logger LOGGER = LogManager.getLogger(MinecraftForge.class);
+	public static final Logger LOGGER = Logger.get("Babricated Forge", "MinecraftForge");
 
 	private static LinkedList<IBucketHandler> bucketHandlers;
 

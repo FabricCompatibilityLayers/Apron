@@ -5,6 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
+import net.legacyfabric.fabric.api.logger.v1.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.client.GameStartupError;
 import net.minecraft.client.Minecraft;
@@ -47,14 +48,16 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import static io.github.betterthanupdates.babricated.BabricatedForge.MOD_CACHE_FOLDER;
 
 @SuppressWarnings("unused")
 public class ModLoader {
@@ -75,9 +78,9 @@ public class ModLoader {
 	private static int itemSpritesLeft = 0;
 	private static final Map<BaseMod, Map<KeyBinding, boolean[]>> keyList = new HashMap<>();
 	private static final File LOG_FILE = new File(Minecraft.getGameDirectory(), "ModLoader.txt");
-	private static final Logger LOGGER = Logger.getLogger("ModLoader");
+	private static final java.util.logging.Logger MOD_LOGGER = java.util.logging.Logger.getLogger("ModLoader");
+	public static final Logger LOGGER = Logger.get("Babricated Forge", "ModLoader");
 	private static FileHandler logHandler = null;
-	private static final File MOD_DIR = new File(Minecraft.getGameDirectory(), "/mods/");
 	private static final LinkedList<BaseMod> MOD_LIST = new LinkedList<>();
 	private static int nextBlockModelID = 1000;
 	private static final Map<Integer, Map<String, Integer>> overrides = new HashMap<>();
@@ -117,7 +120,7 @@ public class ModLoader {
 				achievement.description = description;
 			}
 		} catch (IllegalArgumentException | SecurityException var5) {
-			LOGGER.throwing("ModLoader", "AddAchievementDesc", var5);
+			MOD_LOGGER.throwing("ModLoader", "AddAchievementDesc", var5);
 			ThrowException(var5);
 		}
 	}
@@ -128,7 +131,7 @@ public class ModLoader {
 	 * @return the fuel ID assigned to the item.
 	 */
 	public static int AddAllFuel(int id) {
-		LOGGER.finest("Finding fuel for " + id);
+		LOGGER.debug("Finding fuel for " + id);
 		int result = 0;
 		Iterator<BaseMod> iter = MOD_LIST.iterator();
 
@@ -137,7 +140,7 @@ public class ModLoader {
 		}
 
 		if (result != 0) {
-			LOGGER.finest("Returned " + result);
+			LOGGER.debug("Returned " + result);
 		}
 
 		return result;
@@ -150,7 +153,7 @@ public class ModLoader {
 	public static void AddAllRenderers(Map<Class<? extends Entity>, EntityRenderer> rendererMap) {
 		if (!hasInit) {
 			init();
-			LOGGER.fine("Initialized");
+			LOGGER.debug("Initialized");
 		}
 
 		for(BaseMod mod : MOD_LIST) {
@@ -163,7 +166,7 @@ public class ModLoader {
 	 * @param textureBinder animation instance to register
 	 */
 	public static void addAnimation(TextureBinder textureBinder) {
-		LOGGER.finest("Adding animation " + textureBinder.toString());
+		LOGGER.debug("Adding animation " + textureBinder.toString());
 
 		for(TextureBinder oldAnim : ANIM_LIST) {
 			if (oldAnim.renderMode == textureBinder.renderMode && oldAnim.index == textureBinder.index) {
@@ -194,7 +197,7 @@ public class ModLoader {
 			PlayerRenderer.armorTypes = combinedList.toArray(new String[0]);
 			return index;
 		} catch (IllegalArgumentException var5) {
-			LOGGER.throwing("ModLoader", "AddArmor", var5);
+			MOD_LOGGER.throwing("ModLoader", "AddArmor", var5);
 			ThrowException("An impossible error has occured!", var5);
 		}
 
@@ -232,10 +235,10 @@ public class ModLoader {
 			setupProperties((Class<? extends BaseMod>) modClass);
 			BaseMod mod = (BaseMod)modClass.getDeclaredConstructor().newInstance();
 			MOD_LIST.add(mod);
-			LOGGER.fine("Mod Loaded: \"" + mod + "\" from " + filename);
+			LOGGER.debug("Mod Loaded: \"" + mod + "\" from " + filename);
 		} catch (Throwable var6) {
-			LOGGER.fine("Failed to load mod from \"" + filename + "\"");
-			LOGGER.throwing("ModLoader", "addMod", var6);
+			LOGGER.debug("Failed to load mod from \"" + filename + "\"");
+			MOD_LOGGER.throwing("ModLoader", "addMod", var6);
 			ThrowException(var6);
 		}
 
@@ -266,7 +269,7 @@ public class ModLoader {
 			}
 		} else {
 			Exception e = new Exception(instance.getClass().getName() + " cannot have name attached to it!");
-			LOGGER.throwing("ModLoader", "AddName", e);
+			MOD_LOGGER.throwing("ModLoader", "AddName", e);
 			ThrowException(e);
 		}
 
@@ -274,7 +277,7 @@ public class ModLoader {
 			AddLocalization(tag, name);
 		} else {
 			Exception e = new Exception(instance + " is missing name tag!");
-			LOGGER.throwing("ModLoader", "AddName", e);
+			MOD_LOGGER.throwing("ModLoader", "AddName", e);
 			ThrowException(e);
 		}
 	}
@@ -292,7 +295,7 @@ public class ModLoader {
 			addOverride(fileToOverride, fileToAdd, i);
 			return i;
 		} catch (Throwable var3) {
-			LOGGER.throwing("ModLoader", "addOverride", var3);
+			MOD_LOGGER.throwing("ModLoader", "addOverride", var3);
 			ThrowException(var3);
 			throw new RuntimeException(var3);
 		}
@@ -319,7 +322,7 @@ public class ModLoader {
 			left = itemSpritesLeft;
 		}
 
-		LOGGER.finer("addOverride(" + path + "," + overlayPath + "," + index + "). " + left + " left.");
+		LOGGER.debug("addOverride(" + path + "," + overlayPath + "," + index + "). " + left + " left.");
 		Map<String, Integer> overlays = overrides.computeIfAbsent(dst, k -> new HashMap<>());
 
 		overlays.put(overlayPath, index);
@@ -458,12 +461,11 @@ public class ModLoader {
 	}
 	
 	/**
-	 * Use this to get a reference to the logger ModLoader uses.
-	 * (Or just reference {@link #LOGGER})
+	 * Use this to get a reference to the logger ModLoader mods use.
 	 * @return the logger instance
 	 */
-	public static Logger getLogger() {
-		return LOGGER;
+	public static java.util.logging.Logger getLogger() {
+		return MOD_LOGGER;
 	}
 	
 	/**
@@ -497,7 +499,7 @@ public class ModLoader {
 			f.setAccessible(true);
 			return (T)f.get(instance);
 		} catch (IllegalAccessException var4) {
-			LOGGER.throwing("ModLoader", "getPrivateValue", var4);
+			MOD_LOGGER.throwing("ModLoader", "getPrivateValue", var4);
 			ThrowException("An impossible error has occured!", var4);
 			return null;
 		}
@@ -522,7 +524,7 @@ public class ModLoader {
 			f.setAccessible(true);
 			return (T)f.get(instance);
 		} catch (IllegalAccessException var4) {
-			LOGGER.throwing("ModLoader", "getPrivateValue", var4);
+			MOD_LOGGER.throwing("ModLoader", "getPrivateValue", var4);
 			ThrowException("An impossible error has occured!", var4);
 			return null;
 		}
@@ -561,7 +563,7 @@ public class ModLoader {
 		}
 
 		Exception e = new Exception("No more empty item sprite indices left!");
-		LOGGER.throwing("ModLoader", "getUniqueItemSpriteIndex", e);
+		MOD_LOGGER.throwing("ModLoader", "getUniqueItemSpriteIndex", e);
 		ThrowException(e);
 		return 0;
 	}
@@ -578,7 +580,7 @@ public class ModLoader {
 			return getUniqueTerrainSpriteIndex();
 		} else {
 			Exception e = new Exception("No registry for this texture: " + path);
-			LOGGER.throwing("ModLoader", "getUniqueItemSpriteIndex", e);
+			MOD_LOGGER.throwing("ModLoader", "getUniqueItemSpriteIndex", e);
 			ThrowException(e);
 			return 0;
 		}
@@ -596,7 +598,7 @@ public class ModLoader {
 		}
 
 		Exception e = new Exception("No more empty terrain sprite indices left!");
-		LOGGER.throwing("ModLoader", "getUniqueItemSpriteIndex", e);
+		MOD_LOGGER.throwing("ModLoader", "getUniqueItemSpriteIndex", e);
 		ThrowException(e);
 		return 0;
 	}
@@ -638,7 +640,7 @@ public class ModLoader {
 
 			standardBiomes = biomes.toArray(new Biome[0]);
 		} catch (SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException var10) {
-			LOGGER.throwing("ModLoader", "init", var10);
+			MOD_LOGGER.throwing("ModLoader", "init", var10);
 			ThrowException(var10);
 			throw new RuntimeException(var10);
 		}
@@ -649,14 +651,15 @@ public class ModLoader {
 				cfgLoggingLevel = Level.parse(props.getProperty("loggingLevel"));
 			}
 
-			LOGGER.setLevel(cfgLoggingLevel);
+			MOD_LOGGER.setLevel(cfgLoggingLevel);
+
 			if ((LOG_FILE.exists() || LOG_FILE.createNewFile()) && LOG_FILE.canWrite() && logHandler == null) {
 				logHandler = new FileHandler(LOG_FILE.getPath());
 				logHandler.setFormatter(new SimpleFormatter());
-				LOGGER.addHandler(logHandler);
+				MOD_LOGGER.addHandler(logHandler);
 			}
 
-			LOGGER.fine(VERSION + " Initializing...");
+			LOGGER.debug(VERSION + " Initializing...");
 			File source = new File(ModLoader.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 			MOD_DIR.mkdirs();
 			if (!BabricatedForge.MOD_CACHE_FOLDER.mkdirs()) {
@@ -664,7 +667,7 @@ public class ModLoader {
 			}
 			readFromModFolder(BabricatedForge.MOD_CACHE_FOLDER);
 			readFromClassPath(source);
-			LOGGER.log(Level.INFO, "Done initializing.");
+			LOGGER.info("Done initializing.");
 			props.setProperty("loggingLevel", cfgLoggingLevel.getName());
 
 			for(BaseMod mod : MOD_LIST) {
@@ -679,7 +682,7 @@ public class ModLoader {
 			initStats();
 			saveConfig();
 		} catch (Throwable var9) {
-			LOGGER.throwing("ModLoader", "init", var9);
+			MOD_LOGGER.throwing("ModLoader", "init", var9);
 			ThrowException("ModLoader has failed to initialize.", var9);
 			if (logHandler != null) {
 				logHandler.close();
@@ -784,7 +787,7 @@ public class ModLoader {
 				}
 			}
 		} catch (IOException e) {
-			LOGGER.log(Level.CONFIG, "Config could not be loaded!", e);
+			LOGGER.error("Config could not be loaded!", e);
 		}
 	}
 	
@@ -830,7 +833,7 @@ public class ModLoader {
 	public static void OnTick(Minecraft minecraft) {
 		if (!hasInit) {
 			init();
-			LOGGER.fine("Initialized");
+			LOGGER.debug("Initialized");
 		}
 
 		if (texPack == null || !Objects.equals(minecraft.options.skin, texPack)) {
@@ -892,7 +895,7 @@ public class ModLoader {
 	public static void OpenGUI(PlayerEntity player, Screen screen) {
 		if (!hasInit) {
 			init();
-			LOGGER.fine("Initialized");
+			LOGGER.debug("Initialized");
 		}
 
 		Minecraft game = getMinecraftInstance();
@@ -913,7 +916,7 @@ public class ModLoader {
 	public static void PopulateChunk(WorldSource source, int chunkX, int chunkZ, World world) {
 		if (!hasInit) {
 			init();
-			LOGGER.fine("Initialized");
+			LOGGER.debug("Initialized");
 		}
 
 		Random rnd = new Random(world.getSeed());
@@ -931,10 +934,10 @@ public class ModLoader {
 	}
 
 	private static void readFromClassPath(File source) throws IOException {
-		LOGGER.finer("Adding mods from " + source.getCanonicalPath());
+		LOGGER.debug("Adding mods from " + source.getCanonicalPath());
 		ClassLoader loader = ModLoader.class.getClassLoader();
 		if (source.isFile() && (source.getName().endsWith(".jar") || source.getName().endsWith(".zip"))) {
-			LOGGER.finer("Zip found.");
+			LOGGER.debug("Zip found.");
 			InputStream input = Files.newInputStream(source.toPath());
 			ZipInputStream zip = new ZipInputStream(input);
 			ZipEntry entry;
@@ -958,7 +961,7 @@ public class ModLoader {
 				source = new File(source, pkgdir);
 			}
 
-			LOGGER.finer("Directory found.");
+			LOGGER.debug("Directory found.");
 			File[] files = source.listFiles();
 			if (files != null) {
 				for (File file : files) {
@@ -990,7 +993,7 @@ public class ModLoader {
 				for (File sourceFile : sourceFiles) {
 					File source = sourceFile;
 					if (source.isDirectory() || source.isFile() && (source.getName().endsWith(".jar") || source.getName().endsWith(".zip"))) {
-						LOGGER.finer("Adding mods from " + source.getCanonicalPath());
+						LOGGER.debug("Adding mods from " + source.getCanonicalPath());
 						if (!source.isFile()) {
 							if (source.isDirectory()) {
 								Package pkg = ModLoader.class.getPackage();
@@ -999,7 +1002,7 @@ public class ModLoader {
 									source = new File(source, packageDirectory);
 								}
 
-								LOGGER.finer("Directory found.");
+								LOGGER.debug("Directory found.");
 								File[] directoryFiles = source.listFiles();
 								if (directoryFiles != null) {
 									for (File directoryFile : directoryFiles) {
@@ -1011,7 +1014,7 @@ public class ModLoader {
 								}
 							}
 						} else {
-							LOGGER.finer("Zip found.");
+							LOGGER.debug("Zip found.");
 							InputStream input = Files.newInputStream(source.toPath());
 							ZipInputStream zip = new ZipInputStream(input);
 							ZipEntry entry;
@@ -1078,7 +1081,7 @@ public class ModLoader {
 					TextureBinder anim = new ModTextureStatic(index, dst, im);
 					manager.addTextureBinder(anim);
 				} catch (Exception var11) {
-					LOGGER.throwing("ModLoader", "RegisterAllTextureOverrides", var11);
+					MOD_LOGGER.throwing("ModLoader", "RegisterAllTextureOverrides", var11);
 					ThrowException(var11);
 					throw new RuntimeException(var11);
 				}
@@ -1118,7 +1121,7 @@ public class ModLoader {
 			}
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException | InstantiationException |
 				 InvocationTargetException | NoSuchMethodException var5) {
-			LOGGER.throwing("ModLoader", "RegisterBlock", var5);
+			MOD_LOGGER.throwing("ModLoader", "RegisterBlock", var5);
 			ThrowException(var5);
 		}
 	}
@@ -1133,7 +1136,7 @@ public class ModLoader {
 		try {
 			EntityRegistry.register(entityClass, entityName, entityId);
 		} catch (IllegalArgumentException var4) {
-			LOGGER.throwing("ModLoader", "RegisterEntityID", var4);
+			MOD_LOGGER.throwing("ModLoader", "RegisterEntityID", var4);
 			ThrowException(var4);
 		}
 	}
@@ -1179,7 +1182,7 @@ public class ModLoader {
 				renderer.setRenderDispatcher(ref);
 			}
 		} catch (IllegalArgumentException var5) {
-			LOGGER.throwing("ModLoader", "RegisterTileEntity", var5);
+			MOD_LOGGER.throwing("ModLoader", "RegisterTileEntity", var5);
 			ThrowException(var5);
 		}
 	}
@@ -1350,7 +1353,7 @@ public class ModLoader {
 
 			f.set(instance, value);
 		} catch (IllegalAccessException var6) {
-			LOGGER.throwing("ModLoader", "setPrivateValue", var6);
+			MOD_LOGGER.throwing("ModLoader", "setPrivateValue", var6);
 			ThrowException("An impossible error has occured!", var6);
 		}
 
@@ -1379,7 +1382,7 @@ public class ModLoader {
 			f.setAccessible(true);
 			f.set(instance, value);
 		} catch (IllegalAccessException var6) {
-			LOGGER.throwing("ModLoader", "setPrivateValue", var6);
+			MOD_LOGGER.throwing("ModLoader", "setPrivateValue", var6);
 			ThrowException("An impossible error has occured!", var6);
 		}
 
@@ -1445,13 +1448,13 @@ public class ModLoader {
 							}
 						}
 
-						LOGGER.finer(key + " set to " + value);
+						LOGGER.debug(key + " set to " + value);
 						if (!value.equals(currentvalue)) {
 							field.set(null, value);
 						}
 					}
 				} else {
-					LOGGER.finer(key + " not in config, using default: " + currentvalue);
+					LOGGER.debug(key + " not in config, using default: " + currentvalue);
 					modprops.setProperty(key, currentvalue.toString());
 				}
 			}
