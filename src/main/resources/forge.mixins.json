@@ -28,7 +28,18 @@
     "TextureManagerMixin",
     "ClientInteractionManagerMixin",
     "MultiplayerClientInteractionManagerMixin",
-    "SingleplayerInteractionManagerMixin"
+    "SingleplayerInteractionManagerMixin",
+    "CraftingResultSlotMixin",
+    "LivingEntityMixin",
+    "ItemMixin",
+    "BucketItemMixin",
+    "ToolItemMixin",
+    "HitResultMixin",
+    "ChunkMixin",
+    "ExplosionMixin",
+    "WorldMixin",
+    "class_66Mixin",
+    "class_417Mixin"
   ],
   "client": [
   ],
