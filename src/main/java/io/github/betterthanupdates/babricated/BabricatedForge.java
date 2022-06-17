@@ -11,10 +11,21 @@ import java.io.File;
 @ApiStatus.Internal
 public final class BabricatedForge {
 	// Logging
-	public static final Logger LOGGER = Logger.get("Babricated Forge");
+	public static final Logger LOGGER;
 
-	public static final File MOD_CACHE_FOLDER = new File(Constants.VERSIONED_FOLDER, "mods");
+	public static final File MOD_CACHE_FOLDER;
 
-	public static final ModContainer MOD_CONTAINER = FabricLoader.getInstance().getModContainer("babricated-forge")
-			.orElseThrow(RuntimeException::new);
+	public static final ModContainer MOD_CONTAINER;
+
+	static {
+		LOGGER = Logger.get("Babricated Forge");
+
+		MOD_CACHE_FOLDER = new File(Constants.VERSIONED_FOLDER, "mods");
+		if (!(MOD_CACHE_FOLDER.exists() || MOD_CACHE_FOLDER.mkdirs())) {
+			throw new RuntimeException("Could not get or create mod cache folder!");
+		}
+
+		MOD_CONTAINER = FabricLoader.getInstance().getModContainer("babricated-forge")
+				.orElseThrow(RuntimeException::new);
+	}
 }

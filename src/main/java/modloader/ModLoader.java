@@ -661,11 +661,21 @@ public class ModLoader {
 
 			LOGGER.debug(VERSION + " Initializing...");
 			File source = new File(ModLoader.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-			MOD_DIR.mkdirs();
-			if (!BabricatedForge.MOD_CACHE_FOLDER.mkdirs()) {
-				BabricatedForge.LOGGER.debug("Could not create mod cache directory. It may already exist.");
+
+			if (MOD_CACHE_FOLDER.isDirectory()) {
+				readFromModFolder(MOD_CACHE_FOLDER);
+			} else {
+				LOGGER.error("Path to mod folder is not a directory!");
 			}
-			readFromModFolder(BabricatedForge.MOD_CACHE_FOLDER);
+
+			for (Path rootPath : BabricatedForge.MOD_CONTAINER.getRootPaths()) {
+				try {
+					readFromClassPath(rootPath.toFile());
+				} catch (UnsupportedOperationException ignored) {
+					// rootPath is actually a virtual file, cannot be resolved. Skip.
+				}
+			}
+
 			readFromClassPath(source);
 			LOGGER.info("Done initializing.");
 			props.setProperty("loggingLevel", cfgLoggingLevel.getName());
