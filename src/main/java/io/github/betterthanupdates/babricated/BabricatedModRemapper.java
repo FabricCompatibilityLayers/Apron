@@ -63,6 +63,6 @@ public final class BabricatedModRemapper implements ModRemapper {
 
 	@Override
 	public Optional<TinyRemapper.ApplyVisitorProvider> getPostRemappingVisitor() {
-		return Optional.empty();
+		return Optional.of(new BabricatedPostRemappingVisitor());
 	}
 }

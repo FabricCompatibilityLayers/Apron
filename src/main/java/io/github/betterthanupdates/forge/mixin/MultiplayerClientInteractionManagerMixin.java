@@ -1,5 +1,6 @@
 package io.github.betterthanupdates.forge.mixin;
 
+import io.github.betterthanupdates.forge.block.ForgeBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.ClientInteractionManager;
 import net.minecraft.client.Minecraft;
@@ -49,7 +50,7 @@ public abstract class MultiplayerClientInteractionManagerMixin extends ClientInt
                 Block.BY_ID[i1].activate(this.client.world, i, j, k, this.client.player);
             }
 
-            if (i1 > 0 && Block.BY_ID[i1].blockStrength(this.client.world, this.client.player, i, j, k) >= 1.0F) {
+            if (i1 > 0 && ((ForgeBlock)Block.BY_ID[i1]).blockStrength(this.client.world, this.client.player, i, j, k) >= 1.0F) {
                 this.method_1716(i, j, k, l);
             } else {
                 this.field_2615 = true;
@@ -83,7 +84,7 @@ public abstract class MultiplayerClientInteractionManagerMixin extends ClientInt
                     }
 
                     Block block = Block.BY_ID[i1];
-                    this.field_2611 += block.blockStrength(this.client.world, this.client.player, i, j, k);
+                    this.field_2611 += ((ForgeBlock)block).blockStrength(this.client.world, this.client.player, i, j, k);
                     if (this.field_2613 % 4.0F == 0.0F && block != null) {
                         this.client
                                 .soundHelper

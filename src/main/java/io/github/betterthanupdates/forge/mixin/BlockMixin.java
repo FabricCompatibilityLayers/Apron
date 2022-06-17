@@ -40,6 +40,7 @@ public abstract class BlockMixin implements ForgeBlock {
 
 	/**
 	 * @author Forge
+	 * @reason
 	 */
 	@Environment(EnvType.CLIENT)
 	@Overwrite
@@ -49,6 +50,7 @@ public abstract class BlockMixin implements ForgeBlock {
 
 	/**
 	 * @author Forge
+	 * @reason
 	 */
 	@Overwrite
 	public float getHardness(PlayerEntity entityplayer) {

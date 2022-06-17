@@ -1,6 +1,7 @@
 package io.github.betterthanupdates.forge.mixin;
 
 import forge.IConnectRedstone;
+import io.github.betterthanupdates.forge.ForgeWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.RedstoneDustBlock;
 import net.minecraft.block.material.Material;
@@ -18,14 +19,16 @@ public class RedstoneDustBlockMixin extends Block {
 
 	/**
 	 * @author Forge
+	 * @reason
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k) {
-		return world.isBlockSolidOnSide(i, j - 1, k, 1);
+		return ((ForgeWorld)world).isBlockSolidOnSide(i, j - 1, k, 1);
 	}
 
 	/**
 	 * @author Forge
+	 * @reason
 	 */
 	@Overwrite
 	public static boolean method_1287(BlockView iblockaccess, int i, int j, int k, int l) {
