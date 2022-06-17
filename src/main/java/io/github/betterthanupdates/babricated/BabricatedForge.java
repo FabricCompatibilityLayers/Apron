@@ -10,6 +10,9 @@ import java.io.File;
 
 @ApiStatus.Internal
 public final class BabricatedForge {
+	public static final String MOD_ID = "babricated-forge";
+	public static long fabricModCount = 0, rmlModCount = 0;
+
 	// Logging
 	public static final Logger LOGGER;
 
@@ -27,5 +30,26 @@ public final class BabricatedForge {
 
 		MOD_CONTAINER = FabricLoader.getInstance().getModContainer("babricated-forge")
 				.orElseThrow(RuntimeException::new);
+	}
+
+	/**
+	 * For use in screen mixins
+	 * @param original what the line originally said
+	 * @return the string to replace it with
+	 */
+	public static String versionString(final String original) {
+		return "Babricated Minecraft 1.7.3" + (original.endsWith(" (") ? " (" : "");
+	}
+
+	/**
+	 * For use in screen mixins.
+	 * @return a string telling how many mods are loaded from ModLoader
+	 */
+	public static String rmlModsLoaded() {
+		return rmlModCount + " RML mods";
+	}
+
+	public static String fabricModsLoaded() {
+		return fabricModCount + " Fabric mods";
 	}
 }
