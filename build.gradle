@@ -6,9 +6,9 @@ plugins {
 }
 
 // Fetch build number from Github Actions
-def ENV = System.getenv()
-def build_number = ENV.BUILD_NUMBER ?: "local"
-version = "b1.7.3+build." + build_number
+final def ENV = System.getenv()
+def build_number = ENV.GITHUB_ACTIONS ? ENV.BUILD_NUMBER : "local"
+version = "1.7.3+build." + build_number
 
 archivesBaseName = project.archives_base_name
 group = project.maven_group
