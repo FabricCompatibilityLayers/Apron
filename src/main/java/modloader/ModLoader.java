@@ -73,7 +73,6 @@ public class ModLoader {
 	private static int highestEntityId = 3000;
 	private static final Map<BaseMod, Boolean> inGameHooks = new HashMap<>();
 	private static final Map<BaseMod, Boolean> inGUIHooks = new HashMap<>();
-	private static Minecraft instance = null;
 	private static int itemSpriteIndex = 0;
 	private static int itemSpritesLeft = 0;
 	private static final Map<BaseMod, Map<KeyBinding, boolean[]>> keyList = new HashMap<>();
@@ -472,13 +471,10 @@ public class ModLoader {
 	 * Use this method to get a reference to Minecraft instance.
 	 * @return Minecraft client instance
 	 */
-	@NotNull
+	@Nullable
 	@Environment(EnvType.CLIENT)
 	public static Minecraft getMinecraftInstance() {
-		if (instance == null) {
-			instance = (Minecraft) FabricLoaderImpl.INSTANCE.getGameInstance();
-		}
-		return instance;
+		return (Minecraft) FabricLoaderImpl.INSTANCE.getGameInstance();
 	}
 	
 	/**
@@ -621,8 +617,8 @@ public class ModLoader {
 		}
 
 		try {
-			instance = getMinecraftInstance();
-			instance.gameRenderer = new EntityRendererProxy(instance);
+			Minecraft client = getMinecraftInstance();
+			if (client != null) client.gameRenderer = new EntityRendererProxy(client);
 			field_modifiers = Field.class.getDeclaredField("modifiers");
 			field_modifiers.setAccessible(true);
 			Field[] fieldArray = Biome.class.getDeclaredFields();
@@ -659,7 +655,7 @@ public class ModLoader {
 				MOD_LOGGER.addHandler(logHandler);
 			}
 
-			LOGGER.debug(VERSION + " Initializing...");
+			LOGGER.debug(VERSION + " initializing...");
 			File source = new File(ModLoader.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
 			if (MOD_CACHE_FOLDER.isDirectory()) {
@@ -687,8 +683,12 @@ public class ModLoader {
 				}
 			}
 
-			instance.options.keyBindings = RegisterAllKeys(instance.options.keyBindings);
-			instance.options.load();
+			Minecraft client = getMinecraftInstance();
+
+			if (client != null) {
+				client.options.keyBindings = RegisterAllKeys(client.options.keyBindings);
+				client.options.load();
+			}
 			initStats();
 			saveConfig();
 		} catch (Throwable var9) {
@@ -751,11 +751,13 @@ public class ModLoader {
 	 * @return true if GUI is open
 	 */
 	public static boolean isGUIOpen(@Nullable Class<? extends Screen> gui) {
-		Minecraft game = getMinecraftInstance();
+		Minecraft client = getMinecraftInstance();
+		if (client == null) return false;
+
 		if (gui == null) {
-			return game.currentScreen == null;
+			return client.currentScreen == null;
 		} else {
-			return gui.isInstance(game.currentScreen);
+			return gui.isInstance(client.currentScreen);
 		}
 	}
 	
@@ -784,12 +786,10 @@ public class ModLoader {
 	
 	/**
 	 * Reads the config file and stores the contents in props.
-	 * @throws IOException
 	 */
 	public static void loadConfig()  {
-		CONFIG_DIR.mkdir();
 		try {
-			if (CONFIG_FILE.exists() || CONFIG_FILE.createNewFile()) {
+			if (CONFIG_DIR.mkdir() && (CONFIG_FILE.exists() || CONFIG_FILE.createNewFile())) {
 				if (CONFIG_FILE.canRead()) {
 					InputStream in = Files.newInputStream(CONFIG_FILE.toPath());
 					props.load(in);
@@ -838,43 +838,43 @@ public class ModLoader {
 	
 	/**
 	 * This method is called every tick while minecraft is running.
-	 * @param minecraft instance of the game class
+	 * @param client instance of the game class
 	 */
-	public static void OnTick(Minecraft minecraft) {
+	public static void OnTick(Minecraft client) {
 		if (!hasInit) {
 			init();
 			LOGGER.debug("Initialized");
 		}
 
-		if (texPack == null || !Objects.equals(minecraft.options.skin, texPack)) {
+		if (texPack == null || !Objects.equals(client.options.skin, texPack)) {
 			texturesAdded = false;
-			texPack = minecraft.options.skin;
+			texPack = client.options.skin;
 		}
 
-		if (!texturesAdded && minecraft.textureManager != null) {
-			RegisterAllTextureOverrides(minecraft.textureManager);
+		if (!texturesAdded && client.textureManager != null) {
+			RegisterAllTextureOverrides(client.textureManager);
 			texturesAdded = true;
 		}
 
 		long newClock = 0L;
-		if (minecraft.world != null) {
-			newClock = minecraft.world.getWorldTime();
+		if (client.world != null) {
+			newClock = client.world.getWorldTime();
 			Iterator<Entry<BaseMod, Boolean>> iterator = inGameHooks.entrySet().iterator();
 
 			while(iterator.hasNext()) {
 				Entry<BaseMod, Boolean> modSet = iterator.next();
-				if ((clock != newClock || !modSet.getValue()) && !modSet.getKey().OnTickInGame(minecraft)) {
+				if ((clock != newClock || !modSet.getValue()) && !modSet.getKey().OnTickInGame(client)) {
 					iterator.remove();
 				}
 			}
 		}
 
-		if (minecraft.currentScreen != null) {
+		if (client.currentScreen != null) {
 			Iterator<Entry<BaseMod, Boolean>> iter = inGUIHooks.entrySet().iterator();
 
 			while(iter.hasNext()) {
 				Entry<BaseMod, Boolean> modSet = iter.next();
-				if ((clock != newClock || !(modSet.getValue() & minecraft.world != null)) && !modSet.getKey().OnTickInGUI(minecraft, minecraft.currentScreen)) {
+				if ((clock != newClock || !(modSet.getValue() & client.world != null)) && !modSet.getKey().OnTickInGUI(client, client.currentScreen)) {
 					iter.remove();
 				}
 			}
@@ -908,10 +908,10 @@ public class ModLoader {
 			LOGGER.debug("Initialized");
 		}
 
-		Minecraft game = getMinecraftInstance();
-		if (game.player == player) {
+		Minecraft client = getMinecraftInstance();
+		if (client != null && client.player == player) {
 			if (screen != null) {
-				game.openScreen(screen);
+				client.openScreen(screen);
 			}
 		}
 	}
@@ -984,7 +984,7 @@ public class ModLoader {
 		}
 	}
 
-	@SuppressWarnings("SameParameterValue")
+	@SuppressWarnings({"SameParameterValue", "BulkFileAttributesRead"})
 	private static void readFromModFolder(File folder) throws IOException, IllegalArgumentException, SecurityException {
 		ClassLoader loader = Minecraft.class.getClassLoader();
 		if (!folder.isDirectory()) {
@@ -993,7 +993,8 @@ public class ModLoader {
 			File[] sourceFiles = folder.listFiles();
 			if (sourceFiles != null && sourceFiles.length > 0) {
 				for (File source : sourceFiles) {
-					if (source.isDirectory() || source.isFile() && (source.getName().endsWith(".jar") || source.getName().endsWith(".zip"))) {
+					if (source.isDirectory() ||
+							(source.isFile() && (source.getName().endsWith(".jar") || source.getName().endsWith(".zip")))) {
 						FabricLauncherBase.getLauncher().addToClassPath(source.toPath());
 					}
 				}
@@ -1070,10 +1071,10 @@ public class ModLoader {
 	 */
 	public static void RegisterAllTextureOverrides(TextureManager manager) {
 		ANIM_LIST.clear();
-		Minecraft game = getMinecraftInstance();
+		Minecraft client = getMinecraftInstance();
 
 		for(BaseMod mod : MOD_LIST) {
-			mod.RegisterAnimation(game);
+			mod.RegisterAnimation(client);
 		}
 
 		for(TextureBinder anim : ANIM_LIST) {
@@ -1150,12 +1151,12 @@ public class ModLoader {
 			ThrowException(var4);
 		}
 	}
-	
+
 	/**
-	 * Use this to add an assignable key to the options menu.
-	 * @param mod
-	 * @param keyBinding
-	 * @param allowRepeat
+	 * Use this to add an assignable key to the options screen.
+	 * @param mod The mod which will use this. 99% of the time you should pass <code>this</code>
+	 * @param keyBinding reference to the key to register. Define this in your mod file
+	 * @param allowRepeat when true the command will repeat. When false, only called once per press
 	 */
 	public static void RegisterKey(BaseMod mod, KeyBinding keyBinding, boolean allowRepeat) {
 		Map<KeyBinding, boolean[]> keyMap = keyList.get(mod);
@@ -1166,28 +1167,30 @@ public class ModLoader {
 		keyMap.put(keyBinding, new boolean[]{allowRepeat, false});
 		keyList.put(mod, keyMap);
 	}
-	
+
 	/**
-	 * Registers a tile entity.
-	 * @param blockEntityClass
-	 * @param id
+	 * Registers a block entity.
+	 * @param blockEntityClass Class of block entity to register
+	 * @param id The given name of entity. Used for saving
 	 */
 	public static void RegisterTileEntity(Class<? extends BlockEntity> blockEntityClass, String id) {
 		RegisterTileEntity(blockEntityClass, id, null);
 	}
-	
+
+
 	/**
-	 * Registers a tile entity.
-	 * @param blockEntityClass
-	 * @param id
-	 * @param renderer
+	 * Registers a block entity.
+	 * @param blockEntityClass Class of block entity to register
+	 * @param id The given name of entity. Used for saving
+	 * @param renderer Block entity renderer to assign this block entity
 	 */
+	@SuppressWarnings("unchecked")
 	public static void RegisterTileEntity(Class<? extends BlockEntity> blockEntityClass, String id, BlockEntityRenderer renderer) {
 		try {
 			BlockEntity.register(blockEntityClass, id);
 			if (renderer != null) {
 				BlockEntityRenderDispatcher ref = BlockEntityRenderDispatcher.INSTANCE;
-				Map<Class<? extends BlockEntity>, BlockEntityRenderer> renderers = ref.customRenderers;
+				Map<Class<? extends BlockEntity>, BlockEntityRenderer> renderers = (Map<Class<? extends BlockEntity>, BlockEntityRenderer>) ref.customRenderers;
 				renderers.put(blockEntityClass, renderer);
 				renderer.setRenderDispatcher(ref);
 			}
@@ -1196,22 +1199,23 @@ public class ModLoader {
 			ThrowException(var5);
 		}
 	}
-	
+
 	/**
 	 * Remove entity from spawn list for all biomes except Hell.
-	 * @param entityClass
-	 * @param spawnGroup
+	 * @param entityClass Class of entity to spawn
+	 * @param spawnGroup The spawn group to remove entity from. (Monster, Creature, or Water)
 	 */
 	public static void RemoveSpawn(Class<? extends LivingEntity> entityClass, SpawnGroup spawnGroup) {
 		RemoveSpawn(entityClass, spawnGroup, (Biome) null);
 	}
-	
+
 	/**
 	 * Remove entity from spawn list for selected biomes.
-	 * @param entityClass
-	 * @param spawnGroup
-	 * @param biomes
+	 * @param entityClass Class of entity to spawn
+	 * @param spawnGroup The spawn group to remove the entity from (Monster, Creature, or Water)
+	 * @param biomes Array of biomes to remove entity spawning from
 	 */
+	@SuppressWarnings("unchecked")
 	public static void RemoveSpawn(Class<? extends LivingEntity> entityClass, SpawnGroup spawnGroup, Biome... biomes) {
 		if (entityClass == null) {
 			throw new IllegalArgumentException("entityClass cannot be null");
@@ -1223,28 +1227,28 @@ public class ModLoader {
 			}
 
 			for (Biome biome : biomes) {
-				List<EntityEntry> list = biome.getSpawnList(spawnGroup);
+				List<EntityEntry> list = (List<EntityEntry>) biome.getSpawnList(spawnGroup);
 				if (list != null) {
 					list.removeIf(entry -> entry.entryClass == entityClass);
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Remove entity from spawn list for all biomes except Hell.
-	 * @param entityName
-	 * @param spawnGroup
+	 * @param entityName Name of entity to remove
+	 * @param spawnGroup The spawn group to remove the entity from (Monster, Creature, or Water)
 	 */
 	public static void RemoveSpawn(String entityName, SpawnGroup spawnGroup) {
 		RemoveSpawn(entityName, spawnGroup, (Biome) null);
 	}
-	
+
 	/**
 	 * Remove entity from spawn list for selected biomes.
-	 * @param entityName
-	 * @param spawnGroup
-	 * @param biomes
+	 * @param entityName Name of entity to remove
+	 * @param spawnGroup The spawn group to remove the entity from (Monster, Creature, or Water)
+	 * @param biomes Array of biomes to remove entity spawning from
 	 */
 	@SuppressWarnings("unchecked")
 	public static void RemoveSpawn(String entityName, SpawnGroup spawnGroup, Biome... biomes) {
@@ -1253,11 +1257,11 @@ public class ModLoader {
 			RemoveSpawn((Class<? extends LivingEntity>) entityClass, spawnGroup, biomes);
 		}
 	}
-	
+
 	/**
 	 * Determines how the block should be rendered.
-	 * @param modelID
-	 * @return
+	 * @param modelID ID of block model
+	 * @return true if block should be rendered using {@link #RenderInvBlock(BlockRenderer, Block, int, int)}
 	 */
 	public static boolean RenderBlockIsItemFull3D(int modelID) {
 		if (!BLOCK_SPECIAL_INV.containsKey(modelID)) {
@@ -1266,13 +1270,13 @@ public class ModLoader {
 			return BLOCK_SPECIAL_INV.get(modelID);
 		}
 	}
-	
+
 	/**
 	 * Renders a block in inventory.
-	 * @param renderer
-	 * @param block
-	 * @param metadata
-	 * @param modelID
+	 * @param renderer parent renderer; Methods and fields may be referenced from here.
+	 * @param block reference to block to render
+	 * @param metadata of block; Damage on an item
+	 * @param modelID ID of block model to render
 	 */
 	public static void RenderInvBlock(BlockRenderer renderer, Block block, int metadata, int modelID) {
 		BaseMod mod = BLOCK_MODELS.get(modelID);
@@ -1280,30 +1284,28 @@ public class ModLoader {
 			mod.RenderInvBlock(renderer, block, metadata, modelID);
 		}
 	}
-	
+
 	/**
 	 * Renders a block in the world.
-	 * @param renderer
-	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @param block
-	 * @param modelID
-	 * @return
+	 * @param renderer parent renderer; Methods and fields may be referenced from here
+	 * @param world to render block in
+	 * @param x x position in world
+	 * @param y y position in world
+	 * @param z z position in world
+	 * @param block reference to block to render
+	 * @param modelID ID of block model to render
+	 * @return true if model was rendered
 	 */
 	public static boolean RenderWorldBlock(BlockRenderer renderer, BlockView world, int x, int y, int z, Block block, int modelID) {
-		BaseMod mod = (BaseMod) BLOCK_MODELS.get(modelID);
+		BaseMod mod = BLOCK_MODELS.get(modelID);
 		return mod != null && mod.RenderWorldBlock(renderer, world, x, y, z, block, modelID);
 	}
-	
+
 	/**
-	 * Saves props to the config file.
-	 * @throws IOException
+	 * Saves properties to the config file.
 	 */
 	public static void saveConfig() throws IOException {
-		CONFIG_DIR.mkdir();
-		if (CONFIG_FILE.exists() || CONFIG_FILE.createNewFile()) {
+		if ((CONFIG_DIR.exists() || CONFIG_DIR.mkdir()) && (CONFIG_FILE.exists() || CONFIG_FILE.createNewFile())) {
 			if (CONFIG_FILE.canWrite()) {
 				OutputStream out = Files.newOutputStream(CONFIG_FILE.toPath());
 				props.store(out, "ModLoader Config");
@@ -1311,12 +1313,12 @@ public class ModLoader {
 			}
 		}
 	}
-	
+
 	/**
 	 * Enable or disable BaseMod.OnTickInGame(net.minecraft.client.Minecraft)
-	 * @param mod
-	 * @param enable
-	 * @param useClock
+	 * @param mod to set
+	 * @param enable whether to add or remove from list
+	 * @param useClock if true will only run once each tick on game clock, if false once every render frame
 	 */
 	public static void SetInGameHook(BaseMod mod, boolean enable, boolean useClock) {
 		if (enable) {
@@ -1325,12 +1327,12 @@ public class ModLoader {
 			inGameHooks.remove(mod);
 		}
 	}
-	
+
 	/**
 	 * Enable or disable BaseMod.OnTickInGUI(net.minecraft.client.Minecraft, da)
-	 * @param mod
-	 * @param enable
-	 * @param useClock
+	 * @param mod to set
+	 * @param enable whether to add or remove from list
+	 * @param useClock if true will only run once each tick on game clock, if false once every render frame
 	 */
 	public static void SetInGUIHook(BaseMod mod, boolean enable, boolean useClock) {
 		if (enable) {
@@ -1339,17 +1341,17 @@ public class ModLoader {
 			inGUIHooks.remove(mod);
 		}
 	}
-	
+
 	/**
 	 * Used for setting value of private fields.
-	 * @param instanceClass
-	 * @param instance
-	 * @param fieldIndex
-	 * @param value
-	 * @param <T>
-	 * @param <E>
-	 * @throws IllegalArgumentException
-	 * @throws SecurityException
+	 * @param instanceClass Class to use with instance
+	 * @param instance Object to get private field from
+	 * @param fieldIndex Offset of field in class
+	 * @param value Value to set
+	 * @param <T> Type of instance
+	 * @param <E> Type of value
+	 * @throws IllegalArgumentException if instance isn't compatible with instanceClass
+	 * @throws SecurityException if the thread is not allowed to access field
 	 */
 	@SuppressWarnings("unused")
 	public static <T, E> void setPrivateValue(Class<? super T> instanceClass, T instance, int fieldIndex, E value) throws IllegalArgumentException, SecurityException {
@@ -1368,18 +1370,18 @@ public class ModLoader {
 		}
 
 	}
-	
+
 	/**
 	 * Used for setting value of private fields.
-	 * @param instanceClass
-	 * @param instance
-	 * @param fieldName
-	 * @param value
-	 * @param <T>
-	 * @param <E>
-	 * @throws IllegalArgumentException
-	 * @throws SecurityException
-	 * @throws NoSuchFieldException
+	 * @param instanceClass Class to use with instance
+	 * @param instance Object to get private field from
+	 * @param fieldName Name of the field
+	 * @param value Value to set
+	 * @param <T> Type of instance
+	 * @param <E> Type of value
+	 * @throws IllegalArgumentException if instance isn't compatible with instanceClass
+	 * @throws SecurityException if the thread is not allowed to access field
+	 * @throws NoSuchFieldException if field does not exist
 	 */
 	public static <T, E> void setPrivateValue(Class<? super T> instanceClass, T instance, String fieldName, E value) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
 		try {
@@ -1407,8 +1409,7 @@ public class ModLoader {
 
 		StringBuilder helptext = new StringBuilder();
 
-		Field[] var7;
-		for(Field field : var7 = mod.getFields()) {
+		for (Field field : mod.getFields()) {
 			if ((field.getModifiers() & 8) != 0 && field.isAnnotationPresent(MLProp.class)) {
 				Class<?> type = field.getType();
 				MLProp annotation = field.getAnnotation(MLProp.class);
@@ -1474,38 +1475,38 @@ public class ModLoader {
 			modprops.store(Files.newOutputStream(modcfgfile.toPath()), helptext.toString());
 		}
 	}
-	
+
 	/**
 	 * Is called when an item is picked up from crafting result slot.
-	 * @param player
-	 * @param item
+	 * @param player that took the item
+	 * @param item that was taken
 	 */
 	public static void TakenFromCrafting(PlayerEntity player, ItemStack item) {
 		for(BaseMod mod : MOD_LIST) {
 			mod.TakenFromCrafting(player, item);
 		}
 	}
-	
+
 	/**
 	 * Is called when an item is picked up from furnace result slot.
-	 * @param player
-	 * @param item
+	 * @param player that took the item
+	 * @param item that was taken
 	 */
 	public static void TakenFromFurnace(PlayerEntity player, ItemStack item) {
 		for(BaseMod mod : MOD_LIST) {
 			mod.TakenFromFurnace(player, item);
 		}
 	}
-	
+
 	/**
 	 * Used for catching an error and generating an error report.
-	 * @param message
-	 * @param e
+	 * @param message the title of the error
+	 * @param e the error to show
 	 */
 	public static void ThrowException(String message, Throwable e) {
-		Minecraft game = getMinecraftInstance();
-		if (game != null) {
-			game.showGameStartupError(new GameStartupError(message, e));
+		Minecraft client = getMinecraftInstance();
+		if (client != null) {
+			client.showGameStartupError(new GameStartupError(message, e));
 		} else {
 			throw new RuntimeException(e);
 		}
