@@ -3,6 +3,7 @@ package io.github.betterthanupdates.forge.mixin;
 import forge.ArmorProperties;
 import forge.ForgeHooks;
 import forge.ISpecialArmor;
+import io.github.betterthanupdates.forge.ForgeItem;
 import io.github.betterthanupdates.forge.entity.player.ForgePlayerEntity;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
@@ -50,7 +51,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 		float f = 1.0F;
 		ItemStack ist = this.inventory.getHeldItem();
 		if (ist != null) {
-			f = ist.getItem().getStrVsBlock(ist, block, meta);
+			f = ((ForgeItem)ist.getItem()).getStrVsBlock(ist, block, meta);
 		}
 
 		if (this.isInFluid(Material.WATER)) {

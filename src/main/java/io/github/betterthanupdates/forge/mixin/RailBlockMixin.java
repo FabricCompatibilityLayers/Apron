@@ -1,5 +1,6 @@
 package io.github.betterthanupdates.forge.mixin;
 
+import io.github.betterthanupdates.forge.ForgeWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.RailBlock;
 import net.minecraft.block.RailBlock.RailMagicStuff;
@@ -31,6 +32,7 @@ public abstract class RailBlockMixin extends Block {
 
 	/**
 	 * @author Forge
+	 * @reason
 	 */
 	@Overwrite
 	public static final boolean method_1109(World world, int i, int j, int k) {
@@ -40,6 +42,7 @@ public abstract class RailBlockMixin extends Block {
 
 	/**
 	 * @author Forge
+	 * @reason
 	 */
 	@Overwrite
 	public static final boolean isRail(int i) {
@@ -48,14 +51,16 @@ public abstract class RailBlockMixin extends Block {
 
 	/**
 	 * @author Forge
+	 * @reason
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k) {
-		return world.isBlockSolidOnSide(i, j - 1, k, 1);
+		return ((ForgeWorld)world).isBlockSolidOnSide(i, j - 1, k, 1);
 	}
 
 	/**
 	 * @author Forge
+	 * @reason
 	 */
 	@Overwrite
 	public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {
@@ -67,23 +72,23 @@ public abstract class RailBlockMixin extends Block {
 			}
 
 			boolean flag = false;
-			if (!world.isBlockSolidOnSide(i, j - 1, k, 1)) {
+			if (!((ForgeWorld)world).isBlockSolidOnSide(i, j - 1, k, 1)) {
 				flag = true;
 			}
 
-			if (j1 == 2 && !world.isBlockSolidOnSide(i + 1, j, k, 1)) {
+			if (j1 == 2 && !((ForgeWorld)world).isBlockSolidOnSide(i + 1, j, k, 1)) {
 				flag = true;
 			}
 
-			if (j1 == 3 && !world.isBlockSolidOnSide(i - 1, j, k, 1)) {
+			if (j1 == 3 && !((ForgeWorld)world).isBlockSolidOnSide(i - 1, j, k, 1)) {
 				flag = true;
 			}
 
-			if (j1 == 4 && !world.isBlockSolidOnSide(i, j, k - 1, 1)) {
+			if (j1 == 4 && !((ForgeWorld)world).isBlockSolidOnSide(i, j, k - 1, 1)) {
 				flag = true;
 			}
 
-			if (j1 == 5 && !world.isBlockSolidOnSide(i, j, k + 1, 1)) {
+			if (j1 == 5 && !((ForgeWorld)world).isBlockSolidOnSide(i, j, k + 1, 1)) {
 				flag = true;
 			}
 

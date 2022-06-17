@@ -1,6 +1,7 @@
 package io.github.betterthanupdates.forge.mixin;
 
 import io.github.betterthanupdates.forge.ForgeWorld;
+import io.github.betterthanupdates.forge.block.ForgeBlock;
 import net.minecraft.block.Block;
 import net.minecraft.entity.BlockEntity;
 import net.minecraft.util.math.Box;
@@ -49,7 +50,7 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
     @Overwrite
     public boolean isAir(int i, int j, int k) {
         int iBlockID = this.getBlockId(i, j, k);
-        return iBlockID == 0 ? true : Block.BY_ID[iBlockID].isAirBlock(this, i, j, k);
+        return iBlockID == 0 ? true : ((ForgeBlock)Block.BY_ID[iBlockID]).isAirBlock((World)(Object) this, i, j, k);
     }
 
     /**
@@ -66,7 +67,7 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
                     }
                 } else if (enumskyblock == LightType.field_2758) {
                     int i1 = this.getBlockId(i, j, k);
-                    int bl = i1 == 0 ? 0 : Block.BY_ID[i1].getLightValue(this, i, j, k);
+                    int bl = i1 == 0 ? 0 : ((ForgeBlock)Block.BY_ID[i1]).getLightValue(this, i, j, k);
                     if (bl > l) {
                         l = bl;
                     }
@@ -101,7 +102,7 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
                             return true;
                         }
 
-                        if (j2 > 0 && Block.BY_ID[j2].isBlockBurning(this, k1, l1, i2)) {
+                        if (j2 > 0 && ((ForgeBlock)Block.BY_ID[j2]).isBlockBurning((World)(Object) this, k1, l1, i2)) {
                             return true;
                         }
                     }
@@ -154,13 +155,13 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
     @Overwrite
     public boolean canSuffocate(int i, int j, int k) {
         Block block = Block.BY_ID[this.getBlockId(i, j, k)];
-        return block == null ? false : block.isBlockNormalCube(this, i, j, k);
+        return block == null ? false : ((ForgeBlock)block).isBlockNormalCube((World)(Object) this, i, j, k);
     }
 
     @Override
     public boolean isBlockSolidOnSide(int i, int j, int k, int side) {
         Block block = Block.BY_ID[this.getBlockId(i, j, k)];
-        return block == null ? false : block.isBlockSolidOnSide(this, i, j, k, side);
+        return block == null ? false : ((ForgeBlock)block).isBlockSolidOnSide((World)(Object) this, i, j, k, side);
     }
 
     /**
@@ -189,7 +190,7 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
                 block = null;
             }
 
-            if (block != null && block.isBlockReplaceable(this, j, k, l)) {
+            if (block != null && ((ForgeBlock)block).isBlockReplaceable((World)(Object) this, j, k, l)) {
                 block = null;
             }
 
