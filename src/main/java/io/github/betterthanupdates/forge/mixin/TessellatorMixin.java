@@ -1,6 +1,5 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.babricated.BabricatedTessellator;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.util.GLAllocationUtils;
 import org.lwjgl.opengl.ARBVertexBufferObject;
@@ -14,14 +13,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.Arrays;
 
 @Mixin(Tessellator.class)
-public abstract class TessellatorMixin implements BabricatedTessellator {
+public abstract class TessellatorMixin implements io.github.betterthanupdates.babricated.BabricatedTessellator {
 
     @Shadow public static Tessellator INSTANCE;
     @Shadow private static boolean unused;
@@ -54,26 +52,26 @@ public abstract class TessellatorMixin implements BabricatedTessellator {
     @Shadow public double yOffset;
     @Shadow public double zOffset;
     // Forge Fields
-//    @Unique
-//    private static boolean forged$useFloatBuffer = false;
+    @Unique
+    private static boolean forged$useFloatBuffer = false;
     @Unique
     public boolean defaultTexture = false;
     @Unique
     private int rawBufferSize;
-//    @Unique
-//    private static int forged$field_2052 = 10;
-//    @Unique
-//    private static IntBuffer forged$field_2078;
+    @Unique
+    private static int forged$field_2052 = 10;
+    @Unique
+    private static IntBuffer forged$field_2078;
     @Unique
     private static int nativeBufferSize = 2097152;
     @Unique
     private static int trivertsInBuffer = nativeBufferSize / 48 * 6;
-//    @Unique
-//    private static ByteBuffer forged$byteBuffer = GLAllocationUtils.allocateByteBuffer(nativeBufferSize * 4);
-//    @Unique
-//    private static IntBuffer forged$intBuffer = forged$byteBuffer.asIntBuffer();
-//    @Unique
-//    private static FloatBuffer forged$floatBuffer = forged$byteBuffer.asFloatBuffer();
+    @Unique
+    private static ByteBuffer forged$byteBuffer = GLAllocationUtils.allocateByteBuffer(nativeBufferSize * 4);
+    @Unique
+    private static IntBuffer forged$intBuffer = forged$byteBuffer.asIntBuffer();
+    @Unique
+    private static FloatBuffer forged$floatBuffer = forged$byteBuffer.asFloatBuffer();
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void ctr$overwrite(int par1, CallbackInfo ci) {
@@ -90,25 +88,25 @@ public abstract class TessellatorMixin implements BabricatedTessellator {
         this.rawBufferSize = 0;
     }
 
-//    public void finishInit() {
-//        this.useFloatBuffer = forged$useFloatBuffer;
-//        this.field_2052 = forged$field_2052;
-//        this.field_2078 = forged$field_2078;
-//        this.byteBuffer = forged$byteBuffer;
-//        this.intBuffer = forged$intBuffer;
-//        this.floatBuffer = forged$floatBuffer;
-//    }
+    public void finishInit() {
+        this.useFloatBuffer = forged$useFloatBuffer;
+        this.field_2052 = forged$field_2052;
+        this.field_2078 = forged$field_2078;
+        this.byteBuffer = forged$byteBuffer;
+        this.intBuffer = forged$intBuffer;
+        this.floatBuffer = forged$floatBuffer;
+    }
 
     @Inject(method = "<clinit>", at = @At("RETURN"))
     private static void classCtr$overwrite(CallbackInfo ci) {
         ((TessellatorMixin)(Object)INSTANCE).defaultTexture = true;
-//        forged$useFloatBuffer = unused && GLContext.getCapabilities().GL_ARB_vertex_buffer_object;
-//        if (forged$useFloatBuffer) {
-//            forged$field_2078 = GLAllocationUtils.allocateIntBuffer(forged$field_2052);
-//            ARBVertexBufferObject.glGenBuffersARB(forged$field_2078);
-//        }
-//
-//        ((TessellatorMixin)(Object)INSTANCE).finishInit();
+        forged$useFloatBuffer = unused && GLContext.getCapabilities().GL_ARB_vertex_buffer_object;
+        if (forged$useFloatBuffer) {
+            forged$field_2078 = GLAllocationUtils.allocateIntBuffer(forged$field_2052);
+            ARBVertexBufferObject.glGenBuffersARB(forged$field_2078);
+        }
+
+        ((TessellatorMixin)(Object)INSTANCE).finishInit();
     }
 
     /**
@@ -131,10 +129,10 @@ public abstract class TessellatorMixin implements BabricatedTessellator {
                     vtc = Math.min(this.vertexCount - offs, nativeBufferSize >> 5);
                 }
 
-                ((Buffer)intBuffer).clear();
+                intBuffer.clear();
                 intBuffer.put(this.bufferArray, offs * 8, vtc * 8);
-                ((Buffer)byteBuffer).position(0);
-                ((Buffer)byteBuffer).limit(vtc * 32);
+                byteBuffer.position(0);
+                byteBuffer.limit(vtc * 32);
                 offs += vtc;
                 if (useFloatBuffer) {
                     this.field_2079 = (this.field_2079 + 1) % field_2052;
@@ -146,7 +144,7 @@ public abstract class TessellatorMixin implements BabricatedTessellator {
                     if (useFloatBuffer) {
                         GL11.glTexCoordPointer(2, 5126, 32, 12L);
                     } else {
-                        ((Buffer)floatBuffer).position(3);
+                        floatBuffer.position(3);
                         GL11.glTexCoordPointer(2, 32, floatBuffer);
                     }
 
@@ -157,7 +155,7 @@ public abstract class TessellatorMixin implements BabricatedTessellator {
                     if (useFloatBuffer) {
                         GL11.glColorPointer(4, 5121, 32, 20L);
                     } else {
-                        ((Buffer)byteBuffer).position(20);
+                        byteBuffer.position(20);
                         GL11.glColorPointer(4, true, 32, byteBuffer);
                     }
 
@@ -168,7 +166,7 @@ public abstract class TessellatorMixin implements BabricatedTessellator {
                     if (useFloatBuffer) {
                         GL11.glNormalPointer(5120, 32, 24L);
                     } else {
-                        ((Buffer)byteBuffer).position(24);
+                        byteBuffer.position(24);
                         GL11.glNormalPointer(32, byteBuffer);
                     }
 
@@ -178,7 +176,7 @@ public abstract class TessellatorMixin implements BabricatedTessellator {
                 if (useFloatBuffer) {
                     GL11.glVertexPointer(3, 5126, 32, 0L);
                 } else {
-                    ((Buffer)floatBuffer).position(0);
+                    floatBuffer.position(0);
                     GL11.glVertexPointer(3, 32, floatBuffer);
                 }
 

@@ -130,4 +130,9 @@ public abstract class RailBlockMixin extends Block {
 
 		}
 	}
+
+	// idk but keep it in case
+	static boolean method_1106(RailBlock blockrail) {
+		return ((RailBlockMixin) (Object) blockrail).field_1262;
+	}
 }

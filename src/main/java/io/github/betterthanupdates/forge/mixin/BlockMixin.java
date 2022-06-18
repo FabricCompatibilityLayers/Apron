@@ -119,4 +119,13 @@ public abstract class BlockMixin implements ForgeBlock {
 	public boolean canHarvestBlock(PlayerEntity player, int md) {
 		return ForgeHooks.canHarvestBlock((Block) (Object) this, player, md);
 	}
+
+	// Idk it was there.
+	static Class _mthclass$(String s) {
+		try {
+			return Class.forName(s);
+		} catch (ClassNotFoundException var2) {
+			throw new NoClassDefFoundError(var2.getMessage());
+		}
+	}
 }
