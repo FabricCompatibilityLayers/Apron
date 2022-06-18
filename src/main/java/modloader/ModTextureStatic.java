@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 @SuppressWarnings("unused")
-@Environment(EnvType.SERVER)
+@Environment(EnvType.CLIENT)
 public class ModTextureStatic extends TextureBinder {
 	private boolean oldAnaglyph;
 	private final int[] pixels;

@@ -158,6 +158,6 @@ public class ForgeHooks {
 	}
 
 	static {
-		LOGGER.info("MinecraftForge V{}.{}.{} Initialized\n", majorVersion, minorVersion, revisionVersion);
+		LOGGER.info("MinecraftForge V%d.%d.%d Initialized\n", majorVersion, minorVersion, revisionVersion);
 	}
 }
