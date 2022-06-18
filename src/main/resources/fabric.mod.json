@@ -37,6 +37,7 @@
   },
   "accessWidener": "forge.accesswidener",
   "mixins": [
+    "audiomod.mixins.json",
     "babricated.mixins.json",
     "forge.mixins.json",
     "modloader.mixins.json"
