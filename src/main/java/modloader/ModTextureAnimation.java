@@ -3,7 +3,7 @@ package modloader;
 import net.minecraft.client.render.TextureBinder;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class ModTextureAnimation extends TextureBinder {
@@ -27,7 +27,7 @@ public class ModTextureAnimation extends TextureBinder {
 		int targetHeight = GL11.glGetTexLevelParameteri(3553, 0, 4097) / 16;
 		int width = source.getWidth();
 		int height = source.getHeight();
-		int images = (int) Math.floor((double) (height / width));
+		int images = (int)Math.floor((double)(height / width));
 		if (images <= 0) {
 			throw new IllegalArgumentException("source has no complete images");
 		} else {
@@ -40,20 +40,20 @@ public class ModTextureAnimation extends TextureBinder {
 				source = img;
 			}
 
-			for (int i = 0; i < images; ++i) {
+			for(int i = 0; i < images; ++i) {
 				int[] temp = new int[targetWidth * targetHeight];
 				source.getRGB(0, targetHeight * i, targetWidth, targetHeight, temp, 0, targetWidth);
 				this.images[i] = new byte[targetWidth * targetHeight * 4];
 
-				for (int j = 0; j < temp.length; ++j) {
+				for(int j = 0; j < temp.length; ++j) {
 					int a = temp[j] >> 24 & 0xFF;
 					int r = temp[j] >> 16 & 0xFF;
 					int g = temp[j] >> 8 & 0xFF;
 					int b = temp[j] >> 0 & 0xFF;
-					this.images[i][j * 4 + 0] = (byte) r;
-					this.images[i][j * 4 + 1] = (byte) g;
-					this.images[i][j * 4 + 2] = (byte) b;
-					this.images[i][j * 4 + 3] = (byte) a;
+					this.images[i][j * 4 + 0] = (byte)r;
+					this.images[i][j * 4 + 1] = (byte)g;
+					this.images[i][j * 4 + 2] = (byte)b;
+					this.images[i][j * 4 + 3] = (byte)a;
 				}
 			}
 

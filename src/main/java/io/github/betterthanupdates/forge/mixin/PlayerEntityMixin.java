@@ -10,8 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements ForgePlayerEntity {
-	@Shadow
-	public abstract float getStrengh(Block arg);
+	@Shadow public abstract float getStrengh(Block arg);
 
 	private PlayerEntityMixin(World arg) {
 		super(arg);
@@ -20,9 +19,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 	/**
 	 * Gets the strength of the player against the block, taking
 	 * into account the meta value of the block state.
-	 *
 	 * @param block the block id to check strength against
-	 * @param meta  the meta value of the block state
+	 * @param meta the meta value of the block state
 	 * @return the strength of the player against the given block
 	 */
 	@Override

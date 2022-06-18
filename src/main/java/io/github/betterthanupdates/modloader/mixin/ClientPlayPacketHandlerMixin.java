@@ -13,8 +13,7 @@ import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.entity.projectile.ThrownEggEntity;
 import net.minecraft.network.ClientPlayPacketHandler;
-import net.minecraft.packet.play.EntitySpawnS2CPacket;
-import net.minecraft.packet.play.OpenContainerS2CPacket;
+import net.minecraft.packet.play.*;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -28,11 +27,9 @@ import java.lang.reflect.Field;
 @Environment(EnvType.CLIENT)
 @Mixin(ClientPlayPacketHandler.class)
 public abstract class ClientPlayPacketHandlerMixin {
-	@Shadow
-	private ClientWorld world;
+	@Shadow private ClientWorld world;
 
-	@Shadow
-	protected abstract Entity getEntity(int i);
+	@Shadow protected abstract Entity getEntity(int i);
 
 	/**
 	 * @author Risugami
@@ -41,9 +38,9 @@ public abstract class ClientPlayPacketHandlerMixin {
 	 */
 	@Overwrite
 	public void onEntitySpawn(EntitySpawnS2CPacket packet23vehiclespawn) {
-		double d = (double) packet23vehiclespawn.x / 32.0;
-		double d1 = (double) packet23vehiclespawn.y / 32.0;
-		double d2 = (double) packet23vehiclespawn.z / 32.0;
+		double d = (double)packet23vehiclespawn.x / 32.0;
+		double d1 = (double)packet23vehiclespawn.y / 32.0;
+		double d2 = (double)packet23vehiclespawn.z / 32.0;
 		Entity obj = null;
 		if (packet23vehiclespawn.type == 10) {
 			obj = new ChestMinecartEntity(this.world, d, d1, d2, 0);
@@ -75,9 +72,9 @@ public abstract class ClientPlayPacketHandlerMixin {
 					d,
 					d1,
 					d2,
-					(double) packet23vehiclespawn.field_1667 / 8000.0,
-					(double) packet23vehiclespawn.field_1668 / 8000.0,
-					(double) packet23vehiclespawn.field_1669 / 8000.0
+					(double)packet23vehiclespawn.field_1667 / 8000.0,
+					(double)packet23vehiclespawn.field_1668 / 8000.0,
+					(double)packet23vehiclespawn.field_1669 / 8000.0
 			);
 			packet23vehiclespawn.flag = 0;
 		}
@@ -146,14 +143,14 @@ public abstract class ClientPlayPacketHandlerMixin {
 				if (packet23vehiclespawn.type == 60) {
 					Entity entity = this.getEntity(packet23vehiclespawn.flag);
 					if (entity instanceof LivingEntity) {
-						((ArrowEntity) obj).owner = (LivingEntity) entity;
+						((ArrowEntity)obj).owner = (LivingEntity)entity;
 					}
 				}
 
 				obj.setVelocity(
-						(double) packet23vehiclespawn.field_1667 / 8000.0,
-						(double) packet23vehiclespawn.field_1668 / 8000.0,
-						(double) packet23vehiclespawn.field_1669 / 8000.0
+						(double)packet23vehiclespawn.field_1667 / 8000.0,
+						(double)packet23vehiclespawn.field_1668 / 8000.0,
+						(double)packet23vehiclespawn.field_1669 / 8000.0
 				);
 			}
 		}
@@ -167,10 +164,7 @@ public abstract class ClientPlayPacketHandlerMixin {
 	private void modloader$openContainer(OpenContainerS2CPacket packet, CallbackInfo ci) {
 		int type = packet.inventoryType;
 		switch (type) {
-			case 0:
-			case 1:
-			case 2:
-			case 3:
+			case 0: case 1: case 2: case 3:
 				return;
 			default:
 				ModLoaderMp.HandleGUI(packet);

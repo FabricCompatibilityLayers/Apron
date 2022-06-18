@@ -3,7 +3,7 @@ package modloader;
 import net.minecraft.client.render.TextureBinder;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class ModTextureStatic extends TextureBinder {
@@ -39,7 +39,7 @@ public class ModTextureStatic extends TextureBinder {
 	}
 
 	public void update() {
-		for (int i = 0; i < this.pixels.length; ++i) {
+		for(int i = 0; i < this.pixels.length; ++i) {
 			int a = this.pixels[i] >> 24 & 0xFF;
 			int r = this.pixels[i] >> 16 & 0xFF;
 			int g = this.pixels[i] >> 8 & 0xFF;
@@ -51,10 +51,10 @@ public class ModTextureStatic extends TextureBinder {
 				r = grey;
 			}
 
-			this.grid[i * 4 + 0] = (byte) r;
-			this.grid[i * 4 + 1] = (byte) g;
-			this.grid[i * 4 + 2] = (byte) b;
-			this.grid[i * 4 + 3] = (byte) a;
+			this.grid[i * 4 + 0] = (byte)r;
+			this.grid[i * 4 + 1] = (byte)g;
+			this.grid[i * 4 + 2] = (byte)b;
+			this.grid[i * 4 + 3] = (byte)a;
 		}
 
 		this.oldanaglyph = this.render3d;
@@ -73,8 +73,8 @@ public class ModTextureStatic extends TextureBinder {
 		int height = in.getHeight();
 		BufferedImage out = new BufferedImage(width * 2, height * 2, 2);
 
-		for (int y = 0; y < height; ++y) {
-			for (int x = 0; x < width; ++x) {
+		for(int y = 0; y < height; ++y) {
+			for(int x = 0; x < width; ++x) {
 				int E = in.getRGB(x, y);
 				int B;
 				if (y == 0) {

@@ -66,7 +66,7 @@ public abstract class GameStartupErrorPanelMixin extends Panel {
 		str4 = str4 + "Mods loaded: " + (ModLoader.getLoadedMods().size() + 1) + "\n";
 		str4 = str4 + "ModLoader Beta 1.7.3" + "\n";
 
-		for (BaseMod mod : ModLoader.getLoadedMods()) {
+		for(BaseMod mod : ModLoader.getLoadedMods()) {
 			str4 += mod.getClass().getName() + " " + mod.Version() + "\n";
 		}
 
