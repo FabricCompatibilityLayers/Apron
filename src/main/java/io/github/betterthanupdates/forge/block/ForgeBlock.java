@@ -8,19 +8,19 @@ import net.minecraft.world.World;
  * New methods for {@link net.minecraft.block.Block} by Minecraft Forge
  */
 public interface ForgeBlock {
-	int getLightValue(BlockView iba, int i, int j, int k);
+	int getLightValue(BlockView blockView, int x, int y, int z);
 
 	boolean isLadder();
 
-	boolean isBlockNormalCube(World world, int i, int j, int k);
+	boolean isBlockNormalCube(World world, int x, int y, int z);
 
-	boolean isBlockSolidOnSide(World world, int i, int j, int k, int side);
+	boolean isBlockSolidOnSide(World world, int x, int y, int z, int side);
 
-	boolean isBlockReplaceable(World world, int i, int j, int k);
+	boolean isBlockReplaceable(World world, int x, int y, int z);
 
-	boolean isBlockBurning(World world, int i, int j, int k);
+	boolean isBlockBurning(World world, int x, int y, int z);
 
-	boolean isAirBlock(World world, int i, int j, int k);
+	boolean isAirBlock(World world, int x, int y, int z);
 
 	/**
 	 * Gets hardness for a block, taking into account its hardness.
@@ -30,9 +30,9 @@ public interface ForgeBlock {
 	 */
 	float getHardness(int meta);
 
-	float blockStrength(World world, PlayerEntity player, int i, int j, int k);
+	float blockStrength(World world, PlayerEntity player, int x, int y, int z);
 
-	float blockStrength(PlayerEntity player, int md);
+	float blockStrength(PlayerEntity player, int meta);
 
-	boolean canHarvestBlock(PlayerEntity player, int md);
+	boolean canHarvestBlock(PlayerEntity player, int meta);
 }

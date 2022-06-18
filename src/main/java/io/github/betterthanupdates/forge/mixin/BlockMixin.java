@@ -11,8 +11,10 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Default implementation of the new methods provided by Minecraft Forge
@@ -39,26 +41,26 @@ public abstract class BlockMixin implements ForgeBlock {
 	public abstract boolean isFullCube();
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason Minecraft Forge extension of this method
 	 */
 	@Environment(EnvType.CLIENT)
-	@Overwrite
-	public float getBrightness(BlockView blockView, int i, int j, int k) {
-		return blockView.getNaturalBrightness(i, j, k, this.getLightValue(blockView, i, j, k));
+	@Inject(method = "getBrightness", at = @At("RETURN"), cancellable = true)
+	private void getBrightness(BlockView blockView, int x, int y, int z, CallbackInfoReturnable<Float> cir) {
+		 cir.setReturnValue(blockView.getNaturalBrightness(x, y, z, this.getLightValue(blockView, x, y, z)));
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason Minecraft Forge extension of this method
 	 */
-	@Overwrite
-	public float getHardness(PlayerEntity entityplayer) {
-		return this.blockStrength(entityplayer, 0);
+	@Inject(method = "getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F", at = @At("RETURN"), cancellable = true)
+	public void getHardness(PlayerEntity player, CallbackInfoReturnable<Float> cir) {
+		cir.setReturnValue(this.blockStrength(player, 0));
 	}
 
 	@Override
-	public int getLightValue(BlockView iba, int i, int j, int k) {
+	public int getLightValue(BlockView blockView, int x, int y, int z) {
 		return EMITTANCE[this.id];
 	}
 
@@ -68,27 +70,27 @@ public abstract class BlockMixin implements ForgeBlock {
 	}
 
 	@Override
-	public boolean isBlockNormalCube(World world, int i, int j, int k) {
+	public boolean isBlockNormalCube(World world, int x, int y, int z) {
 		return this.material.hasNoSuffocation() && this.isFullCube();
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(World world, int i, int j, int k, int side) {
-		return this.isBlockNormalCube(world, i, j, k);
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z, int side) {
+		return this.isBlockNormalCube(world, x, y, z);
 	}
 
 	@Override
-	public boolean isBlockReplaceable(World world, int i, int j, int k) {
+	public boolean isBlockReplaceable(World world, int x, int y, int z) {
 		return false;
 	}
 
 	@Override
-	public boolean isBlockBurning(World world, int i, int j, int k) {
+	public boolean isBlockBurning(World world, int x, int y, int z) {
 		return false;
 	}
 
 	@Override
-	public boolean isAirBlock(World world, int i, int j, int k) {
+	public boolean isAirBlock(World world, int x, int y, int z) {
 		return false;
 	}
 
@@ -105,18 +107,18 @@ public abstract class BlockMixin implements ForgeBlock {
 	}
 
 	@Override
-	public float blockStrength(World world, PlayerEntity player, int i, int j, int k) {
-		int md = world.getBlockMeta(i, j, k);
+	public float blockStrength(World world, PlayerEntity player, int x, int y, int z) {
+		int md = world.getBlockMeta(x, y, z);
 		return this.blockStrength(player, md);
 	}
 
 	@Override
-	public float blockStrength(PlayerEntity player, int md) {
-		return ForgeHooks.blockStrength((Block) (Object) this, player, md);
+	public float blockStrength(PlayerEntity player, int meta) {
+		return ForgeHooks.blockStrength((Block) (Object) this, player, meta);
 	}
 
 	@Override
-	public boolean canHarvestBlock(PlayerEntity player, int md) {
-		return ForgeHooks.canHarvestBlock((Block) (Object) this, player, md);
+	public boolean canHarvestBlock(PlayerEntity player, int meta) {
+		return ForgeHooks.canHarvestBlock((Block) (Object) this, player, meta);
 	}
 }
