@@ -33,11 +33,9 @@ mutable field net/minecraft/stat/Stat name Ljava/lang/String;
 
 accessible method net/minecraft/packet/AbstractPacket register (IZZLjava/lang/Class;)V
 
-
 accessible class net/minecraft/block/RailBlock$RailMagicStuff
 
 accessible method net/minecraft/block/RailBlock$RailMagicStuff <init> (Lnet/minecraft/block/RailBlock;Lnet/minecraft/world/World;III)V
-accessible method net/minecraft/block/RailBlock$RailMagicStuff method_1116 ()I
 
 accessible field net/minecraft/client/render/block/BlockRenderer blockView Lnet/minecraft/world/BlockView;
 accessible field net/minecraft/client/render/block/BlockRenderer textureOverride I

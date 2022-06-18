@@ -5,18 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "BlockMixin",
-    "PlayerEntityMixin",
-    "ButtonBlockMixin",
-    "ChestBlockMixin",
-    "DoorBlockMixin",
-    "LadderBlockMixin",
-    "LeverBlockMixin",
-    "PressurePlateBlockMixin",
-    "RailBlockMixin",
-    "RedstoneDustBlockMixin",
-    "RedstoneRepeaterMixin",
-    "TorchBlockMixin",
-    "TrapdoorBlockMixin"
+    "PlayerEntityMixin"
   ],
   "client": [
   ],
