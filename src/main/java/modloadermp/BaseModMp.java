@@ -3,6 +3,7 @@ package modloadermp;
 import modloader.BaseMod;
 import net.minecraft.client.gui.screen.Screen;
 
+@SuppressWarnings("unused")
 public abstract class BaseModMp extends BaseMod {
 	public BaseModMp() {
 	}

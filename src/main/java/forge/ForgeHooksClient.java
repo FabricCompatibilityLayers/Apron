@@ -4,24 +4,26 @@
  */
 package forge;
 
-import io.github.betterthanupdates.babricated.client.ClientUtil;
+import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
 import io.github.betterthanupdates.forge.ForgeClientReflection;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.tinyremapper.extension.mixin.common.data.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.block.BlockRenderer;
+import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.HitResult;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.*;
 
 @SuppressWarnings({ "unused", "BooleanMethodIsAlwaysInverted" })
+@Environment(EnvType.CLIENT)
 public class ForgeHooksClient {
 	static LinkedList<IHighlightHandler> highlightHandlers = new LinkedList<>();
 	static HashMap<Pair<Integer, Integer>, Tessellator> tessellators = new HashMap<>();
@@ -37,6 +39,12 @@ public class ForgeHooksClient {
 	static ArrayList<Pair<Integer, Integer>> renderTextureList = new ArrayList<>();
 	static Tessellator defaultTessellator = null;
 	static int renderPass = -1;
+
+	// Babricated
+	@NotNull
+	private static final ClientUtil BAPI = ClientUtil.instance;
+	@NotNull
+	private static final TextureManager textureManager = Objects.requireNonNull(BAPI.getTextureManager());
 
 	public ForgeHooksClient() {
 	}
@@ -81,12 +89,12 @@ public class ForgeHooksClient {
 	}
 
 	protected static void bindTexture(String name, int sub) {
-		int n;
-		if (!textures.containsKey(name)) {
-			n = ClientUtil.getTextureManager().getTextureId(name);
-			textures.put(name, n);
+		int textureId;
+		if (textures.containsKey(name)) {
+			textureId = textures.get(name);
 		} else {
-			n = textures.get(name);
+			textureId = textureManager.getTextureId(name);
+			textures.put(name, textureId);
 		}
 
 		if (!inWorld) {
@@ -96,9 +104,9 @@ public class ForgeHooksClient {
 				Tessellator.INSTANCE.start(mode);
 			}
 
-			GL11.glBindTexture(3553, n);
+			GL11.glBindTexture(3553, textureId);
 		} else {
-			bindTessellator(n, sub);
+			bindTessellator(textureId, sub);
 		}
 	}
 
@@ -112,7 +120,7 @@ public class ForgeHooksClient {
 				Tessellator.INSTANCE.start(mode);
 			}
 
-			GL11.glBindTexture(3553, ClientUtil.getTextureManager().getTextureId("/terrain.png"));
+			GL11.glBindTexture(3553, textureManager.getTextureId("/terrain.png"));
 		}
 	}
 
@@ -120,7 +128,7 @@ public class ForgeHooksClient {
 		renderPass = pass;
 		defaultTessellator = Tessellator.INSTANCE;
 		ForgeClientReflection.Tessellator$renderingWorldRenderer = true;
-		GL11.glBindTexture(3553, ClientUtil.getTextureManager().getTextureId("/terrain.png"));
+		GL11.glBindTexture(3553, textureManager.getTextureId("/terrain.png"));
 		renderTextureTest.clear();
 		renderTextureList.clear();
 		inWorld = true;
@@ -136,7 +144,7 @@ public class ForgeHooksClient {
 			t.draw();
 		}
 
-		GL11.glBindTexture(3553, ClientUtil.getTextureManager().getTextureId("/terrain.png"));
+		GL11.glBindTexture(3553, textureManager.getTextureId("/terrain.png"));
 		ForgeClientReflection.Tessellator$renderingWorldRenderer = false;
 	}
 
@@ -155,7 +163,7 @@ public class ForgeHooksClient {
 
 	public static void overrideTexture(Object o) {
 		if (o instanceof ITextureProvider) {
-			GL11.glBindTexture(3553, ClientUtil.getTextureManager().getTextureId(((ITextureProvider) o).getTextureFile()));
+			GL11.glBindTexture(3553, textureManager.getTextureId(((ITextureProvider) o).getTextureFile()));
 		}
 	}
 

@@ -1,14 +1,19 @@
 package modloader;
 
+import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.TextureBinder;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+@SuppressWarnings("unused")
+@Environment(EnvType.SERVER)
 public class ModTextureStatic extends TextureBinder {
-	private boolean oldanaglyph;
-	private int[] pixels = null;
+	private boolean oldAnaglyph;
+	private final int[] pixels;
 
 	public ModTextureStatic(int slot, int dst, BufferedImage source) {
 		this(slot, 1, dst, source);
@@ -18,7 +23,7 @@ public class ModTextureStatic extends TextureBinder {
 		super(slot);
 		this.textureSize = size;
 		this.renderMode = dst;
-		this.bindTexture(ModLoader.getMinecraftInstance().textureManager);
+		this.bindTexture(ClientUtil.instance.getTextureManager());
 		int targetWidth = GL11.glGetTexLevelParameteri(3553, 0, 4096) / 16;
 		int targetHeight = GL11.glGetTexLevelParameteri(3553, 0, 4097) / 16;
 		int width = source.getWidth();
@@ -38,6 +43,7 @@ public class ModTextureStatic extends TextureBinder {
 		this.update();
 	}
 
+	@SuppressWarnings("PointlessBitwiseExpression")
 	public void update() {
 		for (int i = 0; i < this.pixels.length; ++i) {
 			int a = this.pixels[i] >> 24 & 0xFF;
@@ -57,12 +63,12 @@ public class ModTextureStatic extends TextureBinder {
 			this.grid[i * 4 + 3] = (byte) a;
 		}
 
-		this.oldanaglyph = this.render3d;
+		this.oldAnaglyph = this.render3d;
 	}
 
 	@Override
 	public void updateTexture() {
-		if (this.oldanaglyph != this.render3d) {
+		if (this.oldAnaglyph != this.render3d) {
 			this.update();
 		}
 
