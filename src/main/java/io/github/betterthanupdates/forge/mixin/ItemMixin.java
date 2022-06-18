@@ -1,6 +1,6 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.ForgeItem;
+import io.github.betterthanupdates.forge.item.ForgeItem;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
