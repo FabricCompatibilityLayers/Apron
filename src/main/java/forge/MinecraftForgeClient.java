@@ -4,18 +4,23 @@
  */
 package forge;
 
+import io.github.betterthanupdates.babricated.api.BabricatedApi;
+import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.block.BlockRenderer;
 import net.minecraft.item.Item;
 
-import static io.github.betterthanupdates.babricated.client.ClientUtil.getTextureManager;
+import java.util.Objects;
 
 @SuppressWarnings("unused")
 @Environment(EnvType.CLIENT)
 public class MinecraftForgeClient {
 	private static final ICustomItemRenderer[] customItemRenderers = new ICustomItemRenderer[Item.byId.length];
+
+	// Babricated
+	private static final ClientUtil BAPI = (ClientUtil) BabricatedApi.getInstance();
 
 	public MinecraftForgeClient() {
 	}
@@ -37,7 +42,7 @@ public class MinecraftForgeClient {
 	}
 
 	public static void preloadTexture(String texture) {
-		getTextureManager().getTextureId(texture);
+		Objects.requireNonNull(BAPI.getTextureManager()).getTextureId(texture);
 	}
 
 	public static void renderBlock(BlockRenderer blockRenderer, Block block, int x, int y, int z) {

@@ -1,7 +1,7 @@
 package modloader;
 
 import io.github.betterthanupdates.babricated.BabricatedForge;
-import io.github.betterthanupdates.babricated.SafeUtil;
+import io.github.betterthanupdates.babricated.api.BabricatedApi;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
@@ -92,6 +92,9 @@ public class ModLoader {
 	private static final boolean[] USED_ITEM_SPRITES = new boolean[256];
 	private static final boolean[] USED_TERRAIN_SPRITES = new boolean[256];
 	public static final String VERSION = "ModLoader Beta 1.7.3";
+
+	// Babricated
+	static final BabricatedApi BAPI = BabricatedApi.getInstance();
 	
 	/**
 	 * Used to give your achievement a readable name and description.
@@ -474,7 +477,7 @@ public class ModLoader {
 	@Nullable
 	@Environment(EnvType.CLIENT)
 	public static Minecraft getMinecraftInstance() {
-		return (Minecraft) SafeUtil.getGame();
+		return (Minecraft) BabricatedApi.getInstance().getGame();
 	}
 	
 	/**
