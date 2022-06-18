@@ -5,12 +5,10 @@ import fr.catcore.modremapperapi.api.RemapLibrary;
 import fr.catcore.modremapperapi.remapping.RemapUtil;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.tinyremapper.TinyRemapper;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.*;
 
-@ApiStatus.Internal
-public final class BabricatedModRemapper implements ModRemapper {
+public class BabricatedModRemapper implements ModRemapper {
 	@Override
 	public String[] getJarFolders() {
 		return new String[0];
@@ -21,16 +19,36 @@ public final class BabricatedModRemapper implements ModRemapper {
 		RemapLibrary[] libraries = new RemapLibrary[0];
 		switch (FabricLoader.getInstance().getEnvironmentType()) {
 			case CLIENT:
-				libraries = new RemapLibrary[] {
-						new RemapLibrary("", new ArrayList<>(), "modloader.zip"),
-						new RemapLibrary("", new ArrayList<>(), "modloadermp-client.zip"),
-						new RemapLibrary("", new ArrayList<>(), "forge-client.zip")
+				libraries = new RemapLibrary[]{
+						new RemapLibrary(
+								BabricatedForge.MODLOADER_URL,
+								new ArrayList<>(),
+								"modloader.zip"
+						),
+						new RemapLibrary(
+								BabricatedForge.MODLOADERMP_CLIENT_URL,
+								new ArrayList<>(),
+								"modloadermp-client.zip"
+						),
+						new RemapLibrary(
+								BabricatedForge.FORGE_CLIENT_URL,
+								new ArrayList<>(),
+								"forge-client.zip"
+						)
 				};
 				break;
 			case SERVER:
-				libraries = new RemapLibrary[] {
-						new RemapLibrary("", new ArrayList<>(), "modloadermp-server.zip"),
-						new RemapLibrary("", new ArrayList<>(), "forge-server.zip")
+				libraries = new RemapLibrary[]{
+						new RemapLibrary(
+								BabricatedForge.MODLOADERMP_SERVER_URL,
+								new ArrayList<>(),
+								"modloadermp-server.zip"
+						),
+						new RemapLibrary(
+								BabricatedForge.FORGE_SERVER_URL,
+								new ArrayList<>(),
+								"forge-server.zip"
+						)
 				};
 				break;
 		}

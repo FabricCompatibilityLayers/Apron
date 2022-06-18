@@ -20,7 +20,7 @@ public class ModLoaderMp {
 	private static boolean packet230Received = false;
 	private static final Map<Integer, NetClientHandlerEntity> NET_CLIENT_HANDLER_MAP = new HashMap<>();
 	private static final Map<Integer, BaseModMp> GUI_MOD_MAP = new HashMap<>();
-
+	
 	public static void Init() {
 		if (!ModLoaderMp.hasInit) {
 			init();
@@ -100,7 +100,8 @@ public class ModLoaderMp {
 		}
 		if (ModLoaderMp.GUI_MOD_MAP.containsKey(i)) {
 			Log("RegisterGUI error: inventoryType already registered.");
-		} else {
+		}
+		else {
 			ModLoaderMp.GUI_MOD_MAP.put(i, basemodmp);
 		}
 	}

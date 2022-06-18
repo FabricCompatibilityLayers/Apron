@@ -9,9 +9,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Block.class)
 public class BlockMixin implements ItemConvertible {
-	@Shadow
-	@Final
-	public int id;
+	@Shadow @Final public int id;
 
 	@Override
 	public Item asItem() {

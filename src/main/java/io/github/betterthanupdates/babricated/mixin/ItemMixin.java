@@ -8,6 +8,6 @@ import org.spongepowered.asm.mixin.Mixin;
 public class ItemMixin implements ItemConvertible {
 	@Override
 	public Item asItem() {
-		return ((Item) (Object) this);
+		return ((Item)(Object) this);
 	}
 }

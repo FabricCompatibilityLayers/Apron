@@ -9,11 +9,10 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ItemEntity.class)
 public class ItemEntityMixin implements ItemConvertible {
-	@Shadow
-	public ItemStack stack;
+	@Shadow public ItemStack stack;
 
 	@Override
 	public Item asItem() {
-		return ((ItemConvertible) (Object) this.stack).asItem();
+		return ((ItemConvertible)(Object) this.stack).asItem();
 	}
 }
