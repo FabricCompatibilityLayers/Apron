@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import java.util.Map;
 import java.util.Random;
 
-@SuppressWarnings({ "unused", "SameReturnValue", "EmptyMethod" })
+@SuppressWarnings("unused")
 public abstract class BaseMod {
 	/**
 	 * Used for adding new sources of fuel to the furnace.

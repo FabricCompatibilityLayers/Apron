@@ -1,21 +1,16 @@
 package modloader;
 
-import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.render.TextureBinder;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-@Environment(EnvType.CLIENT)
-@SuppressWarnings("unused")
 public class ModTextureAnimation extends TextureBinder {
 	private final int tickRate;
 	private final byte[][] images;
 	private int index = 0;
-	private int ticks;
+	private int ticks = 0;
 
 	public ModTextureAnimation(int slot, int dst, BufferedImage source, int rate) {
 		this(slot, 1, dst, source, rate);
@@ -27,12 +22,12 @@ public class ModTextureAnimation extends TextureBinder {
 		this.renderMode = dst;
 		this.tickRate = rate;
 		this.ticks = rate;
-		this.bindTexture(ClientUtil.instance.getTextureManager());
+		this.bindTexture(ModLoader.getMinecraftInstance().textureManager);
 		int targetWidth = GL11.glGetTexLevelParameteri(3553, 0, 4096) / 16;
 		int targetHeight = GL11.glGetTexLevelParameteri(3553, 0, 4097) / 16;
 		int width = source.getWidth();
 		int height = source.getHeight();
-		int images = (int) Math.floor(height / width);
+		int images = (int) Math.floor((double) (height / width));
 		if (images <= 0) {
 			throw new IllegalArgumentException("source has no complete images");
 		} else {
