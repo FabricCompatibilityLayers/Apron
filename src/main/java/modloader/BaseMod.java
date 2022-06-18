@@ -15,10 +15,8 @@ import net.minecraft.world.World;
 import java.util.Map;
 import java.util.Random;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({ "unused", "SameReturnValue", "EmptyMethod" })
 public abstract class BaseMod {
-	public BaseMod() {}
-
 	/**
 	 * Used for adding new sources of fuel to the furnace.
 	 * @param id ItemID for the item to use as fuel
@@ -27,7 +25,7 @@ public abstract class BaseMod {
 	public int AddFuel(int id) {
 		return 0;
 	}
-	
+
 	/**
 	 * Used to add entity renderers.
 	 * @param renderers HashMap of the renderers. key is an entity class, value is the renderer.
@@ -48,7 +46,7 @@ public abstract class BaseMod {
 	public boolean DispenseEntity(World world, double x, double y, double z, int xVel, int zVel, ItemStack item) {
 		return false;
 	}
-	
+
 	/**
 	 * Used for generating new blocks (veins) in Nether.
 	 * @param world Reference to world
@@ -80,28 +78,28 @@ public abstract class BaseMod {
 	
 	/**
 	 * Called when enabled, and in game.
-	 * @param game Instance of the Minecraft class
+	 * @param client Instance of the {@link Minecraft} class
 	 * @return true to continue ticking, or false to stop ticking
 	 */
-	public boolean OnTickInGame(Minecraft game) {
+	public boolean OnTickInGame(Minecraft client) {
 		return false;
 	}
-	
+
 	/**
 	 * Called when enabled, and a GUI is open.
-	 * @param game Instance of the Minecraft class
+	 * @param client Instance of the {@link Minecraft} class
 	 * @param screen Current screen that is open
 	 * @return true to continue ticking, or false to stop ticking
 	 */
-	public boolean OnTickInGUI(Minecraft game, Screen screen) {
+	public boolean OnTickInGUI(Minecraft client, Screen screen) {
 		return false;
 	}
-	
+
 	/**
 	 * Used for registering animations for items and blocks.
-	 * @param game Instance of the Minecraft class.
+	 * @param client Instance of the {@link Minecraft} class.
 	 */
-	public void RegisterAnimation(Minecraft game) {}
+	public void RegisterAnimation(Minecraft client) {}
 	
 	/**
 	 * Renders a block in inventory.
@@ -126,7 +124,7 @@ public abstract class BaseMod {
 	public boolean RenderWorldBlock(BlockRenderer renderer, BlockView world, int x, int y, int z, Block block, int modelID) {
 		return false;
 	}
-	
+
 	/**
 	 * Is called when an item is picked up from crafting result slot.
 	 * @param player that crafted the item
@@ -152,7 +150,7 @@ public abstract class BaseMod {
 	public String toString() {
 		return this.getClass().getName() + " " + this.Version();
 	}
-	
+
 	/**
 	 * Required override that informs users the version of this mod.
 	 * @return Version string

@@ -16,19 +16,26 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FurnaceBlockEntity.class)
 public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inventory {
-	@Shadow public int burnTime;
+	@Shadow
+	public int burnTime;
 
-	@Shadow protected abstract boolean canAcceptRecipeOutput();
+	@Shadow
+	protected abstract boolean canAcceptRecipeOutput();
 
-	@Shadow public int fuelTime;
+	@Shadow
+	public int fuelTime;
 
-	@Shadow protected abstract int getFuelTime(ItemStack arg);
+	@Shadow
+	protected abstract int getFuelTime(ItemStack arg);
 
-	@Shadow private ItemStack[] inventory;
+	@Shadow
+	private ItemStack[] inventory;
 
-	@Shadow public abstract boolean isBurning();
+	@Shadow
+	public abstract boolean isBurning();
 
-	@Shadow public int cookTime;
+	@Shadow
+	public int cookTime;
 
 	/**
 	 * @author Risugami

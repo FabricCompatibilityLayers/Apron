@@ -1,16 +1,23 @@
 package modloadermp;
 
+import io.github.betterthanupdates.babricated.api.BabricatedApi;
+import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
 import modloader.BaseMod;
 import modloader.ModLoader;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.container.Container;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.packet.AbstractPacket;
 import net.minecraft.packet.play.OpenContainerS2CPacket;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @SuppressWarnings("unused")
 public class ModLoaderMp {
@@ -20,7 +27,10 @@ public class ModLoaderMp {
 	private static boolean packet230Received = false;
 	private static final Map<Integer, NetClientHandlerEntity> NET_CLIENT_HANDLER_MAP = new HashMap<>();
 	private static final Map<Integer, BaseModMp> GUI_MOD_MAP = new HashMap<>();
-	
+
+	// Babricated
+	private static final BabricatedApi BAPI = BabricatedApi.getInstance();
+
 	public static void Init() {
 		if (!ModLoaderMp.hasInit) {
 			init();
@@ -47,9 +57,12 @@ public class ModLoaderMp {
 			NetClientHandlerEntity netclienthandlerentity = HandleNetClientHandlerEntities(packet.packetType);
 			if (netclienthandlerentity != null && ISpawnable.class.isAssignableFrom(netclienthandlerentity.entityClass)) {
 				try {
-					Entity entity = netclienthandlerentity.entityClass.getConstructor(World.class).newInstance(ModLoader.getMinecraftInstance().world);
+					Entity entity = netclienthandlerentity.entityClass.getConstructor(World.class).newInstance(BAPI.getWorld());
 					((ISpawnable)entity).spawn(packet);
-					((ClientWorld)ModLoader.getMinecraftInstance().world).method_1495(entity.entityId, entity);
+					ClientWorld world = (ClientWorld) BAPI.getWorld();
+					if (world != null) {
+						world.method_1495(entity.entityId, entity);
+					}
 				} catch (Exception var4) {
 					ModLoader.getLogger().throwing("ModLoader", "handleCustomSpawn", var4);
 					ModLoader.ThrowException(String.format("Error initializing entity of type %s.", packet.packetType), var4);
@@ -100,8 +113,7 @@ public class ModLoaderMp {
 		}
 		if (ModLoaderMp.GUI_MOD_MAP.containsKey(i)) {
 			Log("RegisterGUI error: inventoryType already registered.");
-		}
-		else {
+		} else {
 			ModLoaderMp.GUI_MOD_MAP.put(i, basemodmp);
 		}
 	}
@@ -110,11 +122,19 @@ public class ModLoaderMp {
 		if (!ModLoaderMp.hasInit) {
 			init();
 		}
+
 		final BaseModMp basemodmp = ModLoaderMp.GUI_MOD_MAP.get(packet.inventoryType);
 		final Screen guiScreen = basemodmp.HandleGUI(packet.inventoryType);
+
 		if (guiScreen != null) {
-			ModLoader.OpenGUI(ModLoader.getMinecraftInstance().player, guiScreen);
-			ModLoader.getMinecraftInstance().player.container.currentContainerId = packet.containerId;
+			PlayerEntity player = BAPI.getPlayer();
+
+			if (player != null) {
+				ModLoader.OpenGUI(player, guiScreen);
+
+				Container container = player.container;
+				if (container != null) container.currentContainerId = packet.containerId;
+			}
 		}
 	}
 
@@ -209,8 +229,14 @@ public class ModLoaderMp {
 	}
 
 	private static void sendPacket(Packet230ModLoader packet) {
-		if (packet230Received && ModLoader.getMinecraftInstance().world != null && ModLoader.getMinecraftInstance().world.isClient) {
-			ModLoader.getMinecraftInstance().getPacketHandler().sendPacket(packet);
+		if (!packet230Received) return;
+
+		World world = BAPI.getWorld();
+
+		if (world != null && world.isClient) {
+			((Minecraft) Objects.requireNonNull(BAPI.getGame())).getPacketHandler().sendPacket(packet);
+		} else {
+			((MinecraftServer) Objects.requireNonNull(BAPI.getGame())).serverPlayerConnectionManager.sendToAll(packet);
 		}
 	}
 	

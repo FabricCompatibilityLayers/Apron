@@ -4,16 +4,15 @@
  */
 package forge;
 
+import net.minecraft.client.entity.particle.ParticleEntity;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.entity.particle.ParticleEntity;
-
 public class BlockTextureParticles {
 	public String texture;
-	public List<ParticleEntity> effects;
+	public List<ParticleEntity> effects = new ArrayList<>();
 
 	public BlockTextureParticles() {
-		this.effects = new ArrayList<>();
 	}
 }

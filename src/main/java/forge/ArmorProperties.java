@@ -5,13 +5,14 @@
 package forge;
 
 public class ArmorProperties {
-	public boolean allowRegularComputation;
-	public int damageRemove;
+	public int damageRemove = 0;
+	public boolean allowRegularComputation = false;
 
-	public ArmorProperties() {}
+	public ArmorProperties() {
+	}
 
-	public ArmorProperties(final int damageRemove, final boolean allowRegularCompuation) {
-		this.allowRegularComputation = allowRegularCompuation;
+	public ArmorProperties(int damageRemove, boolean allowRegularCompuation) {
 		this.damageRemove = damageRemove;
+		this.allowRegularComputation = allowRegularCompuation;
 	}
 }

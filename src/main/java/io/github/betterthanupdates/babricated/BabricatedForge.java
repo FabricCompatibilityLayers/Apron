@@ -1,12 +1,17 @@
 package io.github.betterthanupdates.babricated;
 
 import fr.catcore.modremapperapi.utils.Constants;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.impl.launch.FabricLauncherBase;
+import net.fabricmc.mapping.tree.ClassDef;
+import net.fabricmc.mapping.tree.FieldDef;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.File;
+import java.util.Objects;
 
 @ApiStatus.Internal
 public final class BabricatedForge {
@@ -28,8 +33,7 @@ public final class BabricatedForge {
 			throw new RuntimeException("Could not get or create mod cache folder!");
 		}
 
-		MOD_CONTAINER = FabricLoader.getInstance().getModContainer("babricated-forge")
-				.orElseThrow(RuntimeException::new);
+		MOD_CONTAINER = FabricLoader.getInstance().getModContainer(MOD_ID).orElseThrow(RuntimeException::new);
 	}
 
 	/**
@@ -51,5 +55,20 @@ public final class BabricatedForge {
 
 	public static String fabricModsLoaded() {
 		return fabricModCount + " Fabric mods";
+	}
+
+	public static String getRemappedFieldName(Class<?> instanceClass, String name) {
+		for (ClassDef classDef : FabricLauncherBase.getLauncher().getMappingConfiguration().getMappings().getClasses()) {
+			if (classDef.getName(FabricLoader.getInstance().getMappingResolver().getCurrentRuntimeNamespace())
+					.replace(".", "/").equals(instanceClass.getName().replace(".", "/"))) {
+				for (FieldDef fieldDef : classDef.getFields()) {
+					if (Objects.equals(fieldDef.getName(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT ? "client" : "server"), name)) {
+						return fieldDef.getName(FabricLoader.getInstance().getMappingResolver().getCurrentRuntimeNamespace());
+					}
+				}
+			}
+		}
+
+		return name;
 	}
 }

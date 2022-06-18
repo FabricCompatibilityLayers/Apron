@@ -4,130 +4,126 @@
  */
 package forge;
 
+import io.github.betterthanupdates.forge.item.ForgeTool;
+import io.github.betterthanupdates.forge.item.ToolEffectiveness;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 
+@SuppressWarnings("unused")
 public class MinecraftForge {
-	public static final Logger LOGGER = Logger.get("Babricated Forge", "MinecraftForge");
+	static final Logger LOGGER = Logger.get("Babricated Forge", "Minecraft Forge");
 
-	private static LinkedList<IBucketHandler> bucketHandlers;
+	private static final LinkedList<IBucketHandler> bucketHandlers = new LinkedList<>();
 
-	@Deprecated
-	public static void registerCustomBucketHander(final IBucketHandler handler) {
-		registerCustomBucketHandler(handler);
+	/**
+	 * @deprecated
+	 */
+	public static void registerCustomBucketHander(IBucketHandler handler) {
+		bucketHandlers.add(handler);
 	}
 
-	public static void registerCustomBucketHandler(final IBucketHandler handler) {
-		MinecraftForge.bucketHandlers.add(handler);
+	public static void registerCustomBucketHandler(IBucketHandler handler) {
+		bucketHandlers.add(handler);
 	}
 
-	public static void registerSleepHandler(final ISleepHandler handler) {
+	public static void registerSleepHandler(ISleepHandler handler) {
 		ForgeHooks.sleepHandlers.add(handler);
 	}
 
-	public static void registerDestroyToolHandler(final IDestroyToolHandler handler) {
+	public static void registerDestroyToolHandler(IDestroyToolHandler handler) {
 		ForgeHooks.destroyToolHandlers.add(handler);
 	}
 
-	public static void registerCraftingHandler(final ICraftingHandler handler) {
+	public static void registerCraftingHandler(ICraftingHandler handler) {
 		ForgeHooks.craftingHandlers.add(handler);
 	}
 
-	public static ItemStack fillCustomBucket(final World world, final int i, final int j, final int k) {
-		for (final IBucketHandler handler : MinecraftForge.bucketHandlers) {
-			final ItemStack stack = handler.fillCustomBucket(world, i, j, k);
+	public static ItemStack fillCustomBucket(World world, int i, int j, int k) {
+		for (IBucketHandler handler : bucketHandlers) {
+			ItemStack stack = handler.fillCustomBucket(world, i, j, k);
 			if (stack != null) {
 				return stack;
 			}
 		}
+
 		return null;
 	}
 
-	public static void setToolClass(final Item tool, final String tClass, final int hLevel) {
+	public static void setToolClass(Item tool, String toolClass, int harvestLevel) {
 		ForgeHooks.initTools();
-		ForgeHooks.toolClasses.put(tool.id, Arrays.asList(tClass, hLevel));
+		ForgeHooks.toolClasses.put(tool.id, new ForgeTool(toolClass, harvestLevel));
 	}
 
-	public static void setBlockHarvestLevel(final Block bl, final int md, final String tClass, final int hLevel) {
+	public static void setBlockHarvestLevel(Block block, int meta, String toolClass, int harvestLevel) {
 		ForgeHooks.initTools();
-		final List<Object> key = Arrays.asList(bl.id, md, tClass);
-		ForgeHooks.toolHarvestLevels.put(key, hLevel);
+		ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolClass);
+		ForgeHooks.toolHarvestLevels.put(key, harvestLevel);
 		ForgeHooks.toolEffectiveness.add(key);
 	}
 
-	public static void removeBlockEffectiveness(final Block bl, final int md, final String tClass) {
+	public static void removeBlockEffectiveness(Block block, int meta, String toolClass) {
 		ForgeHooks.initTools();
-		final List<Object> key = Arrays.asList(bl.id, md, tClass);
+		ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolClass);
 		ForgeHooks.toolEffectiveness.remove(key);
 	}
 
-	public static void setBlockHarvestLevel(final Block bl, final String tClass, final int hLevel) {
+	public static void setBlockHarvestLevel(Block block, String toolClass, int harvestLevel) {
 		ForgeHooks.initTools();
-		for (int md = 0; md < 16; ++md) {
-			final List<Object> key = Arrays.asList(bl.id, md, tClass);
-			ForgeHooks.toolHarvestLevels.put(key, hLevel);
+
+		for (int meta = 0; meta < 16; ++meta) {
+			ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolClass);
+			ForgeHooks.toolHarvestLevels.put(key, harvestLevel);
 			ForgeHooks.toolEffectiveness.add(key);
 		}
 	}
 
-	public static void removeBlockEffectiveness(final Block bl, final String tClass) {
+	public static void removeBlockEffectiveness(Block block, String toolClass) {
 		ForgeHooks.initTools();
-		for (int md = 0; md < 16; ++md) {
-			final List<Object> key = Arrays.asList(bl.id, md, tClass);
+
+		for (int meta = 0; meta < 16; ++meta) {
+			ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolClass);
 			ForgeHooks.toolEffectiveness.remove(key);
 		}
 	}
 
-	public static void addPickaxeBlockEffectiveAgainst(final Block block) {
+	public static void addPickaxeBlockEffectiveAgainst(Block block) {
 		setBlockHarvestLevel(block, "pickaxe", 0);
 	}
 
-	public static void killMinecraft(final String modName, final String msg) {
+	public static void killMinecraft(String modName, String msg) {
 		throw new RuntimeException(modName + ": " + msg);
 	}
 
-	public static void versionDetect(final String modName, final int major, final int minor, final int revision) {
+	public static void versionDetect(String modName, int major, int minor, int revision) {
 		if (major != 1) {
 			killMinecraft(modName, "MinecraftForge Major Version Mismatch, expecting " + major + ".x.x");
-		}
-		else if (minor != 0) {
+		} else if (minor != 0) {
 			if (minor > 0) {
 				killMinecraft(modName, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
+			} else {
+				LOGGER.warn(modName + ": MinecraftForge minor version mismatch, expecting " + major + "." + minor + ".x, may lead to unexpected behavior");
 			}
-			else {
-				LOGGER.info(modName + ": MinecraftForge minor version mismatch, expecting " + major + "." + minor + ".x, may lead to unexpected behavior");
-			}
-		}
-		else if (revision > 6) {
+		} else if (revision > 6) {
 			killMinecraft(modName, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
 		}
 	}
 
-	public static void versionDetectStrict(final String modName, final int major, final int minor, final int revision) {
+	public static void versionDetectStrict(String modName, int major, int minor, int revision) {
 		if (major != 1) {
 			killMinecraft(modName, "MinecraftForge Major Version Mismatch, expecting " + major + ".x.x");
-		}
-		else if (minor != 0) {
+		} else if (minor != 0) {
 			if (minor > 0) {
 				killMinecraft(modName, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
-			}
-			else {
+			} else {
 				killMinecraft(modName, "MinecraftForge minor version mismatch, expecting " + major + "." + minor + ".x");
 			}
-		}
-		else if (revision > 6) {
+		} else if (revision > 6) {
 			killMinecraft(modName, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
 		}
-	}
-
-	static {
-		MinecraftForge.bucketHandlers = new LinkedList<>();
 	}
 }

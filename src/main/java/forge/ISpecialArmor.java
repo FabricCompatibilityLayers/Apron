@@ -7,5 +7,5 @@ package forge;
 import net.minecraft.entity.player.PlayerEntity;
 
 public interface ISpecialArmor {
-	ArmorProperties getProperties(final PlayerEntity playerBase, final int i, final int j);
+	ArmorProperties getProperties(PlayerEntity arg, int i, int j);
 }

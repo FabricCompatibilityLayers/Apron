@@ -1,16 +1,21 @@
 package modloader;
 
+import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.TextureBinder;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
+@Environment(EnvType.CLIENT)
+@SuppressWarnings("unused")
 public class ModTextureAnimation extends TextureBinder {
 	private final int tickRate;
 	private final byte[][] images;
 	private int index = 0;
-	private int ticks = 0;
+	private int ticks;
 
 	public ModTextureAnimation(int slot, int dst, BufferedImage source, int rate) {
 		this(slot, 1, dst, source, rate);
@@ -22,12 +27,12 @@ public class ModTextureAnimation extends TextureBinder {
 		this.renderMode = dst;
 		this.tickRate = rate;
 		this.ticks = rate;
-		this.bindTexture(ModLoader.getMinecraftInstance().textureManager);
+		this.bindTexture(ClientUtil.instance.getTextureManager());
 		int targetWidth = GL11.glGetTexLevelParameteri(3553, 0, 4096) / 16;
 		int targetHeight = GL11.glGetTexLevelParameteri(3553, 0, 4097) / 16;
 		int width = source.getWidth();
 		int height = source.getHeight();
-		int images = (int)Math.floor((double)(height / width));
+		int images = (int) Math.floor(height / width);
 		if (images <= 0) {
 			throw new IllegalArgumentException("source has no complete images");
 		} else {
@@ -40,20 +45,20 @@ public class ModTextureAnimation extends TextureBinder {
 				source = img;
 			}
 
-			for(int i = 0; i < images; ++i) {
+			for (int i = 0; i < images; ++i) {
 				int[] temp = new int[targetWidth * targetHeight];
 				source.getRGB(0, targetHeight * i, targetWidth, targetHeight, temp, 0, targetWidth);
 				this.images[i] = new byte[targetWidth * targetHeight * 4];
 
-				for(int j = 0; j < temp.length; ++j) {
+				for (int j = 0; j < temp.length; ++j) {
 					int a = temp[j] >> 24 & 0xFF;
 					int r = temp[j] >> 16 & 0xFF;
 					int g = temp[j] >> 8 & 0xFF;
 					int b = temp[j] >> 0 & 0xFF;
-					this.images[i][j * 4 + 0] = (byte)r;
-					this.images[i][j * 4 + 1] = (byte)g;
-					this.images[i][j * 4 + 2] = (byte)b;
-					this.images[i][j * 4 + 3] = (byte)a;
+					this.images[i][j * 4 + 0] = (byte) r;
+					this.images[i][j * 4 + 1] = (byte) g;
+					this.images[i][j * 4 + 2] = (byte) b;
+					this.images[i][j * 4 + 3] = (byte) a;
 				}
 			}
 
