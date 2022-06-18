@@ -19,6 +19,7 @@ import static io.github.betterthanupdates.babricated.BabricatedForge.*;
 
 @Mixin(TitleScreen.class)
 public abstract class TitleScreenMixin extends Screen {
+	private boolean isApplet = false;
 
 	@Shadow public abstract void init();
 
@@ -39,5 +40,13 @@ public abstract class TitleScreenMixin extends Screen {
 		BabricatedForge.fabricModCount = FabricLoader.getInstance().getAllMods().stream()
 				.filter((modContainer -> !Objects.equals(modContainer.getMetadata().getId(), "minecraft"))).count();
 		BabricatedForge.rmlModCount = ModLoader.getLoadedMods().size();
+
+		this.isApplet = this.client.isApplet;
+		this.client.isApplet = false;
+	}
+
+	@Inject(method = "init", at = @At("TAIL"))
+	private void babricated$initEnd(CallbackInfo ci) {
+		this.client.isApplet = this.isApplet;
 	}
 }
