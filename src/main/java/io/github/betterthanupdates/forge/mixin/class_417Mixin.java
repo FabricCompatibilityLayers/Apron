@@ -1,6 +1,7 @@
 package io.github.betterthanupdates.forge.mixin;
 
 import io.github.betterthanupdates.forge.block.ForgeBlock;
+import net.legacyfabric.fabric.api.logger.v1.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.class_417;
 import net.minecraft.world.LightType;
@@ -39,7 +40,7 @@ public class class_417Mixin {
         int k = this.field_1679 - this.field_1676 + 1;
         int l = i * j * k;
         if (l > 32768) {
-            System.out.println("Light too large, skipping!");
+            Logger.get("Minecraft").debug("Light too large, skipping!");
         } else {
             int i1 = 0;
             int j1 = 0;

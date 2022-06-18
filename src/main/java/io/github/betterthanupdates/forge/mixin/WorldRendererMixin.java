@@ -14,12 +14,17 @@ import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Surrogate;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.HashSet;
 import java.util.List;
 
 @Mixin(class_66.class)
-public abstract class class_66Mixin {
+public abstract class WorldRendererMixin {
 
     @Shadow public boolean field_249;
 
@@ -53,9 +58,15 @@ public abstract class class_66Mixin {
 
     @Shadow private boolean field_227;
 
+    @Inject(method = "method_296", at = @At(value = "INVOKE", shift = At.Shift.BEFORE,
+            target = "Lnet/minecraft/client/render/Tessellator;draw()V"), locals = LocalCapture.CAPTURE_FAILHARD)
+    private void forge$afterRenderPass(CallbackInfo ci, int var11) {
+        ForgeHooksClient.afterRenderPass(var11);
+    }
+
     /**
-     * @author Forge
-     * @reason
+     * @author Eloraam
+     * @reason Minecraft Forge client hooks
      */
     @Overwrite
     public void method_296() {
@@ -113,9 +124,6 @@ public abstract class class_66Mixin {
 
                                 Block block = Block.BY_ID[i3];
                                 int j3 = block.getRenderPass();
-                                if (j3 > i2) {
-                                    flag = true;
-                                }
 
                                 if (ForgeHooksClient.canRenderInPass(block, i2)) {
                                     ForgeHooksClient.beforeBlockRender(block, renderblocks);

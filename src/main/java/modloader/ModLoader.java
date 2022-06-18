@@ -1,9 +1,9 @@
 package modloader;
 
 import io.github.betterthanupdates.babricated.BabricatedForge;
+import io.github.betterthanupdates.babricated.SafeUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
 import net.minecraft.block.Block;
@@ -474,7 +474,7 @@ public class ModLoader {
 	@Nullable
 	@Environment(EnvType.CLIENT)
 	public static Minecraft getMinecraftInstance() {
-		return (Minecraft) FabricLoaderImpl.INSTANCE.getGameInstance();
+		return (Minecraft) SafeUtil.getGame();
 	}
 	
 	/**
