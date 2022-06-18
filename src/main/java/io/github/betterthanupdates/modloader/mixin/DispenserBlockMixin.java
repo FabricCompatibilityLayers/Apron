@@ -2,7 +2,6 @@ package io.github.betterthanupdates.modloader.mixin;
 
 import modloader.ModLoader;
 import net.minecraft.block.DispenserBlock;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.block.DispenserBlockEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
@@ -13,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.injection.Inject;
 
 import java.util.Random;
 
@@ -41,11 +39,11 @@ public abstract class DispenserBlockMixin {
 			j = -1;
 		}
 
-		DispenserBlockEntity dispenser = (DispenserBlockEntity)world.getBlockEntity(x, y, z);
+		DispenserBlockEntity dispenser = (DispenserBlockEntity) world.getBlockEntity(x, y, z);
 		ItemStack itemStack = dispenser.getItemToDispense();
-		double posX = (double)x + (double)j * 0.6 + 0.5;
-		double posY = (double)y + 0.5;
-		double posZ = (double)z + (double)k * 0.6 + 0.5;
+		double posX = (double) x + (double) j * 0.6 + 0.5;
+		double posY = (double) y + 0.5;
+		double posZ = (double) z + (double) k * 0.6 + 0.5;
 		if (itemStack == null) {
 			world.playWorldEvent(1001, x, y, z, 0);
 		} else {
@@ -70,9 +68,9 @@ public abstract class DispenserBlockMixin {
 				} else {
 					ItemEntity itemEntity = new ItemEntity(world, posX, posY - 0.3d, posZ, itemStack);
 					double d4 = random.nextDouble() * 0.1d + 0.2d;
-					itemEntity.xVelocity = (double)j * d4;
+					itemEntity.xVelocity = (double) j * d4;
 					itemEntity.yVelocity = 0.2d;
-					itemEntity.zVelocity = (double)k * d4;
+					itemEntity.zVelocity = (double) k * d4;
 					itemEntity.xVelocity += random.nextGaussian() * 0.0075f * 6.0f;
 					itemEntity.yVelocity += random.nextGaussian() * 0.0075f * 6.0f;
 					itemEntity.zVelocity += random.nextGaussian() * 0.0075f * 6.0f;

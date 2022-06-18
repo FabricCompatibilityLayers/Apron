@@ -1,16 +1,12 @@
 package io.github.betterthanupdates.modloader.mixin;
 
 import modloader.ModLoader;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,7 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityMixin extends Entity {
-	@Shadow public ItemStack stack;
+	@Shadow
+	public ItemStack stack;
 
 	public ItemEntityMixin(World arg) {
 		super(arg);

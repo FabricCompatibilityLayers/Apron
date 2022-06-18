@@ -4,145 +4,178 @@
  */
 package forge;
 
-import modloader.ModLoader;
+import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
+import io.github.betterthanupdates.forge.ForgeClientReflection;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.tinyremapper.extension.mixin.common.data.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.block.BlockRenderer;
+import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.HitResult;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-// TODO do something with this hooks
+@SuppressWarnings({ "unused", "BooleanMethodIsAlwaysInverted" })
+@Environment(EnvType.CLIENT)
 public class ForgeHooksClient {
-	static LinkedList<IHighlightHandler> highlightHandlers;
-	static HashMap<List<Object>, Tessellator> tessellators;
-	static HashMap<String, Integer> textures;
-	static boolean inWorld;
-	static HashSet<List<Object>> renderTextureTest;
-	static ArrayList<List<Object>> renderTextureList;
-	static int renderPass;
+	static LinkedList<IHighlightHandler> highlightHandlers = new LinkedList<>();
+	static HashMap<Pair<Integer, Integer>, Tessellator> tessellators = new HashMap<>();
+	static HashMap<String, Integer> textures = new HashMap<>();
+	static boolean inWorld = false;
+	/**
+	 * Set of tex/sub pairs
+	 */
+	static HashSet<Pair<Integer, Integer>> renderTextureTest = new HashSet<>();
+	/**
+	 * List of tex/sub pairs
+	 */
+	static ArrayList<Pair<Integer, Integer>> renderTextureList = new ArrayList<>();
+	static Tessellator defaultTessellator = null;
+	static int renderPass = -1;
 
-	public static boolean onBlockHighlight(final WorldRenderer renderglobal, final PlayerEntity player, final HitResult mop, final int i, final ItemStack itemstack, final float f) {
-		for (final IHighlightHandler handler : ForgeHooksClient.highlightHandlers) {
-			if (handler.onBlockHighlight(renderglobal, player, mop, i, itemstack, f)) {
+	// Babricated
+	@NotNull
+	private static final ClientUtil BAPI = ClientUtil.instance;
+	@NotNull
+	private static final TextureManager textureManager = Objects.requireNonNull(BAPI.getTextureManager());
+
+	public ForgeHooksClient() {
+	}
+
+	public static boolean onBlockHighlight(WorldRenderer renderGlobal, PlayerEntity player, HitResult mop, int i, ItemStack itemstack, float f) {
+		for (IHighlightHandler handler : highlightHandlers) {
+			if (handler.onBlockHighlight(renderGlobal, player, mop, i, itemstack, f)) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
-	public static boolean canRenderInPass(final Block block, final int pass) {
+	public static boolean canRenderInPass(Block block, int pass) {
 		if (block instanceof IMultipassRender) {
-			final IMultipassRender impr = (IMultipassRender)block;
-			return impr.canRenderInPass(pass);
+			IMultipassRender iMultipassRender = (IMultipassRender) block;
+			return iMultipassRender.canRenderInPass(pass);
+		} else {
+			return pass == block.getRenderPass();
 		}
-		return pass == block.getRenderPass();
 	}
 
-	// TODO do something with tesselators
-	protected static void bindTessellator(final int tex, final int sub) {
-        /*final List key = Arrays.asList((Object[])new Integer[] { tex, sub });
-        Tessellator t;
-        if (!ForgeHooksClient.tessellators.containsKey(key)) {
-            t = new Tessellator();
-            ForgeHooksClient.tessellators.put(key, t);
-        }
-        else {
-            t = (Tessellator)ForgeHooksClient.tessellators.get(key);
-        }
-        if (ForgeHooksClient.inWorld && !ForgeHooksClient.renderTextureTest.contains(key)) {
-            ForgeHooksClient.renderTextureTest.add(key);
-            ForgeHooksClient.renderTextureList.add(key);
-            t.start();
-            t.setOffset(Tessellator.firstInstance.xOffset, Tessellator.firstInstance.yOffset, Tessellator.firstInstance.zOffset);
-        }
-        Tessellator.INSTANCE = t;*/
+	protected static void bindTessellator(int tex, int sub) {
+		Pair<Integer, Integer> key = Pair.of(tex, sub);
+		Tessellator t;
+		if (!tessellators.containsKey(key)) {
+			t = new Tessellator(2097152);
+			tessellators.put(key, t);
+		} else {
+			t = tessellators.get(key);
+		}
+
+		if (inWorld && !renderTextureTest.contains(key)) {
+			renderTextureTest.add(key);
+			renderTextureList.add(key);
+			t.start();
+			t.setOffset(defaultTessellator.xOffset, defaultTessellator.yOffset, defaultTessellator.zOffset);
+		}
+
+		Tessellator.INSTANCE = t;
 	}
 
-	// TODO manage texture binding
-	protected static void bindTexture(final String name, final int sub) {
-        /*int n;
-        if (!ForgeHooksClient.textures.containsKey(name)) {
-            n = ModLoader.getMinecraftInstance().textureManager.getTextureId(name);
-            ForgeHooksClient.textures.put(name, n);
-        }
-        else {
-            n = (int)ForgeHooksClient.textures.get(name);
-        }
-        if (!ForgeHooksClient.inWorld) {
-            Tessellator.INSTANCE = Tessellator.firstInstance;
-            GL11.glBindTexture(3553, n);
-            return;
-        }
-        bindTessellator(n, sub);*/
+	protected static void bindTexture(String name, int sub) {
+		int textureId;
+		if (textures.containsKey(name)) {
+			textureId = textures.get(name);
+		} else {
+			textureId = textureManager.getTextureId(name);
+			textures.put(name, textureId);
+		}
+
+		if (!inWorld) {
+			if (Tessellator.INSTANCE.drawing) {
+				int mode = Tessellator.INSTANCE.drawingMode;
+				Tessellator.INSTANCE.draw();
+				Tessellator.INSTANCE.start(mode);
+			}
+
+			GL11.glBindTexture(3553, textureId);
+		} else {
+			bindTessellator(textureId, sub);
+		}
 	}
 
-	// TODO manage textures unbinding
 	protected static void unbindTexture() {
-        /*Tessellator.INSTANCE = Tessellator.firstInstance;
-        if (!ForgeHooksClient.inWorld) {
-            GL11.glBindTexture(3553, ModLoader.getMinecraftInstance().textureManager.getTextureId("/terrain.png"));
-        }*/
-	}
+		if (inWorld) {
+			Tessellator.INSTANCE = defaultTessellator;
+		} else {
+			if (Tessellator.INSTANCE.drawing) {
+				int mode = Tessellator.INSTANCE.drawingMode;
+				Tessellator.INSTANCE.draw();
+				Tessellator.INSTANCE.start(mode);
+			}
 
-	public static void beforeRenderPass(final int pass) {
-        /*ForgeHooksClient.renderPass = pass;
-        Tessellator.INSTANCE = Tessellator.firstInstance;
-        Tessellator.renderingWorldRenderer = true;
-        GL11.glBindTexture(3553, ModLoader.getMinecraftInstance().textureManager.getTextureId("/terrain.png"));
-        ForgeHooksClient.renderTextureTest.clear();
-        ForgeHooksClient.renderTextureList.clear();
-        ForgeHooksClient.inWorld = true;*/
-	}
-
-	public static void afterRenderPass(final int pass) {
-        /*ForgeHooksClient.renderPass = -1;
-        ForgeHooksClient.inWorld = false;
-        for (final List l : ForgeHooksClient.renderTextureList) {
-            final Integer[] tn = (Integer[])l.toArray();
-            GL11.glBindTexture(3553, (int)tn[0]);
-            final Tessellator t = (Tessellator)ForgeHooksClient.tessellators.get(l);
-            t.draw();
-        }
-        GL11.glBindTexture(3553, ModLoader.getMinecraftInstance().textureManager.getTextureId("/terrain.png"));
-        Tessellator.INSTANCE = Tessellator.firstInstance;
-        Tessellator.renderingWorldRenderer = false;*/
-	}
-
-	public static void beforeBlockRender(final Block block, final BlockRenderer renderblocks) {
-        /*if (block instanceof ITextureProvider && renderblocks.textureOverride == -1) {
-            final ITextureProvider itp = (ITextureProvider)block;
-            bindTexture(itp.getTextureFile(), 0);
-        }*/
-	}
-
-	public static void afterBlockRender(final Block block, final BlockRenderer renderblocks) {
-        /*if (block instanceof ITextureProvider && renderblocks.textureOverride == -1) {
-            unbindTexture();
-        }*/
-	}
-
-	public static void overrideTexture(final Object o) {
-		if (o instanceof ITextureProvider) {
-			GL11.glBindTexture(3553, ModLoader.getMinecraftInstance().textureManager.getTextureId(((ITextureProvider)o).getTextureFile()));
+			GL11.glBindTexture(3553, textureManager.getTextureId("/terrain.png"));
 		}
 	}
 
-	static {
-		ForgeHooksClient.highlightHandlers = new LinkedList<>();
-		ForgeHooksClient.tessellators = new HashMap<>();
-		ForgeHooksClient.textures = new HashMap<>();
-		ForgeHooksClient.inWorld = false;
-		ForgeHooksClient.renderTextureTest = new HashSet<>();
-		ForgeHooksClient.renderTextureList = new ArrayList<>();
-		ForgeHooksClient.renderPass = -1;
+	public static void beforeRenderPass(int pass) {
+		renderPass = pass;
+		defaultTessellator = Tessellator.INSTANCE;
+		ForgeClientReflection.Tessellator$renderingWorldRenderer = true;
+		GL11.glBindTexture(3553, textureManager.getTextureId("/terrain.png"));
+		renderTextureTest.clear();
+		renderTextureList.clear();
+		inWorld = true;
+	}
+
+	public static void afterRenderPass(int pass) {
+		renderPass = -1;
+		inWorld = false;
+
+		for (Pair<Integer, Integer> l : renderTextureList) {
+			GL11.glBindTexture(3553, l.first());
+			Tessellator t = tessellators.get(l);
+			t.draw();
+		}
+
+		GL11.glBindTexture(3553, textureManager.getTextureId("/terrain.png"));
+		ForgeClientReflection.Tessellator$renderingWorldRenderer = false;
+	}
+
+	public static void beforeBlockRender(Block block, BlockRenderer renderBlocks) {
+		if (block instanceof ITextureProvider && renderBlocks.textureOverride == -1) {
+			ITextureProvider itp = (ITextureProvider) block;
+			bindTexture(itp.getTextureFile(), 0);
+		}
+	}
+
+	public static void afterBlockRender(Block block, BlockRenderer renderBlocks) {
+		if (block instanceof ITextureProvider && renderBlocks.textureOverride == -1) {
+			unbindTexture();
+		}
+	}
+
+	public static void overrideTexture(Object o) {
+		if (o instanceof ITextureProvider) {
+			GL11.glBindTexture(3553, textureManager.getTextureId(((ITextureProvider) o).getTextureFile()));
+		}
+	}
+
+	public static void renderCustomItem(ICustomItemRenderer customRenderer, BlockRenderer renderBlocks, int itemID, int meta, float f) {
+		if (renderBlocks.field_81) {
+			int j = 16777215;
+			float f1 = (float) (j >> 16 & 0xFF) / 255.0F;
+			float f3 = (float) (j >> 8 & 0xFF) / 255.0F;
+			float f5 = (float) (j & 0xFF) / 255.0F;
+			GL11.glColor4f(f1 * f, f3 * f, f5 * f, 1.0F);
+		}
+
+		customRenderer.renderInventory(renderBlocks, itemID, meta);
 	}
 }

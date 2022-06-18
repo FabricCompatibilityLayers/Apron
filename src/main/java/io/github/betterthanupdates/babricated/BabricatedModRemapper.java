@@ -7,7 +7,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.tinyremapper.TinyRemapper;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.nio.file.Path;
 import java.util.*;
 
 @ApiStatus.Internal
@@ -17,25 +16,21 @@ public final class BabricatedModRemapper implements ModRemapper {
 		return new String[0];
 	}
 
-	private Path getLibPath(String name) {
-		return BabricatedForge.MOD_CONTAINER.findPath("./libs/" + name + ".zip").get();
-	}
-
 	@Override
 	public RemapLibrary[] getRemapLibraries() {
 		RemapLibrary[] libraries = new RemapLibrary[0];
 		switch (FabricLoader.getInstance().getEnvironmentType()) {
 			case CLIENT:
 				libraries = new RemapLibrary[] {
-						new RemapLibrary(getLibPath("modloader-b1.7.3"), new ArrayList<>(), "modloader.zip"),
-						new RemapLibrary(getLibPath("modloadermp-1.7.3-unofficial-v2"), new ArrayList<>(), "modloadermp-client.zip"),
-						new RemapLibrary(getLibPath("minecraftforge-client-1.0.7-20110907"), new ArrayList<>(), "forge-client.zip")
+						new RemapLibrary("", new ArrayList<>(), "modloader.zip"),
+						new RemapLibrary("", new ArrayList<>(), "modloadermp-client.zip"),
+						new RemapLibrary("", new ArrayList<>(), "forge-client.zip")
 				};
 				break;
 			case SERVER:
 				libraries = new RemapLibrary[] {
-						new RemapLibrary(getLibPath("modloadermp-1.7.3-unofficial-server-v2"), new ArrayList<>(), "modloadermp-server.zip"),
-						new RemapLibrary(getLibPath("minecraftforge-server-1.0.7-20110907"), new ArrayList<>(), "forge-server.zip")
+						new RemapLibrary("", new ArrayList<>(), "modloadermp-server.zip"),
+						new RemapLibrary("", new ArrayList<>(), "forge-server.zip")
 				};
 				break;
 		}
@@ -68,6 +63,6 @@ public final class BabricatedModRemapper implements ModRemapper {
 
 	@Override
 	public Optional<TinyRemapper.ApplyVisitorProvider> getPostRemappingVisitor() {
-		return Optional.empty();
+		return Optional.of(new BabricatedPostRemappingVisitor());
 	}
 }

@@ -9,5 +9,5 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 
 public interface ICraftingHandler {
-	void onTakenFromCrafting(final PlayerEntity playerBase, final Inventory itemInstance, final ItemStack inventoryBase);
+	void onTakenFromCrafting(PlayerEntity arg, ItemStack arg2, Inventory arg3);
 }
