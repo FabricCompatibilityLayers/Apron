@@ -1389,6 +1389,7 @@ public class ModLoader {
 	 */
 	public static <T, E> void setPrivateValue(Class<? super T> instanceClass, T instance, String fieldName, E value) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
 		try {
+			fieldName = BabricatedForge.getRemappedFieldName(instanceClass, fieldName);
 			Field f = instanceClass.getDeclaredField(fieldName);
 
 			if (field_modifiers == null) {

@@ -139,3 +139,20 @@ accessible field net/minecraft/world/World autoSaveInterval I
 accessible method net/minecraft/block/Block setHardness (F)Lnet/minecraft/block/Block;
 accessible method net/minecraft/block/Block setLightOpacity (I)Lnet/minecraft/block/Block;
 accessible method net/minecraft/block/Block setSounds (Lnet/minecraft/block/BlockSounds;)Lnet/minecraft/block/Block;
+accessible method net/minecraft/block/Block setBlastResistance (F)Lnet/minecraft/block/Block;
+accessible method net/minecraft/block/Block setLightEmittance (F)Lnet/minecraft/block/Block;
+accessible method net/minecraft/block/Block disableNotifyOnMetaDataChange ()Lnet/minecraft/block/Block;
+accessible method net/minecraft/block/Block setUnbreakable ()Lnet/minecraft/block/Block;
+accessible method net/minecraft/block/Block setTicksRandomly (Z)Lnet/minecraft/block/Block;
+
+accessible method net/minecraft/item/Item setHasSubItems (Z)Lnet/minecraft/item/Item;
+accessible method net/minecraft/item/Item setDurability (I)Lnet/minecraft/item/Item;
+
+accessible field net/minecraft/world/World dimensionData Lnet/minecraft/world/dimension/DimensionData;
+accessible field net/minecraft/world/World properties Lnet/minecraft/world/WorldProperties;
+
+accessible method net/minecraft/world/dimension/DimensionFile getParentFolder ()Ljava/io/File;
+
+accessible field net/minecraft/entity/LivingEntity texture Ljava/lang/String;
+
+accessible method net/minecraft/entity/Entity kill ()V
