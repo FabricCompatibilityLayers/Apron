@@ -6,7 +6,6 @@ package forge;
 
 import io.github.betterthanupdates.forge.item.ForgeTool;
 import io.github.betterthanupdates.forge.item.ToolEffectiveness;
-import net.legacyfabric.fabric.api.logger.v1.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,8 +15,6 @@ import java.util.LinkedList;
 
 @SuppressWarnings("unused")
 public class MinecraftForge {
-	static final Logger LOGGER = Logger.get("Babricated Forge", "Minecraft Forge");
-
 	private static final LinkedList<IBucketHandler> bucketHandlers = new LinkedList<>();
 
 	/**
@@ -72,12 +69,12 @@ public class MinecraftForge {
 		ForgeHooks.toolEffectiveness.remove(key);
 	}
 
-	public static void setBlockHarvestLevel(Block block, String toolClass, int harvestLevel) {
+	public static void setBlockHarvestLevel(Block block, String toolClass, int harvestName) {
 		ForgeHooks.initTools();
 
 		for (int meta = 0; meta < 16; ++meta) {
 			ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolClass);
-			ForgeHooks.toolHarvestLevels.put(key, harvestLevel);
+			ForgeHooks.toolHarvestLevels.put(key, harvestName);
 			ForgeHooks.toolEffectiveness.add(key);
 		}
 	}
@@ -106,7 +103,8 @@ public class MinecraftForge {
 			if (minor > 0) {
 				killMinecraft(modName, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
 			} else {
-				LOGGER.warn(modName + ": MinecraftForge minor version mismatch, expecting " + major + "." + minor + ".x, may lead to unexpected behavior");
+				System.out
+						.println(modName + ": MinecraftForge minor version mismatch, expecting " + major + "." + minor + ".x, may lead to unexpected behavior");
 			}
 		} else if (revision > 6) {
 			killMinecraft(modName, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);

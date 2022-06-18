@@ -4,7 +4,6 @@ import modloader.BaseMod;
 import modloader.ModLoader;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.container.Container;
 import net.minecraft.entity.Entity;
 import net.minecraft.packet.AbstractPacket;
 import net.minecraft.packet.play.OpenContainerS2CPacket;
@@ -12,8 +11,6 @@ import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static io.github.betterthanupdates.babricated.client.ClientUtil.*;
 
 @SuppressWarnings("unused")
 public class ModLoaderMp {
@@ -50,9 +47,9 @@ public class ModLoaderMp {
 			NetClientHandlerEntity netclienthandlerentity = HandleNetClientHandlerEntities(packet.packetType);
 			if (netclienthandlerentity != null && ISpawnable.class.isAssignableFrom(netclienthandlerentity.entityClass)) {
 				try {
-					Entity entity = netclienthandlerentity.entityClass.getConstructor(World.class).newInstance(getClient().world);
+					Entity entity = netclienthandlerentity.entityClass.getConstructor(World.class).newInstance(ModLoader.getMinecraftInstance().world);
 					((ISpawnable)entity).spawn(packet);
-					((ClientWorld)getClient().world).method_1495(entity.entityId, entity);
+					((ClientWorld)ModLoader.getMinecraftInstance().world).method_1495(entity.entityId, entity);
 				} catch (Exception var4) {
 					ModLoader.getLogger().throwing("ModLoader", "handleCustomSpawn", var4);
 					ModLoader.ThrowException(String.format("Error initializing entity of type %s.", packet.packetType), var4);
@@ -115,10 +112,8 @@ public class ModLoaderMp {
 		final BaseModMp basemodmp = ModLoaderMp.GUI_MOD_MAP.get(packet.inventoryType);
 		final Screen guiScreen = basemodmp.HandleGUI(packet.inventoryType);
 		if (guiScreen != null) {
-			ModLoader.OpenGUI(getPlayer(), guiScreen);
-
-			Container container = getPlayerContainer();
-			if (container != null) container.currentContainerId = packet.containerId;
+			ModLoader.OpenGUI(ModLoader.getMinecraftInstance().player, guiScreen);
+			ModLoader.getMinecraftInstance().player.container.currentContainerId = packet.containerId;
 		}
 	}
 
@@ -213,8 +208,8 @@ public class ModLoaderMp {
 	}
 
 	private static void sendPacket(Packet230ModLoader packet) {
-		if (packet230Received && getWorld() != null && getWorld().isClient) {
-			getClient().getPacketHandler().sendPacket(packet);
+		if (packet230Received && ModLoader.getMinecraftInstance().world != null && ModLoader.getMinecraftInstance().world.isClient) {
+			ModLoader.getMinecraftInstance().getPacketHandler().sendPacket(packet);
 		}
 	}
 	

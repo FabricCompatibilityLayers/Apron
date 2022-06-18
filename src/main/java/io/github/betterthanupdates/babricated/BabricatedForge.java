@@ -33,7 +33,8 @@ public final class BabricatedForge {
 			throw new RuntimeException("Could not get or create mod cache folder!");
 		}
 
-		MOD_CONTAINER = FabricLoader.getInstance().getModContainer(MOD_ID).orElseThrow(RuntimeException::new);
+		MOD_CONTAINER = FabricLoader.getInstance().getModContainer("babricated-forge")
+				.orElseThrow(RuntimeException::new);
 	}
 
 	/**

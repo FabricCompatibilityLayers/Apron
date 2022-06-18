@@ -17,8 +17,6 @@ import net.minecraft.util.SleepStatus;
 
 import java.util.*;
 
-import static forge.MinecraftForge.LOGGER;
-
 @SuppressWarnings("unused")
 public class ForgeHooks {
 	static LinkedList<ICraftingHandler> craftingHandlers = new LinkedList<>();
@@ -39,6 +37,7 @@ public class ForgeHooks {
 		for (forge.ICraftingHandler handler : craftingHandlers) {
 			handler.onTakenFromCrafting(player, ist, craftMatrix);
 		}
+
 	}
 
 	public static void onDestroyCurrentItem(PlayerEntity player, ItemStack orig) {
@@ -151,13 +150,14 @@ public class ForgeHooks {
 					Block.LAPIS_LAZULI_BLOCK
 			};
 
-			for (Block block : pickaxeEffective) {
-				MinecraftForge.setBlockHarvestLevel(block, "pickaxe", 0);
+			for (Block bl : pickaxeEffective) {
+				MinecraftForge.setBlockHarvestLevel(bl, "pickaxe", 0);
 			}
+
 		}
 	}
 
 	static {
-		LOGGER.info("MinecraftForge V{}.{}.{} Initialized\n", majorVersion, minorVersion, revisionVersion);
+		System.out.printf("MinecraftForge V%d.%d.%d Initialized\n", majorVersion, minorVersion, revisionVersion);
 	}
 }

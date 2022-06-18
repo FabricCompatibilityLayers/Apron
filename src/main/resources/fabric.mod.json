@@ -31,12 +31,6 @@
 
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "io.github.betterthanupdates.babricated.client.ClientUtil"
-    ],
-    "main": [
-      "io.github.betterthanupdates.babricated.SafeUtil"
-    ],
     "mod-remapper-api:modremapper": [
       "io.github.betterthanupdates.babricated.BabricatedModRemapper"
     ]
