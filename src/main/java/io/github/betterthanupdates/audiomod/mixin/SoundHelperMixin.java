@@ -1,5 +1,6 @@
 package io.github.betterthanupdates.audiomod.mixin;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.sound.SoundEntry;
@@ -56,10 +57,10 @@ public abstract class SoundHelperMixin {
 
     @Inject(method = "acceptOptions", at = @At("RETURN"))
     private void audiomod$acceptOptions(GameOptions paramkv, CallbackInfo ci) {
-        loadModAudio("minecraft/resources/mod/sound", this.sounds);
-        loadModAudio("minecraft/resources/mod/streaming", this.streaming);
-        loadModAudio("minecraft/resources/mod/music", this.music);
-        loadModAudio("minecraft/resources/mod/cavemusic", this.cave);
+        loadModAudio("./resources/mod/sound", this.sounds);
+        loadModAudio("./resources/mod/streaming", this.streaming);
+        loadModAudio("./resources/mod/music", this.music);
+        loadModAudio("./resources/mod/cavemusic", this.cave);
 
         try {
             Field minecraft = Minecraft.class.getDeclaredFields()[1];
@@ -70,7 +71,7 @@ public abstract class SoundHelperMixin {
     }
 
     private static void loadModAudio(String folder, SoundMap array) {
-        File base = Minecraft.getWorkingDirectory(folder);
+        File base = new File(FabricLoader.getInstance().getGameDir().toFile(), folder);
 
         try {
             walkFolder(base, base, array);
