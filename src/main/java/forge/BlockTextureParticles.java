@@ -11,5 +11,9 @@ import net.minecraft.client.entity.particle.ParticleEntity;
 
 public class BlockTextureParticles {
 	public String texture;
-	public List<ParticleEntity> effects = new ArrayList<>();
+	public List<ParticleEntity> effects;
+
+	public BlockTextureParticles() {
+		this.effects = new ArrayList<>();
+	}
 }
