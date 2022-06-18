@@ -118,20 +118,6 @@ extendable method net/minecraft/client/render/block/BlockRenderer renderPistonHe
 accessible method net/minecraft/client/render/block/BlockRenderer method_43 (IIILnet/minecraft/block/material/Material;)F
 extendable method net/minecraft/client/render/block/BlockRenderer method_43 (IIILnet/minecraft/block/material/Material;)F
 
-
-accessible field net/minecraft/client/render/Tessellator drawingMode I
-accessible field net/minecraft/client/render/Tessellator xOffset D
-accessible field net/minecraft/client/render/Tessellator yOffset D
-accessible field net/minecraft/client/render/Tessellator zOffset D
-accessible field net/minecraft/client/render/Tessellator drawing Z
-mutable field net/minecraft/client/render/Tessellator INSTANCE Lnet/minecraft/client/render/Tessellator;
-accessible method net/minecraft/client/render/Tessellator <init> (I)V
-
-accessible field net/minecraft/client/render/WorldRenderer world Lnet/minecraft/world/World;
-accessible field net/minecraft/client/render/WorldRenderer textureManager Lnet/minecraft/client/texture/TextureManager;
-accessible field net/minecraft/client/render/WorldRenderer client Lnet/minecraft/client/Minecraft;
-accessible field net/minecraft/client/render/WorldRenderer blockRenderer Lnet/minecraft/client/render/block/BlockRenderer;
-
 accessible field net/minecraft/client/entity/player/AbstractClientPlayerEntity client Lnet/minecraft/client/Minecraft;
 
 accessible field net/minecraft/world/World autoSaveInterval I

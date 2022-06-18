@@ -24,11 +24,7 @@
     "PlayerRendererMixin",
     "GameRendererMixin",
     "HeldItemRendererMixin",
-    "TessellatorMixin",
-    "TextureManagerMixin",
-    "ClientInteractionManagerMixin",
-    "MultiplayerClientInteractionManagerMixin",
-    "SingleplayerInteractionManagerMixin"
+    "TessellatorMixin"
   ],
   "client": [
   ],
