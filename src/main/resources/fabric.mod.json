@@ -25,7 +25,7 @@
     "issues": "https://github.com/Better-Than-Updates-MC/babricated-forge/issues"
   },
   "license": "MIT",
-  "icon": "assets/forge/icon.png",
+  "icon": "assets/babricated-forge/icon.png",
   "environment": "*",
   "entrypoints": {
     "client": [
