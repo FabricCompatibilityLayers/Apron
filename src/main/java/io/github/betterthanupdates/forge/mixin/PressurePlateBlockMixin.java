@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PressurePlateBlock.class)
@@ -31,13 +31,9 @@ public class PressurePlateBlockMixin extends Block {
 	 * @author Eloraam
 	 * @reason Minecraft Forge patch to method
 	 */
-	@Inject(method = "onAdjacentBlockUpdate", at = @At("RETURN"))
-	private void forge$onAdjacentBlockUpdate(final World world, final int x, final int y, final int z, final int side,
-	                                         final CallbackInfo ci) {
-		if (!((ForgeWorld)world).isBlockSolidOnSide(x, y - 1, z, 1)) {
-			this.drop(world, x, y, z, world.getBlockMeta(x, y, z));
-			world.setBlock(x, y, z, 0);
-		}
+	@Redirect(method = "onAdjacentBlockUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z"))
+	private boolean forge$onAdjacentBlockUpdate(World world, int x, int y, int z) {
+		return ((ForgeWorld)world).isBlockSolidOnSide(x, y, z, 1);
 	}
 
 
