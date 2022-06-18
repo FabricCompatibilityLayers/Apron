@@ -144,14 +144,9 @@ accessible method net/minecraft/block/Block setLightEmittance (F)Lnet/minecraft/
 accessible method net/minecraft/block/Block disableNotifyOnMetaDataChange ()Lnet/minecraft/block/Block;
 accessible method net/minecraft/block/Block setUnbreakable ()Lnet/minecraft/block/Block;
 accessible method net/minecraft/block/Block setTicksRandomly (Z)Lnet/minecraft/block/Block;
-accessible method net/minecraft/block/Block disableStat ()Lnet/minecraft/block/Block;
 
 accessible method net/minecraft/item/Item setHasSubItems (Z)Lnet/minecraft/item/Item;
 accessible method net/minecraft/item/Item setDurability (I)Lnet/minecraft/item/Item;
-accessible field net/minecraft/item/Item texturePosition I
-accessible field net/minecraft/item/Item maxStackSize I
-accessible field net/minecraft/item/Item isRendered3d Z
-accessible field net/minecraft/item/Item hasSubItems Z
 
 accessible field net/minecraft/world/World dimensionData Lnet/minecraft/world/dimension/DimensionData;
 accessible field net/minecraft/world/World properties Lnet/minecraft/world/WorldProperties;
@@ -161,20 +156,3 @@ accessible method net/minecraft/world/dimension/DimensionFile getParentFolder ()
 accessible field net/minecraft/entity/LivingEntity texture Ljava/lang/String;
 
 accessible method net/minecraft/entity/Entity kill ()V
-
-accessible field net/minecraft/client/gui/screen/Screen buttons Ljava/util/List;
-
-accessible field net/minecraft/client/gui/screen/container/ContainerScreen containerWidth I
-accessible field net/minecraft/client/gui/screen/container/ContainerScreen containerHeight I
-
-accessible method net/minecraft/item/AxeItem <init> (ILnet/minecraft/item/ToolMaterial;)V
-
-accessible method net/minecraft/item/PickaxeItem <init> (ILnet/minecraft/item/ToolMaterial;)V
-
-accessible method net/minecraft/item/RecordItem <init> (ILjava/lang/String;)V
-
-accessible method net/minecraft/client/gui/GuiElement fill (IIIII)V
-accessible method net/minecraft/client/gui/GuiElement drawLineVertical (IIII)V
-accessible method net/minecraft/client/gui/GuiElement drawLineHorizontal (IIII)V
-accessible method net/minecraft/client/gui/GuiElement fillGradient (IIIIII)V
-accessible field net/minecraft/client/gui/GuiElement zOffset F
