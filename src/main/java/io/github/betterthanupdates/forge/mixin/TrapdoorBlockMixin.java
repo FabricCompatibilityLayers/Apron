@@ -1,7 +1,7 @@
 package io.github.betterthanupdates.forge.mixin;
 
 import io.github.betterthanupdates.forge.ForgeReflection;
-import io.github.betterthanupdates.forge.ForgeWorld;
+import io.github.betterthanupdates.forge.world.ForgeWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.TrapdoorBlock;
 import net.minecraft.block.material.Material;
