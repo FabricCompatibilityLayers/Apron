@@ -2,7 +2,6 @@ package io.github.betterthanupdates.forge.mixin;
 
 import io.github.betterthanupdates.forge.ForgeClientReflection;
 import net.minecraft.client.TexturePackManager;
-import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.resource.TexturePack;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.GLAllocationUtils;
@@ -11,8 +10,8 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.io.InputStream;
+import java.nio.Buffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 
@@ -53,7 +52,7 @@ public abstract class TextureManagerMixin {
                     System.out.printf("Warning: Texture %s not preloaded, will cause render glitches!\n", s);
                 }
 
-                this.field_1249.clear();
+                ((Buffer)this.field_1249).clear();
                 GLAllocationUtils.genTextures(this.field_1249);
                 int i = this.field_1249.get(0);
                 if (s.startsWith("##")) {
