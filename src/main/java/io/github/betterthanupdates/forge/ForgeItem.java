@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.item;
+package io.github.betterthanupdates.forge;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;

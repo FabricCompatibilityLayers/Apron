@@ -2,7 +2,7 @@ package io.github.betterthanupdates.forge.mixin;
 
 import forge.BlockTextureParticles;
 import forge.ITextureProvider;
-import io.github.betterthanupdates.forge.client.particle.ForgeParticleManager;
+import io.github.betterthanupdates.forge.ForgeParticleManager;
 import net.minecraft.block.Block;
 import net.minecraft.client.entity.particle.DiggingParticleEntity;
 import net.minecraft.client.entity.particle.ParticleEntity;
@@ -24,6 +24,7 @@ import java.util.Random;
 
 @Mixin(ParticleManager.class)
 public abstract class ParticleManagerMixin implements ForgeParticleManager {
+
 	@Shadow
 	private List[] field_270;
 	@Shadow

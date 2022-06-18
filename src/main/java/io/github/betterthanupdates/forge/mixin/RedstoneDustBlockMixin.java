@@ -1,7 +1,7 @@
 package io.github.betterthanupdates.forge.mixin;
 
 import forge.IConnectRedstone;
-import io.github.betterthanupdates.forge.world.ForgeWorld;
+import io.github.betterthanupdates.forge.ForgeWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.RedstoneDustBlock;
 import net.minecraft.block.material.Material;

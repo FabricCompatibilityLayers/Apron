@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.client.particle;
+package io.github.betterthanupdates.forge;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.entity.particle.DiggingParticleEntity;

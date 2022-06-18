@@ -1,6 +1,6 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.world.ForgeWorld;
+import io.github.betterthanupdates.forge.ForgeWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.RailBlock;
 import net.minecraft.block.RailBlock.RailMagicStuff;

@@ -3,7 +3,7 @@ package io.github.betterthanupdates.forge.mixin;
 import forge.ArmorProperties;
 import forge.ForgeHooks;
 import forge.ISpecialArmor;
-import io.github.betterthanupdates.forge.item.ForgeItem;
+import io.github.betterthanupdates.forge.ForgeItem;
 import io.github.betterthanupdates.forge.entity.player.ForgePlayerEntity;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
