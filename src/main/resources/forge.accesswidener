@@ -131,8 +131,11 @@ accessible field net/minecraft/client/render/WorldRenderer textureManager Lnet/m
 accessible field net/minecraft/client/render/WorldRenderer client Lnet/minecraft/client/Minecraft;
 accessible field net/minecraft/client/render/WorldRenderer blockRenderer Lnet/minecraft/client/render/block/BlockRenderer;
 
-
 accessible field net/minecraft/item/ToolItem field_2713 F
 accessible field net/minecraft/item/ToolItem field_2714 I
 
 accessible field net/minecraft/world/World autoSaveInterval I
+
+accessible method net/minecraft/block/Block setHardness (F)Lnet/minecraft/block/Block;
+accessible method net/minecraft/block/Block setLightOpacity (I)Lnet/minecraft/block/Block;
+accessible method net/minecraft/block/Block setSounds (Lnet/minecraft/block/BlockSounds;)Lnet/minecraft/block/Block;
