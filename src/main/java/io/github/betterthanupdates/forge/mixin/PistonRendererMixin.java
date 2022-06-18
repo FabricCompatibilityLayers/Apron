@@ -23,7 +23,6 @@ public abstract class PistonRendererMixin extends BlockEntityRenderer {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public void render(PistonBlockEntity tileentitypiston, double d, double d1, double d2, float f) {

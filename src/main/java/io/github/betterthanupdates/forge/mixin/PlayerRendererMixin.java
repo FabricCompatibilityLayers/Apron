@@ -31,7 +31,6 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	protected boolean render(PlayerEntity entityplayer, int i, float f) {

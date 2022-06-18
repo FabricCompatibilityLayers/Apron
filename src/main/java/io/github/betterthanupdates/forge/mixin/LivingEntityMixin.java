@@ -1,6 +1,5 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.block.ForgeBlock;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -133,6 +132,6 @@ public abstract class LivingEntityMixin extends Entity {
         int j = MathHelper.floor(this.boundingBox.minY);
         int k = MathHelper.floor(this.z);
         Block block = Block.BY_ID[this.world.getBlockId(i, j, k)];
-        return block == null ? false : ((ForgeBlock)block).isLadder();
+        return block == null ? false : block.isLadder();
     }
 }

@@ -14,7 +14,7 @@
     "PressurePlateBlockMixin",
     "RailBlockMixin",
     "RedstoneDustBlockMixin",
-    "RedstoneRepeaterBlockMixin",
+    "RedstoneRepeaterMixin",
     "TorchBlockMixin",
     "TrapdoorBlockMixin",
     "ParticleManagerMixin",

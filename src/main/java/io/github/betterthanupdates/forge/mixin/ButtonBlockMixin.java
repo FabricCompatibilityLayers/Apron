@@ -1,6 +1,5 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.ForgeWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.ButtonBlock;
 import net.minecraft.block.material.Material;
@@ -21,52 +20,49 @@ public abstract class ButtonBlockMixin extends Block {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k, int l) {
-		if (l == 2 && ((ForgeWorld)world).isBlockSolidOnSide(i, j, k + 1, 2)) {
+		if (l == 2 && world.isBlockSolidOnSide(i, j, k + 1, 2)) {
 			return true;
-		} else if (l == 3 && ((ForgeWorld)world).isBlockSolidOnSide(i, j, k - 1, 3)) {
+		} else if (l == 3 && world.isBlockSolidOnSide(i, j, k - 1, 3)) {
 			return true;
-		} else if (l == 4 && ((ForgeWorld)world).isBlockSolidOnSide(i + 1, j, k, 4)) {
+		} else if (l == 4 && world.isBlockSolidOnSide(i + 1, j, k, 4)) {
 			return true;
 		} else {
-			return l == 5 && ((ForgeWorld)world).isBlockSolidOnSide(i - 1, j, k, 5);
+			return l == 5 && world.isBlockSolidOnSide(i - 1, j, k, 5);
 		}
 	}
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k) {
-		if (((ForgeWorld)world).isBlockSolidOnSide(i - 1, j, k, 5)) {
+		if (world.isBlockSolidOnSide(i - 1, j, k, 5)) {
 			return true;
-		} else if (((ForgeWorld)world).isBlockSolidOnSide(i + 1, j, k, 4)) {
+		} else if (world.isBlockSolidOnSide(i + 1, j, k, 4)) {
 			return true;
 		} else {
-			return ((ForgeWorld)world).isBlockSolidOnSide(i, j, k - 1, 3) ? true : ((ForgeWorld)world).isBlockSolidOnSide(i, j, k + 1, 2);
+			return world.isBlockSolidOnSide(i, j, k - 1, 3) ? true : world.isBlockSolidOnSide(i, j, k + 1, 2);
 		}
 	}
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public void onBlockPlaced(World world, int i, int j, int k, int l) {
 		int i1 = world.getBlockMeta(i, j, k);
 		int j1 = i1 & 8;
 		i1 &= 7;
-		if (l == 2 && ((ForgeWorld)world).isBlockSolidOnSide(i, j, k + 1, 2)) {
+		if (l == 2 && world.isBlockSolidOnSide(i, j, k + 1, 2)) {
 			i1 = 4;
-		} else if (l == 3 && ((ForgeWorld)world).isBlockSolidOnSide(i, j, k - 1, 3)) {
+		} else if (l == 3 && world.isBlockSolidOnSide(i, j, k - 1, 3)) {
 			i1 = 3;
-		} else if (l == 4 && ((ForgeWorld)world).isBlockSolidOnSide(i + 1, j, k, 4)) {
+		} else if (l == 4 && world.isBlockSolidOnSide(i + 1, j, k, 4)) {
 			i1 = 2;
-		} else if (l == 5 && ((ForgeWorld)world).isBlockSolidOnSide(i - 1, j, k, 5)) {
+		} else if (l == 5 && world.isBlockSolidOnSide(i - 1, j, k, 5)) {
 			i1 = 1;
 		} else {
 			i1 = this.method_1047(world, i, j, k);
@@ -77,43 +73,41 @@ public abstract class ButtonBlockMixin extends Block {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	private int method_1047(World world, int i, int j, int k) {
-		if (((ForgeWorld)world).isBlockSolidOnSide(i - 1, j, k, 5)) {
+		if (world.isBlockSolidOnSide(i - 1, j, k, 5)) {
 			return 1;
-		} else if (((ForgeWorld)world).isBlockSolidOnSide(i + 1, j, k, 4)) {
+		} else if (world.isBlockSolidOnSide(i + 1, j, k, 4)) {
 			return 2;
-		} else if (((ForgeWorld)world).isBlockSolidOnSide(i, j, k - 1, 3)) {
+		} else if (world.isBlockSolidOnSide(i, j, k - 1, 3)) {
 			return 3;
 		} else {
-			return !((ForgeWorld)world).isBlockSolidOnSide(i, j, k + 1, 2) ? 1 : 4;
+			return !world.isBlockSolidOnSide(i, j, k + 1, 2) ? 1 : 4;
 		}
 	}
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {
 		if (this.method_1048(world, i, j, k)) {
 			int i1 = world.getBlockMeta(i, j, k) & 7;
 			boolean flag = false;
-			if (!((ForgeWorld)world).isBlockSolidOnSide(i - 1, j, k, 5) && i1 == 1) {
+			if (!world.isBlockSolidOnSide(i - 1, j, k, 5) && i1 == 1) {
 				flag = true;
 			}
 
-			if (!((ForgeWorld)world).isBlockSolidOnSide(i + 1, j, k, 4) && i1 == 2) {
+			if (!world.isBlockSolidOnSide(i + 1, j, k, 4) && i1 == 2) {
 				flag = true;
 			}
 
-			if (!((ForgeWorld)world).isBlockSolidOnSide(i, j, k - 1, 3) && i1 == 3) {
+			if (!world.isBlockSolidOnSide(i, j, k - 1, 3) && i1 == 3) {
 				flag = true;
 			}
 
-			if (!((ForgeWorld)world).isBlockSolidOnSide(i, j, k + 1, 2) && i1 == 4) {
+			if (!world.isBlockSolidOnSide(i, j, k + 1, 2) && i1 == 4) {
 				flag = true;
 			}
 

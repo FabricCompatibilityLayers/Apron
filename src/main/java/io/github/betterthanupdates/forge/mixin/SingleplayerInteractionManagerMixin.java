@@ -1,6 +1,5 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.block.ForgeBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.ClientInteractionManager;
 import net.minecraft.client.Minecraft;
@@ -40,7 +39,7 @@ public class SingleplayerInteractionManagerMixin extends ClientInteractionManage
         int j1 = this.client.world.getBlockMeta(i, j, k);
         boolean flag = super.method_1716(i, j, k, l);
         ItemStack itemstack = this.client.player.getHeldItem();
-        boolean flag1 = ((ForgeBlock)Block.BY_ID[i1]).canHarvestBlock(this.client.player, j1);
+        boolean flag1 = Block.BY_ID[i1].canHarvestBlock(this.client.player, j1);
         if (itemstack != null) {
             itemstack.postMine(i1, i, j, k, this.client.player);
             if (itemstack.count == 0) {
@@ -68,7 +67,7 @@ public class SingleplayerInteractionManagerMixin extends ClientInteractionManage
             Block.BY_ID[i1].activate(this.client.world, i, j, k, this.client.player);
         }
 
-        if (i1 > 0 && ((ForgeBlock)Block.BY_ID[i1]).blockStrength(this.client.world, this.client.player, i, j, k) >= 1.0F) {
+        if (i1 > 0 && Block.BY_ID[i1].blockStrength(this.client.world, this.client.player, i, j, k) >= 1.0F) {
             this.method_1716(i, j, k, l);
         }
 
@@ -90,7 +89,7 @@ public class SingleplayerInteractionManagerMixin extends ClientInteractionManage
                 }
 
                 Block block = Block.BY_ID[i1];
-                this.damage += ((ForgeBlock)block).blockStrength(this.client.world, this.client.player, i, j, k);
+                this.damage += block.blockStrength(this.client.world, this.client.player, i, j, k);
                 if (this.field_2186 % 4.0F == 0.0F && block != null) {
                     this.client
                             .soundHelper

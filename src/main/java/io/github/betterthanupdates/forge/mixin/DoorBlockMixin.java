@@ -1,6 +1,5 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.ForgeWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.block.material.Material;
@@ -20,7 +19,6 @@ public abstract class DoorBlockMixin extends Block {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {
@@ -40,7 +38,7 @@ public abstract class DoorBlockMixin extends Block {
 				flag = true;
 			}
 
-			if (!((ForgeWorld)world).isBlockSolidOnSide(i, j - 1, k, 1)) {
+			if (!world.isBlockSolidOnSide(i, j - 1, k, 1)) {
 				world.setBlock(i, j, k, 0);
 				flag = true;
 				if (world.getBlockId(i, j + 1, k) == this.id) {
@@ -62,14 +60,13 @@ public abstract class DoorBlockMixin extends Block {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k) {
 		if (j >= 127) {
 			return false;
 		} else {
-			return ((ForgeWorld)world).isBlockSolidOnSide(i, j - 1, k, 1) && super.canPlaceAt(world, i, j, k) && super.canPlaceAt(world, i, j + 1, k);
+			return world.isBlockSolidOnSide(i, j - 1, k, 1) && super.canPlaceAt(world, i, j, k) && super.canPlaceAt(world, i, j + 1, k);
 		}
 	}
 }

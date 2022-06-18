@@ -1,6 +1,5 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.ForgeWorld;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.material.Material;
@@ -21,20 +20,19 @@ public abstract class ChestBlockMixin extends BlockWithEntity {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public boolean canUse(World world, int i, int j, int k, PlayerEntity playerEntity) {
 		Object obj = world.getBlockEntity(i, j, k);
-		if (((ForgeWorld)world).isBlockSolidOnSide(i, j + 1, k, 0)) {
+		if (world.isBlockSolidOnSide(i, j + 1, k, 0)) {
 			return true;
-		} else if (world.getBlockId(i - 1, j, k) == this.id && ((ForgeWorld)world).isBlockSolidOnSide(i - 1, j + 1, k, 0)) {
+		} else if (world.getBlockId(i - 1, j, k) == this.id && world.isBlockSolidOnSide(i - 1, j + 1, k, 0)) {
 			return true;
-		} else if (world.getBlockId(i + 1, j, k) == this.id && ((ForgeWorld)world).isBlockSolidOnSide(i + 1, j + 1, k, 0)) {
+		} else if (world.getBlockId(i + 1, j, k) == this.id && world.isBlockSolidOnSide(i + 1, j + 1, k, 0)) {
 			return true;
-		} else if (world.getBlockId(i, j, k - 1) == this.id && ((ForgeWorld)world).isBlockSolidOnSide(i, j + 1, k - 1, 0)) {
+		} else if (world.getBlockId(i, j, k - 1) == this.id && world.isBlockSolidOnSide(i, j + 1, k - 1, 0)) {
 			return true;
-		} else if (world.getBlockId(i, j, k + 1) == this.id && ((ForgeWorld)world).isBlockSolidOnSide(i, j + 1, k + 1, 0)) {
+		} else if (world.getBlockId(i, j, k + 1) == this.id && world.isBlockSolidOnSide(i, j + 1, k + 1, 0)) {
 			return true;
 		} else {
 			if (world.getBlockId(i - 1, j, k) == this.id) {

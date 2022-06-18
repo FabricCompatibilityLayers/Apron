@@ -1,6 +1,5 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.ForgeClientReflection;
 import net.minecraft.client.TexturePackManager;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.resource.TexturePack;
@@ -49,7 +48,7 @@ public abstract class TextureManagerMixin {
             return integer;
         } else {
             try {
-                if (ForgeClientReflection.Tessellator$renderingWorldRenderer) {
+                if (Tessellator.renderingWorldRenderer) {
                     System.out.printf("Warning: Texture %s not preloaded, will cause render glitches!\n", s);
                 }
 
@@ -77,7 +76,7 @@ public abstract class TextureManagerMixin {
 
                 this.textures.put(s, i);
                 return i;
-            } catch (RuntimeException var6) {
+            } catch (IOException var6) {
                 var6.printStackTrace();
                 GLAllocationUtils.genTextures(this.field_1249);
                 int j = this.field_1249.get(0);

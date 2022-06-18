@@ -27,7 +27,6 @@ public class HeldItemRendererMixin {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public void render(LivingEntity entityliving, ItemStack itemstack) {

@@ -1,6 +1,5 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.ForgeWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.PressurePlateBlock;
 import net.minecraft.block.material.Material;
@@ -16,20 +15,18 @@ public class PressurePlateBlockMixin extends Block {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k) {
-		return ((ForgeWorld)world).isBlockSolidOnSide(i, j - 1, k, 1);
+		return world.isBlockSolidOnSide(i, j - 1, k, 1);
 	}
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {
-		boolean flag = !((ForgeWorld)world).isBlockSolidOnSide(i, j - 1, k, 1);
+		boolean flag = !world.isBlockSolidOnSide(i, j - 1, k, 1);
 
 		if (flag) {
 			this.drop(world, i, j, k, world.getBlockMeta(i, j, k));

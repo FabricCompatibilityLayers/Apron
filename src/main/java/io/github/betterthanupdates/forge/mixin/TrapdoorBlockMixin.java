@@ -1,7 +1,5 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.ForgeReflection;
-import io.github.betterthanupdates.forge.ForgeWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.TrapdoorBlock;
 import net.minecraft.block.material.Material;
@@ -16,13 +14,14 @@ public abstract class TrapdoorBlockMixin extends Block {
 	@Shadow
 	public abstract void method_1059(World arg, int i, int j, int k, boolean bl);
 
+	public static boolean disableValidation = false;
+
 	protected TrapdoorBlockMixin(int i, Material arg) {
 		super(i, arg);
 	}
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {
@@ -46,7 +45,7 @@ public abstract class TrapdoorBlockMixin extends Block {
 				--j1;
 			}
 
-			if (!ForgeReflection.TrapdoorBlock$disableValidation && !((ForgeWorld)world).isBlockSolidOnSide(j1, j, k1, (i1 & 3) + 2)) {
+			if (!disableValidation && !world.isBlockSolidOnSide(j1, j, k1, (i1 & 3) + 2)) {
 				world.setBlock(i, j, k, 0);
 				this.drop(world, i, j, k, i1);
 			}
@@ -61,11 +60,10 @@ public abstract class TrapdoorBlockMixin extends Block {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k, int l) {
-		if (ForgeReflection.TrapdoorBlock$disableValidation) {
+		if (disableValidation) {
 			return true;
 		} else if (l == 0) {
 			return false;
@@ -88,7 +86,7 @@ public abstract class TrapdoorBlockMixin extends Block {
 				--i;
 			}
 
-			return ((ForgeWorld)world).isBlockSolidOnSide(i, j, k, l);
+			return world.isBlockSolidOnSide(i, j, k, l);
 		}
 	}
 }

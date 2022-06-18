@@ -42,7 +42,6 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public void method_320() {
@@ -75,7 +74,6 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public void method_324(Entity entity, float f) {
@@ -137,7 +135,6 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public void method_323(World world) {
@@ -156,7 +153,6 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public void addBlockBreakParticles(int i, int j, int k, int l, int i1) {
@@ -185,7 +181,6 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public void addBlockClickParticle(int i, int j, int k, int l) {

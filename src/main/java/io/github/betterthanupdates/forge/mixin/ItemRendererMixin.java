@@ -38,7 +38,6 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public void render(ItemEntity entityitem, double d, double d1, double d2, float f, float f1) {
@@ -161,7 +160,6 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 
 	/**
 	 * @author Forge
-	 * @reason
 	 */
 	@Overwrite
 	public void renderItemOnGui(TextRenderer fontrenderer, TextureManager renderengine, int i, int j, int k, int l, int i1) {

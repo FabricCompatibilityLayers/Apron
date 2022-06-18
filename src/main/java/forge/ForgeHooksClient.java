@@ -113,7 +113,6 @@
  */
 package forge;
 
-import io.github.betterthanupdates.forge.ForgeClientReflection;
 import modloader.ModLoader;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
@@ -162,7 +161,7 @@ public class ForgeHooksClient {
 		List key = Arrays.asList(tex, sub);
 		Tessellator t;
 		if (!tessellators.containsKey(key)) {
-			t = new Tessellator(0);
+			t = new Tessellator();
 			tessellators.put(key, t);
 		} else {
 			t = tessellators.get(key);
@@ -217,7 +216,7 @@ public class ForgeHooksClient {
 	public static void beforeRenderPass(int pass) {
 		renderPass = pass;
 		defaultTessellator = Tessellator.INSTANCE;
-		ForgeClientReflection.Tessellator$renderingWorldRenderer = true;
+		Tessellator.renderingWorldRenderer = true;
 		GL11.glBindTexture(3553, ModLoader.getMinecraftInstance().textureManager.getTextureId("/terrain.png"));
 		renderTextureTest.clear();
 		renderTextureList.clear();
@@ -236,7 +235,7 @@ public class ForgeHooksClient {
 		}
 
 		GL11.glBindTexture(3553, ModLoader.getMinecraftInstance().textureManager.getTextureId("/terrain.png"));
-		ForgeClientReflection.Tessellator$renderingWorldRenderer = false;
+		Tessellator.renderingWorldRenderer = false;
 	}
 
 	public static void beforeBlockRender(Block block, BlockRenderer renderBlocks) {

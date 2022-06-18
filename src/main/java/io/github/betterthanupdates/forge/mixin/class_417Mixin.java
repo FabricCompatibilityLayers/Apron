@@ -1,6 +1,5 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.block.ForgeBlock;
 import net.minecraft.block.Block;
 import net.minecraft.class_417;
 import net.minecraft.world.LightType;
@@ -91,7 +90,7 @@ public class class_417Mixin {
                                     l3 = 15;
                                 }
                             } else if (this.field_1673 == LightType.field_2758) {
-                                l3 = j3 == 0 ? 0 : ((ForgeBlock)Block.BY_ID[j3]).getLightValue(world, k1, k2, l1);
+                                l3 = j3 == 0 ? 0 : Block.BY_ID[j3].getLightValue(world, k1, k2, l1);
                             }
 
                             if (k3 >= 15 && l3 == 0) {

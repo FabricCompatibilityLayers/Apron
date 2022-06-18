@@ -19,7 +19,7 @@ import java.nio.IntBuffer;
 import java.util.Arrays;
 
 @Mixin(Tessellator.class)
-public abstract class TessellatorMixin implements io.github.betterthanupdates.babricated.BabricatedTessellator {
+public abstract class TessellatorMixin {
 
     @Shadow public static Tessellator INSTANCE;
     @Shadow private static boolean unused;
@@ -54,6 +54,7 @@ public abstract class TessellatorMixin implements io.github.betterthanupdates.ba
     // Forge Fields
     @Unique
     private static boolean forged$useFloatBuffer = false;
+    public static boolean renderingWorldRenderer = false;
     @Unique
     public boolean defaultTexture = false;
     @Unique
@@ -265,15 +266,5 @@ public abstract class TessellatorMixin implements io.github.betterthanupdates.ba
         this.bufferArray[this.field_2068 + 2] = Float.floatToRawIntBits((float)(d2 + this.zOffset));
         this.field_2068 += 8;
         ++this.vertexCount;
-    }
-
-    @Override
-    public boolean defaultTexture() {
-        return this.defaultTexture;
-    }
-
-    @Override
-    public void defaultTexture(boolean defaultTexture) {
-        this.defaultTexture = defaultTexture;
     }
 }
