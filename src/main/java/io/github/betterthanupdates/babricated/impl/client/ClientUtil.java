@@ -1,7 +1,6 @@
 package io.github.betterthanupdates.babricated.impl.client;
 
 import io.github.betterthanupdates.babricated.api.BabricatedApi;
-import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.texture.TextureManager;
@@ -82,7 +81,7 @@ public final class ClientUtil implements BabricatedApi {
 	 * If it's used any time before then, it's <i>probably</i> going to break something.
 	 */
 	@Override
-	public void onInitializeClient() {
+	public void onInitialize() {
 		if (instance == null) {
 			instance = this;
 			client = (Minecraft) FabricLoaderImpl.INSTANCE.getGameInstance();

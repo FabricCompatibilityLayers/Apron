@@ -53,7 +53,7 @@ public class ServerUtil implements BabricatedApi {
 	}
 
 	@Override
-	public void onInitializeServer() {
+	public void onInitialize() {
 		if (instance == null) {
 			instance = this;
 			BabricatedForge.LOGGER.info("Server Util is now ready");

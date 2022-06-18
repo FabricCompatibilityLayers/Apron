@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
-import java.nio.Buffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 
@@ -50,10 +49,10 @@ public abstract class TextureManagerMixin {
         } else {
             try {
                 if (ForgeClientReflection.Tessellator$renderingWorldRenderer) {
-                    Logger.get("Babricated Forge", "Minecraft Forge").warn("Texture %s not preloaded, will cause render glitches!", s);
+                    Logger.get("Babricated Forge", "Minecraft Forge").warn("Texture {} not preloaded, will cause render glitches!", s);
                 }
 
-                ((Buffer)this.field_1249).clear();
+                this.field_1249.clear();
                 GLAllocationUtils.genTextures(this.field_1249);
                 int i = this.field_1249.get(0);
                 if (s.startsWith("##")) {
