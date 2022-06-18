@@ -37,11 +37,11 @@ public class ForgeHooksClient {
 	static HashMap<String, Integer> textures = new HashMap<>();
 	static boolean inWorld = false;
 	/**
-	 * Set of tex/sub pairs
+	 * Set of tex/sub pairs.
 	 */
 	static HashSet<Pair<Integer, Integer>> renderTextureTest = new HashSet<>();
 	/**
-	 * List of tex/sub pairs
+	 * List of tex/sub pairs.
 	 */
 	static ArrayList<Pair<Integer, Integer>> renderTextureList = new ArrayList<>();
 	static Tessellator defaultTessellator = null;
@@ -78,6 +78,7 @@ public class ForgeHooksClient {
 	protected static void bindTessellator(int tex, int sub) {
 		Pair<Integer, Integer> key = Pair.of(tex, sub);
 		Tessellator t;
+
 		if (!tessellators.containsKey(key)) {
 			t = new Tessellator(2097152);
 			tessellators.put(key, t);
@@ -97,6 +98,7 @@ public class ForgeHooksClient {
 
 	protected static void bindTexture(String name, int sub) {
 		int textureId;
+
 		if (textures.containsKey(name)) {
 			textureId = textures.get(name);
 		} else {

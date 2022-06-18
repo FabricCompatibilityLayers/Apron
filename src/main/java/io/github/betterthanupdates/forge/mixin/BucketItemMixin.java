@@ -32,13 +32,13 @@ public class BucketItemMixin extends Item {
 	 * @reason
 	 */
 	@Overwrite
-	public ItemStack use(ItemStack itemstack, World world, PlayerEntity entityplayer) {
+	public ItemStack use(ItemStack itemstack, World world, PlayerEntity player) {
 		float f = 1.0F;
-		float f1 = entityplayer.prevPitch + (entityplayer.pitch - entityplayer.prevPitch) * f;
-		float f2 = entityplayer.prevYaw + (entityplayer.yaw - entityplayer.prevYaw) * f;
-		double d = entityplayer.prevX + (entityplayer.x - entityplayer.prevX) * (double) f;
-		double d1 = entityplayer.prevY + (entityplayer.y - entityplayer.prevY) * (double) f + 1.62 - (double) entityplayer.standingEyeHeight;
-		double d2 = entityplayer.prevZ + (entityplayer.z - entityplayer.prevZ) * (double) f;
+		float f1 = player.prevPitch + (player.pitch - player.prevPitch) * f;
+		float f2 = player.prevYaw + (player.yaw - player.prevYaw) * f;
+		double d = player.prevX + (player.x - player.prevX) * (double) f;
+		double d1 = player.prevY + (player.y - player.prevY) * (double) f + 1.62 - (double) player.standingEyeHeight;
+		double d2 = player.prevZ + (player.z - player.prevZ) * (double) f;
 		Vec3d vec3d = Vec3d.from(d, d1, d2);
 		float f3 = MathHelper.cos(-f2 * 0.01745329F - 3.141593F);
 		float f4 = MathHelper.sin(-f2 * 0.01745329F - 3.141593F);
@@ -49,17 +49,20 @@ public class BucketItemMixin extends Item {
 		double d3 = 5.0;
 		Vec3d vec3d1 = vec3d.translate((double) f7 * d3, (double) f6 * d3, (double) f9 * d3);
 		HitResult movingobjectposition = world.method_161(vec3d, vec3d1, this.liquidBlockId == 0);
+
 		if (movingobjectposition != null) {
 			if (movingobjectposition.type == HitType.field_789) {
 				int i = movingobjectposition.x;
 				int j = movingobjectposition.y;
 				int k = movingobjectposition.z;
-				if (!world.method_171(entityplayer, i, j, k)) {
+
+				if (!world.method_171(player, i, j, k)) {
 					return itemstack;
 				}
 
 				if (this.liquidBlockId == 0) {
 					ItemStack customBucket = MinecraftForge.fillCustomBucket(world, i, j, k);
+
 					if (customBucket != null) {
 						return customBucket;
 					}
@@ -119,8 +122,8 @@ public class BucketItemMixin extends Item {
 			} else if (this.liquidBlockId == 0 && movingobjectposition.field_1989 instanceof CowEntity) {
 				return new ItemStack(Item.MILK);
 			}
-
 		}
+
 		return itemstack;
 	}
 }

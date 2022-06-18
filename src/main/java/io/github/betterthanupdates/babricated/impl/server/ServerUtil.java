@@ -28,6 +28,7 @@ public class ServerUtil implements BabricatedApi {
 	@Override
 	public @Nullable World getWorld() {
 		MinecraftServer server = (MinecraftServer) getGame();
+
 		if (server != null) {
 			return server.getWorld(0);
 		}
@@ -39,6 +40,7 @@ public class ServerUtil implements BabricatedApi {
 	@SuppressWarnings("unchecked")
 	public List<PlayerEntity> getPlayers() {
 		MinecraftServer server = (MinecraftServer) getGame();
+
 		if (server != null) {
 			return server.serverPlayerConnectionManager.players;
 		}

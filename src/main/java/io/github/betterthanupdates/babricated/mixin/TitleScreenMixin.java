@@ -22,7 +22,6 @@ import io.github.betterthanupdates.babricated.BabricatedForge;
 
 @Mixin(TitleScreen.class)
 public abstract class TitleScreenMixin extends Screen {
-
 	@Shadow
 	public abstract void init();
 

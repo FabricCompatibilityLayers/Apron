@@ -13,20 +13,21 @@ import net.minecraft.world.World;
 
 @Mixin(ClientInteractionManager.class)
 public class ClientInteractionManagerMixin {
-
 	/**
 	 * @author Forge
 	 * @reason
 	 */
 	@Overwrite
-	public boolean method_1712(PlayerEntity entityplayer, World world, ItemStack itemstack) {
-		int i = itemstack.count;
-		ItemStack itemstack1 = itemstack.use(world, entityplayer);
-		if (itemstack1 != itemstack || itemstack1 != null && itemstack1.count != i) {
-			entityplayer.inventory.main[entityplayer.inventory.selectedHotBarSlot] = itemstack1;
-			if (itemstack1.count == 0) {
-				entityplayer.inventory.main[entityplayer.inventory.selectedHotBarSlot] = null;
-				ForgeHooks.onDestroyCurrentItem(entityplayer, itemstack1);
+	public boolean method_1712(PlayerEntity player, World world, ItemStack stack) {
+		int i = stack.count;
+		ItemStack stack1 = stack.use(world, player);
+
+		if (stack1 != stack || stack1 != null && stack1.count != i) {
+			player.inventory.main[player.inventory.selectedHotBarSlot] = stack1;
+
+			if (stack1.count == 0) {
+				player.inventory.main[player.inventory.selectedHotBarSlot] = null;
+				ForgeHooks.onDestroyCurrentItem(player, stack1);
 			}
 
 			return true;
@@ -40,24 +41,26 @@ public class ClientInteractionManagerMixin {
 	 * @reason
 	 */
 	@Overwrite
-	public boolean useItemOnBlock(PlayerEntity entityplayer, World world, ItemStack itemstack, int i, int j, int k, int l) {
+	public boolean useItemOnBlock(PlayerEntity player, World world, ItemStack itemstack, int i, int j, int k, int l) {
 		if (itemstack != null && itemstack.getItem() instanceof IUseItemFirst) {
 			IUseItemFirst iuif = (IUseItemFirst) itemstack.getItem();
-			if (iuif.onItemUseFirst(itemstack, entityplayer, world, i, j, k, l)) {
+
+			if (iuif.onItemUseFirst(itemstack, player, world, i, j, k, l)) {
 				return true;
 			}
 		}
 
 		int i1 = world.getBlockId(i, j, k);
-		if (i1 > 0 && Block.BY_ID[i1].canUse(world, i, j, k, entityplayer)) {
+
+		if (i1 > 0 && Block.BY_ID[i1].canUse(world, i, j, k, player)) {
 			return true;
 		} else if (itemstack == null) {
 			return false;
-		} else if (!itemstack.useOnBlock(entityplayer, world, i, j, k, l)) {
+		} else if (!itemstack.useOnBlock(player, world, i, j, k, l)) {
 			return false;
 		} else {
 			if (itemstack.count == 0) {
-				ForgeHooks.onDestroyCurrentItem(entityplayer, itemstack);
+				ForgeHooks.onDestroyCurrentItem(player, itemstack);
 			}
 
 			return true;

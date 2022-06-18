@@ -16,7 +16,6 @@ import io.github.betterthanupdates.forge.block.ForgeBlock;
 
 @Mixin(class_417.class)
 public class class_417Mixin {
-
 	@Shadow
 	public int field_1677;
 
@@ -49,6 +48,7 @@ public class class_417Mixin {
 		int j = this.field_1678 - this.field_1675 + 1;
 		int k = this.field_1679 - this.field_1676 + 1;
 		int l = i * j * k;
+
 		if (l > 32768) {
 			Logger.get("Minecraft").debug("Light too large, skipping!");
 		} else {
@@ -61,13 +61,16 @@ public class class_417Mixin {
 				for (int l1 = this.field_1676; l1 <= this.field_1679; ++l1) {
 					int i2 = k1 >> 4;
 					int j2 = l1 >> 4;
-					boolean flag2 = false;
+					boolean flag2;
+
 					if (flag && i2 == i1 && j2 == j1) {
 						flag2 = flag1;
 					} else {
 						flag2 = world.method_153(k1, 0, l1, 1);
+
 						if (flag2) {
 							Chunk chunk = world.getChunkFromCache(k1 >> 4, l1 >> 4);
+
 							if (chunk.method_886()) {
 								flag2 = false;
 							}
@@ -92,11 +95,13 @@ public class class_417Mixin {
 							int i3 = 0;
 							int j3 = world.getBlockId(k1, k2, l1);
 							int k3 = Block.LIGHT_OPACITY[j3];
+
 							if (k3 == 0) {
 								k3 = 1;
 							}
 
 							int l3 = 0;
+
 							if (this.field_1673 == LightType.field_2757) {
 								if (world.isAboveGround(k1, k2, l1)) {
 									l3 = 15;
@@ -115,6 +120,7 @@ public class class_417Mixin {
 								int j5 = world.method_164(this.field_1673, k1, k2, l1 - 1);
 								int k5 = world.method_164(this.field_1673, k1, k2, l1 + 1);
 								i3 = i4;
+
 								if (k4 > i4) {
 									i3 = k4;
 								}
@@ -136,6 +142,7 @@ public class class_417Mixin {
 								}
 
 								i3 -= k3;
+
 								if (i3 < 0) {
 									i3 = 0;
 								}
@@ -148,6 +155,7 @@ public class class_417Mixin {
 							if (l2 != i3) {
 								world.method_205(this.field_1673, k1, k2, l1, i3);
 								int j4 = i3 - 1;
+
 								if (j4 < 0) {
 									j4 = 0;
 								}
@@ -155,6 +163,7 @@ public class class_417Mixin {
 								world.method_165(this.field_1673, k1 - 1, k2, l1, j4);
 								world.method_165(this.field_1673, k1, k2 - 1, l1, j4);
 								world.method_165(this.field_1673, k1, k2, l1 - 1, j4);
+
 								if (k1 + 1 >= this.field_1677) {
 									world.method_165(this.field_1673, k1 + 1, k2, l1, j4);
 								}
@@ -171,7 +180,6 @@ public class class_417Mixin {
 					}
 				}
 			}
-
 		}
 	}
 }

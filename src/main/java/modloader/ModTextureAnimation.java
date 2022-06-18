@@ -35,10 +35,12 @@ public class ModTextureAnimation extends TextureBinder {
 		int width = source.getWidth();
 		int height = source.getHeight();
 		int images = (int) Math.floor(height / width);
+
 		if (images <= 0) {
 			throw new IllegalArgumentException("source has no complete images");
 		} else {
 			this.images = new byte[images][];
+
 			if (width != targetWidth) {
 				BufferedImage img = new BufferedImage(targetWidth, targetHeight * images, 6);
 				Graphics2D gfx = img.createGraphics();
@@ -63,7 +65,6 @@ public class ModTextureAnimation extends TextureBinder {
 					this.images[i][j * 4 + 3] = (byte) a;
 				}
 			}
-
 		}
 	}
 
@@ -71,6 +72,7 @@ public class ModTextureAnimation extends TextureBinder {
 	public void updateTexture() {
 		if (this.ticks >= this.tickRate) {
 			++this.index;
+
 			if (this.index >= this.images.length) {
 				this.index = 0;
 			}

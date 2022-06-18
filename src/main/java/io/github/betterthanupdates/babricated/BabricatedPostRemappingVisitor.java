@@ -10,11 +10,9 @@ public class BabricatedPostRemappingVisitor implements TinyRemapper.ApplyVisitor
 	@Override
 	public ClassVisitor insertApplyVisitor(TrClass cls, ClassVisitor next) {
 		return new ClassVisitor(Opcodes.ASM9, next) {
-
 			@Override
 			public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
 				return new MethodVisitor(Opcodes.ASM9, super.visitMethod(access, name, descriptor, signature, exceptions)) {
-
 					@Override
 					public void visitFieldInsn(int opcode, String fieldOwner, String fieldName, String fieldDescriptor) {
 						switch (fieldOwner) {
@@ -23,6 +21,7 @@ public class BabricatedPostRemappingVisitor implements TinyRemapper.ApplyVisitor
 								fieldOwner = "io/github/betterthanupdates/forge/ForgeClientReflection";
 								fieldName = "Tessellator$renderingWorldRenderer";
 							}
+
 							break;
 						case "net/minecraft/class_13":
 							if (fieldName.equals("cfgGrassFix")) {
@@ -32,12 +31,14 @@ public class BabricatedPostRemappingVisitor implements TinyRemapper.ApplyVisitor
 								fieldOwner = "io/github/betterthanupdates/forge/ForgeClientReflection";
 								fieldName = "BlockRenderer$redstoneColors";
 							}
+
 							break;
 						case "net/minecraft/class_328":
 							if (fieldName.equals("disableValidation")) {
 								fieldOwner = "io/github/betterthanupdates/forge/ForgeReflection";
 								fieldName = "TrapdoorBlock$disableValidation";
 							}
+
 							break;
 						}
 
@@ -52,6 +53,7 @@ public class BabricatedPostRemappingVisitor implements TinyRemapper.ApplyVisitor
 								methodOwner = "io/github/betterthanupdates/forge/ForgeClientReflection";
 								methodName = "BlockRenderer$setRedstoneColors";
 							}
+
 							break;
 						}
 

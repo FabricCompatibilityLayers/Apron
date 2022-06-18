@@ -51,6 +51,7 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 			for (int j = 0; j < this.field_270[i].size(); ++j) {
 				ParticleEntity entityfx = (ParticleEntity) this.field_270[i].get(j);
 				entityfx.tick();
+
 				if (entityfx.removed) {
 					this.field_270[i].remove(j--);
 				}
@@ -62,6 +63,7 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 
 			for (int y = 0; y < entry.effects.size(); ++y) {
 				ParticleEntity entityfx = entry.effects.get(y);
+
 				if (entityfx.removed) {
 					entry.effects.remove(y--);
 				}
@@ -71,7 +73,6 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 				this.effectList.remove(x--);
 			}
 		}
-
 	}
 
 	/**
@@ -92,6 +93,7 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 		for (int i = 0; i < 3; ++i) {
 			if (this.field_270[i].size() != 0) {
 				int j = 0;
+
 				if (i == 0) {
 					j = this.textureManager.getTextureId("/particles.png");
 				}
@@ -110,6 +112,7 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 
 				for (int k = 0; k < this.field_270[i].size(); ++k) {
 					ParticleEntity entityfx = (ParticleEntity) this.field_270[i].get(k);
+
 					if (!(entityfx instanceof DiggingParticleEntity)) {
 						entityfx.method_2002(tessellator, f, f1, f5, f2, f3, f4);
 					}
@@ -133,7 +136,6 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 
 			tessellator.draw();
 		}
-
 	}
 
 	/**
@@ -180,7 +182,6 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 					}
 				}
 			}
-
 		}
 	}
 
@@ -191,12 +192,14 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 	@Overwrite
 	public void addBlockClickParticle(int i, int j, int k, int l) {
 		int i1 = this.world.getBlockId(i, j, k);
+
 		if (i1 != 0) {
 			Block block = Block.BY_ID[i1];
 			float f = 0.1F;
 			double d = (double) i + this.rand.nextDouble() * (block.maxX - block.minX - (double) (f * 2.0F)) + (double) f + block.minX;
 			double d1 = (double) j + this.rand.nextDouble() * (block.maxY - block.minY - (double) (f * 2.0F)) + (double) f + block.minY;
 			double d2 = (double) k + this.rand.nextDouble() * (block.maxZ - block.minZ - (double) (f * 2.0F)) + (double) f + block.minZ;
+
 			if (l == 0) {
 				d1 = (double) j + block.minY - (double) f;
 			}
@@ -233,6 +236,7 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 	public void addDigParticleEffect(DiggingParticleEntity dig_effect, Block block) {
 		boolean added = false;
 		String comp;
+
 		if (block instanceof ITextureProvider) {
 			comp = ((ITextureProvider) block).getTextureFile();
 		} else {

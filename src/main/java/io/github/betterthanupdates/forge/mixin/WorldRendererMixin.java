@@ -21,7 +21,6 @@ import net.minecraft.world.chunk.Chunk;
 
 @Mixin(class_66.class)
 public abstract class WorldRendererMixin {
-
 	@Shadow
 	public boolean field_249;
 
@@ -94,8 +93,8 @@ public abstract class WorldRendererMixin {
 			hashset.addAll(this.field_224);
 			this.field_224.clear();
 			int l1 = 1;
-			WorldPopulationRegion chunkcache = new WorldPopulationRegion(this.world, i - l1, j - l1, k - l1, l + l1, i1 + l1, j1 + l1);
-			BlockRenderer renderblocks = new BlockRenderer(chunkcache);
+			WorldPopulationRegion region = new WorldPopulationRegion(this.world, i - l1, j - l1, k - l1, l + l1, i1 + l1, j1 + l1);
+			BlockRenderer blockRenderer = new BlockRenderer(region);
 
 			for (int i2 = 0; i2 < 2; ++i2) {
 				boolean flag = false;
@@ -105,7 +104,8 @@ public abstract class WorldRendererMixin {
 				for (int j2 = j; j2 < i1; ++j2) {
 					for (int k2 = k; k2 < j1; ++k2) {
 						for (int l2 = i; l2 < l; ++l2) {
-							int i3 = chunkcache.getBlockId(l2, j2, k2);
+							int i3 = region.getBlockId(l2, j2, k2);
+
 							if (i3 > 0) {
 								if (!flag2) {
 									flag2 = true;
@@ -122,22 +122,24 @@ public abstract class WorldRendererMixin {
 								}
 
 								if (i2 == 0 && Block.HAS_BLOCK_ENTITY[i3]) {
-									BlockEntity tileentity = chunkcache.getBlockEntity(l2, j2, k2);
-									if (BlockEntityRenderDispatcher.INSTANCE.hasCustomRenderer(tileentity)) {
-										this.field_224.add(tileentity);
+									BlockEntity blockEntity = region.getBlockEntity(l2, j2, k2);
+
+									if (BlockEntityRenderDispatcher.INSTANCE.hasCustomRenderer(blockEntity)) {
+										this.field_224.add(blockEntity);
 									}
 								}
 
 								Block block = Block.BY_ID[i3];
 								int j3 = block.getRenderPass();
+
 								if (j3 > i2) {
 									flag = true;
 								}
 
 								if (ForgeHooksClient.canRenderInPass(block, i2)) {
-									ForgeHooksClient.beforeBlockRender(block, renderblocks);
-									flag1 |= renderblocks.render(block, l2, j2, k2);
-									ForgeHooksClient.afterBlockRender(block, renderblocks);
+									ForgeHooksClient.beforeBlockRender(block, blockRenderer);
+									flag1 |= blockRenderer.render(block, l2, j2, k2);
+									ForgeHooksClient.afterBlockRender(block, blockRenderer);
 								}
 							}
 						}

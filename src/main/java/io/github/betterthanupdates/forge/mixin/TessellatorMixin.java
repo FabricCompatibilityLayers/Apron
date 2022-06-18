@@ -20,13 +20,11 @@ import net.minecraft.client.render.Tessellator;
 
 import io.github.betterthanupdates.babricated.BabricatedTessellator;
 
+// FIXME
 @Mixin(Tessellator.class)
 public abstract class TessellatorMixin implements BabricatedTessellator {
-
 	@Shadow
 	public static Tessellator INSTANCE;
-	@Shadow
-	private static boolean unused;
 	@Shadow
 	private int vertexCount;
 	@Shadow
@@ -82,26 +80,14 @@ public abstract class TessellatorMixin implements BabricatedTessellator {
 	@Shadow
 	public double zOffset;
 	// Forge Fields
-//    @Unique
-//    private static boolean forged$useFloatBuffer = false;
 	@Unique
 	public boolean defaultTexture = false;
 	@Unique
 	private int rawBufferSize;
-	//    @Unique
-//    private static int forged$field_2052 = 10;
-//    @Unique
-//    private static IntBuffer forged$field_2078;
 	@Unique
 	private static int nativeBufferSize = 2097152;
 	@Unique
 	private static int trivertsInBuffer = nativeBufferSize / 48 * 6;
-//    @Unique
-//    private static ByteBuffer forged$byteBuffer = GLAllocationUtils.allocateByteBuffer(nativeBufferSize * 4);
-//    @Unique
-//    private static IntBuffer forged$intBuffer = forged$byteBuffer.asIntBuffer();
-//    @Unique
-//    private static FloatBuffer forged$floatBuffer = forged$byteBuffer.asFloatBuffer();
 
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void ctr$overwrite(int par1, CallbackInfo ci) {
@@ -118,30 +104,16 @@ public abstract class TessellatorMixin implements BabricatedTessellator {
 		this.rawBufferSize = 0;
 	}
 
-//    public void finishInit() {
-//        this.useFloatBuffer = forged$useFloatBuffer;
-//        this.field_2052 = forged$field_2052;
-//        this.field_2078 = forged$field_2078;
-//        this.byteBuffer = forged$byteBuffer;
-//        this.intBuffer = forged$intBuffer;
-//        this.floatBuffer = forged$floatBuffer;
-//    }
-
 	@Inject(method = "<clinit>", at = @At("RETURN"))
 	private static void classCtr$overwrite(CallbackInfo ci) {
 		((TessellatorMixin) (Object) INSTANCE).defaultTexture = true;
-//        forged$useFloatBuffer = unused && GLContext.getCapabilities().GL_ARB_vertex_buffer_object;
-//        if (forged$useFloatBuffer) {
-//            forged$field_2078 = GLAllocationUtils.allocateIntBuffer(forged$field_2052);
-//            ARBVertexBufferObject.glGenBuffersARB(forged$field_2078);
-//        }
-//
-//        ((TessellatorMixin)(Object)INSTANCE).finishInit();
+
+		// TODO
 	}
 
 	/**
 	 * @author Forge
-	 * @reason needed
+	 * @reason
 	 */
 	@Overwrite
 	public void draw() {
@@ -153,6 +125,7 @@ public abstract class TessellatorMixin implements BabricatedTessellator {
 
 			while (offs < this.vertexCount) {
 				int vtc;
+
 				if (this.drawingMode == 7 && useTriangles) {
 					vtc = Math.min(this.vertexCount - offs, trivertsInBuffer);
 				} else {
@@ -164,6 +137,7 @@ public abstract class TessellatorMixin implements BabricatedTessellator {
 				((Buffer) byteBuffer).position(0);
 				((Buffer) byteBuffer).limit(vtc * 32);
 				offs += vtc;
+
 				if (useFloatBuffer) {
 					this.field_2079 = (this.field_2079 + 1) % field_2052;
 					ARBVertexBufferObject.glBindBufferARB(34962, field_2078.get(this.field_2079));
@@ -174,7 +148,7 @@ public abstract class TessellatorMixin implements BabricatedTessellator {
 					if (useFloatBuffer) {
 						GL11.glTexCoordPointer(2, 5126, 32, 12L);
 					} else {
-						((Buffer) floatBuffer).position(3);
+						floatBuffer.position(3);
 						GL11.glTexCoordPointer(2, 32, floatBuffer);
 					}
 
@@ -211,6 +185,7 @@ public abstract class TessellatorMixin implements BabricatedTessellator {
 				}
 
 				GL11.glEnableClientState(32884);
+
 				if (this.drawingMode == 7 && useTriangles) {
 					GL11.glDrawArrays(4, 0, vtc);
 				} else {
@@ -218,6 +193,7 @@ public abstract class TessellatorMixin implements BabricatedTessellator {
 				}
 
 				GL11.glDisableClientState(32884);
+
 				if (this.hasTexture) {
 					GL11.glDisableClientState(32888);
 				}
@@ -257,9 +233,11 @@ public abstract class TessellatorMixin implements BabricatedTessellator {
 		}
 
 		++this.vertexAmount;
+
 		if (this.drawingMode == 7 && useTriangles && this.vertexAmount % 4 == 0) {
 			for (int i = 0; i < 2; ++i) {
 				int j = 8 * (3 - i);
+
 				if (this.hasTexture) {
 					this.bufferArray[this.field_2068 + 3] = this.bufferArray[this.field_2068 - j + 3];
 					this.bufferArray[this.field_2068 + 4] = this.bufferArray[this.field_2068 - j + 4];

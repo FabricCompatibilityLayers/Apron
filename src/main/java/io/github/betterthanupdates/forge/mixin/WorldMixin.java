@@ -22,7 +22,6 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(World.class)
 public abstract class WorldMixin implements BlockView, ForgeWorld {
-
 	@Shadow
 	@Final
 	public Dimension dimension;
@@ -82,6 +81,7 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 				} else if (enumskyblock == LightType.field_2758) {
 					int i1 = this.getBlockId(i, j, k);
 					int bl = i1 == 0 ? 0 : ((ForgeBlock) Block.BY_ID[i1]).getLightValue(this, i, j, k);
+
 					if (bl > l) {
 						l = bl;
 					}
@@ -90,7 +90,6 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 				if (this.method_164(enumskyblock, i, j, k) != l) {
 					this.method_166(enumskyblock, i, j, k, i, j, k);
 				}
-
 			}
 		}
 	}
@@ -107,11 +106,13 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 		int l = MathHelper.floor(axisalignedbb.maxY + 1.0);
 		int i1 = MathHelper.floor(axisalignedbb.minZ);
 		int j1 = MathHelper.floor(axisalignedbb.maxZ + 1.0);
+
 		if (this.method_155(i, k, i1, j, l, j1)) {
 			for (int k1 = i; k1 < j; ++k1) {
 				for (int l1 = k; l1 < l; ++l1) {
 					for (int i2 = i1; i2 < j1; ++i2) {
 						int j2 = this.getBlockId(k1, l1, i2);
+
 						if (j2 == Block.FIRE.id || j2 == Block.FLOWING_LAVA.id || j2 == Block.STILL_LAVA.id) {
 							return true;
 						}
@@ -142,6 +143,7 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 
 				for (Object o : this.field_185) {
 					BlockEntity e = (BlockEntity) o;
+
 					if (e.x == i && e.y == j && e.z == k) {
 						found = true;
 						break;
@@ -154,12 +156,12 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 			} else {
 				this.blockEntities.add(tileentity);
 				Chunk chunk = this.getChunkFromCache(i >> 4, k >> 4);
+
 				if (chunk != null) {
 					chunk.placeBlockEntity(i & 15, j, k & 15, tileentity);
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -188,6 +190,7 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 		Block block = Block.BY_ID[j1];
 		Block block1 = Block.BY_ID[i];
 		Box axisalignedbb = block1.getCollisionShape((World) (Object) this, j, k, l);
+
 		if (flag) {
 			axisalignedbb = null;
 		}

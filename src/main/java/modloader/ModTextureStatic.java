@@ -32,6 +32,7 @@ public class ModTextureStatic extends TextureBinder {
 		int height = source.getHeight();
 		this.pixels = new int[targetWidth * targetHeight];
 		this.grid = new byte[targetWidth * targetHeight * 4];
+
 		if (width == height && width == targetWidth) {
 			source.getRGB(0, 0, width, height, this.pixels, 0, width);
 		} else {
@@ -52,6 +53,7 @@ public class ModTextureStatic extends TextureBinder {
 			int r = this.pixels[i] >> 16 & 0xFF;
 			int g = this.pixels[i] >> 8 & 0xFF;
 			int b = this.pixels[i] >> 0 & 0xFF;
+
 			if (this.render3d) {
 				int grey = (r + g + b) / 3;
 				b = grey;
@@ -73,7 +75,6 @@ public class ModTextureStatic extends TextureBinder {
 		if (this.oldAnaglyph != this.render3d) {
 			this.update();
 		}
-
 	}
 
 	public static BufferedImage scale2x(BufferedImage in) {
@@ -83,55 +84,51 @@ public class ModTextureStatic extends TextureBinder {
 
 		for (int y = 0; y < height; ++y) {
 			for (int x = 0; x < width; ++x) {
-				int E = in.getRGB(x, y);
-				int B;
+				int rgb = in.getRGB(x, y);
+				int b, d, f, h;
+
 				if (y == 0) {
-					B = E;
+					b = rgb;
 				} else {
-					B = in.getRGB(x, y - 1);
+					b = in.getRGB(x, y - 1);
 				}
 
-				int D;
 				if (x == 0) {
-					D = E;
+					d = rgb;
 				} else {
-					D = in.getRGB(x - 1, y);
+					d = in.getRGB(x - 1, y);
 				}
 
-				int F;
 				if (x >= width - 1) {
-					F = E;
+					f = rgb;
 				} else {
-					F = in.getRGB(x + 1, y);
+					f = in.getRGB(x + 1, y);
 				}
 
-				int H;
 				if (y >= height - 1) {
-					H = E;
+					h = rgb;
 				} else {
-					H = in.getRGB(x, y + 1);
+					h = in.getRGB(x, y + 1);
 				}
 
-				int E0;
-				int E1;
-				int E2;
-				int E3;
-				if (B != H && D != F) {
-					E0 = D == B ? D : E;
-					E1 = B == F ? F : E;
-					E2 = D == H ? D : E;
-					E3 = H == F ? F : E;
+				int e0, e1, e2, e3;
+
+				if (b != h && d != f) {
+					e0 = d == b ? d : rgb;
+					e1 = b == f ? f : rgb;
+					e2 = d == h ? d : rgb;
+					e3 = h == f ? f : rgb;
 				} else {
-					E0 = E;
-					E1 = E;
-					E2 = E;
-					E3 = E;
+					e0 = rgb;
+					e1 = rgb;
+					e2 = rgb;
+					e3 = rgb;
 				}
 
-				out.setRGB(x * 2, y * 2, E0);
-				out.setRGB(x * 2 + 1, y * 2, E1);
-				out.setRGB(x * 2, y * 2 + 1, E2);
-				out.setRGB(x * 2 + 1, y * 2 + 1, E3);
+				out.setRGB(x * 2, y * 2, e0);
+				out.setRGB(x * 2 + 1, y * 2, e1);
+				out.setRGB(x * 2, y * 2 + 1, e2);
+				out.setRGB(x * 2 + 1, y * 2 + 1, e3);
 			}
 		}
 

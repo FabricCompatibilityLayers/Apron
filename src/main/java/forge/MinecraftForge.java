@@ -49,6 +49,7 @@ public class MinecraftForge {
 	public static ItemStack fillCustomBucket(World world, int i, int j, int k) {
 		for (IBucketHandler handler : bucketHandlers) {
 			ItemStack stack = handler.fillCustomBucket(world, i, j, k);
+
 			if (stack != null) {
 				return stack;
 			}

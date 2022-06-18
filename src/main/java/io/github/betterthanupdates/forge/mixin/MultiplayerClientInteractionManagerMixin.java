@@ -58,6 +58,7 @@ public abstract class MultiplayerClientInteractionManagerMixin extends ClientInt
 		if (!this.field_2615 || i != this.field_2608 || j != this.field_2609 || k != this.field_2610) {
 			this.networkHandler.sendPacket(new PlayerDiggingC2SPacket(0, i, j, k, l));
 			int i1 = this.client.world.getBlockId(i, j, k);
+
 			if (i1 > 0 && this.field_2611 == 0.0F) {
 				Block.BY_ID[i1].activate(this.client.world, i, j, k, this.client.player);
 			}
@@ -74,7 +75,6 @@ public abstract class MultiplayerClientInteractionManagerMixin extends ClientInt
 				this.field_2613 = 0.0F;
 			}
 		}
-
 	}
 
 	/**
@@ -85,11 +85,13 @@ public abstract class MultiplayerClientInteractionManagerMixin extends ClientInt
 	public void method_1721(int i, int j, int k, int l) {
 		if (this.field_2615) {
 			this.method_1997();
+
 			if (this.field_2614 > 0) {
 				--this.field_2614;
 			} else {
 				if (i == this.field_2608 && j == this.field_2609 && k == this.field_2610) {
 					int i1 = this.client.world.getBlockId(i, j, k);
+
 					if (i1 == 0) {
 						this.field_2615 = false;
 						return;
@@ -97,20 +99,20 @@ public abstract class MultiplayerClientInteractionManagerMixin extends ClientInt
 
 					Block block = Block.BY_ID[i1];
 					this.field_2611 += ((ForgeBlock) block).blockStrength(this.client.world, this.client.player, i, j, k);
+
 					if (this.field_2613 % 4.0F == 0.0F && block != null) {
-						this.client
-								.soundHelper
-								.playSound(
-										block.sounds.getWalkSound(),
-										(float) i + 0.5F,
-										(float) j + 0.5F,
-										(float) k + 0.5F,
-										(block.sounds.getVolume() + 1.0F) / 8.0F,
-										block.sounds.getPitch() * 0.5F
-								);
+						this.client.soundHelper.playSound(
+								block.sounds.getWalkSound(),
+								(float) i + 0.5F,
+								(float) j + 0.5F,
+								(float) k + 0.5F,
+								(block.sounds.getVolume() + 1.0F) / 8.0F,
+								block.sounds.getPitch() * 0.5F
+						);
 					}
 
 					++this.field_2613;
+
 					if (this.field_2611 >= 1.0F) {
 						this.field_2615 = false;
 						this.networkHandler.sendPacket(new PlayerDiggingC2SPacket(2, i, j, k, l));
@@ -123,7 +125,6 @@ public abstract class MultiplayerClientInteractionManagerMixin extends ClientInt
 				} else {
 					this.method_1707(i, j, k, l);
 				}
-
 			}
 		}
 	}

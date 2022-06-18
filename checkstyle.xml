@@ -79,8 +79,8 @@
 
         <module name="ImportOrder">
             <property name="groups" value="java,javax,*,net.minecraft,io.github"/>
-            <property name="ordered"
-                      value="false"/><!-- the plugin orders alphabetically without considering separators.. -->
+            <!-- the plugin orders alphabetically without considering separators... -->
+            <property name="ordered" value="false"/>
             <property name="separated" value="true"/>
             <property name="option" value="top"/>
             <property name="sortStaticImportsAlphabetically" value="true"/>
@@ -155,9 +155,6 @@
 
         <module name="AnnotationLocation"/>
         <module name="MissingOverride"/>
-
-        <!-- By default this allows catch blocks with only comments -->
-        <module name="EmptyCatchBlock"/>
 
         <!-- Enforce tabs -->
         <module name="RegexpSinglelineJava">

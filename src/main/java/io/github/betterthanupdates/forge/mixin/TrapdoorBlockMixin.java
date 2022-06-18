@@ -14,7 +14,6 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(TrapdoorBlock.class)
 public abstract class TrapdoorBlockMixin extends Block {
-
 	@Shadow
 	public abstract void method_1059(World arg, int i, int j, int k, boolean bl);
 
@@ -32,6 +31,7 @@ public abstract class TrapdoorBlockMixin extends Block {
 			int i1 = world.getBlockMeta(i, j, k);
 			int j1 = i;
 			int k1 = k;
+
 			if ((i1 & 3) == 0) {
 				k1 = k + 1;
 			}
@@ -57,7 +57,6 @@ public abstract class TrapdoorBlockMixin extends Block {
 				boolean flag = world.hasRedstonePower(i, j, k);
 				this.method_1059(world, i, j, k, flag);
 			}
-
 		}
 	}
 

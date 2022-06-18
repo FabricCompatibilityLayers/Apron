@@ -53,6 +53,7 @@ public abstract class TorchBlockMixin extends Block {
 	@Overwrite
 	public void onBlockPlaced(World world, int i, int j, int k, int l) {
 		int i1 = world.getBlockMeta(i, j, k);
+
 		if (l == 1 && this.method_1674(world, i, j - 1, k)) {
 			i1 = 5;
 		}
@@ -106,6 +107,7 @@ public abstract class TorchBlockMixin extends Block {
 		if (this.method_1675(world, i, j, k)) {
 			int i1 = world.getBlockMeta(i, j, k);
 			boolean flag = false;
+
 			if (!((ForgeWorld) world).isBlockSolidOnSide(i - 1, j, k, 5) && i1 == 1) {
 				flag = true;
 			}

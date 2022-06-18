@@ -16,9 +16,8 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(ChestBlock.class)
 public abstract class ChestBlockMixin extends BlockWithEntity {
-
-	protected ChestBlockMixin(int i, Material arg) {
-		super(i, arg);
+	protected ChestBlockMixin(int blockId, Material material) {
+		super(blockId, material);
 	}
 
 	/**
@@ -28,6 +27,7 @@ public abstract class ChestBlockMixin extends BlockWithEntity {
 	@Overwrite
 	public boolean canUse(World world, int i, int j, int k, PlayerEntity playerEntity) {
 		Object obj = world.getBlockEntity(i, j, k);
+
 		if (((ForgeWorld) world).isBlockSolidOnSide(i, j + 1, k, 0)) {
 			return true;
 		} else if (world.getBlockId(i - 1, j, k) == this.id && ((ForgeWorld) world).isBlockSolidOnSide(i - 1, j + 1, k, 0)) {
@@ -58,6 +58,7 @@ public abstract class ChestBlockMixin extends BlockWithEntity {
 			if (!world.isClient) {
 				playerEntity.openChestScreen((Inventory) obj);
 			}
+
 			return true;
 		}
 	}

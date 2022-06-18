@@ -13,7 +13,6 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(ButtonBlock.class)
 public abstract class ButtonBlockMixin extends Block {
-
 	@Shadow
 	protected abstract boolean method_1048(World arg, int i, int j, int k);
 
@@ -62,6 +61,7 @@ public abstract class ButtonBlockMixin extends Block {
 		int i1 = world.getBlockMeta(i, j, k);
 		int j1 = i1 & 8;
 		i1 &= 7;
+
 		if (l == 2 && ((ForgeWorld) world).isBlockSolidOnSide(i, j, k + 1, 2)) {
 			i1 = 4;
 		} else if (l == 3 && ((ForgeWorld) world).isBlockSolidOnSide(i, j, k - 1, 3)) {
@@ -103,6 +103,7 @@ public abstract class ButtonBlockMixin extends Block {
 		if (this.method_1048(world, i, j, k)) {
 			int i1 = world.getBlockMeta(i, j, k) & 7;
 			boolean flag = false;
+
 			if (!((ForgeWorld) world).isBlockSolidOnSide(i - 1, j, k, 5) && i1 == 1) {
 				flag = true;
 			}
@@ -124,6 +125,5 @@ public abstract class ButtonBlockMixin extends Block {
 				world.setBlock(i, j, k, 0);
 			}
 		}
-
 	}
 }

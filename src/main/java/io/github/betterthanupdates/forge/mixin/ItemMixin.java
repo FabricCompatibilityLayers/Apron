@@ -11,7 +11,6 @@ import io.github.betterthanupdates.forge.item.ForgeItem;
 
 @Mixin(Item.class)
 public abstract class ItemMixin implements ForgeItem {
-
 	@Shadow
 	public abstract float getStrengthOnBlock(ItemStack arg, Block arg2);
 

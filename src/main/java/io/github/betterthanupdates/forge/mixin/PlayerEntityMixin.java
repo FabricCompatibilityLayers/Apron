@@ -23,7 +23,6 @@ import io.github.betterthanupdates.forge.item.ForgeItem;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements ForgePlayerEntity {
-
 	@Shadow
 	public PlayerInventory inventory;
 
@@ -58,6 +57,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 	public float getCurrentPlayerStrVsBlock(Block block, int meta) {
 		float f = 1.0F;
 		ItemStack ist = this.inventory.getHeldItem();
+
 		if (ist != null) {
 			f = ((ForgeItem) ist.getItem()).getStrVsBlock(ist, block, meta);
 		}
@@ -121,6 +121,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 	@Overwrite
 	public SleepStatus trySleep(int i, int j, int k) {
 		SleepStatus customSleep = ForgeHooks.sleepInBedAt((PlayerEntity) (Object) this, i, j, k);
+
 		if (customSleep != null) {
 			return customSleep;
 		} else {
@@ -144,6 +145,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 
 			this.setSize(0.2F, 0.2F);
 			this.standingEyeHeight = 0.2F;
+
 			if (this.world.isBlockLoaded(i, j, k)) {
 				int l = this.world.getBlockMeta(i, j, k);
 				int i1 = BedBlock.orientationOnly(l);
@@ -173,6 +175,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 			this.sleepTimer = 0;
 			this.bedPosition = new Vec3i(i, j, k);
 			this.xVelocity = this.zVelocity = this.yVelocity = 0.0;
+
 			if (!this.world.isClient) {
 				this.world.onPlayerDisconnect();
 			}

@@ -24,6 +24,7 @@ public class Packet230ModLoader extends AbstractPacket {
 			this.modId = datainputstream.readInt();
 			this.packetType = datainputstream.readInt();
 			int i = datainputstream.readInt();
+
 			if (i > MAX_DATA_LENGTH) {
 				throw new IOException(String.format("Integer data size of %d is higher than the max (%d).", i, MAX_DATA_LENGTH));
 			} else {
@@ -34,6 +35,7 @@ public class Packet230ModLoader extends AbstractPacket {
 				}
 
 				int k = datainputstream.readInt();
+
 				if (k > MAX_DATA_LENGTH) {
 					throw new IOException(String.format("Float data size of %d is higher than the max (%d).", k, MAX_DATA_LENGTH));
 				} else {
@@ -44,6 +46,7 @@ public class Packet230ModLoader extends AbstractPacket {
 					}
 
 					int i1 = datainputstream.readInt();
+
 					if (i1 > MAX_DATA_LENGTH) {
 						throw new IOException(String.format("String data size of %d is higher than the max (%d).", i1, MAX_DATA_LENGTH));
 					} else {
@@ -51,6 +54,7 @@ public class Packet230ModLoader extends AbstractPacket {
 
 						for (int j1 = 0; j1 < i1; ++j1) {
 							int k1 = datainputstream.readInt();
+
 							if (k1 > MAX_DATA_LENGTH) {
 								throw new IOException(String.format("String length of %d is higher than the max (%d).", k1, MAX_DATA_LENGTH));
 							}
@@ -59,7 +63,6 @@ public class Packet230ModLoader extends AbstractPacket {
 							datainputstream.read(abyte0, 0, k1);
 							this.dataString[j1] = new String(abyte0);
 						}
-
 					}
 				}
 			}
@@ -80,6 +83,7 @@ public class Packet230ModLoader extends AbstractPacket {
 			} else {
 				dataoutputstream.writeInt(this.modId);
 				dataoutputstream.writeInt(this.packetType);
+
 				if (this.dataInt == null) {
 					dataoutputstream.writeInt(0);
 				} else {
@@ -114,7 +118,6 @@ public class Packet230ModLoader extends AbstractPacket {
 						dataoutputstream.writeBytes(s);
 					}
 				}
-
 			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -133,6 +136,7 @@ public class Packet230ModLoader extends AbstractPacket {
 		i = ++i + (this.dataInt != null ? this.dataInt.length * 32 : 0);
 		i = ++i + (this.dataFloat != null ? this.dataFloat.length * 32 : 0);
 		++i;
+
 		if (this.dataString != null) {
 			for (String s : this.dataString) {
 				i = ++i + s.length();

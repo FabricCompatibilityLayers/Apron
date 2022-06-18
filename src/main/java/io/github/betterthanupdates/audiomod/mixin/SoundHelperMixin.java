@@ -29,7 +29,6 @@ import net.minecraft.util.math.MathHelper;
 
 @Mixin(SoundHelper.class)
 public abstract class SoundHelperMixin {
-
 	@Shadow
 	private Random rand;
 	@Shadow
@@ -55,7 +54,7 @@ public abstract class SoundHelperMixin {
 	private int soundUID;
 	// AudioMod Fields
 	@Unique
-	private SoundMap cave = new SoundMap();
+	private final SoundMap cave = new SoundMap();
 	@Unique
 	private Minecraft mc;
 	@Unique
@@ -77,7 +76,7 @@ public abstract class SoundHelperMixin {
 			Field minecraft = Minecraft.class.getDeclaredFields()[1];
 			minecraft.setAccessible(true);
 			this.mc = (Minecraft) minecraft.get(null);
-		} catch (Throwable var3) {
+		} catch (Throwable ignored) {
 		}
 	}
 
@@ -94,10 +93,12 @@ public abstract class SoundHelperMixin {
 	private static void walkFolder(File root, File folder, SoundMap array) throws IOException {
 		if (folder.exists() || folder.mkdirs()) {
 			File[] files = folder.listFiles();
+
 			if (files != null && files.length > 0) {
 				for (File file : files) {
 					if (!file.getName().startsWith(".")) {
 						BasicFileAttributes basicFileAttributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+
 						if (basicFileAttributes.isDirectory()) {
 							walkFolder(root, file, array);
 						} else if (basicFileAttributes.isRegularFile()) {
@@ -117,7 +118,8 @@ public abstract class SoundHelperMixin {
 			SoundSystemConfig.setCodec("xm", CodecIBXM.class);
 			SoundSystemConfig.setCodec("s3m", CodecIBXM.class);
 			SoundSystemConfig.setCodec("mod", CodecIBXM.class);
-		} catch (ClassNotFoundException ignored) {
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -153,26 +155,25 @@ public abstract class SoundHelperMixin {
 					return;
 				}
 
-				SoundEntry localbh;
+				SoundEntry entry;
 				if (this.mc != null
 						&& this.mc.player != null
 						&& !this.mc
 						.player
 						.world
 						.isAboveGroundCached(MathHelper.floor(this.mc.player.x), MathHelper.floor(this.mc.player.y), MathHelper.floor(this.mc.player.z))) {
-					localbh = this.cave.getRandomSound();
+					entry = this.cave.getRandomSound();
 				} else {
-					localbh = this.music.getRandomSound();
+					entry = this.music.getRandomSound();
 				}
 
-				if (localbh != null) {
+				if (entry != null) {
 					this.musicCountdown = this.rand.nextInt(MUSINTERVAL) + MUSINTERVAL;
-					soundSystem.backgroundMusic("BgMusic", localbh.soundUrl, localbh.soundName, false);
+					soundSystem.backgroundMusic("BgMusic", entry.soundUrl, entry.soundName, false);
 					soundSystem.setVolume("BgMusic", this.gameOptions.musicVolume);
 					soundSystem.play("BgMusic");
 				}
 			}
-
 		}
 	}
 
@@ -210,23 +211,24 @@ public abstract class SoundHelperMixin {
 	public void playStreaming(String paramString, float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5) {
 		if (initialized && this.gameOptions.soundVolume != 0.0F && soundSystem != null) {
 			String str = "streaming";
+
 			if (soundSystem.playing("streaming")) {
 				soundSystem.stop("streaming");
 			}
 
 			if (paramString != null) {
-				SoundEntry localbh = this.streaming.getRandomSoundForId(paramString);
-				if (localbh != null && paramFloat4 > 0.0F) {
+				SoundEntry entry = this.streaming.getRandomSoundForId(paramString);
+
+				if (entry != null && paramFloat4 > 0.0F) {
 					if (soundSystem.playing("BgMusic")) {
 						soundSystem.stop("BgMusic");
 					}
 
 					float f1 = 16.0F;
-					soundSystem.newStreamingSource(true, str, localbh.soundUrl, localbh.soundName, false, paramFloat1, paramFloat2, paramFloat3, 2, f1 * 4.0F);
+					soundSystem.newStreamingSource(true, str, entry.soundUrl, entry.soundName, false, paramFloat1, paramFloat2, paramFloat3, 2, f1 * 4.0F);
 					soundSystem.setVolume(str, 0.5F * this.gameOptions.soundVolume);
 					soundSystem.play(str);
 				}
-
 			}
 		}
 	}
@@ -238,17 +240,20 @@ public abstract class SoundHelperMixin {
 	@Overwrite
 	public void playSound(String paramString, float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5) {
 		if (initialized && this.gameOptions.soundVolume != 0.0F && soundSystem != null) {
-			SoundEntry localbh = this.sounds.getRandomSoundForId(paramString);
-			if (localbh != null && paramFloat4 > 0.0F) {
+			SoundEntry entry = this.sounds.getRandomSoundForId(paramString);
+
+			if (entry != null && paramFloat4 > 0.0F) {
 				this.soundUID = (this.soundUID + 1) % 256;
 				String str = "sound_" + this.soundUID;
 				float f1 = 16.0F;
+
 				if (paramFloat4 > 1.0F) {
 					f1 *= paramFloat4;
 				}
 
-				soundSystem.newSource(paramFloat4 > 1.0F, str, localbh.soundUrl, localbh.soundName, false, paramFloat1, paramFloat2, paramFloat3, 2, f1);
+				soundSystem.newSource(paramFloat4 > 1.0F, str, entry.soundUrl, entry.soundName, false, paramFloat1, paramFloat2, paramFloat3, 2, f1);
 				soundSystem.setPitch(str, paramFloat5);
+
 				if (paramFloat4 > 1.0F) {
 					paramFloat4 = 1.0F;
 				}
@@ -256,7 +261,6 @@ public abstract class SoundHelperMixin {
 				soundSystem.setVolume(str, paramFloat4 * this.gameOptions.soundVolume);
 				soundSystem.play(str);
 			}
-
 		}
 	}
 
@@ -267,11 +271,13 @@ public abstract class SoundHelperMixin {
 	@Overwrite
 	public void playSound(String paramString, float paramFloat1, float paramFloat2) {
 		if (initialized && this.gameOptions.soundVolume != 0.0F && soundSystem != null) {
-			SoundEntry localbh = this.sounds.getRandomSoundForId(paramString);
-			if (localbh != null) {
+			SoundEntry entry = this.sounds.getRandomSoundForId(paramString);
+
+			if (entry != null) {
 				this.soundUID = (this.soundUID + 1) % 256;
 				String str = "sound_" + this.soundUID;
-				soundSystem.newSource(false, str, localbh.soundUrl, localbh.soundName, false, 0.0F, 0.0F, 0.0F, 0, 0.0F);
+				soundSystem.newSource(false, str, entry.soundUrl, entry.soundName, false, 0.0F, 0.0F, 0.0F, 0, 0.0F);
+
 				if (paramFloat1 > 1.0F) {
 					paramFloat1 = 1.0F;
 				}
@@ -281,7 +287,6 @@ public abstract class SoundHelperMixin {
 				soundSystem.setVolume(str, paramFloat1 * this.gameOptions.soundVolume);
 				soundSystem.play(str);
 			}
-
 		}
 	}
 }

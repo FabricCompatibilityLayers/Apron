@@ -29,6 +29,7 @@ public final class BabricatedForge {
 		LOGGER = Logger.get("Babricated Forge");
 
 		MOD_CACHE_FOLDER = new File(Constants.VERSIONED_FOLDER, "mods");
+
 		if (!(MOD_CACHE_FOLDER.exists() || MOD_CACHE_FOLDER.mkdirs())) {
 			throw new RuntimeException("Could not get or create mod cache folder!");
 		}
@@ -37,7 +38,7 @@ public final class BabricatedForge {
 	}
 
 	/**
-	 * For use in screen mixins
+	 * For use in screen mixins.
 	 *
 	 * @param original what the line originally said
 	 * @return the string to replace it with

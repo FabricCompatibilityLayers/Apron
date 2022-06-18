@@ -19,11 +19,11 @@ public interface BabricatedApi extends ModInitializer, ClientModInitializer, Ded
 	@NotNull
 	static BabricatedApi getInstance() {
 		switch (FabricLoader.getInstance().getEnvironmentType()) {
-		default:
-		case CLIENT:
-			return ClientUtil.instance;
 		case SERVER:
 			return ServerUtil.instance;
+		case CLIENT:
+		default:
+			return ClientUtil.instance;
 		}
 	}
 

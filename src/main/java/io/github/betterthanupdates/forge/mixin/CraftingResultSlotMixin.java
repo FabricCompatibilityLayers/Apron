@@ -36,6 +36,7 @@ public class CraftingResultSlotMixin extends Slot {
 	@Overwrite
 	public void onCrafted(ItemStack itemstack) {
 		itemstack.onCrafted(this.player.world, this.player);
+
 		if (itemstack.itemId == Block.WORKBENCH.id) {
 			this.player.increaseStat(Achievements.CRAFT_WORKBENCH, 1);
 		} else if (itemstack.itemId == Item.WOOD_PICKAXE.id) {
@@ -58,14 +59,15 @@ public class CraftingResultSlotMixin extends Slot {
 		ForgeHooks.onTakenFromCrafting(this.player, itemstack, this.craftingInventory);
 
 		for (int i = 0; i < this.craftingInventory.getInventorySize(); ++i) {
-			ItemStack itemstack1 = this.craftingInventory.getInventoryItem(i);
-			if (itemstack1 != null) {
+			ItemStack stack = this.craftingInventory.getInventoryItem(i);
+
+			if (stack != null) {
 				this.craftingInventory.takeInventoryItem(i, 1);
-				if (itemstack1.getItem().hasContainerItemType()) {
-					this.craftingInventory.setInventoryItem(i, new ItemStack(itemstack1.getItem().getContainerItemType()));
+
+				if (stack.getItem().hasContainerItemType()) {
+					this.craftingInventory.setInventoryItem(i, new ItemStack(stack.getItem().getContainerItemType()));
 				}
 			}
 		}
-
 	}
 }

@@ -24,7 +24,6 @@ import net.minecraft.util.math.MathHelper;
 
 @Mixin(ItemRenderer.class)
 public abstract class ItemRendererMixin extends EntityRenderer {
-
 	@Shadow
 	private Random rand;
 
@@ -42,28 +41,30 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 	 * @reason
 	 */
 	@Overwrite
-	public void render(ItemEntity entityitem, double d, double d1, double d2, float f, float f1) {
+	public void render(ItemEntity itemEntity, double d, double d1, double d2, float f, float f1) {
 		this.rand.setSeed(187L);
-		ItemStack itemstack = entityitem.stack;
+		ItemStack itemstack = itemEntity.stack;
 		GL11.glPushMatrix();
-		float f2 = MathHelper.sin(((float) entityitem.age + f1) / 10.0F + entityitem.field_567) * 0.1F + 0.1F;
-		float f3 = (((float) entityitem.age + f1) / 20.0F + entityitem.field_567) * (float) (180.0 / Math.PI);
+		float f2 = MathHelper.sin(((float) itemEntity.age + f1) / 10.0F + itemEntity.field_567) * 0.1F + 0.1F;
+		float f3 = (((float) itemEntity.age + f1) / 20.0F + itemEntity.field_567) * (float) (180.0 / Math.PI);
 		byte byte0 = 1;
-		if (entityitem.stack.count > 1) {
+
+		if (itemEntity.stack.count > 1) {
 			byte0 = 2;
 		}
 
-		if (entityitem.stack.count > 5) {
+		if (itemEntity.stack.count > 5) {
 			byte0 = 3;
 		}
 
-		if (entityitem.stack.count > 20) {
+		if (itemEntity.stack.count > 20) {
 			byte0 = 4;
 		}
 
 		GL11.glTranslatef((float) d, (float) d1 + f2, (float) d2);
 		GL11.glEnable(32826);
 		ICustomItemRenderer customRenderer = MinecraftForgeClient.getCustomItemRenderer(itemstack.itemId);
+
 		if (customRenderer != null) {
 			GL11.glRotatef(f3, 0.0F, 1.0F, 0.0F);
 			this.bindTexture("/terrain.png");
@@ -74,6 +75,7 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 
 			for (int j = 0; j < byte0; ++j) {
 				GL11.glPushMatrix();
+
 				if (j > 0) {
 					float f5 = (this.rand.nextFloat() * 2.0F - 1.0F) * 0.2F / f4;
 					float f7 = (this.rand.nextFloat() * 2.0F - 1.0F) * 0.2F / f4;
@@ -81,7 +83,7 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 					GL11.glTranslatef(f5, f7, f9);
 				}
 
-				ForgeHooksClient.renderCustomItem(customRenderer, this.field_1708, itemstack.itemId, itemstack.getMeta(), entityitem.getBrightnessAtEyes(f1));
+				ForgeHooksClient.renderCustomItem(customRenderer, this.field_1708, itemstack.itemId, itemstack.getMeta(), itemEntity.getBrightnessAtEyes(f1));
 				GL11.glPopMatrix();
 			}
 		} else if (itemstack.itemId < 256 && BlockRenderer.method_42(Block.BY_ID[itemstack.itemId].getRenderType())) {
@@ -89,6 +91,7 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 			this.bindTexture("/terrain.png");
 			ForgeHooksClient.overrideTexture(Block.BY_ID[itemstack.itemId]);
 			float f4 = 0.25F;
+
 			if (!Block.BY_ID[itemstack.itemId].isFullCube() && itemstack.itemId != Block.STONE_SLAB.id && Block.BY_ID[itemstack.itemId].getRenderType() != 16) {
 				f4 = 0.5F;
 			}
@@ -97,6 +100,7 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 
 			for (int j = 0; j < byte0; ++j) {
 				GL11.glPushMatrix();
+
 				if (j > 0) {
 					float f5 = (this.rand.nextFloat() * 2.0F - 1.0F) * 0.2F / f4;
 					float f7 = (this.rand.nextFloat() * 2.0F - 1.0F) * 0.2F / f4;
@@ -104,12 +108,13 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 					GL11.glTranslatef(f5, f7, f9);
 				}
 
-				this.field_1708.method_48(Block.BY_ID[itemstack.itemId], itemstack.getMeta(), entityitem.getBrightnessAtEyes(f1));
+				this.field_1708.method_48(Block.BY_ID[itemstack.itemId], itemstack.getMeta(), itemEntity.getBrightnessAtEyes(f1));
 				GL11.glPopMatrix();
 			}
 		} else {
 			GL11.glScalef(0.5F, 0.5F, 0.5F);
 			int i = itemstack.getItemTexture();
+
 			if (itemstack.itemId < 256) {
 				this.bindTexture("/terrain.png");
 				ForgeHooksClient.overrideTexture(Block.BY_ID[itemstack.itemId]);
@@ -126,17 +131,19 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 			float f12 = 1.0F;
 			float f13 = 0.5F;
 			float f14 = 0.25F;
+
 			if (this.field_1707) {
 				int k = Item.byId[itemstack.itemId].getNameColor(itemstack.getMeta());
 				float f15 = (float) (k >> 16 & 0xFF) / 255.0F;
 				float f17 = (float) (k >> 8 & 0xFF) / 255.0F;
 				float f19 = (float) (k & 0xFF) / 255.0F;
-				float f21 = entityitem.getBrightnessAtEyes(f1);
+				float f21 = itemEntity.getBrightnessAtEyes(f1);
 				GL11.glColor4f(f15 * f21, f17 * f21, f19 * f21, 1.0F);
 			}
 
 			for (int l = 0; l < byte0; ++l) {
 				GL11.glPushMatrix();
+
 				if (l > 0) {
 					float f16 = (this.rand.nextFloat() * 2.0F - 1.0F) * 0.3F;
 					float f18 = (this.rand.nextFloat() * 2.0F - 1.0F) * 0.3F;
@@ -167,6 +174,7 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 	@Overwrite
 	public void renderItemOnGui(TextRenderer fontrenderer, TextureManager renderengine, int i, int j, int k, int l, int i1) {
 		ICustomItemRenderer customRenderer = MinecraftForgeClient.getCustomItemRenderer(i);
+
 		if (customRenderer != null) {
 			renderengine.bindTexture(renderengine.getTextureId("/terrain.png"));
 			Item item = Item.byId[i];
@@ -182,6 +190,7 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 			float f2 = (float) (l1 >> 16 & 0xFF) / 255.0F;
 			float f4 = (float) (l1 >> 8 & 0xFF) / 255.0F;
 			float f5 = (float) (l1 & 0xFF) / 255.0F;
+
 			if (this.field_1707) {
 				GL11.glColor4f(f2, f4, f5, 1.0F);
 			}
@@ -206,6 +215,7 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 			float f2 = (float) (l1 >> 16 & 0xFF) / 255.0F;
 			float f4 = (float) (l1 >> 8 & 0xFF) / 255.0F;
 			float f5 = (float) (l1 & 0xFF) / 255.0F;
+
 			if (this.field_1707) {
 				GL11.glColor4f(f2, f4, f5, 1.0F);
 			}
@@ -217,6 +227,7 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 			GL11.glPopMatrix();
 		} else if (k >= 0) {
 			GL11.glDisable(2896);
+
 			if (i < 256) {
 				renderengine.bindTexture(renderengine.getTextureId("/terrain.png"));
 				ForgeHooksClient.overrideTexture(Block.BY_ID[i]);
@@ -229,6 +240,7 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 			float f = (float) (k1 >> 16 & 0xFF) / 255.0F;
 			float f1 = (float) (k1 >> 8 & 0xFF) / 255.0F;
 			float f3 = (float) (k1 & 0xFF) / 255.0F;
+
 			if (this.field_1707) {
 				GL11.glColor4f(f, f1, f3, 1.0F);
 			}

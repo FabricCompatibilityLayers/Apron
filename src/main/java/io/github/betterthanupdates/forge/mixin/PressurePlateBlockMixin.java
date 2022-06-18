@@ -24,8 +24,7 @@ public class PressurePlateBlockMixin extends Block {
 	 * @reason Minecraft Forge patch to method
 	 */
 	@Inject(method = "canPlaceAt", at = @At("RETURN"), cancellable = true)
-	private void forge$canPlaceAt(final World world, final int x, final int y, final int z,
-								  final CallbackInfoReturnable<Boolean> cir) {
+	private void forge$canPlaceAt(World world, int x, int y, int z, CallbackInfoReturnable<Boolean> cir) {
 		cir.setReturnValue(((ForgeWorld) world).isBlockSolidOnSide(x, y - 1, z, 1));
 	}
 
@@ -37,6 +36,4 @@ public class PressurePlateBlockMixin extends Block {
 	private boolean forge$onAdjacentBlockUpdate(World world, int x, int y, int z) {
 		return ((ForgeWorld) world).isBlockSolidOnSide(x, y, z, 1);
 	}
-
-
 }

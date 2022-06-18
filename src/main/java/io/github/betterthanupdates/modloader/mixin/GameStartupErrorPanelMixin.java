@@ -72,12 +72,14 @@ public abstract class GameStartupErrorPanelMixin extends Panel {
 		}
 
 		str4 = str4 + "\n";
+
 		if (str1.contains("Pixel format not accelerated")) {
 			str4 = str4 + "      Bad video card drivers!      \n";
 			str4 = str4 + "      -----------------------      \n";
 			str4 = str4 + "\n";
 			str4 = str4 + "Minecraft was unable to start because it failed to find an accelerated OpenGL mode.\n";
 			str4 = str4 + "This can usually be fixed by updating the video card drivers.\n";
+
 			if (str2.toLowerCase().contains("nvidia")) {
 				str4 = str4 + "\n";
 				str4 = str4 + "You might be able to find drivers for your video card here:\n";

@@ -44,6 +44,7 @@ public abstract class LadderBlockMixin extends Block implements ForgeBlock {
 	@Overwrite
 	public void onBlockPlaced(World world, int i, int j, int k, int l) {
 		int i1 = world.getBlockMeta(i, j, k);
+
 		if ((i1 == 0 || l == 2) && ((ForgeWorld) world).isBlockSolidOnSide(i, j, k + 1, 2)) {
 			i1 = 2;
 		}
@@ -71,6 +72,7 @@ public abstract class LadderBlockMixin extends Block implements ForgeBlock {
 	public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {
 		int i1 = world.getBlockMeta(i, j, k);
 		boolean flag = false;
+
 		if (i1 == 2 && ((ForgeWorld) world).isBlockSolidOnSide(i, j, k + 1, 2)) {
 			flag = true;
 		}

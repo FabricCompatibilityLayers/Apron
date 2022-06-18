@@ -19,11 +19,10 @@ import net.minecraft.world.World;
 import io.github.betterthanupdates.forge.block.ForgeBlock;
 
 /**
- * Default implementation of the new methods provided by Minecraft Forge
+ * Default implementation of the new methods provided by Minecraft Forge.
  */
 @Mixin(Block.class)
 public abstract class BlockMixin implements ForgeBlock {
-
 	@Shadow
 	protected float hardness;
 

@@ -49,12 +49,12 @@ public class ForgeHooks {
 		for (forge.IDestroyToolHandler handler : destroyToolHandlers) {
 			handler.onDestroyCurrentItem(player, orig);
 		}
-
 	}
 
 	public static SleepStatus sleepInBedAt(PlayerEntity player, int i, int j, int k) {
 		for (forge.ISleepHandler handler : sleepHandlers) {
 			SleepStatus status = handler.sleepInBedAt(player, i, j, k);
+
 			if (status != null) {
 				return status;
 			}
@@ -68,14 +68,17 @@ public class ForgeHooks {
 			return true;
 		} else {
 			ItemStack itemstack = player.inventory.getHeldItem();
+
 			if (itemstack == null) {
 				return false;
 			} else {
 				ForgeTool tc = toolClasses.get(itemstack.itemId);
+
 				if (tc == null) {
 					return itemstack.isEffectiveOn(block);
 				} else {
 					Integer bhl = toolHarvestLevels.get(new ToolEffectiveness(block.id, meta, tc.toolClass));
+
 					if (bhl == null) {
 						return itemstack.isEffectiveOn(block);
 					} else {
@@ -88,6 +91,7 @@ public class ForgeHooks {
 
 	public static float blockStrength(Block bl, PlayerEntity player, int md) {
 		float bh = ((ForgeBlock) bl).getHardness(md);
+
 		if (bh < 0.0F) {
 			return 0.0F;
 		} else {
@@ -97,6 +101,7 @@ public class ForgeHooks {
 
 	public static boolean isToolEffective(ItemStack tool, Block block, int meta) {
 		ForgeTool tc = toolClasses.get(tool.itemId);
+
 		if (tc == null) {
 			return false;
 		} else {

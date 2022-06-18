@@ -27,6 +27,7 @@ public abstract class DoorBlockMixin extends Block {
 	@Overwrite
 	public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {
 		int i1 = world.getBlockMeta(i, j, k);
+
 		if ((i1 & 8) != 0) {
 			if (world.getBlockId(i, j - 1, k) != this.id) {
 				world.setBlock(i, j, k, 0);
@@ -37,6 +38,7 @@ public abstract class DoorBlockMixin extends Block {
 			}
 		} else {
 			boolean flag = false;
+
 			if (world.getBlockId(i, j + 1, k) != this.id) {
 				world.setBlock(i, j, k, 0);
 				flag = true;
@@ -45,6 +47,7 @@ public abstract class DoorBlockMixin extends Block {
 			if (!((ForgeWorld) world).isBlockSolidOnSide(i, j - 1, k, 1)) {
 				world.setBlock(i, j, k, 0);
 				flag = true;
+
 				if (world.getBlockId(i, j + 1, k) == this.id) {
 					world.setBlock(i, j + 1, k, 0);
 				}
@@ -59,7 +62,6 @@ public abstract class DoorBlockMixin extends Block {
 				this.method_837(world, i, j, k, flag1);
 			}
 		}
-
 	}
 
 	/**

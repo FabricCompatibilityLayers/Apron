@@ -5,6 +5,8 @@ plugins {
 	id 'maven-publish'
 }
 
+apply plugin: "checkstyle"
+
 // Fetch build number from Github Actions
 final def ENV = System.getenv()
 version = "1.7.3+build." + (ENV.GITHUB_ACTIONS ? ENV.BUILD_NUMBER : "local")
@@ -17,8 +19,6 @@ loom {
 	customMinecraftManifest.set("https://babric.github.io/manifest-polyfill/${minecraft_version}.json")
 	accessWidenerPath = file("src/main/resources/forge.accesswidener")
 }
-
-apply plugin: "checkstyle"
 
 repositories {
 	mavenCentral()
@@ -76,6 +76,7 @@ dependencies {
 	modImplementation("net.legacyfabric.legacy-fabric-api:legacy-fabric-logger-api-v1:${project.lfapi_version}")
 
 	include modApi("maven.modrinth:mod-remapping-api:1.2.0")
+	include implementation('org.slick2d:slick2d-core:1.0.2')
 
 	// Done
 //	modRuntimeOnly(group: "remapped.client", name: "modloader", version: "b1.7.3")

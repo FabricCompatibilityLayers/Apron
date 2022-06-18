@@ -47,6 +47,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 	public void tick() {
 		int j = this.burnTime > 0 ? 1 : 0;
 		int k = 0;
+
 		if (this.burnTime > 0) {
 			--this.burnTime;
 		}
@@ -54,8 +55,10 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 		if (!this.world.isClient) {
 			if (this.burnTime == 0 && this.canAcceptRecipeOutput()) {
 				this.fuelTime = this.burnTime = this.getFuelTime(this.inventory[1]);
+
 				if (this.burnTime > 0) {
 					k = 1;
+
 					if (this.inventory[1] != null) {
 						if (this.inventory[1].getItem().hasContainerItemType()) {
 							this.inventory[1] = new ItemStack(this.inventory[1].getItem().getContainerItemType());
@@ -71,8 +74,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 			}
 
 			if (this.isBurning() && this.canAcceptRecipeOutput()) {
-				++this.cookTime;
-				if (this.cookTime == 200) {
+				if (++this.cookTime == 200) {
 					this.cookTime = 0;
 					this.craftRecipe();
 					k = 1;
@@ -101,6 +103,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 	public void craftRecipe() {
 		if (this.canAcceptRecipeOutput()) {
 			ItemStack result = SmeltingRecipeRegistry.getInstance().getResult(this.inventory[0].getItem().id);
+
 			if (this.inventory[2] == null) {
 				this.inventory[2] = result.copy();
 			} else if (this.inventory[2].itemId == result.itemId) {
@@ -116,7 +119,6 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 			if (this.inventory[0].count <= 0) {
 				this.inventory[0] = null;
 			}
-
 		}
 	}
 

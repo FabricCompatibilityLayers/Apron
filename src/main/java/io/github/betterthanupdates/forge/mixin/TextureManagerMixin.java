@@ -20,7 +20,6 @@ import io.github.betterthanupdates.forge.ForgeClientReflection;
 
 @Mixin(TextureManager.class)
 public abstract class TextureManagerMixin {
-
 	@Shadow
 	public TexturePackManager texturePackManager;
 
@@ -56,6 +55,7 @@ public abstract class TextureManagerMixin {
 	public int getTextureId(String s) {
 		TexturePack texturePack = this.texturePackManager.texturePack;
 		Integer integer = (Integer) this.textures.get(s);
+
 		if (integer != null) {
 			return integer;
 		} else {
@@ -67,6 +67,7 @@ public abstract class TextureManagerMixin {
 				((Buffer) this.field_1249).clear();
 				GLAllocationUtils.genTextures(this.field_1249);
 				int i = this.field_1249.get(0);
+
 				if (s.startsWith("##")) {
 					this.bindImageToId(this.method_1101(this.readImage(texturePack.getResourceAsStream(s.substring(2)))), i);
 				} else if (s.startsWith("%clamp%")) {
@@ -79,6 +80,7 @@ public abstract class TextureManagerMixin {
 					this.isBlurTexture = false;
 				} else {
 					InputStream inputstream = texturePack.getResourceAsStream(s);
+
 					if (inputstream == null) {
 						this.bindImageToId(this.missingTexImage, i);
 					} else {
@@ -108,6 +110,7 @@ public abstract class TextureManagerMixin {
 		int k = (i & 0xFF000000) >> 24 & 0xFF;
 		int l = (j & 0xFF000000) >> 24 & 0xFF;
 		char c = 255;
+
 		if (k + l == 0) {
 			k = 1;
 			l = 1;

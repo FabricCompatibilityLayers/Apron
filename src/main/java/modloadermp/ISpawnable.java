@@ -1,5 +1,5 @@
 package modloadermp;
 
 public interface ISpawnable {
-	void spawn(final Packet230ModLoader packet);
+	void spawn(Packet230ModLoader packet);
 }

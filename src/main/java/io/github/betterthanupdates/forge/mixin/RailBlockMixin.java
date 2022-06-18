@@ -69,11 +69,13 @@ public abstract class RailBlockMixin extends Block {
 		if (!world.isClient) {
 			int i1 = world.getBlockMeta(i, j, k);
 			int j1 = i1;
+
 			if (this.field_1262) {
 				j1 = i1 & 7;
 			}
 
 			boolean flag = false;
+
 			if (!((ForgeWorld) world).isBlockSolidOnSide(i, j - 1, k, 1)) {
 				flag = true;
 			}
@@ -101,6 +103,7 @@ public abstract class RailBlockMixin extends Block {
 				boolean flag1 = world.hasRedstonePower(i, j, k) || world.hasRedstonePower(i, j + 1, k);
 				flag1 = flag1 || this.method_1103(world, i, j, k, i1, true, 0) || this.method_1103(world, i, j, k, i1, false, 0);
 				boolean flag2 = false;
+
 				if (flag1 && (i1 & 8) == 0) {
 					world.setBlockMeta(i, j, k, j1 | 8);
 					flag2 = true;
@@ -111,6 +114,7 @@ public abstract class RailBlockMixin extends Block {
 
 				if (flag2) {
 					world.updateAdjacentBlocks(i, j - 1, k, this.id);
+
 					if (j1 == 2 || j1 == 3 || j1 == 4 || j1 == 5) {
 						world.updateAdjacentBlocks(i, j + 1, k, this.id);
 					}
@@ -120,16 +124,15 @@ public abstract class RailBlockMixin extends Block {
 					&& !this.field_1262) {
 				try {
 					Constructor<RailMagicStuff> ctr = RailMagicStuff.class.getDeclaredConstructor(RailBlock.class, World.class, Integer.class, Integer.class, Integer.class);
-					RailMagicStuff railMagicStuff = ctr.newInstance((RailBlock) (Object) this, world, i, j, k);
+					RailMagicStuff railMagicStuff = ctr.newInstance(this, world, i, j, k);
+
 					if (railMagicStuff.method_1116() == 3) {
 						this.method_1104(world, i, j, k, false);
 					}
-				} catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
-						 IllegalAccessException e) {
+				} catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
 					e.printStackTrace();
 				}
 			}
-
 		}
 	}
 }

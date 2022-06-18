@@ -263,6 +263,7 @@ public abstract class BlockRendererMixin {
 	public boolean render(Block block, int x, int y, int z) {
 		int l = block.getRenderType();
 		block.updateBoundingBox(this.blockView, x, y, z);
+
 		if (l == 0) {
 			return this.renderStandardBlock(block, x, y, z);
 		} else if (l == 4) {
@@ -351,6 +352,7 @@ public abstract class BlockRendererMixin {
 		double d18 = d10;
 		double d19 = d12;
 		double d20 = d12;
+
 		if (i1 == 0) {
 			d14 = d9;
 			d15 = d12;
@@ -382,6 +384,7 @@ public abstract class BlockRendererMixin {
 		tessellator.vertex(d21, d23, d24, d14, d16);
 		tessellator.vertex(d21, d23, d25, d18, d20);
 		f17 = (float) BedMagicNumbers.field_792[i1];
+
 		if (flag) {
 			f17 = (float) BedMagicNumbers.field_792[BedMagicNumbers.field_793[i1]];
 		}
@@ -402,6 +405,7 @@ public abstract class BlockRendererMixin {
 
 		if (f17 != 2.0F && (this.renderAllSides || block.isSideRendered(this.blockView, x, y, z - 1, 2))) {
 			float f18 = block.getBrightness(this.blockView, x, y, z - 1);
+
 			if (block.minZ > 0.0) {
 				f18 = f16;
 			}
@@ -413,6 +417,7 @@ public abstract class BlockRendererMixin {
 
 		if (f17 != 3.0F && (this.renderAllSides || block.isSideRendered(this.blockView, x, y, z + 1, 3))) {
 			float f19 = block.getBrightness(this.blockView, x, y, z + 1);
+
 			if (block.maxZ < 1.0) {
 				f19 = f16;
 			}
@@ -424,6 +429,7 @@ public abstract class BlockRendererMixin {
 
 		if (f17 != 4.0F && (this.renderAllSides || block.isSideRendered(this.blockView, x - 1, y, z, 4))) {
 			float f20 = block.getBrightness(this.blockView, x - 1, y, z);
+
 			if (block.minX > 0.0) {
 				f20 = f16;
 			}
@@ -435,6 +441,7 @@ public abstract class BlockRendererMixin {
 
 		if (f17 != 5.0F && (this.renderAllSides || block.isSideRendered(this.blockView, x + 1, y, z, 5))) {
 			float f21 = block.getBrightness(this.blockView, x + 1, y, z);
+
 			if (block.maxX < 1.0) {
 				f21 = f16;
 			}
@@ -457,6 +464,7 @@ public abstract class BlockRendererMixin {
 		Tessellator tessellator = Tessellator.INSTANCE;
 		int l = this.blockView.getBlockMeta(i, j, k);
 		int i1 = block.getTextureForSide(1, l);
+
 		if (this.textureOverride >= 0) {
 			i1 = this.textureOverride;
 		}
@@ -504,6 +512,7 @@ public abstract class BlockRendererMixin {
 		float f6 = (float) (k + 0);
 		float f7 = (float) (k + 1);
 		byte byte0 = 0;
+
 		if ((flag || flag1) && !flag2 && !flag3) {
 			byte0 = 1;
 		}
@@ -590,6 +599,7 @@ public abstract class BlockRendererMixin {
 			double d5 = ((float) (j1 + 16) + 15.99F) / 256.0F;
 			double d6 = (float) k1 / 256.0F;
 			double d7 = ((float) k1 + 15.99F) / 256.0F;
+
 			if (this.blockView.canSuffocate(i - 1, j, k) && this.blockView.getBlockId(i - 1, j + 1, k) == Block.REDSTONE_DUST.id) {
 				tessellator.color(f * f1, f * f2, f * f3);
 				tessellator.vertex((float) i + 0.015625F, (float) (j + 1) + 0.021875F, k + 1, d5, d6);
@@ -683,6 +693,7 @@ public abstract class BlockRendererMixin {
 		this.field_69 = Block.ALLOWS_GRASS_UNDER[this.blockView.getBlockId(i, j + 1, k - 1)];
 		this.field_80 = Block.ALLOWS_GRASS_UNDER[this.blockView.getBlockId(i, j - 1, k + 1)];
 		this.field_77 = Block.ALLOWS_GRASS_UNDER[this.blockView.getBlockId(i, j - 1, k - 1)];
+
 		if (block.texture == 3) {
 			flag6 = false;
 			flag5 = false;
@@ -704,6 +715,7 @@ public abstract class BlockRendererMixin {
 			float f13;
 			float f19;
 			float f25;
+
 			if (this.field_55 <= 0) {
 				f25 = this.field_95;
 				f19 = this.field_95;
@@ -714,6 +726,7 @@ public abstract class BlockRendererMixin {
 				this.field_103 = block.getBrightness(this.blockView, i, j, k - 1);
 				this.field_104 = block.getBrightness(this.blockView, i, j, k + 1);
 				this.field_41 = block.getBrightness(this.blockView, i + 1, j, k);
+
 				if (!this.field_77 && !this.field_79) {
 					this.field_100 = this.field_101;
 				} else {
@@ -769,6 +782,7 @@ public abstract class BlockRendererMixin {
 			float f14;
 			float f20;
 			float f26;
+
 			if (this.field_55 <= 0) {
 				f26 = this.field_98;
 				f20 = this.field_98;
@@ -779,6 +793,7 @@ public abstract class BlockRendererMixin {
 				this.field_48 = block.getBrightness(this.blockView, i + 1, j, k);
 				this.field_46 = block.getBrightness(this.blockView, i, j, k - 1);
 				this.field_49 = block.getBrightness(this.blockView, i, j, k + 1);
+
 				if (!this.field_69 && !this.field_71) {
 					this.field_43 = this.field_44;
 				} else {
@@ -835,6 +850,7 @@ public abstract class BlockRendererMixin {
 			float f15;
 			float f21;
 			float f27;
+
 			if (this.field_55 <= 0) {
 				f27 = this.field_96;
 				f21 = this.field_96;
@@ -845,6 +861,7 @@ public abstract class BlockRendererMixin {
 				this.field_103 = block.getBrightness(this.blockView, i, j - 1, k);
 				this.field_46 = block.getBrightness(this.blockView, i, j + 1, k);
 				this.field_52 = block.getBrightness(this.blockView, i + 1, j, k);
+
 				if (!this.field_73 && !this.field_77) {
 					this.field_100 = this.field_51;
 				} else {
@@ -893,6 +910,7 @@ public abstract class BlockRendererMixin {
 			this.field_68 *= f27;
 			int i1 = block.getTextureForSide(this.blockView, i, j, k, 2);
 			this.renderEastFace(block, i, j, k, i1);
+
 			if (((BabricatedTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && i1 == 3 && this.textureOverride < 0) {
 				this.field_56 *= f;
 				this.field_57 *= f;
@@ -917,6 +935,7 @@ public abstract class BlockRendererMixin {
 			float f16;
 			float f22;
 			float f28;
+
 			if (this.field_55 <= 0) {
 				f28 = this.field_99;
 				f22 = this.field_99;
@@ -927,6 +946,7 @@ public abstract class BlockRendererMixin {
 				this.field_54 = block.getBrightness(this.blockView, i + 1, j, k);
 				this.field_104 = block.getBrightness(this.blockView, i, j - 1, k);
 				this.field_49 = block.getBrightness(this.blockView, i, j + 1, k);
+
 				if (!this.field_75 && !this.field_80) {
 					this.field_102 = this.field_53;
 				} else {
@@ -975,6 +995,7 @@ public abstract class BlockRendererMixin {
 			this.field_68 *= f28;
 			int j1 = block.getTextureForSide(this.blockView, i, j, k, 3);
 			this.renderWestFace(block, i, j, k, block.getTextureForSide(this.blockView, i, j, k, 3));
+
 			if (((BabricatedTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && j1 == 3 && this.textureOverride < 0) {
 				this.field_56 *= f;
 				this.field_57 *= f;
@@ -999,6 +1020,7 @@ public abstract class BlockRendererMixin {
 			float f17;
 			float f23;
 			float f29;
+
 			if (this.field_55 <= 0) {
 				f29 = this.field_94;
 				f23 = this.field_94;
@@ -1009,6 +1031,7 @@ public abstract class BlockRendererMixin {
 				this.field_51 = block.getBrightness(this.blockView, i, j, k - 1);
 				this.field_53 = block.getBrightness(this.blockView, i, j, k + 1);
 				this.field_44 = block.getBrightness(this.blockView, i, j + 1, k);
+
 				if (!this.field_73 && !this.field_79) {
 					this.field_100 = this.field_51;
 				} else {
@@ -1057,6 +1080,7 @@ public abstract class BlockRendererMixin {
 			this.field_68 *= f29;
 			int k1 = block.getTextureForSide(this.blockView, i, j, k, 4);
 			this.renderNorthFace(block, i, j, k, k1);
+
 			if (((BabricatedTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && k1 == 3 && this.textureOverride < 0) {
 				this.field_56 *= f;
 				this.field_57 *= f;
@@ -1081,6 +1105,7 @@ public abstract class BlockRendererMixin {
 			float f18;
 			float f24;
 			float f30;
+
 			if (this.field_55 <= 0) {
 				f30 = this.field_97;
 				f24 = this.field_97;
@@ -1091,6 +1116,7 @@ public abstract class BlockRendererMixin {
 				this.field_52 = block.getBrightness(this.blockView, i, j, k - 1);
 				this.field_54 = block.getBrightness(this.blockView, i, j, k + 1);
 				this.field_48 = block.getBrightness(this.blockView, i, j + 1, k);
+
 				if (!this.field_78 && !this.field_76) {
 					this.field_105 = this.field_52;
 				} else {
@@ -1139,6 +1165,7 @@ public abstract class BlockRendererMixin {
 			this.field_68 *= f30;
 			int l1 = block.getTextureForSide(this.blockView, i, j, k, 5);
 			this.renderSouthFace(block, i, j, k, l1);
+
 			if (((BabricatedTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && l1 == 3 && this.textureOverride < 0) {
 				this.field_56 *= f;
 				this.field_57 *= f;
@@ -1187,6 +1214,7 @@ public abstract class BlockRendererMixin {
 		float f16 = f3;
 		float f17 = f5;
 		float f18 = f6;
+
 		if (block != Block.GRASS) {
 			f10 = f3 * f;
 			f11 = f5 * f;
@@ -1200,6 +1228,7 @@ public abstract class BlockRendererMixin {
 		}
 
 		float f19 = block.getBrightness(this.blockView, i, j, k);
+
 		if (this.renderAllSides || block.isSideRendered(this.blockView, i, j - 1, k, 0)) {
 			float f20 = block.getBrightness(this.blockView, i, j - 1, k);
 			tessellator.color(f10 * f20, f13 * f20, f16 * f20);
@@ -1209,6 +1238,7 @@ public abstract class BlockRendererMixin {
 
 		if (this.renderAllSides || block.isSideRendered(this.blockView, i, j + 1, k, 1)) {
 			float f21 = block.getBrightness(this.blockView, i, j + 1, k);
+
 			if (block.maxY != 1.0 && !block.material.isLiquid()) {
 				f21 = f19;
 			}
@@ -1220,6 +1250,7 @@ public abstract class BlockRendererMixin {
 
 		if (this.renderAllSides || block.isSideRendered(this.blockView, i, j, k - 1, 2)) {
 			float f22 = block.getBrightness(this.blockView, i, j, k - 1);
+
 			if (block.minZ > 0.0) {
 				f22 = f19;
 			}
@@ -1227,6 +1258,7 @@ public abstract class BlockRendererMixin {
 			tessellator.color(f11 * f22, f14 * f22, f17 * f22);
 			int l = block.getTextureForSide(this.blockView, i, j, k, 2);
 			this.renderEastFace(block, i, j, k, l);
+
 			if (((BabricatedTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && l == 3 && this.textureOverride < 0) {
 				tessellator.color(f11 * f22 * f, f14 * f22 * f1, f17 * f22 * f2);
 				this.renderEastFace(block, i, j, k, 38);
@@ -1237,6 +1269,7 @@ public abstract class BlockRendererMixin {
 
 		if (this.renderAllSides || block.isSideRendered(this.blockView, i, j, k + 1, 3)) {
 			float f23 = block.getBrightness(this.blockView, i, j, k + 1);
+
 			if (block.maxZ < 1.0) {
 				f23 = f19;
 			}
@@ -1244,6 +1277,7 @@ public abstract class BlockRendererMixin {
 			tessellator.color(f11 * f23, f14 * f23, f17 * f23);
 			int i1 = block.getTextureForSide(this.blockView, i, j, k, 3);
 			this.renderWestFace(block, i, j, k, i1);
+
 			if (((BabricatedTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && i1 == 3 && this.textureOverride < 0) {
 				tessellator.color(f11 * f23 * f, f14 * f23 * f1, f17 * f23 * f2);
 				this.renderWestFace(block, i, j, k, 38);
@@ -1254,6 +1288,7 @@ public abstract class BlockRendererMixin {
 
 		if (this.renderAllSides || block.isSideRendered(this.blockView, i - 1, j, k, 4)) {
 			float f24 = block.getBrightness(this.blockView, i - 1, j, k);
+
 			if (block.minX > 0.0) {
 				f24 = f19;
 			}
@@ -1261,6 +1296,7 @@ public abstract class BlockRendererMixin {
 			tessellator.color(f12 * f24, f15 * f24, f18 * f24);
 			int j1 = block.getTextureForSide(this.blockView, i, j, k, 4);
 			this.renderNorthFace(block, i, j, k, j1);
+
 			if (((BabricatedTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && j1 == 3 && this.textureOverride < 0) {
 				tessellator.color(f12 * f24 * f, f15 * f24 * f1, f18 * f24 * f2);
 				this.renderNorthFace(block, i, j, k, 38);
@@ -1271,6 +1307,7 @@ public abstract class BlockRendererMixin {
 
 		if (this.renderAllSides || block.isSideRendered(this.blockView, i + 1, j, k, 5)) {
 			float f25 = block.getBrightness(this.blockView, i + 1, j, k);
+
 			if (block.maxX < 1.0) {
 				f25 = f19;
 			}
@@ -1278,6 +1315,7 @@ public abstract class BlockRendererMixin {
 			tessellator.color(f12 * f25, f15 * f25, f18 * f25);
 			int k1 = block.getTextureForSide(this.blockView, i, j, k, 5);
 			this.renderSouthFace(block, i, j, k, k1);
+
 			if (((BabricatedTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && k1 == 3 && this.textureOverride < 0) {
 				tessellator.color(f12 * f25 * f, f15 * f25 * f1, f18 * f25 * f2);
 				this.renderSouthFace(block, i, j, k, 38);
@@ -1296,6 +1334,7 @@ public abstract class BlockRendererMixin {
 	@Overwrite
 	public void method_48(Block block, int i, float f) {
 		Tessellator tessellator = Tessellator.INSTANCE;
+
 		if (this.field_81) {
 			int j = block.getBaseColor(i);
 			float f1 = (float) (j >> 16 & 0xFF) / 255.0F;
@@ -1305,6 +1344,7 @@ public abstract class BlockRendererMixin {
 		}
 
 		int k = block.getRenderType();
+
 		if (k != 0 && k != 16) {
 			if (k == 1) {
 				tessellator.start();
@@ -1398,6 +1438,7 @@ public abstract class BlockRendererMixin {
 			} else if (k == 11) {
 				for (int i1 = 0; i1 < 4; ++i1) {
 					float f4 = 0.125F;
+
 					if (i1 == 0) {
 						block.setBoundingBox(0.5F - f4, 0.0F, 0.0F, 0.5F + f4, 1.0F, f4 * 2.0F);
 					}
@@ -1407,6 +1448,7 @@ public abstract class BlockRendererMixin {
 					}
 
 					f4 = 0.0625F;
+
 					if (i1 == 2) {
 						block.setBoundingBox(0.5F - f4, 1.0F - f4 * 3.0F, -f4 * 2.0F, 0.5F + f4, 1.0F - f4, 1.0F + f4 * 2.0F);
 					}
@@ -1480,7 +1522,6 @@ public abstract class BlockRendererMixin {
 			tessellator.draw();
 			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		}
-
 	}
 
 	/**
@@ -1504,12 +1545,14 @@ public abstract class BlockRendererMixin {
 		for (int i = 0; i < ForgeClientReflection.BlockRenderer$redstoneColors.length; ++i) {
 			float f = (float) i / 15.0F;
 			float f1 = f * 0.6F + 0.4F;
+
 			if (i == 0) {
 				f = 0.0F;
 			}
 
 			float f2 = f * f * 0.7F - 0.5F;
 			float f3 = f * f * 0.6F - 0.7F;
+
 			if (f2 < 0.0F) {
 				f2 = 0.0F;
 			}
@@ -1520,6 +1563,5 @@ public abstract class BlockRendererMixin {
 
 			ForgeClientReflection.BlockRenderer$redstoneColors[i] = new float[] {f1, f2, f3};
 		}
-
 	}
 }

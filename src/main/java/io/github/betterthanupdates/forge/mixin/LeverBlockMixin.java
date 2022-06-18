@@ -66,6 +66,7 @@ public abstract class LeverBlockMixin extends Block {
 		int j1 = i1 & 8;
 		i1 &= 7;
 		i1 = -1;
+
 		if (l == 1 && ((ForgeWorld) world).isBlockSolidOnSide(i, j - 1, k, 1)) {
 			i1 = 5 + world.rand.nextInt(2);
 		}
@@ -103,6 +104,7 @@ public abstract class LeverBlockMixin extends Block {
 		if (this.method_1785(world, i, j, k)) {
 			int i1 = world.getBlockMeta(i, j, k) & 7;
 			boolean flag = false;
+
 			if (!((ForgeWorld) world).isBlockSolidOnSide(i - 1, j, k, 5) && i1 == 1) {
 				flag = true;
 			}
@@ -132,6 +134,5 @@ public abstract class LeverBlockMixin extends Block {
 				world.setBlock(i, j, k, 0);
 			}
 		}
-
 	}
 }

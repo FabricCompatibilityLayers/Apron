@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 
 @Mixin(PlayerRenderer.class)
 public abstract class PlayerRendererMixin extends LivingEntityRenderer {
-
 	@Shadow
 	public static String[] armorTypes;
 
@@ -35,27 +34,30 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer {
 	 * @reason
 	 */
 	@Overwrite
-	protected boolean render(PlayerEntity entityplayer, int i, float f) {
-		ItemStack itemstack = entityplayer.inventory.getArmorItem(3 - i);
+	protected boolean render(PlayerEntity player, int i, float f) {
+		ItemStack itemstack = player.inventory.getArmorItem(3 - i);
+
 		if (itemstack != null) {
 			Item item = itemstack.getItem();
+
 			if (item instanceof ArmorItem) {
-				ArmorItem itemarmor = (ArmorItem) item;
+				ArmorItem armor = (ArmorItem) item;
+
 				if (item instanceof IArmorTextureProvider) {
 					this.bindTexture(((IArmorTextureProvider) item).getArmorTextureFile());
 				} else {
-					this.bindTexture("/armor/" + armorTypes[itemarmor.textureFileAppend] + "_" + (i != 2 ? 1 : 2) + ".png");
+					this.bindTexture("/armor/" + armorTypes[armor.textureFileAppend] + "_" + (i != 2 ? 1 : 2) + ".png");
 				}
 
-				BipedEntityModel modelbiped = i != 2 ? this.field_295 : this.field_296;
-				modelbiped.head.visible = i == 0;
-				modelbiped.hat.visible = i == 0;
-				modelbiped.torso.visible = i == 1 || i == 2;
-				modelbiped.rightArm.visible = i == 1;
-				modelbiped.leftArm.visible = i == 1;
-				modelbiped.rightLeg.visible = i == 2 || i == 3;
-				modelbiped.leftLeg.visible = i == 2 || i == 3;
-				this.setModel(modelbiped);
+				BipedEntityModel bipedModel = i != 2 ? this.field_295 : this.field_296;
+				bipedModel.head.visible = i == 0;
+				bipedModel.hat.visible = i == 0;
+				bipedModel.torso.visible = i == 1 || i == 2;
+				bipedModel.rightArm.visible = i == 1;
+				bipedModel.leftArm.visible = i == 1;
+				bipedModel.rightLeg.visible = i == 2 || i == 3;
+				bipedModel.leftLeg.visible = i == 2 || i == 3;
+				this.setModel(bipedModel);
 				return true;
 			}
 		}

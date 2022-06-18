@@ -14,7 +14,6 @@ import io.github.betterthanupdates.forge.block.ForgeBlock;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
-
 	@Shadow
 	public float limbDistance;
 
@@ -24,8 +23,8 @@ public abstract class LivingEntityMixin extends Entity {
 	@Shadow
 	public float field_1050;
 
-	public LivingEntityMixin(World arg) {
-		super(arg);
+	public LivingEntityMixin(World world) {
+		super(world);
 	}
 
 	/**
@@ -42,6 +41,7 @@ public abstract class LivingEntityMixin extends Entity {
 			this.yVelocity *= 0.8F;
 			this.zVelocity *= 0.8F;
 			this.yVelocity -= 0.02;
+
 			if (this.field_1624 && this.method_1344(this.xVelocity, this.yVelocity + 0.6F - this.y + d, this.zVelocity)) {
 				this.yVelocity = 0.3F;
 			}
@@ -53,14 +53,17 @@ public abstract class LivingEntityMixin extends Entity {
 			this.yVelocity *= 0.5;
 			this.zVelocity *= 0.5;
 			this.yVelocity -= 0.02;
+
 			if (this.field_1624 && this.method_1344(this.xVelocity, this.yVelocity + 0.6F - this.y + d1, this.zVelocity)) {
 				this.yVelocity = 0.3F;
 			}
 		} else {
 			float f2 = 0.91F;
+
 			if (this.onGround) {
 				f2 = 0.5460001F;
 				int i = this.world.getBlockId(MathHelper.floor(this.x), MathHelper.floor(this.boundingBox.minY) - 1, MathHelper.floor(this.z));
+
 				if (i > 0) {
 					f2 = Block.BY_ID[i].slipperiness * 0.91F;
 				}
@@ -69,9 +72,11 @@ public abstract class LivingEntityMixin extends Entity {
 			float f3 = 0.1627714F / (f2 * f2 * f2);
 			this.movementInputToVelocity(f, f1, this.onGround ? 0.1F * f3 : 0.02F);
 			f2 = 0.91F;
+
 			if (this.onGround) {
 				f2 = 0.5460001F;
 				int j = this.world.getBlockId(MathHelper.floor(this.x), MathHelper.floor(this.boundingBox.minY) - 1, MathHelper.floor(this.z));
+
 				if (j > 0) {
 					f2 = Block.BY_ID[j].slipperiness * 0.91F;
 				}
@@ -79,23 +84,25 @@ public abstract class LivingEntityMixin extends Entity {
 
 			if (this.method_932()) {
 				float f4 = 0.15F;
+
 				if (this.xVelocity < (double) (-f4)) {
-					this.xVelocity = (double) (-f4);
+					this.xVelocity = -f4;
 				}
 
 				if (this.xVelocity > (double) f4) {
-					this.xVelocity = (double) f4;
+					this.xVelocity = f4;
 				}
 
 				if (this.zVelocity < (double) (-f4)) {
-					this.zVelocity = (double) (-f4);
+					this.zVelocity = -f4;
 				}
 
 				if (this.zVelocity > (double) f4) {
-					this.zVelocity = (double) f4;
+					this.zVelocity = f4;
 				}
 
 				this.fallDistance = 0.0F;
+
 				if (this.yVelocity < -0.15) {
 					this.yVelocity = -0.15;
 				}
@@ -106,20 +113,22 @@ public abstract class LivingEntityMixin extends Entity {
 			}
 
 			this.move(this.xVelocity, this.yVelocity, this.zVelocity);
+
 			if (this.field_1624 && this.method_932()) {
 				this.yVelocity = 0.2;
 			}
 
 			this.yVelocity -= 0.08;
 			this.yVelocity *= 0.98F;
-			this.xVelocity *= (double) f2;
-			this.zVelocity *= (double) f2;
+			this.xVelocity *= f2;
+			this.zVelocity *= f2;
 		}
 
 		this.field_1048 = this.limbDistance;
 		double d2 = this.x - this.prevX;
 		double d3 = this.z - this.prevZ;
 		float f5 = MathHelper.sqrt(d2 * d2 + d3 * d3) * 4.0F;
+
 		if (f5 > 1.0F) {
 			f5 = 1.0F;
 		}

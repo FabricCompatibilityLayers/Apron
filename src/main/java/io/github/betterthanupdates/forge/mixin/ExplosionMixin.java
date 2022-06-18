@@ -21,7 +21,6 @@ import net.minecraft.world.explosion.Explosion;
 
 @Mixin(Explosion.class)
 public class ExplosionMixin {
-
 	@Shadow
 	public float power;
 
@@ -79,6 +78,7 @@ public class ExplosionMixin {
 							int k4 = MathHelper.floor(d7);
 							int l4 = MathHelper.floor(d9);
 							int i5 = this.world.getBlockId(j4, k4, l4);
+
 							if (i5 > 0) {
 								if (Block.BY_ID[i5] instanceof ISpecialResistance) {
 									ISpecialResistance isr = (ISpecialResistance) Block.BY_ID[i5];
@@ -114,6 +114,7 @@ public class ExplosionMixin {
 		for (int k2 = 0; k2 < list.size(); ++k2) {
 			Entity entity = (Entity) list.get(k2);
 			double d4 = entity.distanceTo(this.x, this.y, this.z) / (double) this.power;
+
 			if (d4 <= 1.0) {
 				double d6 = entity.x - this.x;
 				double d8 = entity.y - this.y;
@@ -134,6 +135,7 @@ public class ExplosionMixin {
 		this.power = f;
 		ArrayList arraylist = new ArrayList();
 		arraylist.addAll(this.damagedBlocks);
+
 		if (this.causeFires) {
 			for (int l2 = arraylist.size() - 1; l2 >= 0; --l2) {
 				BlockPos chunkposition = (BlockPos) arraylist.get(l2);
@@ -142,11 +144,11 @@ public class ExplosionMixin {
 				int k3 = chunkposition.z;
 				int l3 = this.world.getBlockId(i3, j3, k3);
 				int i4 = this.world.getBlockId(i3, j3 - 1, k3);
+
 				if (l3 == 0 && Block.FULL_OPAQUE[i4] && this.random.nextInt(3) == 0) {
 					this.world.setBlock(i3, j3, k3, Block.FIRE.id);
 				}
 			}
 		}
-
 	}
 }

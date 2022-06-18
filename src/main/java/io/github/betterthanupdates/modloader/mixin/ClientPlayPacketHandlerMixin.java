@@ -52,6 +52,7 @@ public abstract class ClientPlayPacketHandlerMixin {
 		double d1 = (double) packet23vehiclespawn.y / 32.0;
 		double d2 = (double) packet23vehiclespawn.z / 32.0;
 		Entity obj = null;
+
 		if (packet23vehiclespawn.type == 10) {
 			obj = new ChestMinecartEntity(this.world, d, d1, d2, 0);
 		}
@@ -110,18 +111,22 @@ public abstract class ClientPlayPacketHandlerMixin {
 		}
 
 		NetClientHandlerEntity netclienthandlerentity = ModLoaderMp.HandleNetClientHandlerEntities(packet23vehiclespawn.type);
+
 		if (netclienthandlerentity != null) {
 			try {
 				obj = netclienthandlerentity.entityClass
 						.getConstructor(World.class, Double.TYPE, Double.TYPE, Double.TYPE)
 						.newInstance(this.world, d, d1, d2);
+
 				if (netclienthandlerentity.entityHasOwner) {
 					Field field = netclienthandlerentity.entityClass.getField("owner");
+
 					if (!Entity.class.isAssignableFrom(field.getType())) {
 						throw new Exception(String.format("Entity's owner field must be of type Entity, but it is of type %s.", field.getType()));
 					}
 
 					Entity entity1 = this.getEntity(packet23vehiclespawn.flag);
+
 					if (entity1 == null) {
 						ModLoaderMp.Log("Received spawn packet for entity with owner, but owner was not found.");
 					} else {
@@ -149,9 +154,11 @@ public abstract class ClientPlayPacketHandlerMixin {
 			obj.pitch = 0.0F;
 			obj.entityId = packet23vehiclespawn.entityId;
 			this.world.method_1495(packet23vehiclespawn.entityId, obj);
+
 			if (packet23vehiclespawn.flag > 0) {
 				if (packet23vehiclespawn.type == 60) {
 					Entity entity = this.getEntity(packet23vehiclespawn.flag);
+
 					if (entity instanceof LivingEntity) {
 						((ArrowEntity) obj).owner = (LivingEntity) entity;
 					}

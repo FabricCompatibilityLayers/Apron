@@ -53,8 +53,10 @@ public class SafeUtil implements ModInitializer {
 		case SERVER:
 			try {
 				Class<?> serverClass = CLASS_LOADER.loadClass("net.minecraft.server.MinecraftServer");
+
 				if (serverClass != null) {
 					MinecraftServer server = (MinecraftServer) getGame();
+
 					if (server != null) {
 						server.getWorld(0);
 					}
@@ -63,12 +65,15 @@ public class SafeUtil implements ModInitializer {
 				LOGGER.error("Wrong environment!");
 				return null;
 			}
+
 			break;
 		case CLIENT:
 			try {
 				Class<?> clientClass = CLASS_LOADER.loadClass("net.minecraft.client.Minecraft");
+
 				if (clientClass != null) {
 					Minecraft client = (Minecraft) getGame();
+
 					if (client != null) {
 						return client.world;
 					}

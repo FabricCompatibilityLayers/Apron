@@ -42,7 +42,9 @@ public class ModLoaderMp {
 		if (!ModLoaderMp.hasInit) {
 			init();
 		}
+
 		ModLoaderMp.packet230Received = true;
+
 		if (packet.modId == NAME.hashCode()) {
 			switch (packet.packetType) {
 			case 0: {
@@ -56,24 +58,28 @@ public class ModLoaderMp {
 			}
 		} else if (packet.modId == "Spawn".hashCode()) {
 			NetClientHandlerEntity netclienthandlerentity = HandleNetClientHandlerEntities(packet.packetType);
+
 			if (netclienthandlerentity != null && ISpawnable.class.isAssignableFrom(netclienthandlerentity.entityClass)) {
 				try {
 					Entity entity = netclienthandlerentity.entityClass.getConstructor(World.class).newInstance(BAPI.getWorld());
 					((ISpawnable) entity).spawn(packet);
 					ClientWorld world = (ClientWorld) BAPI.getWorld();
+
 					if (world != null) {
 						world.method_1495(entity.entityId, entity);
 					}
-				} catch (Exception var4) {
-					ModLoader.getLogger().throwing("ModLoader", "handleCustomSpawn", var4);
-					ModLoader.ThrowException(String.format("Error initializing entity of type %s.", packet.packetType), var4);
+				} catch (Exception e) {
+					ModLoader.getLogger().throwing("ModLoader", "handleCustomSpawn", e);
+					ModLoader.ThrowException(String.format("Error initializing entity of type %s.", packet.packetType), e);
 				}
 			}
 		} else {
 			for (int i = 0; i < ModLoader.getLoadedMods().size(); ++i) {
 				BaseMod basemod = ModLoader.getLoadedMods().get(i);
+
 				if (basemod instanceof BaseModMp) {
 					BaseModMp basemodmp = (BaseModMp) basemod;
+
 					if (basemodmp.getId() == packet.modId) {
 						basemodmp.HandlePacket(packet);
 						break;
@@ -87,9 +93,11 @@ public class ModLoaderMp {
 		if (!ModLoaderMp.hasInit) {
 			init();
 		}
+
 		if (ModLoaderMp.NET_CLIENT_HANDLER_MAP.containsKey(aInteger1)) {
 			return ModLoaderMp.NET_CLIENT_HANDLER_MAP.get(aInteger1);
 		}
+
 		return null;
 	}
 
@@ -99,9 +107,9 @@ public class ModLoaderMp {
 		}
 
 		if (basemodmp == null) {
-			IllegalArgumentException illegalargumentexception = new IllegalArgumentException("baseModMp cannot be null.");
-			ModLoader.getLogger().throwing("ModLoaderMp", "SendPacket", illegalargumentexception);
-			ModLoader.ThrowException("baseModMp cannot be null.", illegalargumentexception);
+			IllegalArgumentException e = new IllegalArgumentException("baseModMp cannot be null.");
+			ModLoader.getLogger().throwing("ModLoaderMp", "SendPacket", e);
+			ModLoader.ThrowException("baseModMp cannot be null.", e);
 		} else {
 			packet.modId = basemodmp.getId();
 			sendPacket(packet);
@@ -112,6 +120,7 @@ public class ModLoaderMp {
 		if (!ModLoaderMp.hasInit) {
 			init();
 		}
+
 		if (ModLoaderMp.GUI_MOD_MAP.containsKey(i)) {
 			Log("RegisterGUI error: inventoryType already registered.");
 		} else {
@@ -165,6 +174,7 @@ public class ModLoaderMp {
 		if (!ModLoaderMp.hasInit) {
 			init();
 		}
+
 		if (basemodmp == null) {
 			final IllegalArgumentException e = new IllegalArgumentException("baseModMp cannot be null.");
 			ModLoader.getLogger().throwing(NAME, "SendKey", e);
@@ -215,8 +225,10 @@ public class ModLoaderMp {
 
 			for (int j1 = 0; j1 < ModLoader.getLoadedMods().size(); ++j1) {
 				BaseMod basemod = ModLoader.getLoadedMods().get(j1);
+
 				if (basemod instanceof BaseModMp) {
 					BaseModMp basemodmp = (BaseModMp) basemod;
+
 					if (basemodmp.getId() == i) {
 						basemodmp.HandleTileEntityPacket(j, k, l, i1, ai, af, as);
 						break;
@@ -244,11 +256,13 @@ public class ModLoaderMp {
 		for (BaseMod basemod : ModLoader.getLoadedMods()) {
 			if (basemod instanceof BaseModMp) {
 				final BaseModMp basemodmp = (BaseModMp) basemod;
+
 				if (v1.isInstance(basemodmp)) {
 					return basemodmp;
 				}
 			}
 		}
+
 		return null;
 	}
 

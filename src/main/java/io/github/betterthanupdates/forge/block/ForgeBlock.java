@@ -5,7 +5,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 /**
- * New methods for {@link net.minecraft.block.Block} by Minecraft Forge
+ * New methods for {@link net.minecraft.block.Block} by Minecraft Forge.
  */
 public interface ForgeBlock {
 	int getLightValue(BlockView blockView, int x, int y, int z);

@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 
 @Mixin(DispenserBlock.class)
 public abstract class DispenserBlockMixin {
-
 	/**
 	 * @author Risugami
 	 * @reason Implements {@link ModLoader#DispenseEntity(World, double, double, double, int, int, ItemStack)
@@ -30,6 +29,7 @@ public abstract class DispenserBlockMixin {
 		int meta = world.getBlockMeta(x, y, z);
 		int j = 0;
 		int k = 0;
+
 		if (meta == 3) {
 			k = 1;
 		} else if (meta == 2) {
@@ -45,10 +45,12 @@ public abstract class DispenserBlockMixin {
 		double posX = (double) x + (double) j * 0.6 + 0.5;
 		double posY = (double) y + 0.5;
 		double posZ = (double) z + (double) k * 0.6 + 0.5;
+
 		if (itemStack == null) {
 			world.playWorldEvent(1001, x, y, z, 0);
 		} else {
 			boolean handled = ModLoader.DispenseEntity(world, posX, posY, posZ, j, k, itemStack);
+
 			if (!handled) {
 				if (itemStack.itemId == Item.ARROW.id) {
 					ArrowEntity arrow = new ArrowEntity(world, posX, posY, posZ);
@@ -82,6 +84,5 @@ public abstract class DispenserBlockMixin {
 
 			world.playWorldEvent(2000, x, y, z, j + 1 + (k + 1) * 3);
 		}
-
 	}
 }

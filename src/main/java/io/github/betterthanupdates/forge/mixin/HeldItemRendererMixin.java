@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 
 @Mixin(HeldItemRenderer.class)
 public class HeldItemRendererMixin {
-
 	@Shadow
 	private Minecraft client;
 
@@ -31,17 +30,18 @@ public class HeldItemRendererMixin {
 	 * @reason
 	 */
 	@Overwrite
-	public void render(LivingEntity entityliving, ItemStack itemstack) {
+	public void render(LivingEntity livingEntity, ItemStack itemstack) {
 		GL11.glPushMatrix();
 		ICustomItemRenderer customRenderer = MinecraftForgeClient.getCustomItemRenderer(itemstack.itemId);
+
 		if (customRenderer != null) {
 			GL11.glBindTexture(3553, this.client.textureManager.getTextureId("/terrain.png"));
 			ForgeHooksClient.overrideTexture(itemstack.getItem());
-			ForgeHooksClient.renderCustomItem(customRenderer, this.blockRenderer, itemstack.itemId, itemstack.getMeta(), entityliving.getBrightnessAtEyes(1.0F));
+			ForgeHooksClient.renderCustomItem(customRenderer, this.blockRenderer, itemstack.itemId, itemstack.getMeta(), livingEntity.getBrightnessAtEyes(1.0F));
 		} else if (itemstack.itemId < 256 && BlockRenderer.method_42(Block.BY_ID[itemstack.itemId].getRenderType())) {
 			GL11.glBindTexture(3553, this.client.textureManager.getTextureId("/terrain.png"));
 			ForgeHooksClient.overrideTexture(Block.BY_ID[itemstack.itemId]);
-			this.blockRenderer.method_48(Block.BY_ID[itemstack.itemId], itemstack.getMeta(), entityliving.getBrightnessAtEyes(1.0F));
+			this.blockRenderer.method_48(Block.BY_ID[itemstack.itemId], itemstack.getMeta(), livingEntity.getBrightnessAtEyes(1.0F));
 		} else {
 			if (itemstack.itemId < 256) {
 				GL11.glBindTexture(3553, this.client.textureManager.getTextureId("/terrain.png"));
@@ -52,7 +52,7 @@ public class HeldItemRendererMixin {
 			}
 
 			Tessellator tessellator = Tessellator.INSTANCE;
-			int i = entityliving.getHeldItemTexture(itemstack);
+			int i = livingEntity.getHeldItemTexture(itemstack);
 			float f = ((float) (i % 16 * 16) + 0.0F) / 256.0F;
 			float f1 = ((float) (i % 16 * 16) + 15.99F) / 256.0F;
 			float f2 = ((float) (i / 16 * 16) + 0.0F) / 256.0F;

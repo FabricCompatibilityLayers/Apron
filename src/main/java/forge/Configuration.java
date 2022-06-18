@@ -21,6 +21,7 @@ import java.util.TreeMap;
 
 import net.minecraft.block.Block;
 
+@SuppressWarnings("unused")
 public class Configuration {
 	private boolean[] configBlocks = null;
 	public static final int GENERAL_PROPERTY = 0;
@@ -50,6 +51,7 @@ public class Configuration {
 			Property property = new Property();
 			this.blockProperties.put(key, property);
 			property.name = key;
+
 			if (Block.BY_ID[defaultId] == null && !this.configBlocks[defaultId]) {
 				property.value = Integer.toString(defaultId);
 				this.configBlocks[defaultId] = true;
@@ -82,9 +84,11 @@ public class Configuration {
 
 	public Property getOrCreateBooleanProperty(String key, int kind, boolean defaultValue) {
 		Property prop = this.getOrCreateProperty(key, kind, Boolean.toString(defaultValue));
+
 		if (!"true".equalsIgnoreCase(prop.value) && !"false".equalsIgnoreCase(prop.value)) {
 			prop.value = Boolean.toString(defaultValue);
 		}
+
 		return prop;
 	}
 
@@ -131,9 +135,8 @@ public class Configuration {
 
 				while (true) {
 					String line = buffer.readLine();
-					if (line == null) {
-						break;
-					}
+
+					if (line == null) break;
 
 					int nameStart = -1;
 					int nameEnd = -1;
@@ -148,6 +151,7 @@ public class Configuration {
 									break;
 								case '=':
 									String propertyName = line.substring(nameStart, nameEnd + 1);
+
 									if (currentMap == null) {
 										throw new RuntimeException("property " + propertyName + " has no scope");
 									}
@@ -160,6 +164,7 @@ public class Configuration {
 									break;
 								case '{':
 									String scopeName = line.substring(nameStart, nameEnd + 1);
+
 									if (scopeName.equals("general")) {
 										currentMap = this.generalProperties;
 									} else if (scopeName.equals("block")) {
@@ -171,6 +176,7 @@ public class Configuration {
 
 										currentMap = this.itemProperties;
 									}
+
 									break;
 								case '}':
 									currentMap = null;
