@@ -6,12 +6,13 @@ package forge;
 
 import net.minecraft.world.World;
 
+@SuppressWarnings("unused")
 public interface IBlockSecondaryProperties {
-	boolean isBlockNormalCube(World arg, int i, int j, int k);
+	boolean isBlockNormalCube(World world, int x, int y, int z);
 
-	boolean isBlockReplaceable(World arg, int i, int j, int k);
+	boolean isBlockReplaceable(World world, int x, int y, int z);
 
-	boolean isBlockBurning(World arg, int i, int j, int k);
+	boolean isBlockBurning(World world, int x, int y, int z);
 
-	boolean isAirBlock(World arg, int i, int j, int k);
+	boolean isAirBlock(World world, int x, int y, int z);
 }
