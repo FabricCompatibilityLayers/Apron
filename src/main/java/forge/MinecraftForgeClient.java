@@ -4,11 +4,16 @@
  */
 package forge;
 
-import modloader.ModLoader;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.block.BlockRenderer;
 import net.minecraft.item.Item;
 
+import static io.github.betterthanupdates.babricated.client.ClientUtil.getTextureManager;
+
+@SuppressWarnings("unused")
+@Environment(EnvType.CLIENT)
 public class MinecraftForgeClient {
 	private static final ICustomItemRenderer[] customItemRenderers = new ICustomItemRenderer[Item.byId.length];
 
@@ -32,13 +37,13 @@ public class MinecraftForgeClient {
 	}
 
 	public static void preloadTexture(String texture) {
-		ModLoader.getMinecraftInstance().textureManager.getTextureId(texture);
+		getTextureManager().getTextureId(texture);
 	}
 
-	public static void renderBlock(BlockRenderer rb, Block bl, int i, int j, int k) {
-		ForgeHooksClient.beforeBlockRender(bl, rb);
-		rb.render(bl, i, j, k);
-		ForgeHooksClient.afterBlockRender(bl, rb);
+	public static void renderBlock(BlockRenderer blockRenderer, Block block, int x, int y, int z) {
+		ForgeHooksClient.beforeBlockRender(block, blockRenderer);
+		blockRenderer.render(block, x, y, z);
+		ForgeHooksClient.afterBlockRender(block, blockRenderer);
 	}
 
 	public static int getRenderPass() {

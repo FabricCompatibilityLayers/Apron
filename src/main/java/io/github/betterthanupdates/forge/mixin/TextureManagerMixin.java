@@ -1,6 +1,7 @@
 package io.github.betterthanupdates.forge.mixin;
 
 import io.github.betterthanupdates.forge.ForgeClientReflection;
+import net.legacyfabric.fabric.api.logger.v1.Logger;
 import net.minecraft.client.TexturePackManager;
 import net.minecraft.client.resource.TexturePack;
 import net.minecraft.client.texture.TextureManager;
@@ -11,7 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
-import java.nio.Buffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 
@@ -42,31 +42,31 @@ public abstract class TextureManagerMixin {
      */
     @Overwrite
     public int getTextureId(String s) {
-        TexturePack texturepackbase = this.texturePackManager.texturePack;
+        TexturePack texturePack = this.texturePackManager.texturePack;
         Integer integer = (Integer)this.textures.get(s);
         if (integer != null) {
             return integer;
         } else {
             try {
                 if (ForgeClientReflection.Tessellator$renderingWorldRenderer) {
-                    System.out.printf("Warning: Texture %s not preloaded, will cause render glitches!\n", s);
+                    Logger.get("Babricated Forge", "Minecraft Forge").warn("Texture {} not preloaded, will cause render glitches!", s);
                 }
 
-                ((Buffer)this.field_1249).clear();
+                this.field_1249.clear();
                 GLAllocationUtils.genTextures(this.field_1249);
                 int i = this.field_1249.get(0);
                 if (s.startsWith("##")) {
-                    this.bindImageToId(this.method_1101(this.readImage(texturepackbase.getResourceAsStream(s.substring(2)))), i);
+                    this.bindImageToId(this.method_1101(this.readImage(texturePack.getResourceAsStream(s.substring(2)))), i);
                 } else if (s.startsWith("%clamp%")) {
                     this.isClampTexture = true;
-                    this.bindImageToId(this.readImage(texturepackbase.getResourceAsStream(s.substring(7))), i);
+                    this.bindImageToId(this.readImage(texturePack.getResourceAsStream(s.substring(7))), i);
                     this.isClampTexture = false;
                 } else if (s.startsWith("%blur%")) {
                     this.isBlurTexture = true;
-                    this.bindImageToId(this.readImage(texturepackbase.getResourceAsStream(s.substring(6))), i);
+                    this.bindImageToId(this.readImage(texturePack.getResourceAsStream(s.substring(6))), i);
                     this.isBlurTexture = false;
                 } else {
-                    InputStream inputstream = texturepackbase.getResourceAsStream(s);
+                    InputStream inputstream = texturePack.getResourceAsStream(s);
                     if (inputstream == null) {
                         this.bindImageToId(this.missingTexImage, i);
                     } else {

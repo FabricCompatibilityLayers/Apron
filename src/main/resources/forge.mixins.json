@@ -38,7 +38,7 @@
     "ChunkMixin",
     "ExplosionMixin",
     "WorldMixin",
-    "class_66Mixin",
+    "WorldRendererMixin",
     "class_417Mixin"
   ],
   "client": [
