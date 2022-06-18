@@ -1,20 +1,22 @@
 package io.github.betterthanupdates.forge.mixin;
 
 import forge.ForgeHooks;
-import io.github.betterthanupdates.forge.block.ForgeBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
+
+import io.github.betterthanupdates.forge.block.ForgeBlock;
 
 /**
  * Default implementation of the new methods provided by Minecraft Forge
@@ -47,7 +49,7 @@ public abstract class BlockMixin implements ForgeBlock {
 	@Environment(EnvType.CLIENT)
 	@Inject(method = "getBrightness", at = @At("RETURN"), cancellable = true)
 	private void getBrightness(BlockView blockView, int x, int y, int z, CallbackInfoReturnable<Float> cir) {
-		 cir.setReturnValue(blockView.getNaturalBrightness(x, y, z, this.getLightValue(blockView, x, y, z)));
+		cir.setReturnValue(blockView.getNaturalBrightness(x, y, z, this.getLightValue(blockView, x, y, z)));
 	}
 
 	/**

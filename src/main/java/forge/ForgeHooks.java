@@ -2,12 +2,15 @@
  * This software is provided under the terms of the Minecraft Forge Public
  * License v1.1.
  */
+
 package forge;
 
-import io.github.betterthanupdates.forge.block.ForgeBlock;
-import io.github.betterthanupdates.forge.entity.player.ForgePlayerEntity;
-import io.github.betterthanupdates.forge.item.ForgeTool;
-import io.github.betterthanupdates.forge.item.ToolEffectiveness;
+import static forge.MinecraftForge.LOGGER;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -15,9 +18,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SleepStatus;
 
-import java.util.*;
-
-import static forge.MinecraftForge.LOGGER;
+import io.github.betterthanupdates.forge.block.ForgeBlock;
+import io.github.betterthanupdates.forge.entity.player.ForgePlayerEntity;
+import io.github.betterthanupdates.forge.item.ForgeTool;
+import io.github.betterthanupdates.forge.item.ToolEffectiveness;
 
 @SuppressWarnings("unused")
 public class ForgeHooks {

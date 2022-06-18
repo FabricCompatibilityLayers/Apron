@@ -1,6 +1,11 @@
 package io.github.betterthanupdates.forge.mixin;
 
 import forge.ForgeHooksClient;
+import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.PistonBlock;
 import net.minecraft.client.Minecraft;
@@ -10,10 +15,6 @@ import net.minecraft.client.render.block.BlockRenderer;
 import net.minecraft.client.render.entity.block.BlockEntityRenderer;
 import net.minecraft.client.render.entity.block.PistonRenderer;
 import net.minecraft.entity.block.PistonBlockEntity;
-import org.lwjgl.opengl.GL11;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(PistonRenderer.class)
 public abstract class PistonRendererMixin extends BlockEntityRenderer {

@@ -1,8 +1,10 @@
 package io.github.betterthanupdates.babricated.mixin;
 
-import io.github.betterthanupdates.babricated.item.ItemConvertible;
-import net.minecraft.item.Item;
 import org.spongepowered.asm.mixin.Mixin;
+
+import net.minecraft.item.Item;
+
+import io.github.betterthanupdates.babricated.item.ItemConvertible;
 
 @Mixin(Item.class)
 public class ItemMixin implements ItemConvertible {

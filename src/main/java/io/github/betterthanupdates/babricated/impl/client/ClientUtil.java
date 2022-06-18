@@ -1,19 +1,20 @@
 package io.github.betterthanupdates.babricated.impl.client;
 
-import io.github.betterthanupdates.babricated.api.BabricatedApi;
-import net.fabricmc.api.ClientModInitializer;
+import static io.github.betterthanupdates.babricated.BabricatedForge.LOGGER;
+
+import java.util.List;
+
 import net.fabricmc.loader.impl.FabricLoaderImpl;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.texture.TextureManager;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.include.com.google.common.collect.ImmutableList;
 
-import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.texture.TextureManager;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.World;
 
-import static io.github.betterthanupdates.babricated.BabricatedForge.LOGGER;
+import io.github.betterthanupdates.babricated.api.BabricatedApi;
 
 /**
  * Provides quick access to fields in the {@link Minecraft client}.<br>

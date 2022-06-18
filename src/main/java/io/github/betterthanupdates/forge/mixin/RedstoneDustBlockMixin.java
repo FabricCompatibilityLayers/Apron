@@ -1,15 +1,17 @@
 package io.github.betterthanupdates.forge.mixin;
 
 import forge.IConnectRedstone;
-import io.github.betterthanupdates.forge.world.ForgeWorld;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.RedstoneDustBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.number.BedMagicNumbers;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+
+import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(RedstoneDustBlock.class)
 public class RedstoneDustBlockMixin extends Block {
@@ -23,7 +25,7 @@ public class RedstoneDustBlockMixin extends Block {
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k) {
-		return ((ForgeWorld)world).isBlockSolidOnSide(i, j - 1, k, 1);
+		return ((ForgeWorld) world).isBlockSolidOnSide(i, j - 1, k, 1);
 	}
 
 	/**

@@ -1,18 +1,19 @@
 package io.github.betterthanupdates.modloader.mixin;
 
 import modloader.ModLoader;
-import net.minecraft.block.FurnaceBlock;
-import net.minecraft.entity.BlockEntity;
-import net.minecraft.entity.block.FurnaceBlockEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.SmeltingRecipeRegistry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import net.minecraft.block.FurnaceBlock;
+import net.minecraft.entity.BlockEntity;
+import net.minecraft.entity.block.FurnaceBlockEntity;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.SmeltingRecipeRegistry;
 
 @Mixin(FurnaceBlockEntity.class)
 public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inventory {

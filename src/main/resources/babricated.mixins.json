@@ -5,10 +5,10 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "BlockMixin",
+    "InGameHudMixin",
     "ItemEntityMixin",
     "ItemMixin",
     "ItemStackMixin",
-    "InGameHudMixin",
     "TitleScreenMixin"
   ],
   "client": [

@@ -1,12 +1,14 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.world.ForgeWorld;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.RedstoneRepeaterBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+
+import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(RedstoneRepeaterBlock.class)
 public class RedstoneRepeaterBlockMixin extends Block {
@@ -20,7 +22,7 @@ public class RedstoneRepeaterBlockMixin extends Block {
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k) {
-		return !((ForgeWorld)world).isBlockSolidOnSide(i, j - 1, k, 1) ? false : super.canPlaceAt(world, i, j, k);
+		return !((ForgeWorld) world).isBlockSolidOnSide(i, j - 1, k, 1) ? false : super.canPlaceAt(world, i, j, k);
 	}
 
 	/**
@@ -29,6 +31,6 @@ public class RedstoneRepeaterBlockMixin extends Block {
 	 */
 	@Overwrite
 	public boolean canGrow(World world, int i, int j, int k) {
-		return !((ForgeWorld)world).isBlockSolidOnSide(i, j - 1, k, 1) ? false : super.canGrow(world, i, j, k);
+		return !((ForgeWorld) world).isBlockSolidOnSide(i, j - 1, k, 1) ? false : super.canGrow(world, i, j, k);
 	}
 }

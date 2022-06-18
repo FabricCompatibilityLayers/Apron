@@ -1,8 +1,17 @@
 package io.github.betterthanupdates.forge.mixin;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import forge.BlockTextureParticles;
 import forge.ITextureProvider;
-import io.github.betterthanupdates.forge.client.particle.ForgeParticleManager;
+import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.entity.particle.DiggingParticleEntity;
 import net.minecraft.client.entity.particle.ParticleEntity;
@@ -12,15 +21,8 @@ import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import io.github.betterthanupdates.forge.client.particle.ForgeParticleManager;
 
 @Mixin(ParticleManager.class)
 public abstract class ParticleManagerMixin implements ForgeParticleManager {

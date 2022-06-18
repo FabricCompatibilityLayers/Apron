@@ -1,7 +1,8 @@
 package io.github.betterthanupdates.babricated.item;
 
-import net.minecraft.item.Item;
 import org.jetbrains.annotations.Nullable;
+
+import net.minecraft.item.Item;
 
 /**
  * A utility interface from newer versions of Minecraft that makes getting an item from

@@ -1,7 +1,7 @@
 package io.github.betterthanupdates.babricated;
 
 public interface BabricatedTessellator {
-    boolean defaultTexture();
+	boolean defaultTexture();
 
-    void defaultTexture(boolean defaultTexture);
+	void defaultTexture(boolean defaultTexture);
 }

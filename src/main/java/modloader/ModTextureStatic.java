@@ -1,13 +1,15 @@
 package modloader;
 
-import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.TextureBinder;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import net.minecraft.client.render.TextureBinder;
+
+import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
 
 @SuppressWarnings("unused")
 @Environment(EnvType.CLIENT)

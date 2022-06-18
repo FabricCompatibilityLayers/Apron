@@ -2,17 +2,20 @@
  * This software is provided under the terms of the Minecraft Forge Public
  * License v1.1.
  */
+
 package forge;
 
-import io.github.betterthanupdates.babricated.api.BabricatedApi;
-import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
+import java.util.Objects;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.render.block.BlockRenderer;
 import net.minecraft.item.Item;
 
-import java.util.Objects;
+import io.github.betterthanupdates.babricated.api.BabricatedApi;
+import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
 
 @SuppressWarnings("unused")
 @Environment(EnvType.CLIENT)

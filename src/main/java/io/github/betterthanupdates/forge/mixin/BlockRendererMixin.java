@@ -1,8 +1,14 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.babricated.BabricatedTessellator;
-import io.github.betterthanupdates.forge.ForgeClientReflection;
 import modloader.ModLoader;
+import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.RailBlock;
@@ -11,13 +17,9 @@ import net.minecraft.block.number.BedMagicNumbers;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderer;
 import net.minecraft.world.BlockView;
-import org.lwjgl.opengl.GL11;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import io.github.betterthanupdates.babricated.BabricatedTessellator;
+import io.github.betterthanupdates.forge.ForgeClientReflection;
 
 @Mixin(BlockRenderer.class)
 public abstract class BlockRendererMixin {
@@ -386,16 +388,16 @@ public abstract class BlockRendererMixin {
 
 		k1 = 4;
 		switch (i1) {
-			case 0:
-				k1 = 5;
-				break;
-			case 1:
-				k1 = 3;
-			case 2:
-			default:
-				break;
-			case 3:
-				k1 = 2;
+		case 0:
+			k1 = 5;
+			break;
+		case 1:
+			k1 = 3;
+		case 2:
+		default:
+			break;
+		case 3:
+			k1 = 2;
 		}
 
 		if (f17 != 2.0F && (this.renderAllSides || block.isSideRendered(this.blockView, x, y, z - 1, 2))) {
@@ -891,7 +893,7 @@ public abstract class BlockRendererMixin {
 			this.field_68 *= f27;
 			int i1 = block.getTextureForSide(this.blockView, i, j, k, 2);
 			this.renderEastFace(block, i, j, k, i1);
-			if (((BabricatedTessellator)Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && i1 == 3 && this.textureOverride < 0) {
+			if (((BabricatedTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && i1 == 3 && this.textureOverride < 0) {
 				this.field_56 *= f;
 				this.field_57 *= f;
 				this.field_58 *= f;
@@ -973,7 +975,7 @@ public abstract class BlockRendererMixin {
 			this.field_68 *= f28;
 			int j1 = block.getTextureForSide(this.blockView, i, j, k, 3);
 			this.renderWestFace(block, i, j, k, block.getTextureForSide(this.blockView, i, j, k, 3));
-			if (((BabricatedTessellator)Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && j1 == 3 && this.textureOverride < 0) {
+			if (((BabricatedTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && j1 == 3 && this.textureOverride < 0) {
 				this.field_56 *= f;
 				this.field_57 *= f;
 				this.field_58 *= f;
@@ -1055,7 +1057,7 @@ public abstract class BlockRendererMixin {
 			this.field_68 *= f29;
 			int k1 = block.getTextureForSide(this.blockView, i, j, k, 4);
 			this.renderNorthFace(block, i, j, k, k1);
-			if (((BabricatedTessellator)Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && k1 == 3 && this.textureOverride < 0) {
+			if (((BabricatedTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && k1 == 3 && this.textureOverride < 0) {
 				this.field_56 *= f;
 				this.field_57 *= f;
 				this.field_58 *= f;
@@ -1137,7 +1139,7 @@ public abstract class BlockRendererMixin {
 			this.field_68 *= f30;
 			int l1 = block.getTextureForSide(this.blockView, i, j, k, 5);
 			this.renderSouthFace(block, i, j, k, l1);
-			if (((BabricatedTessellator)Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && l1 == 3 && this.textureOverride < 0) {
+			if (((BabricatedTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && l1 == 3 && this.textureOverride < 0) {
 				this.field_56 *= f;
 				this.field_57 *= f;
 				this.field_58 *= f;
@@ -1225,7 +1227,7 @@ public abstract class BlockRendererMixin {
 			tessellator.color(f11 * f22, f14 * f22, f17 * f22);
 			int l = block.getTextureForSide(this.blockView, i, j, k, 2);
 			this.renderEastFace(block, i, j, k, l);
-			if (((BabricatedTessellator)Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && l == 3 && this.textureOverride < 0) {
+			if (((BabricatedTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && l == 3 && this.textureOverride < 0) {
 				tessellator.color(f11 * f22 * f, f14 * f22 * f1, f17 * f22 * f2);
 				this.renderEastFace(block, i, j, k, 38);
 			}
@@ -1242,7 +1244,7 @@ public abstract class BlockRendererMixin {
 			tessellator.color(f11 * f23, f14 * f23, f17 * f23);
 			int i1 = block.getTextureForSide(this.blockView, i, j, k, 3);
 			this.renderWestFace(block, i, j, k, i1);
-			if (((BabricatedTessellator)Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && i1 == 3 && this.textureOverride < 0) {
+			if (((BabricatedTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && i1 == 3 && this.textureOverride < 0) {
 				tessellator.color(f11 * f23 * f, f14 * f23 * f1, f17 * f23 * f2);
 				this.renderWestFace(block, i, j, k, 38);
 			}
@@ -1259,7 +1261,7 @@ public abstract class BlockRendererMixin {
 			tessellator.color(f12 * f24, f15 * f24, f18 * f24);
 			int j1 = block.getTextureForSide(this.blockView, i, j, k, 4);
 			this.renderNorthFace(block, i, j, k, j1);
-			if (((BabricatedTessellator)Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && j1 == 3 && this.textureOverride < 0) {
+			if (((BabricatedTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && j1 == 3 && this.textureOverride < 0) {
 				tessellator.color(f12 * f24 * f, f15 * f24 * f1, f18 * f24 * f2);
 				this.renderNorthFace(block, i, j, k, 38);
 			}
@@ -1276,7 +1278,7 @@ public abstract class BlockRendererMixin {
 			tessellator.color(f12 * f25, f15 * f25, f18 * f25);
 			int k1 = block.getTextureForSide(this.blockView, i, j, k, 5);
 			this.renderSouthFace(block, i, j, k, k1);
-			if (((BabricatedTessellator)Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && k1 == 3 && this.textureOverride < 0) {
+			if (((BabricatedTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && k1 == 3 && this.textureOverride < 0) {
 				tessellator.color(f12 * f25 * f, f15 * f25 * f1, f18 * f25 * f2);
 				this.renderSouthFace(block, i, j, k, 38);
 			}
@@ -1516,7 +1518,7 @@ public abstract class BlockRendererMixin {
 				f3 = 0.0F;
 			}
 
-			ForgeClientReflection.BlockRenderer$redstoneColors[i] = new float[]{f1, f2, f3};
+			ForgeClientReflection.BlockRenderer$redstoneColors[i] = new float[] {f1, f2, f3};
 		}
 
 	}

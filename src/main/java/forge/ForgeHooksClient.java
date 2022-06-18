@@ -2,13 +2,21 @@
  * This software is provided under the terms of the Minecraft Forge Public
  * License v1.1.
  */
+
 package forge;
 
-import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
-import io.github.betterthanupdates.forge.ForgeClientReflection;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Objects;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.tinyremapper.extension.mixin.common.data.Pair;
+import org.jetbrains.annotations.NotNull;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.WorldRenderer;
@@ -17,12 +25,11 @@ import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.HitResult;
-import org.jetbrains.annotations.NotNull;
-import org.lwjgl.opengl.GL11;
 
-import java.util.*;
+import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
+import io.github.betterthanupdates.forge.ForgeClientReflection;
 
-@SuppressWarnings({ "unused", "BooleanMethodIsAlwaysInverted" })
+@SuppressWarnings({"unused", "BooleanMethodIsAlwaysInverted"})
 @Environment(EnvType.CLIENT)
 public class ForgeHooksClient {
 	static LinkedList<IHighlightHandler> highlightHandlers = new LinkedList<>();

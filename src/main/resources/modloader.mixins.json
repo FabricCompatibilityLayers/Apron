@@ -6,16 +6,16 @@
   "mixins": [
     "DisconnectPacketMixin",
     "DispenserBlockMixin",
-    "ItemEntityMixin",
     "FurnaceBlockEntityMixin",
+    "ItemEntityMixin",
     "ServerChunkCacheMixin"
   ],
   "client": [
     "ClientPlayPacketHandlerMixin",
     "DisconnectingScreenMixin",
-    "GameStartupErrorPanelMixin",
     "EntityRenderDispatcherMixin",
-    "FurnaceOutputSlotMixin"
+    "FurnaceOutputSlotMixin",
+    "GameStartupErrorPanelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

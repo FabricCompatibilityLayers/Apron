@@ -1,6 +1,11 @@
 package io.github.betterthanupdates.forge.mixin;
 
 import forge.ForgeHooksClient;
+import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.class_573;
 import net.minecraft.class_598;
@@ -15,10 +20,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.ChunkCache;
 import net.minecraft.world.source.WorldSource;
-import org.lwjgl.opengl.GL11;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {

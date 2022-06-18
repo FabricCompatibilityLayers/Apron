@@ -1,18 +1,20 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.world.ForgeWorld;
-import net.minecraft.block.Block;
-import net.minecraft.block.RailBlock;
-import net.minecraft.block.RailBlock.RailMagicStuff;
-import net.minecraft.block.material.Material;
-import net.minecraft.world.World;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import net.minecraft.block.Block;
+import net.minecraft.block.RailBlock;
+import net.minecraft.block.RailBlock.RailMagicStuff;
+import net.minecraft.block.material.Material;
+import net.minecraft.world.World;
+
+import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(RailBlock.class)
 public abstract class RailBlockMixin extends Block {
@@ -55,7 +57,7 @@ public abstract class RailBlockMixin extends Block {
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k) {
-		return ((ForgeWorld)world).isBlockSolidOnSide(i, j - 1, k, 1);
+		return ((ForgeWorld) world).isBlockSolidOnSide(i, j - 1, k, 1);
 	}
 
 	/**
@@ -72,23 +74,23 @@ public abstract class RailBlockMixin extends Block {
 			}
 
 			boolean flag = false;
-			if (!((ForgeWorld)world).isBlockSolidOnSide(i, j - 1, k, 1)) {
+			if (!((ForgeWorld) world).isBlockSolidOnSide(i, j - 1, k, 1)) {
 				flag = true;
 			}
 
-			if (j1 == 2 && !((ForgeWorld)world).isBlockSolidOnSide(i + 1, j, k, 1)) {
+			if (j1 == 2 && !((ForgeWorld) world).isBlockSolidOnSide(i + 1, j, k, 1)) {
 				flag = true;
 			}
 
-			if (j1 == 3 && !((ForgeWorld)world).isBlockSolidOnSide(i - 1, j, k, 1)) {
+			if (j1 == 3 && !((ForgeWorld) world).isBlockSolidOnSide(i - 1, j, k, 1)) {
 				flag = true;
 			}
 
-			if (j1 == 4 && !((ForgeWorld)world).isBlockSolidOnSide(i, j, k - 1, 1)) {
+			if (j1 == 4 && !((ForgeWorld) world).isBlockSolidOnSide(i, j, k - 1, 1)) {
 				flag = true;
 			}
 
-			if (j1 == 5 && !((ForgeWorld)world).isBlockSolidOnSide(i, j, k + 1, 1)) {
+			if (j1 == 5 && !((ForgeWorld) world).isBlockSolidOnSide(i, j, k + 1, 1)) {
 				flag = true;
 			}
 

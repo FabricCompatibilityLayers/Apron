@@ -1,19 +1,20 @@
 package io.github.betterthanupdates.modloader.mixin;
 
+import java.awt.Panel;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import modloader.BaseMod;
 import modloader.ModLoader;
-import net.minecraft.applet.GameStartupErrorPanel;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-import java.awt.*;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import net.minecraft.applet.GameStartupErrorPanel;
 
 @Mixin(GameStartupErrorPanel.class)
 public abstract class GameStartupErrorPanelMixin extends Panel {

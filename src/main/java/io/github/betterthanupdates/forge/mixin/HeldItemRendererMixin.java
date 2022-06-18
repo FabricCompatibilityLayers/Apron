@@ -3,6 +3,11 @@ package io.github.betterthanupdates.forge.mixin;
 import forge.ForgeHooksClient;
 import forge.ICustomItemRenderer;
 import forge.MinecraftForgeClient;
+import org.lwjgl.opengl.GL11;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.HeldItemRenderer;
@@ -11,10 +16,6 @@ import net.minecraft.client.render.block.BlockRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import org.lwjgl.opengl.GL11;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(HeldItemRenderer.class)
 public class HeldItemRendererMixin {

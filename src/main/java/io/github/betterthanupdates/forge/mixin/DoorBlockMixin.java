@@ -1,13 +1,15 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.world.ForgeWorld;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+
+import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(DoorBlock.class)
 public abstract class DoorBlockMixin extends Block {
@@ -40,7 +42,7 @@ public abstract class DoorBlockMixin extends Block {
 				flag = true;
 			}
 
-			if (!((ForgeWorld)world).isBlockSolidOnSide(i, j - 1, k, 1)) {
+			if (!((ForgeWorld) world).isBlockSolidOnSide(i, j - 1, k, 1)) {
 				world.setBlock(i, j, k, 0);
 				flag = true;
 				if (world.getBlockId(i, j + 1, k) == this.id) {
@@ -69,7 +71,7 @@ public abstract class DoorBlockMixin extends Block {
 		if (j >= 127) {
 			return false;
 		} else {
-			return ((ForgeWorld)world).isBlockSolidOnSide(i, j - 1, k, 1) && super.canPlaceAt(world, i, j, k) && super.canPlaceAt(world, i, j + 1, k);
+			return ((ForgeWorld) world).isBlockSolidOnSide(i, j - 1, k, 1) && super.canPlaceAt(world, i, j, k) && super.canPlaceAt(world, i, j + 1, k);
 		}
 	}
 }

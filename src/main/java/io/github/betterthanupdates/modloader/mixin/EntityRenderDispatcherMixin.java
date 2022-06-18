@@ -1,16 +1,17 @@
 package io.github.betterthanupdates.modloader.mixin;
 
+import java.util.Map;
+
 import modloader.ModLoader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Map;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
 
 @Environment(EnvType.CLIENT)
 @Mixin(EntityRenderDispatcher.class)

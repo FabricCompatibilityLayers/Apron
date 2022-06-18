@@ -4,4 +4,5 @@
  * inside their respective package.<br>
  * Any original implementations should be inside the {@link io.github.betterthanupdates.babricated babricated} package.
  */
+
 package io.github.betterthanupdates;

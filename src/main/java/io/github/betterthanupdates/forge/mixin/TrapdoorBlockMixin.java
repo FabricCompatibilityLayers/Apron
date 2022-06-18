@@ -1,14 +1,16 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import io.github.betterthanupdates.forge.ForgeReflection;
-import io.github.betterthanupdates.forge.world.ForgeWorld;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.TrapdoorBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+
+import io.github.betterthanupdates.forge.ForgeReflection;
+import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(TrapdoorBlock.class)
 public abstract class TrapdoorBlockMixin extends Block {
@@ -46,7 +48,7 @@ public abstract class TrapdoorBlockMixin extends Block {
 				--j1;
 			}
 
-			if (!ForgeReflection.TrapdoorBlock$disableValidation && !((ForgeWorld)world).isBlockSolidOnSide(j1, j, k1, (i1 & 3) + 2)) {
+			if (!ForgeReflection.TrapdoorBlock$disableValidation && !((ForgeWorld) world).isBlockSolidOnSide(j1, j, k1, (i1 & 3) + 2)) {
 				world.setBlock(i, j, k, 0);
 				this.drop(world, i, j, k, i1);
 			}
@@ -88,7 +90,7 @@ public abstract class TrapdoorBlockMixin extends Block {
 				--i;
 			}
 
-			return ((ForgeWorld)world).isBlockSolidOnSide(i, j, k, l);
+			return ((ForgeWorld) world).isBlockSolidOnSide(i, j, k, l);
 		}
 	}
 }

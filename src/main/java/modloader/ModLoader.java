@@ -1,11 +1,46 @@
 package modloader;
 
-import io.github.betterthanupdates.babricated.BabricatedForge;
-import io.github.betterthanupdates.babricated.api.BabricatedApi;
+import static io.github.betterthanupdates.babricated.BabricatedForge.MOD_CACHE_FOLDER;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.Random;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.SimpleFormatter;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import javax.imageio.ImageIO;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.GameStartupError;
 import net.minecraft.client.Minecraft;
@@ -22,7 +57,12 @@ import net.minecraft.client.render.entity.block.BlockEntityRenderer;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.Session;
-import net.minecraft.entity.*;
+import net.minecraft.entity.BlockEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityEntry;
+import net.minecraft.entity.EntityRegistry;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -38,26 +78,9 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.HellBiome;
 import net.minecraft.world.biome.SkyBiome;
 import net.minecraft.world.source.WorldSource;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.lwjgl.input.Keyboard;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.SimpleFormatter;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-
-import static io.github.betterthanupdates.babricated.BabricatedForge.MOD_CACHE_FOLDER;
+import io.github.betterthanupdates.babricated.BabricatedForge;
+import io.github.betterthanupdates.babricated.api.BabricatedApi;
 
 @SuppressWarnings("unused")
 public class ModLoader {
@@ -95,11 +118,12 @@ public class ModLoader {
 
 	// Babricated
 	static final BabricatedApi BAPI = BabricatedApi.getInstance();
-	
+
 	/**
 	 * Used to give your achievement a readable name and description.
+	 *
 	 * @param achievement the entry to be described
-	 * @param name the name of the entry
+	 * @param name        the name of the entry
 	 * @param description the description of the entry
 	 */
 	@SuppressWarnings("unused")
@@ -126,9 +150,10 @@ public class ModLoader {
 			ThrowException(var5);
 		}
 	}
-	
+
 	/**
 	 * Used for adding new sources of fuel to the furnace.
+	 *
 	 * @param id the item to be used as fuel.
 	 * @return the fuel ID assigned to the item.
 	 */
@@ -137,7 +162,7 @@ public class ModLoader {
 		int result = 0;
 		Iterator<BaseMod> iter = MOD_LIST.iterator();
 
-		while(iter.hasNext() && result == 0) {
+		while (iter.hasNext() && result == 0) {
 			result = iter.next().AddFuel(id);
 		}
 
@@ -147,9 +172,10 @@ public class ModLoader {
 
 		return result;
 	}
-	
+
 	/**
 	 * Used to add all mod entity renderers.
+	 *
 	 * @param rendererMap renderers to add
 	 */
 	public static void AddAllRenderers(Map<Class<? extends Entity>, EntityRenderer> rendererMap) {
@@ -158,19 +184,20 @@ public class ModLoader {
 			LOGGER.debug("Initialized");
 		}
 
-		for(BaseMod mod : MOD_LIST) {
+		for (BaseMod mod : MOD_LIST) {
 			mod.AddRenderer(rendererMap);
 		}
 	}
-	
+
 	/**
 	 * Registers one animation instance.
+	 *
 	 * @param textureBinder animation instance to register
 	 */
 	public static void addAnimation(TextureBinder textureBinder) {
 		LOGGER.debug("Adding animation " + textureBinder.toString());
 
-		for(TextureBinder oldAnim : ANIM_LIST) {
+		for (TextureBinder oldAnim : ANIM_LIST) {
 			if (oldAnim.renderMode == textureBinder.renderMode && oldAnim.index == textureBinder.index) {
 				ANIM_LIST.remove(textureBinder);
 				break;
@@ -179,9 +206,10 @@ public class ModLoader {
 
 		ANIM_LIST.add(textureBinder);
 	}
-	
+
 	/**
 	 * Use this when you need the player to have new armor skin.
+	 *
 	 * @param armor Name of the armor skin
 	 * @return index assign for the armor skin
 	 */
@@ -205,10 +233,11 @@ public class ModLoader {
 
 		return -1;
 	}
-	
+
 	/**
 	 * Method for adding raw strings to the translation table.
-	 * @param key tag for string
+	 *
+	 * @param key   tag for string
 	 * @param value string to add
 	 */
 	public static void AddLocalization(String key, String value) {
@@ -235,7 +264,7 @@ public class ModLoader {
 
 			//noinspection unchecked
 			setupProperties((Class<? extends BaseMod>) modClass);
-			BaseMod mod = (BaseMod)modClass.getDeclaredConstructor().newInstance();
+			BaseMod mod = (BaseMod) modClass.getDeclaredConstructor().newInstance();
 			MOD_LIST.add(mod);
 			LOGGER.debug("Mod Loaded: \"" + mod + "\" from " + filename);
 		} catch (Throwable var6) {
@@ -248,24 +277,25 @@ public class ModLoader {
 
 	/**
 	 * This method will allow adding name to item in inventory.
+	 *
 	 * @param instance A block, item, or item stack reference to name
-	 * @param name The name to give
+	 * @param name     The name to give
 	 */
 	@SuppressWarnings("unused")
 	public static void AddName(Object instance, String name) {
 		String tag = null;
 		if (instance instanceof Item) {
-			Item item = (Item)instance;
+			Item item = (Item) instance;
 			if (item.getTranslationKey() != null) {
 				tag = item.getTranslationKey() + ".name";
 			}
 		} else if (instance instanceof Block) {
-			Block block = (Block)instance;
+			Block block = (Block) instance;
 			if (block.getTranslationKey() != null) {
 				tag = block.getTranslationKey() + ".name";
 			}
 		} else if (instance instanceof ItemStack) {
-			ItemStack stack = (ItemStack)instance;
+			ItemStack stack = (ItemStack) instance;
 			if (stack.getTranslationKey() != null) {
 				tag = stack.getTranslationKey() + ".name";
 			}
@@ -286,8 +316,9 @@ public class ModLoader {
 
 	/**
 	 * Use this to add custom images for your items and blocks.
+	 *
 	 * @param fileToOverride file to override ("/terrain.png" or "/gui/items.png")
-	 * @param fileToAdd path to the image you want to add
+	 * @param fileToAdd      path to the image you want to add
 	 * @return unique sprite index
 	 */
 	@SuppressWarnings("unused")
@@ -305,9 +336,10 @@ public class ModLoader {
 
 	/**
 	 * Registers one texture override to be done.
-	 * @param path Path to the texture file to modify ("/terrain.png" or "/gui/items.png")
+	 *
+	 * @param path        Path to the texture file to modify ("/terrain.png" or "/gui/items.png")
 	 * @param overlayPath Path to the texture file which is to be overlaid
-	 * @param index Sprite index into the texture to be modified
+	 * @param index       Sprite index into the texture to be modified
 	 */
 	public static void addOverride(String path, String overlayPath, int index) {
 		int dst;
@@ -332,7 +364,8 @@ public class ModLoader {
 
 	/**
 	 * Add a shaped recipe to crafting list.
-	 * @param output the result of the crafting recipe
+	 *
+	 * @param output      the result of the crafting recipe
 	 * @param ingredients the ingredients for the crafting recipe from top left to bottom right.
 	 */
 	@SuppressWarnings("unused")
@@ -342,7 +375,8 @@ public class ModLoader {
 
 	/**
 	 * Add recipe to crafting list.
-	 * @param output the result of the crafting recipe
+	 *
+	 * @param output      the result of the crafting recipe
 	 * @param ingredients ingredients for the recipe in any order
 	 */
 	public static void AddShapelessRecipe(ItemStack output, Object... ingredients) {
@@ -351,7 +385,8 @@ public class ModLoader {
 
 	/**
 	 * Used to add smelting recipes to the furnace.
-	 * @param input ingredient for the recipe
+	 *
+	 * @param input  ingredient for the recipe
 	 * @param output the result of the furnace recipe
 	 */
 	public static void AddSmelting(int input, ItemStack output) {
@@ -360,9 +395,10 @@ public class ModLoader {
 
 	/**
 	 * Add entity to spawn list for all biomes except Hell.
-	 * @param entityClass entity to spawn
+	 *
+	 * @param entityClass  entity to spawn
 	 * @param weightedProb chance of spawning for every try
-	 * @param spawnGroup group to spawn the entity in
+	 * @param spawnGroup   group to spawn the entity in
 	 */
 	public static void AddSpawn(Class<? extends LivingEntity> entityClass, int weightedProb, SpawnGroup spawnGroup) {
 		AddSpawn(entityClass, weightedProb, spawnGroup, (Biome) null);
@@ -370,10 +406,11 @@ public class ModLoader {
 
 	/**
 	 * Add entity to spawn list for selected biomes.
-	 * @param entityClass entity to spawn
+	 *
+	 * @param entityClass  entity to spawn
 	 * @param weightedProb chance of spawning for every try
-	 * @param spawnGroup group to spawn the entity in
-	 * @param biomes biomes to spawn the entity in
+	 * @param spawnGroup   group to spawn the entity in
+	 * @param biomes       biomes to spawn the entity in
 	 */
 	@SuppressWarnings("unchecked")
 	public static void AddSpawn(Class<? extends LivingEntity> entityClass, int weightedProb, SpawnGroup spawnGroup, Biome... biomes) {
@@ -406,23 +443,25 @@ public class ModLoader {
 			}
 		}
 	}
-	
+
 	/**
 	 * Add entity to spawn list for all biomes except Hell.
+	 *
 	 * @param entityName Name of entity to spawn
-	 * @param chance Higher number means more likely to spawn
+	 * @param chance     Higher number means more likely to spawn
 	 * @param spawnGroup The spawn group to add entity to (Monster, Creature, or Water)
 	 */
 	public static void AddSpawn(String entityName, int chance, SpawnGroup spawnGroup) {
 		AddSpawn(entityName, chance, spawnGroup, (Biome) null);
 	}
-	
+
 	/**
 	 * Add entity to spawn list for selected biomes.
-	 * @param entityName Name of entity to spawn
+	 *
+	 * @param entityName   Name of entity to spawn
 	 * @param weightedProb Higher number means more likely to spawn
-	 * @param spawnGroup The spawn group to add entity to (Monster, Creature, or Water)
-	 * @param biomes Array of biomes to add entity spawning to
+	 * @param spawnGroup   The spawn group to add entity to (Monster, Creature, or Water)
+	 * @param biomes       Array of biomes to add entity spawning to
 	 */
 	@SuppressWarnings("unchecked")
 	public static void AddSpawn(String entityName, int weightedProb, SpawnGroup spawnGroup, Biome... biomes) {
@@ -431,15 +470,16 @@ public class ModLoader {
 			AddSpawn((Class<? extends LivingEntity>) entityClass, weightedProb, spawnGroup, biomes);
 		}
 	}
-	
+
 	/**
 	 * Dispenses the entity associated with the selected item.
+	 *
 	 * @param world world to spawn in
-	 * @param x x position
-	 * @param y y position
-	 * @param z z position
-	 * @param xVel x velocity
-	 * @param zVel z velocity
+	 * @param x     x position
+	 * @param y     y position
+	 * @param z     z position
+	 * @param xVel  x velocity
+	 * @param zVel  z velocity
 	 * @param stack item inside the dispenser to dispense
 	 * @return whether dispensing was successful
 	 */
@@ -447,31 +487,34 @@ public class ModLoader {
 		boolean result = false;
 		Iterator<BaseMod> iter = MOD_LIST.iterator();
 
-		while(iter.hasNext() && !result) {
+		while (iter.hasNext() && !result) {
 			result = iter.next().DispenseEntity(world, x, y, z, xVel, zVel, stack);
 		}
 
 		return result;
 	}
-	
+
 	/**
 	 * Use this method if you need a list of loaded mods.
+	 *
 	 * @return the list of loaded {@link BaseMod ModLoader mods}
 	 */
 	public static List<BaseMod> getLoadedMods() {
 		return Collections.unmodifiableList(MOD_LIST);
 	}
-	
+
 	/**
 	 * Use this to get a reference to the logger ModLoader mods use.
+	 *
 	 * @return the logger instance
 	 */
 	public static java.util.logging.Logger getLogger() {
 		return MOD_LOGGER;
 	}
-	
+
 	/**
 	 * Use this method to get a reference to Minecraft instance.
+	 *
 	 * @return Minecraft client instance
 	 */
 	@Nullable
@@ -479,59 +522,62 @@ public class ModLoader {
 	public static Minecraft getMinecraftInstance() {
 		return (Minecraft) BabricatedApi.getInstance().getGame();
 	}
-	
+
 	/**
 	 * Used for getting value of private fields.
+	 *
 	 * @param instanceClass Class to use with instance.
-	 * @param instance Object to get private field from.
-	 * @param fieldIndex Name of the field.
-	 * @param <T> Return type
-	 * @param <E> Type of instance
+	 * @param instance      Object to get private field from.
+	 * @param fieldIndex    Name of the field.
+	 * @param <T>           Return type
+	 * @param <E>           Type of instance
 	 * @return Value of private field
 	 * @throws IllegalArgumentException if instance isn't compatible with instanceClass
-	 * @throws SecurityException if the thread is not allowed to access field
+	 * @throws SecurityException        if the thread is not allowed to access field
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T, E> T getPrivateValue(Class<? super E> instanceClass, E instance, int fieldIndex) throws IllegalArgumentException, SecurityException {
 		try {
 			Field f = instanceClass.getDeclaredFields()[fieldIndex];
 			f.setAccessible(true);
-			return (T)f.get(instance);
+			return (T) f.get(instance);
 		} catch (IllegalAccessException var4) {
 			MOD_LOGGER.throwing("ModLoader", "getPrivateValue", var4);
 			ThrowException("An impossible error has occured!", var4);
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Used for getting value of private fields.
+	 *
 	 * @param instanceClass Class to use with instance
-	 * @param instance Object to get private field from
-	 * @param fieldName Name of the field
-	 * @param <T> Return type
-	 * @param <E> Type of instance
+	 * @param instance      Object to get private field from
+	 * @param fieldName     Name of the field
+	 * @param <T>           Return type
+	 * @param <E>           Type of instance
 	 * @return Value of private field
 	 * @throws IllegalArgumentException if instance isn't compatible with instanceClass
-	 * @throws SecurityException if the thread is not allowed to access field
-	 * @throws NoSuchFieldException if field does not exist
+	 * @throws SecurityException        if the thread is not allowed to access field
+	 * @throws NoSuchFieldException     if field does not exist
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T, E> T getPrivateValue(Class<? super E> instanceClass, E instance, String fieldName) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
 		try {
 			Field f = instanceClass.getDeclaredField(fieldName);
 			f.setAccessible(true);
-			return (T)f.get(instance);
+			return (T) f.get(instance);
 		} catch (IllegalAccessException var4) {
 			MOD_LOGGER.throwing("ModLoader", "getPrivateValue", var4);
 			ThrowException("An impossible error has occured!", var4);
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Assigns a model id for blocks to use for the given mod.
-	 * @param mod to assign id to
+	 *
+	 * @param mod        to assign id to
 	 * @param full3DItem if true the item will have 3D model created from {@link #RenderInvBlock(BlockRenderer, Block, int, int)}, if false will be a flat image
 	 * @return assigned block model id
 	 */
@@ -541,9 +587,10 @@ public class ModLoader {
 		BLOCK_SPECIAL_INV.put(id, full3DItem);
 		return id;
 	}
-	
+
 	/**
 	 * Gets next Entity ID to use.
+	 *
 	 * @return Assigned ID
 	 */
 	public static int getUniqueEntityId() {
@@ -551,7 +598,7 @@ public class ModLoader {
 	}
 
 	private static int getUniqueItemSpriteIndex() {
-		while(itemSpriteIndex < USED_ITEM_SPRITES.length) {
+		while (itemSpriteIndex < USED_ITEM_SPRITES.length) {
 			if (!USED_ITEM_SPRITES[itemSpriteIndex]) {
 				USED_ITEM_SPRITES[itemSpriteIndex] = true;
 				--itemSpritesLeft;
@@ -569,6 +616,7 @@ public class ModLoader {
 
 	/**
 	 * Gets next available index for this sprite map.
+	 *
 	 * @param path path to sprite sheet to get available index from
 	 * @return Assigned sprite index to use
 	 */
@@ -586,7 +634,7 @@ public class ModLoader {
 	}
 
 	private static int getUniqueTerrainSpriteIndex() {
-		while(terrainSpriteIndex < USED_TERRAIN_SPRITES.length) {
+		while (terrainSpriteIndex < USED_TERRAIN_SPRITES.length) {
 			if (!USED_TERRAIN_SPRITES[terrainSpriteIndex]) {
 				USED_TERRAIN_SPRITES[terrainSpriteIndex] = true;
 				--terrainSpritesLeft;
@@ -607,7 +655,7 @@ public class ModLoader {
 		String usedItemSpritesString = "1111111111111111111111111111111111111101111111011111111111111001111111111111111111111111111011111111100110000011111110000000001111111001100000110000000100000011000000010000001100000000000000110000000000000000000000000000000000000000000000001100000000000000";
 		String usedTerrainSpritesString = "1111111111111111111111111111110111111111111111111111110111111111111111111111000111111011111111111111001111111110111111111111100011111111000010001111011110000000111111000000000011111100000000001111000000000111111000000000001101000000000001111111111111000011";
 
-		for(int i = 0; i < 256; ++i) {
+		for (int i = 0; i < 256; ++i) {
 			USED_ITEM_SPRITES[i] = usedItemSpritesString.charAt(i) == '1';
 			if (!USED_ITEM_SPRITES[i]) {
 				++itemSpritesLeft;
@@ -677,7 +725,7 @@ public class ModLoader {
 			LOGGER.info("Done initializing.");
 			props.setProperty("loggingLevel", cfgLoggingLevel.getName());
 
-			for(BaseMod mod : MOD_LIST) {
+			for (BaseMod mod : MOD_LIST) {
 				mod.ModsLoaded();
 				if (!props.containsKey(mod.getClass().getName())) {
 					props.setProperty(mod.getClass().getName(), "on");
@@ -705,7 +753,7 @@ public class ModLoader {
 
 	@SuppressWarnings("unchecked")
 	private static void initStats() {
-		for(int id = 0; id < Block.BY_ID.length; ++id) {
+		for (int id = 0; id < Block.BY_ID.length; ++id) {
 			if (!Stats.idMap.containsKey(16777216 + id) && Block.BY_ID[id] != null && Block.BY_ID[id].isStatEnabled()) {
 				String str = TranslationStorage.getInstance().translate("stat.mineBlock", Block.BY_ID[id].getTranslatedName());
 				Stats.mineBlock[id] = new StatEntity(16777216 + id, str, id).register();
@@ -713,7 +761,7 @@ public class ModLoader {
 			}
 		}
 
-		for(int id = 0; id < Item.byId.length; ++id) {
+		for (int id = 0; id < Item.byId.length; ++id) {
 			if (!Stats.idMap.containsKey(16908288 + id) && Item.byId[id] != null) {
 				String str = TranslationStorage.getInstance().translate("stat.useItem", Item.byId[id].getTranslatedName());
 				Stats.useItem[id] = new StatEntity(16908288 + id, str, id).register();
@@ -730,24 +778,25 @@ public class ModLoader {
 
 		HashSet<Integer> idHashSet = new HashSet<>();
 
-		for(Object result : RecipeRegistry.getInstance().getRecipes()) {
-			idHashSet.add(((Recipe)result).getOutput().itemId);
+		for (Object result : RecipeRegistry.getInstance().getRecipes()) {
+			idHashSet.add(((Recipe) result).getOutput().itemId);
 		}
 
-		for(Object result : SmeltingRecipeRegistry.getInstance().getRecipes().values()) {
-			idHashSet.add(((ItemStack)result).itemId);
+		for (Object result : SmeltingRecipeRegistry.getInstance().getRecipes().values()) {
+			idHashSet.add(((ItemStack) result).itemId);
 		}
 
-		for(int id : idHashSet) {
+		for (int id : idHashSet) {
 			if (!Stats.idMap.containsKey(16842752 + id) && Item.byId[id] != null) {
 				String str = TranslationStorage.getInstance().translate("stat.craftItem", Item.byId[id].getTranslatedName());
 				Stats.timesCrafted[id] = new StatEntity(16842752 + id, str, id).register();
 			}
 		}
 	}
-	
+
 	/**
 	 * Use this method to check if GUI is opened for the player.
+	 *
 	 * @param gui The type of GUI to check for. If null, will check for any GUI
 	 * @return true if GUI is open
 	 */
@@ -761,9 +810,10 @@ public class ModLoader {
 			return gui.isInstance(client.currentScreen);
 		}
 	}
-	
+
 	/**
 	 * Checks if a mod is loaded.
+	 *
 	 * @param modName name of the mod to check for
 	 * @return true if a mod with supplied name exists in the mod list
 	 */
@@ -776,7 +826,7 @@ public class ModLoader {
 			return false;
 		}
 
-		for(BaseMod mod : MOD_LIST) {
+		for (BaseMod mod : MOD_LIST) {
 			if (chk.isInstance(mod)) {
 				return true;
 			}
@@ -784,11 +834,11 @@ public class ModLoader {
 
 		return false;
 	}
-	
+
 	/**
 	 * Reads the config file and stores the contents in props.
 	 */
-	public static void loadConfig()  {
+	public static void loadConfig() {
 		try {
 			if (CONFIG_DIR.mkdir() && (CONFIG_FILE.exists() || CONFIG_FILE.createNewFile())) {
 				if (CONFIG_FILE.canRead()) {
@@ -801,14 +851,15 @@ public class ModLoader {
 			LOGGER.error("Config could not be loaded!", e);
 		}
 	}
-	
+
 	/**
 	 * Loads an image from a file in the jar into a BufferedImage.
+	 *
 	 * @param textureManager Reference to texture cache
-	 * @param path Path inside the jar to the image (starts with /)
+	 * @param path           Path inside the jar to the image (starts with /)
 	 * @return Loaded image to override with
 	 * @throws FileNotFoundException if the image is not found
-	 * @throws Exception if the image is corrupted
+	 * @throws Exception             if the image is corrupted
 	 */
 	public static BufferedImage loadImage(TextureManager textureManager, String path)
 			throws FileNotFoundException, Exception {
@@ -825,20 +876,22 @@ public class ModLoader {
 			}
 		}
 	}
-	
+
 	/**
 	 * Is called when an item is picked up from the world.
+	 *
 	 * @param player that picked up item
-	 * @param item that was picked up
+	 * @param item   that was picked up
 	 */
 	public static void OnItemPickup(PlayerEntity player, ItemStack item) {
-		for(BaseMod mod : MOD_LIST) {
+		for (BaseMod mod : MOD_LIST) {
 			mod.OnItemPickup(player, item);
 		}
 	}
-	
+
 	/**
 	 * This method is called every tick while minecraft is running.
+	 *
 	 * @param client instance of the game class
 	 */
 	public static void OnTick(Minecraft client) {
@@ -862,7 +915,7 @@ public class ModLoader {
 			newClock = client.world.getWorldTime();
 			Iterator<Entry<BaseMod, Boolean>> iterator = inGameHooks.entrySet().iterator();
 
-			while(iterator.hasNext()) {
+			while (iterator.hasNext()) {
 				Entry<BaseMod, Boolean> modSet = iterator.next();
 				if ((clock != newClock || !modSet.getValue()) && !modSet.getKey().OnTickInGame(client)) {
 					iterator.remove();
@@ -873,7 +926,7 @@ public class ModLoader {
 		if (client.currentScreen != null) {
 			Iterator<Entry<BaseMod, Boolean>> iter = inGUIHooks.entrySet().iterator();
 
-			while(iter.hasNext()) {
+			while (iter.hasNext()) {
 				Entry<BaseMod, Boolean> modSet = iter.next();
 				if ((clock != newClock || !(modSet.getValue() & client.world != null)) && !modSet.getKey().OnTickInGUI(client, client.currentScreen)) {
 					iter.remove();
@@ -882,8 +935,8 @@ public class ModLoader {
 		}
 
 		if (clock != newClock) {
-			for(Entry<BaseMod, Map<KeyBinding, boolean[]>> modSet : keyList.entrySet()) {
-				for(Entry<KeyBinding, boolean[]> keySet : modSet.getValue().entrySet()) {
+			for (Entry<BaseMod, Map<KeyBinding, boolean[]>> modSet : keyList.entrySet()) {
+				for (Entry<KeyBinding, boolean[]> keySet : modSet.getValue().entrySet()) {
 					boolean state = Keyboard.isKeyDown(keySet.getKey().key);
 					boolean[] keyInfo = keySet.getValue();
 					boolean oldState = keyInfo[1];
@@ -897,9 +950,10 @@ public class ModLoader {
 
 		clock = newClock;
 	}
-	
+
 	/**
 	 * Opens GUI for use with mods.
+	 *
 	 * @param player instance to open GUI for
 	 * @param screen instance of GUI to open for player
 	 */
@@ -916,13 +970,14 @@ public class ModLoader {
 			}
 		}
 	}
-	
+
 	/**
 	 * Used for generating new blocks in the world.
+	 *
 	 * @param source Generator to pair with
 	 * @param chunkX X coordinate of chunk
 	 * @param chunkZ Z coordinate of chunk
-	 * @param world World to generate blocks in
+	 * @param world  World to generate blocks in
 	 */
 	public static void PopulateChunk(WorldSource source, int chunkX, int chunkZ, World world) {
 		if (!hasInit) {
@@ -933,9 +988,9 @@ public class ModLoader {
 		Random rnd = new Random(world.getSeed());
 		long xSeed = rnd.nextLong() / 2L * 2L + 1L;
 		long zSeed = rnd.nextLong() / 2L * 2L + 1L;
-		rnd.setSeed((long)chunkX * xSeed + (long)chunkZ * zSeed ^ world.getSeed());
+		rnd.setSeed((long) chunkX * xSeed + (long) chunkZ * zSeed ^ world.getSeed());
 
-		for(BaseMod mod : MOD_LIST) {
+		for (BaseMod mod : MOD_LIST) {
 			if (source.toString().equals("RandomLevelSource")) {
 				mod.GenerateSurface(world, rnd, chunkX << 4, chunkZ << 4);
 			} else if (source.toString().equals("HellRandomLevelSource")) {
@@ -953,7 +1008,7 @@ public class ModLoader {
 			ZipInputStream zip = new ZipInputStream(input);
 			ZipEntry entry;
 
-			while(true) {
+			while (true) {
 				entry = zip.getNextEntry();
 				if (entry == null) {
 					input.close();
@@ -1050,40 +1105,42 @@ public class ModLoader {
 			}
 		}
 	}
-	
+
 	/**
 	 * Appends all mod key handlers to the given array and returns it.
+	 *
 	 * @param keyBindings Array of the original keys
 	 * @return the appended array
 	 */
 	public static KeyBinding[] RegisterAllKeys(KeyBinding[] keyBindings) {
 		List<KeyBinding> combinedList = new LinkedList<>(Arrays.asList(keyBindings));
 
-		for(Map<KeyBinding, boolean[]> keyMap : keyList.values()) {
+		for (Map<KeyBinding, boolean[]> keyMap : keyList.values()) {
 			combinedList.addAll(keyMap.keySet());
 		}
 
 		return combinedList.toArray(new KeyBinding[0]);
 	}
-	
+
 	/**
 	 * Processes all registered texture overrides.
+	 *
 	 * @param manager Reference to texture cache
 	 */
 	public static void RegisterAllTextureOverrides(TextureManager manager) {
 		ANIM_LIST.clear();
 		Minecraft client = getMinecraftInstance();
 
-		for(BaseMod mod : MOD_LIST) {
+		for (BaseMod mod : MOD_LIST) {
 			mod.RegisterAnimation(client);
 		}
 
-		for(TextureBinder anim : ANIM_LIST) {
+		for (TextureBinder anim : ANIM_LIST) {
 			manager.addTextureBinder(anim);
 		}
 
-		for(Entry<Integer, Map<String, Integer>> overlay : overrides.entrySet()) {
-			for(Entry<String, Integer> overlayEntry : overlay.getValue().entrySet()) {
+		for (Entry<Integer, Map<String, Integer>> overlay : overrides.entrySet()) {
+			for (Entry<String, Integer> overlayEntry : overlay.getValue().entrySet()) {
 				String overlayPath = overlayEntry.getKey();
 				int index = overlayEntry.getValue();
 				int dst = overlay.getKey();
@@ -1100,18 +1157,20 @@ public class ModLoader {
 			}
 		}
 	}
-	
+
 	/**
 	 * Adds block to list of blocks the player can use.
+	 *
 	 * @param block to add
 	 */
 	public static void RegisterBlock(Block block) {
 		RegisterBlock(block, null);
 	}
-	
+
 	/**
 	 * Adds block to list of blocks the player can use. Includes the item to use for block (unsafely).
-	 * @param block to add
+	 *
+	 * @param block     to add
 	 * @param itemClass class to use for block item
 	 */
 	@SuppressWarnings("unchecked")
@@ -1137,12 +1196,13 @@ public class ModLoader {
 			ThrowException(var5);
 		}
 	}
-	
+
 	/**
 	 * Registers an entity ID.
+	 *
 	 * @param entityClass type of entity to register
-	 * @param entityName name of entity
-	 * @param entityId an arbitrary number that <b>cannot</b> be reused for other entities
+	 * @param entityName  name of entity
+	 * @param entityId    an arbitrary number that <b>cannot</b> be reused for other entities
 	 */
 	public static void RegisterEntityID(Class<? extends Entity> entityClass, String entityName, int entityId) {
 		try {
@@ -1155,8 +1215,9 @@ public class ModLoader {
 
 	/**
 	 * Use this to add an assignable key to the options screen.
-	 * @param mod The mod which will use this. 99% of the time you should pass <code>this</code>
-	 * @param keyBinding reference to the key to register. Define this in your mod file
+	 *
+	 * @param mod         The mod which will use this. 99% of the time you should pass <code>this</code>
+	 * @param keyBinding  reference to the key to register. Define this in your mod file
 	 * @param allowRepeat when true the command will repeat. When false, only called once per press
 	 */
 	public static void RegisterKey(BaseMod mod, KeyBinding keyBinding, boolean allowRepeat) {
@@ -1165,14 +1226,15 @@ public class ModLoader {
 			keyMap = new HashMap<>();
 		}
 
-		keyMap.put(keyBinding, new boolean[]{allowRepeat, false});
+		keyMap.put(keyBinding, new boolean[] {allowRepeat, false});
 		keyList.put(mod, keyMap);
 	}
 
 	/**
 	 * Registers a block entity.
+	 *
 	 * @param blockEntityClass Class of block entity to register
-	 * @param id The given name of entity. Used for saving
+	 * @param id               The given name of entity. Used for saving
 	 */
 	public static void RegisterTileEntity(Class<? extends BlockEntity> blockEntityClass, String id) {
 		RegisterTileEntity(blockEntityClass, id, null);
@@ -1181,9 +1243,10 @@ public class ModLoader {
 
 	/**
 	 * Registers a block entity.
+	 *
 	 * @param blockEntityClass Class of block entity to register
-	 * @param id The given name of entity. Used for saving
-	 * @param renderer Block entity renderer to assign this block entity
+	 * @param id               The given name of entity. Used for saving
+	 * @param renderer         Block entity renderer to assign this block entity
 	 */
 	@SuppressWarnings("unchecked")
 	public static void RegisterTileEntity(Class<? extends BlockEntity> blockEntityClass, String id, BlockEntityRenderer renderer) {
@@ -1203,8 +1266,9 @@ public class ModLoader {
 
 	/**
 	 * Remove entity from spawn list for all biomes except Hell.
+	 *
 	 * @param entityClass Class of entity to spawn
-	 * @param spawnGroup The spawn group to remove entity from. (Monster, Creature, or Water)
+	 * @param spawnGroup  The spawn group to remove entity from. (Monster, Creature, or Water)
 	 */
 	public static void RemoveSpawn(Class<? extends LivingEntity> entityClass, SpawnGroup spawnGroup) {
 		RemoveSpawn(entityClass, spawnGroup, (Biome) null);
@@ -1212,9 +1276,10 @@ public class ModLoader {
 
 	/**
 	 * Remove entity from spawn list for selected biomes.
+	 *
 	 * @param entityClass Class of entity to spawn
-	 * @param spawnGroup The spawn group to remove the entity from (Monster, Creature, or Water)
-	 * @param biomes Array of biomes to remove entity spawning from
+	 * @param spawnGroup  The spawn group to remove the entity from (Monster, Creature, or Water)
+	 * @param biomes      Array of biomes to remove entity spawning from
 	 */
 	@SuppressWarnings("unchecked")
 	public static void RemoveSpawn(Class<? extends LivingEntity> entityClass, SpawnGroup spawnGroup, Biome... biomes) {
@@ -1238,6 +1303,7 @@ public class ModLoader {
 
 	/**
 	 * Remove entity from spawn list for all biomes except Hell.
+	 *
 	 * @param entityName Name of entity to remove
 	 * @param spawnGroup The spawn group to remove the entity from (Monster, Creature, or Water)
 	 */
@@ -1247,9 +1313,10 @@ public class ModLoader {
 
 	/**
 	 * Remove entity from spawn list for selected biomes.
+	 *
 	 * @param entityName Name of entity to remove
 	 * @param spawnGroup The spawn group to remove the entity from (Monster, Creature, or Water)
-	 * @param biomes Array of biomes to remove entity spawning from
+	 * @param biomes     Array of biomes to remove entity spawning from
 	 */
 	@SuppressWarnings("unchecked")
 	public static void RemoveSpawn(String entityName, SpawnGroup spawnGroup, Biome... biomes) {
@@ -1261,6 +1328,7 @@ public class ModLoader {
 
 	/**
 	 * Determines how the block should be rendered.
+	 *
 	 * @param modelID ID of block model
 	 * @return true if block should be rendered using {@link #RenderInvBlock(BlockRenderer, Block, int, int)}
 	 */
@@ -1274,10 +1342,11 @@ public class ModLoader {
 
 	/**
 	 * Renders a block in inventory.
+	 *
 	 * @param renderer parent renderer; Methods and fields may be referenced from here.
-	 * @param block reference to block to render
+	 * @param block    reference to block to render
 	 * @param metadata of block; Damage on an item
-	 * @param modelID ID of block model to render
+	 * @param modelID  ID of block model to render
 	 */
 	public static void RenderInvBlock(BlockRenderer renderer, Block block, int metadata, int modelID) {
 		BaseMod mod = BLOCK_MODELS.get(modelID);
@@ -1288,13 +1357,14 @@ public class ModLoader {
 
 	/**
 	 * Renders a block in the world.
+	 *
 	 * @param renderer parent renderer; Methods and fields may be referenced from here
-	 * @param world to render block in
-	 * @param x x position in world
-	 * @param y y position in world
-	 * @param z z position in world
-	 * @param block reference to block to render
-	 * @param modelID ID of block model to render
+	 * @param world    to render block in
+	 * @param x        x position in world
+	 * @param y        y position in world
+	 * @param z        z position in world
+	 * @param block    reference to block to render
+	 * @param modelID  ID of block model to render
 	 * @return true if model was rendered
 	 */
 	public static boolean RenderWorldBlock(BlockRenderer renderer, BlockView world, int x, int y, int z, Block block, int modelID) {
@@ -1317,8 +1387,9 @@ public class ModLoader {
 
 	/**
 	 * Enable or disable BaseMod.OnTickInGame(net.minecraft.client.Minecraft)
-	 * @param mod to set
-	 * @param enable whether to add or remove from list
+	 *
+	 * @param mod      to set
+	 * @param enable   whether to add or remove from list
 	 * @param useClock if true will only run once each tick on game clock, if false once every render frame
 	 */
 	public static void SetInGameHook(BaseMod mod, boolean enable, boolean useClock) {
@@ -1331,8 +1402,9 @@ public class ModLoader {
 
 	/**
 	 * Enable or disable BaseMod.OnTickInGUI(net.minecraft.client.Minecraft, da)
-	 * @param mod to set
-	 * @param enable whether to add or remove from list
+	 *
+	 * @param mod      to set
+	 * @param enable   whether to add or remove from list
 	 * @param useClock if true will only run once each tick on game clock, if false once every render frame
 	 */
 	public static void SetInGUIHook(BaseMod mod, boolean enable, boolean useClock) {
@@ -1345,14 +1417,15 @@ public class ModLoader {
 
 	/**
 	 * Used for setting value of private fields.
+	 *
 	 * @param instanceClass Class to use with instance
-	 * @param instance Object to get private field from
-	 * @param fieldIndex Offset of field in class
-	 * @param value Value to set
-	 * @param <T> Type of instance
-	 * @param <E> Type of value
+	 * @param instance      Object to get private field from
+	 * @param fieldIndex    Offset of field in class
+	 * @param value         Value to set
+	 * @param <T>           Type of instance
+	 * @param <E>           Type of value
 	 * @throws IllegalArgumentException if instance isn't compatible with instanceClass
-	 * @throws SecurityException if the thread is not allowed to access field
+	 * @throws SecurityException        if the thread is not allowed to access field
 	 */
 	@SuppressWarnings("unused")
 	public static <T, E> void setPrivateValue(Class<? super T> instanceClass, T instance, int fieldIndex, E value) throws IllegalArgumentException, SecurityException {
@@ -1380,15 +1453,16 @@ public class ModLoader {
 
 	/**
 	 * Used for setting value of private fields.
+	 *
 	 * @param instanceClass Class to use with instance
-	 * @param instance Object to get private field from
-	 * @param fieldName Name of the field
-	 * @param value Value to set
-	 * @param <T> Type of instance
-	 * @param <E> Type of value
+	 * @param instance      Object to get private field from
+	 * @param fieldName     Name of the field
+	 * @param value         Value to set
+	 * @param <T>           Type of instance
+	 * @param <E>           Type of value
 	 * @throws IllegalArgumentException if instance isn't compatible with instanceClass
-	 * @throws SecurityException if the thread is not allowed to access field
-	 * @throws NoSuchFieldException if field does not exist
+	 * @throws SecurityException        if the thread is not allowed to access field
+	 * @throws NoSuchFieldException     if field does not exist
 	 */
 	public static <T, E> void setPrivateValue(Class<? super T> instanceClass, T instance, String fieldName, E value) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
 		try {
@@ -1466,7 +1540,7 @@ public class ModLoader {
 
 					if (value != null) {
 						if (value instanceof Number) {
-							double num = ((Number)value).doubleValue();
+							double num = ((Number) value).doubleValue();
 							if (annotation.min() != Double.NEGATIVE_INFINITY && num < annotation.min()
 									|| annotation.max() != Double.POSITIVE_INFINITY && num > annotation.max()) {
 								continue;
@@ -1492,30 +1566,33 @@ public class ModLoader {
 
 	/**
 	 * Is called when an item is picked up from crafting result slot.
+	 *
 	 * @param player that took the item
-	 * @param item that was taken
+	 * @param item   that was taken
 	 */
 	public static void TakenFromCrafting(PlayerEntity player, ItemStack item) {
-		for(BaseMod mod : MOD_LIST) {
+		for (BaseMod mod : MOD_LIST) {
 			mod.TakenFromCrafting(player, item);
 		}
 	}
 
 	/**
 	 * Is called when an item is picked up from furnace result slot.
+	 *
 	 * @param player that took the item
-	 * @param item that was taken
+	 * @param item   that was taken
 	 */
 	public static void TakenFromFurnace(PlayerEntity player, ItemStack item) {
-		for(BaseMod mod : MOD_LIST) {
+		for (BaseMod mod : MOD_LIST) {
 			mod.TakenFromFurnace(player, item);
 		}
 	}
 
 	/**
 	 * Used for catching an error and generating an error report.
+	 *
 	 * @param message the title of the error
-	 * @param e the error to show
+	 * @param e       the error to show
 	 */
 	public static void ThrowException(String message, Throwable e) {
 		Minecraft client = getMinecraftInstance();

@@ -2,17 +2,20 @@
  * This software is provided under the terms of the Minecraft Forge Public
  * License v1.1.
  */
+
 package forge;
 
-import io.github.betterthanupdates.forge.item.ForgeTool;
-import io.github.betterthanupdates.forge.item.ToolEffectiveness;
+import java.util.LinkedList;
+
 import net.legacyfabric.fabric.api.logger.v1.Logger;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import java.util.LinkedList;
+import io.github.betterthanupdates.forge.item.ForgeTool;
+import io.github.betterthanupdates.forge.item.ToolEffectiveness;
 
 @SuppressWarnings("unused")
 public class MinecraftForge {

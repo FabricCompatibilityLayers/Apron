@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "babricated-forge",
   "version": "${version}",
-
   "name": "Babricated Forge",
   "description": "A compatibility layer to load Forge mods with Fabric.",
   "authors": [
@@ -25,10 +24,8 @@
     "sources": "https://github.com/Better-Than-Updates-MC/babricated-forge",
     "issues": "https://github.com/Better-Than-Updates-MC/babricated-forge/issues"
   },
-
   "license": "MIT",
   "icon": "assets/forge/icon.png",
-
   "environment": "*",
   "entrypoints": {
     "client": [
@@ -48,7 +45,6 @@
     "forge.mixins.json",
     "modloader.mixins.json"
   ],
-
   "depends": {
     "fabricloader": ">=0.13.3",
     "minecraft": "1.0.0-beta.7.3",

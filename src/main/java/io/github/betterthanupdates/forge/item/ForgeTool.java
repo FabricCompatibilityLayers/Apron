@@ -1,8 +1,8 @@
 package io.github.betterthanupdates.forge.item;
 
-import org.jetbrains.annotations.ApiStatus;
-
 import java.util.List;
+
+import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public class ForgeTool {

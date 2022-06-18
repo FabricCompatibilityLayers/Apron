@@ -1,6 +1,11 @@
 package io.github.betterthanupdates.modloader.mixin;
 
+import java.util.Random;
+
 import modloader.ModLoader;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.block.DispenserBlockEntity;
@@ -10,10 +15,6 @@ import net.minecraft.entity.projectile.ThrownEggEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-
-import java.util.Random;
 
 @Mixin(DispenserBlock.class)
 public abstract class DispenserBlockMixin {

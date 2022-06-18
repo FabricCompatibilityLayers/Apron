@@ -3,7 +3,6 @@ plugins {
 	id 'babric-loom' version '0.12-SNAPSHOT'
 	id 'io.github.juuxel.loom-quiltflower' version '1.7.3'
 	id 'maven-publish'
-//	id "com.diffplug.spotless" version "6.5.1"
 }
 
 // Fetch build number from Github Actions

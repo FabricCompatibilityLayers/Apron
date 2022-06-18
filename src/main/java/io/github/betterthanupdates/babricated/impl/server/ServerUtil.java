@@ -1,15 +1,17 @@
 package io.github.betterthanupdates.babricated.impl.server;
 
-import io.github.betterthanupdates.babricated.BabricatedForge;
-import io.github.betterthanupdates.babricated.api.BabricatedApi;
+import java.util.List;
+
 import net.fabricmc.loader.impl.FabricLoaderImpl;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
+
+import io.github.betterthanupdates.babricated.BabricatedForge;
+import io.github.betterthanupdates.babricated.api.BabricatedApi;
 
 public class ServerUtil implements BabricatedApi {
 	@ApiStatus.Internal

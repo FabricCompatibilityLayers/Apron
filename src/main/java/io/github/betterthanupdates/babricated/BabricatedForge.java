@@ -1,5 +1,8 @@
 package io.github.betterthanupdates.babricated;
 
+import java.io.File;
+import java.util.Objects;
+
 import fr.catcore.modremapperapi.utils.Constants;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -9,9 +12,6 @@ import net.fabricmc.mapping.tree.ClassDef;
 import net.fabricmc.mapping.tree.FieldDef;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
 import org.jetbrains.annotations.ApiStatus;
-
-import java.io.File;
-import java.util.Objects;
 
 @ApiStatus.Internal
 public final class BabricatedForge {
@@ -38,6 +38,7 @@ public final class BabricatedForge {
 
 	/**
 	 * For use in screen mixins
+	 *
 	 * @param original what the line originally said
 	 * @return the string to replace it with
 	 */
@@ -47,6 +48,7 @@ public final class BabricatedForge {
 
 	/**
 	 * For use in screen mixins.
+	 *
 	 * @return a string telling how many mods are loaded from ModLoader
 	 */
 	public static String rmlModsLoaded() {

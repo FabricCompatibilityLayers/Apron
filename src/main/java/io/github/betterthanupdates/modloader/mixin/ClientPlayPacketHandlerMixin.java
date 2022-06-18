@@ -1,13 +1,28 @@
 package io.github.betterthanupdates.modloader.mixin;
 
+import java.lang.reflect.Field;
+
 import modloader.ModLoader;
 import modloadermp.ModLoaderMp;
 import modloadermp.NetClientHandlerEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.*;
+import net.minecraft.entity.BoatEntity;
+import net.minecraft.entity.ChestMinecartEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.FallingBlockEntity;
+import net.minecraft.entity.FishHookEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.PrimedTntEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
@@ -16,14 +31,6 @@ import net.minecraft.network.ClientPlayPacketHandler;
 import net.minecraft.packet.play.EntitySpawnS2CPacket;
 import net.minecraft.packet.play.OpenContainerS2CPacket;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.lang.reflect.Field;
 
 @Environment(EnvType.CLIENT)
 @Mixin(ClientPlayPacketHandler.class)
@@ -167,13 +174,13 @@ public abstract class ClientPlayPacketHandlerMixin {
 	private void modloader$openContainer(OpenContainerS2CPacket packet, CallbackInfo ci) {
 		int type = packet.inventoryType;
 		switch (type) {
-			case 0:
-			case 1:
-			case 2:
-			case 3:
-				return;
-			default:
-				ModLoaderMp.HandleGUI(packet);
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+			return;
+		default:
+			ModLoaderMp.HandleGUI(packet);
 		}
 	}
 }

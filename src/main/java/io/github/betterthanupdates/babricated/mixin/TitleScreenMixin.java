@@ -1,10 +1,12 @@
 package io.github.betterthanupdates.babricated.mixin;
 
-import io.github.betterthanupdates.babricated.BabricatedForge;
+import static io.github.betterthanupdates.babricated.BabricatedForge.fabricModsLoaded;
+import static io.github.betterthanupdates.babricated.BabricatedForge.rmlModsLoaded;
+
+import java.util.Objects;
+
 import modloader.ModLoader;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.menu.TitleScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,14 +15,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Objects;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.menu.TitleScreen;
 
-import static io.github.betterthanupdates.babricated.BabricatedForge.*;
+import io.github.betterthanupdates.babricated.BabricatedForge;
 
 @Mixin(TitleScreen.class)
 public abstract class TitleScreenMixin extends Screen {
 
-	@Shadow public abstract void init();
+	@Shadow
+	public abstract void init();
 
 	@ModifyConstant(method = "render", constant = @Constant(stringValue = "Minecraft Beta 1.7.3"))
 	private String babricated$renderVersion(final String constant) {
