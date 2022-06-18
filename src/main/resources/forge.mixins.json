@@ -18,13 +18,7 @@
     "TorchBlockMixin",
     "TrapdoorBlockMixin",
     "ParticleManagerMixin",
-    "BlockRendererMixin",
-    "PistonRendererMixin",
-    "ItemRendererMixin",
-    "PlayerRendererMixin",
-    "GameRendererMixin",
-    "HeldItemRendererMixin",
-    "TessellatorMixin"
+    "BlockRendererMixin"
   ],
   "client": [
   ],
