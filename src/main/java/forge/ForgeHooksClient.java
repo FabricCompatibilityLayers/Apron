@@ -162,7 +162,7 @@ public class ForgeHooksClient {
 		List key = Arrays.asList(tex, sub);
 		Tessellator t;
 		if (!tessellators.containsKey(key)) {
-			t = new Tessellator(0);
+			t = new Tessellator(2097152);
 			tessellators.put(key, t);
 		} else {
 			t = tessellators.get(key);

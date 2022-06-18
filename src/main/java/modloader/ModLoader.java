@@ -619,8 +619,6 @@ public class ModLoader {
 		try {
 			Minecraft client = getMinecraftInstance();
 			if (client != null) client.gameRenderer = new EntityRendererProxy(client);
-			field_modifiers = Field.class.getDeclaredField("modifiers");
-			field_modifiers.setAccessible(true);
 			Field[] fieldArray = Biome.class.getDeclaredFields();
 			List<Biome> biomes = new LinkedList<>();
 
@@ -635,7 +633,7 @@ public class ModLoader {
 			}
 
 			standardBiomes = biomes.toArray(new Biome[0]);
-		} catch (SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException var10) {
+		} catch (SecurityException | IllegalArgumentException | IllegalAccessException var10) {
 			MOD_LOGGER.throwing("ModLoader", "init", var10);
 			ThrowException(var10);
 			throw new RuntimeException(var10);
@@ -1358,13 +1356,19 @@ public class ModLoader {
 		try {
 			Field f = instanceClass.getDeclaredFields()[fieldIndex];
 			f.setAccessible(true);
+
+			if (field_modifiers == null) {
+				field_modifiers = Field.class.getDeclaredField("modifiers");
+				field_modifiers.setAccessible(true);
+			}
+
 			int modifiers = field_modifiers.getInt(f);
 			if ((modifiers & 16) != 0) {
 				field_modifiers.setInt(f, modifiers & -17);
 			}
 
 			f.set(instance, value);
-		} catch (IllegalAccessException var6) {
+		} catch (IllegalAccessException | NoSuchFieldException var6) {
 			MOD_LOGGER.throwing("ModLoader", "setPrivateValue", var6);
 			ThrowException("An impossible error has occured!", var6);
 		}
@@ -1386,6 +1390,12 @@ public class ModLoader {
 	public static <T, E> void setPrivateValue(Class<? super T> instanceClass, T instance, String fieldName, E value) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
 		try {
 			Field f = instanceClass.getDeclaredField(fieldName);
+
+			if (field_modifiers == null) {
+				field_modifiers = Field.class.getDeclaredField("modifiers");
+				field_modifiers.setAccessible(true);
+			}
+
 			int modifiers = field_modifiers.getInt(f);
 			if ((modifiers & 16) != 0) {
 				field_modifiers.setInt(f, modifiers & -17);
