@@ -58,6 +58,12 @@ public abstract class WorldRendererMixin {
 
     @Shadow private boolean field_227;
 
+    @Inject(method = "method_296", at = @At(value = "INVOKE", shift = At.Shift.BEFORE,
+            target = "Lnet/minecraft/client/render/Tessellator;draw()V"), locals = LocalCapture.CAPTURE_FAILHARD)
+    private void forge$afterRenderPass(CallbackInfo ci, int var11) {
+        ForgeHooksClient.afterRenderPass(var11);
+    }
+
     /**
      * @author Eloraam
      * @reason Minecraft Forge client hooks
@@ -118,9 +124,6 @@ public abstract class WorldRendererMixin {
 
                                 Block block = Block.BY_ID[i3];
                                 int j3 = block.getRenderPass();
-                                if (j3 > i2) {
-                                    flag = true;
-                                }
 
                                 if (ForgeHooksClient.canRenderInPass(block, i2)) {
                                     ForgeHooksClient.beforeBlockRender(block, renderblocks);
