@@ -118,6 +118,7 @@ extendable method net/minecraft/client/render/block/BlockRenderer renderPistonHe
 accessible method net/minecraft/client/render/block/BlockRenderer method_43 (IIILnet/minecraft/block/material/Material;)F
 extendable method net/minecraft/client/render/block/BlockRenderer method_43 (IIILnet/minecraft/block/material/Material;)F
 
+
 accessible field net/minecraft/client/render/Tessellator drawingMode I
 accessible field net/minecraft/client/render/Tessellator xOffset D
 accessible field net/minecraft/client/render/Tessellator yOffset D
@@ -131,8 +132,7 @@ accessible field net/minecraft/client/render/WorldRenderer textureManager Lnet/m
 accessible field net/minecraft/client/render/WorldRenderer client Lnet/minecraft/client/Minecraft;
 accessible field net/minecraft/client/render/WorldRenderer blockRenderer Lnet/minecraft/client/render/block/BlockRenderer;
 
-
-accessible field net/minecraft/item/ToolItem field_2713 F
-accessible field net/minecraft/item/ToolItem field_2714 I
+accessible field net/minecraft/client/entity/player/AbstractClientPlayerEntity client Lnet/minecraft/client/Minecraft;
 
 accessible field net/minecraft/world/World autoSaveInterval I
+accessible method net/minecraft/world/dimension/DimensionFile getParentFolder ()Ljava/io/File;
