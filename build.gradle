@@ -3,6 +3,7 @@ plugins {
 	id 'babric-loom' version '0.12-SNAPSHOT'
 	id 'io.github.juuxel.loom-quiltflower' version '1.7.3'
 	id 'maven-publish'
+//	id "com.diffplug.spotless" version "6.5.1"
 }
 
 // Fetch build number from Github Actions
@@ -17,6 +18,8 @@ loom {
 	customMinecraftManifest.set("https://babric.github.io/manifest-polyfill/${minecraft_version}.json")
 	accessWidenerPath = file("src/main/resources/forge.accesswidener")
 }
+
+apply plugin: "checkstyle"
 
 repositories {
 	mavenCentral()
@@ -84,6 +87,11 @@ dependencies {
 //	modRuntimeOnly(group: "remapped.server", name: "modloadermp-1.7.3-unofficial-server", version: "v2")
 //	modRuntimeOnly(group: "remapped.server", name: "minecraftforge-server", version: "1.0.7-20110907")
 //	modRuntimeOnly(group: "remapped.client", name: "shockahpi", version: "r8")
+}
+
+checkstyle {
+	configFile = rootProject.file("checkstyle.xml")
+	toolVersion = "9.1"
 }
 
 processResources {
