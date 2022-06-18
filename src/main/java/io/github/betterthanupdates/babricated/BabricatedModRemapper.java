@@ -29,7 +29,8 @@ public final class BabricatedModRemapper implements ModRemapper {
 				libraries = new RemapLibrary[] {
 						new RemapLibrary(getLibPath("modloader-b1.7.3"), new ArrayList<>(), "modloader.zip"),
 						new RemapLibrary(getLibPath("modloadermp-1.7.3-unofficial-v2"), new ArrayList<>(), "modloadermp-client.zip"),
-						new RemapLibrary(getLibPath("minecraftforge-client-1.0.7-20110907"), new ArrayList<>(), "forge-client.zip")
+						new RemapLibrary(getLibPath("minecraftforge-client-1.0.7-20110907"), new ArrayList<>(), "forge-client.zip"),
+						new RemapLibrary(getLibPath("audiomod-b1.7.3"), new ArrayList<>(), "audiomod.zip")
 				};
 				break;
 			case SERVER:
