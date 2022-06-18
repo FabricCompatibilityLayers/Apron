@@ -4,10 +4,6 @@
  */
 package forge;
 
-import io.github.betterthanupdates.forge.block.ForgeBlock;
-import io.github.betterthanupdates.forge.entity.player.ForgePlayerEntity;
-import io.github.betterthanupdates.forge.item.ForgeTool;
-import io.github.betterthanupdates.forge.item.ToolEffectiveness;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -16,6 +12,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.SleepStatus;
 
 import java.util.*;
+
+import io.github.betterthanupdates.forge.block.ForgeBlock;
+import io.github.betterthanupdates.forge.entity.player.ForgePlayerEntity;
+
+import static forge.MinecraftForge.LOGGER;
 
 @SuppressWarnings("unused")
 public class ForgeHooks {
@@ -26,9 +27,9 @@ public class ForgeHooks {
 	public static final int minorVersion = 0;
 	public static final int revisionVersion = 6;
 	static boolean toolInit = false;
-	static HashMap<Integer, ForgeTool> toolClasses = new HashMap<>();
-	static HashMap<ToolEffectiveness, Integer> toolHarvestLevels = new HashMap<>();
-	static HashSet<ToolEffectiveness> toolEffectiveness = new HashSet<>();
+	static HashMap<Integer, List> toolClasses = new HashMap<>();
+	static HashMap<List, Integer> toolHarvestLevels = new HashMap<>();
+	static HashSet<List> toolEffectiveness = new HashSet<>();
 
 	public ForgeHooks() {
 	}
@@ -58,23 +59,26 @@ public class ForgeHooks {
 		return null;
 	}
 
-	public static boolean canHarvestBlock(Block block, PlayerEntity player, int meta) {
-		if (block.material.doesRequireTool()) {
+	public static boolean canHarvestBlock(Block bl, PlayerEntity player, int md) {
+		if (bl.material.doesRequireTool()) {
 			return true;
 		} else {
 			ItemStack itemstack = player.inventory.getHeldItem();
 			if (itemstack == null) {
 				return false;
 			} else {
-				ForgeTool tc = toolClasses.get(itemstack.itemId);
+				List tc = toolClasses.get(itemstack.itemId);
 				if (tc == null) {
-					return itemstack.isEffectiveOn(block);
+					return itemstack.isEffectiveOn(bl);
 				} else {
-					Integer bhl = toolHarvestLevels.get(new ToolEffectiveness(block.id, meta, tc.toolClass));
+					Object[] ta = tc.toArray();
+					String cls = (String) ta[0];
+					int hvl = (int) ta[1];
+					Integer bhl = toolHarvestLevels.get(Arrays.asList(bl.id, md, cls));
 					if (bhl == null) {
-						return itemstack.isEffectiveOn(block);
+						return itemstack.isEffectiveOn(bl);
 					} else {
-						return bhl <= tc.harvestLevel && itemstack.isEffectiveOn(block);
+						return bhl <= hvl && itemstack.isEffectiveOn(bl);
 					}
 				}
 			}
@@ -90,12 +94,14 @@ public class ForgeHooks {
 		}
 	}
 
-	public static boolean isToolEffective(ItemStack tool, Block block, int meta) {
-		ForgeTool tc = toolClasses.get(tool.itemId);
+	public static boolean isToolEffective(ItemStack ist, Block bl, int md) {
+		List tc = toolClasses.get(ist.itemId);
 		if (tc == null) {
 			return false;
 		} else {
-			return toolEffectiveness.contains(new ToolEffectiveness(block.id, meta, tc.toolClass));
+			Object[] ta = tc.toArray();
+			String cls = (String) ta[0];
+			return toolEffectiveness.contains(Arrays.asList(bl.id, md, cls));
 		}
 	}
 
@@ -130,7 +136,7 @@ public class ForgeHooks {
 			MinecraftForge.setBlockHarvestLevel(Block.REDSTONE_ORE_LIT, "pickaxe", 2);
 			MinecraftForge.removeBlockEffectiveness(Block.REDSTONE_ORE, "pickaxe");
 			MinecraftForge.removeBlockEffectiveness(Block.REDSTONE_ORE_LIT, "pickaxe");
-			Block[] pickaxeEffective = new Block[] {
+			Block[] pickaxeEffective = new Block[]{
 					Block.COBBLESTONE,
 					Block.DOUBLE_STONE_SLAB,
 					Block.STONE_SLAB,

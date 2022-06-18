@@ -4,18 +4,20 @@
  */
 package forge;
 
-import io.github.betterthanupdates.forge.item.ForgeTool;
-import io.github.betterthanupdates.forge.item.ToolEffectiveness;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
-@SuppressWarnings("unused")
 public class MinecraftForge {
 	private static final LinkedList<IBucketHandler> bucketHandlers = new LinkedList<>();
+
+	public MinecraftForge() {
+	}
 
 	/**
 	 * @deprecated
@@ -51,39 +53,39 @@ public class MinecraftForge {
 		return null;
 	}
 
-	public static void setToolClass(Item tool, String toolClass, int harvestLevel) {
+	public static void setToolClass(Item tool, String tClass, int hLevel) {
 		ForgeHooks.initTools();
-		ForgeHooks.toolClasses.put(tool.id, new ForgeTool(toolClass, harvestLevel));
+		ForgeHooks.toolClasses.put(tool.id, Arrays.asList(tClass, hLevel));
 	}
 
-	public static void setBlockHarvestLevel(Block block, int meta, String toolClass, int harvestLevel) {
+	public static void setBlockHarvestLevel(Block bl, int md, String tClass, int hLevel) {
 		ForgeHooks.initTools();
-		ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolClass);
-		ForgeHooks.toolHarvestLevels.put(key, harvestLevel);
+		List key = Arrays.asList(bl.id, md, tClass);
+		ForgeHooks.toolHarvestLevels.put(key, hLevel);
 		ForgeHooks.toolEffectiveness.add(key);
 	}
 
-	public static void removeBlockEffectiveness(Block block, int meta, String toolClass) {
+	public static void removeBlockEffectiveness(Block bl, int md, String tClass) {
 		ForgeHooks.initTools();
-		ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolClass);
+		List key = Arrays.asList(bl.id, md, tClass);
 		ForgeHooks.toolEffectiveness.remove(key);
 	}
 
-	public static void setBlockHarvestLevel(Block block, String toolClass, int harvestName) {
+	public static void setBlockHarvestLevel(Block bl, String tClass, int hLevel) {
 		ForgeHooks.initTools();
 
-		for (int meta = 0; meta < 16; ++meta) {
-			ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolClass);
-			ForgeHooks.toolHarvestLevels.put(key, harvestName);
+		for (int md = 0; md < 16; ++md) {
+			List key = Arrays.asList(bl.id, md, tClass);
+			ForgeHooks.toolHarvestLevels.put(key, hLevel);
 			ForgeHooks.toolEffectiveness.add(key);
 		}
 	}
 
-	public static void removeBlockEffectiveness(Block block, String toolClass) {
+	public static void removeBlockEffectiveness(Block bl, String tClass) {
 		ForgeHooks.initTools();
 
-		for (int meta = 0; meta < 16; ++meta) {
-			ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolClass);
+		for (int md = 0; md < 16; ++md) {
+			List key = Arrays.asList(bl.id, md, tClass);
 			ForgeHooks.toolEffectiveness.remove(key);
 		}
 	}
