@@ -1,9 +1,12 @@
 package io.github.betterthanupdates.babricated;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import fr.catcore.modremapperapi.utils.Constants;
+import modloader.BaseMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -12,6 +15,8 @@ import net.fabricmc.mapping.tree.ClassDef;
 import net.fabricmc.mapping.tree.FieldDef;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
 import org.jetbrains.annotations.ApiStatus;
+import org.spongepowered.include.com.google.common.collect.ImmutableList;
+import shockahpi.ShockAhPI;
 
 @ApiStatus.Internal
 public final class BabricatedForge {
@@ -24,6 +29,10 @@ public final class BabricatedForge {
 	public static final File MOD_CACHE_FOLDER;
 
 	public static final ModContainer MOD_CONTAINER;
+
+	public static final List<? extends BaseMod> BUILTIN_RML_MODS = ImmutableList.of(
+			new ShockAhPI()
+	);
 
 	static {
 		LOGGER = Logger.get("Babricated Forge");

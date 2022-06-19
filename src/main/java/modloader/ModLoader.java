@@ -1,5 +1,6 @@
 package modloader;
 
+import static io.github.betterthanupdates.babricated.BabricatedForge.BUILTIN_RML_MODS;
 import static io.github.betterthanupdates.babricated.BabricatedForge.MOD_CACHE_FOLDER;
 
 import java.awt.image.BufferedImage;
@@ -250,9 +251,9 @@ public class ModLoader {
 		}
 	}
 
-	private static void addMod(ClassLoader loader, String filename) {
+	private static void addInternalMod(ClassLoader loader, String filename) {
 		try {
-			String name = filename.split("\\.")[0];
+			String name = filename.replace("/", ".").replace("\\", ".").split("\\.")[0];
 
 			if (name.contains("$")) {
 				return;
@@ -276,6 +277,11 @@ public class ModLoader {
 			MOD_LOGGER.throwing("ModLoader", "addMod", var6);
 			ThrowException(var6);
 		}
+	}
+
+	private static void addInternalMod(BaseMod mod) {
+		MOD_LIST.add(mod);
+		LOGGER.info("Internal mod loaded: {} {}", mod.getClass().getSimpleName(), mod.Version());
 	}
 
 	/**
@@ -737,6 +743,9 @@ public class ModLoader {
 			}
 
 			readFromClassPath(source);
+
+			BUILTIN_RML_MODS.forEach(ModLoader::addInternalMod);
+
 			LOGGER.info("Done initializing.");
 			props.setProperty("loggingLevel", cfgLoggingLevel.getName());
 
@@ -1044,9 +1053,11 @@ public class ModLoader {
 				}
 
 				String name = entry.getName();
+				String[] nameParts = name.split("/");
+				String fileName = nameParts[nameParts.length - 1];
 
-				if (!entry.isDirectory() && name.startsWith("mod_") && name.endsWith(".class")) {
-					addMod(loader, name);
+				if (!entry.isDirectory() && (fileName.startsWith("mod_") && fileName.endsWith(".class"))) {
+					addInternalMod(loader, name);
 				}
 			}
 		} else if (source.isDirectory()) {
@@ -1065,7 +1076,7 @@ public class ModLoader {
 					String name = file.getName();
 
 					if (file.isFile() && name.startsWith("mod_") && name.endsWith(".class")) {
-						addMod(loader, name);
+						addInternalMod(loader, name);
 					}
 				}
 			}
@@ -1114,7 +1125,7 @@ public class ModLoader {
 										String name = directoryFile.getName();
 
 										if (directoryFile.isFile() && name.startsWith("mod_") && name.endsWith(".class")) {
-											addMod(loader, name);
+											addInternalMod(loader, name);
 										}
 									}
 								}
@@ -1137,7 +1148,7 @@ public class ModLoader {
 								String name = entry.getName();
 
 								if (!entry.isDirectory() && name.startsWith("mod_") && name.endsWith(".class")) {
-									addMod(loader, name);
+									addInternalMod(loader, name);
 								}
 							}
 						}
