@@ -95,14 +95,14 @@ public class Configuration {
 	public Property getOrCreateProperty(String key, int kind, String defaultValue) {
 		TreeMap<String, Property> source = null;
 		switch (kind) {
-		case GENERAL_PROPERTY:
-			source = this.generalProperties;
-			break;
-		case BLOCK_PROPERTY:
-			source = this.blockProperties;
-			break;
-		case ITEM_PROPERTY:
-			source = this.itemProperties;
+			case GENERAL_PROPERTY:
+				source = this.generalProperties;
+				break;
+			case BLOCK_PROPERTY:
+				source = this.blockProperties;
+				break;
+			case ITEM_PROPERTY:
+				source = this.itemProperties;
 		}
 
 		if (source.containsKey(key)) {
@@ -146,43 +146,43 @@ public class Configuration {
 						if (!Character.isLetterOrDigit(line.charAt(i)) && line.charAt(i) != '.') {
 							if (!Character.isWhitespace(line.charAt(i))) {
 								switch (line.charAt(i)) {
-								case '#':
-									skip = true;
-									break;
-								case '=':
-									String propertyName = line.substring(nameStart, nameEnd + 1);
+									case '#':
+										skip = true;
+										break;
+									case '=':
+										String propertyName = line.substring(nameStart, nameEnd + 1);
 
-									if (currentMap == null) {
-										throw new RuntimeException("property " + propertyName + " has no scope");
-									}
-
-									Property prop = new Property();
-									prop.name = propertyName;
-									prop.value = line.substring(i + 1);
-									i = line.length();
-									currentMap.put(propertyName, prop);
-									break;
-								case '{':
-									String scopeName = line.substring(nameStart, nameEnd + 1);
-
-									if (scopeName.equals("general")) {
-										currentMap = this.generalProperties;
-									} else if (scopeName.equals("block")) {
-										currentMap = this.blockProperties;
-									} else {
-										if (!scopeName.equals("item")) {
-											throw new RuntimeException("unknown section " + scopeName);
+										if (currentMap == null) {
+											throw new RuntimeException("property " + propertyName + " has no scope");
 										}
 
-										currentMap = this.itemProperties;
-									}
+										Property prop = new Property();
+										prop.name = propertyName;
+										prop.value = line.substring(i + 1);
+										i = line.length();
+										currentMap.put(propertyName, prop);
+										break;
+									case '{':
+										String scopeName = line.substring(nameStart, nameEnd + 1);
 
-									break;
-								case '}':
-									currentMap = null;
-									break;
-								default:
-									throw new RuntimeException("unknown character " + line.charAt(i));
+										if (scopeName.equals("general")) {
+											currentMap = this.generalProperties;
+										} else if (scopeName.equals("block")) {
+											currentMap = this.blockProperties;
+										} else {
+											if (!scopeName.equals("item")) {
+												throw new RuntimeException("unknown section " + scopeName);
+											}
+
+											currentMap = this.itemProperties;
+										}
+
+										break;
+									case '}':
+										currentMap = null;
+										break;
+									default:
+										throw new RuntimeException("unknown character " + line.charAt(i));
 								}
 							}
 						} else {

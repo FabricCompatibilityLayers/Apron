@@ -74,14 +74,14 @@ public class HeldItemRendererMixin {
 			tessellator.vertex((double) f4, 0.0, 0.0, (double) f, (double) f3);
 			tessellator.vertex((double) f4, 1.0, 0.0, (double) f, (double) f2);
 			tessellator.vertex(0.0, 1.0, 0.0, (double) f1, (double) f2);
-			tessellator.draw();
+			tessellator.tessellate();
 			tessellator.start();
 			tessellator.setNormal(0.0F, 0.0F, -1.0F);
 			tessellator.vertex(0.0, 1.0, (double) (0.0F - f8), (double) f1, (double) f2);
 			tessellator.vertex((double) f4, 1.0, (double) (0.0F - f8), (double) f, (double) f2);
 			tessellator.vertex((double) f4, 0.0, (double) (0.0F - f8), (double) f, (double) f3);
 			tessellator.vertex(0.0, 0.0, (double) (0.0F - f8), (double) f1, (double) f3);
-			tessellator.draw();
+			tessellator.tessellate();
 			tessellator.start();
 			tessellator.setNormal(-1.0F, 0.0F, 0.0F);
 
@@ -95,7 +95,7 @@ public class HeldItemRendererMixin {
 				tessellator.vertex((double) f17, 1.0, (double) (0.0F - f8), (double) f13, (double) f2);
 			}
 
-			tessellator.draw();
+			tessellator.tessellate();
 			tessellator.start();
 			tessellator.setNormal(1.0F, 0.0F, 0.0F);
 
@@ -109,7 +109,7 @@ public class HeldItemRendererMixin {
 				tessellator.vertex((double) f18, 0.0, (double) (0.0F - f8), (double) f14, (double) f3);
 			}
 
-			tessellator.draw();
+			tessellator.tessellate();
 			tessellator.start();
 			tessellator.setNormal(0.0F, 1.0F, 0.0F);
 
@@ -123,7 +123,7 @@ public class HeldItemRendererMixin {
 				tessellator.vertex(0.0, (double) f19, (double) (0.0F - f8), (double) f1, (double) f15);
 			}
 
-			tessellator.draw();
+			tessellator.tessellate();
 			tessellator.start();
 			tessellator.setNormal(0.0F, -1.0F, 0.0F);
 
@@ -137,7 +137,7 @@ public class HeldItemRendererMixin {
 				tessellator.vertex((double) f4, (double) f20, (double) (0.0F - f8), (double) f, (double) f16);
 			}
 
-			tessellator.draw();
+			tessellator.tessellate();
 			GL11.glDisable(32826);
 		}
 

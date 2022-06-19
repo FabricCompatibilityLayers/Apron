@@ -47,14 +47,14 @@ public class ModLoaderMp {
 
 		if (packet.modId == NAME.hashCode()) {
 			switch (packet.packetType) {
-			case 0: {
-				handleModCheck(packet);
-				break;
-			}
-			case 1: {
-				handleTileEntityPacket(packet);
-				break;
-			}
+				case 0: {
+					handleModCheck(packet);
+					break;
+				}
+				case 1: {
+					handleTileEntityPacket(packet);
+					break;
+				}
 			}
 		} else if (packet.modId == "Spawn".hashCode()) {
 			NetClientHandlerEntity netclienthandlerentity = HandleNetClientHandlerEntities(packet.packetType);

@@ -7,13 +7,14 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.class_573;
-import net.minecraft.class_598;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.RenderHelper;
-import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.render.WorldEventRenderer;
+import net.minecraft.client.util.Camera;
+import net.minecraft.client.util.CameraFrustum;
+import net.minecraft.client.util.CameraView;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -67,18 +68,18 @@ public abstract class GameRendererMixin {
 		}
 
 		this.method_1838(f);
-		LivingEntity entityliving = this.client.viewEntity;
-		WorldRenderer renderglobal = this.client.worldRenderer;
-		ParticleManager effectrenderer = this.client.particleManager;
-		double d = entityliving.prevRenderX + (entityliving.x - entityliving.prevRenderX) * (double) f;
-		double d1 = entityliving.prevRenderY + (entityliving.y - entityliving.prevRenderY) * (double) f;
-		double d2 = entityliving.prevRenderZ + (entityliving.z - entityliving.prevRenderZ) * (double) f;
-		WorldSource ichunkprovider = this.client.world.getCache();
+		LivingEntity livingEntity = this.client.viewEntity;
+		WorldEventRenderer renderGlobal = this.client.worldRenderer;
+		ParticleManager effectRenderer = this.client.particleManager;
+		double x = livingEntity.prevRenderX + (livingEntity.x - livingEntity.prevRenderX) * (double) f;
+		double y = livingEntity.prevRenderY + (livingEntity.y - livingEntity.prevRenderY) * (double) f;
+		double z = livingEntity.prevRenderZ + (livingEntity.z - livingEntity.prevRenderZ) * (double) f;
+		WorldSource worldSource = this.client.world.getCache();
 
-		if (ichunkprovider instanceof ChunkCache) {
-			ChunkCache chunkproviderloadorgenerate = (ChunkCache) ichunkprovider;
-			int j = MathHelper.floor((float) ((int) d)) >> 4;
-			int k = MathHelper.floor((float) ((int) d2)) >> 4;
+		if (worldSource instanceof ChunkCache) {
+			ChunkCache chunkproviderloadorgenerate = (ChunkCache) worldSource;
+			int j = MathHelper.floor((float) ((int) x)) >> 4;
+			int k = MathHelper.floor((float) ((int) z)) >> 4;
 			chunkproviderloadorgenerate.method_1242(j, k);
 		}
 
@@ -98,11 +99,11 @@ public abstract class GameRendererMixin {
 			GL11.glClear(16640);
 			GL11.glEnable(2884);
 			this.method_1840(f, i);
-			class_598.method_1973();
+			CameraFrustum.getInstance();
 
 			if (this.client.options.viewDistance < 2) {
 				this.method_1842(-1, f);
-				renderglobal.renderSky(f);
+				renderGlobal.renderSky(f);
 			}
 
 			GL11.glEnable(2912);
@@ -112,12 +113,12 @@ public abstract class GameRendererMixin {
 				GL11.glShadeModel(7425);
 			}
 
-			class_573 frustrum = new class_573();
-			frustrum.method_2006(d, d1, d2);
-			this.client.worldRenderer.method_1550(frustrum, f);
+			CameraView frustum = new Camera();
+			frustum.setPosition(x, y, z);
+			this.client.worldRenderer.method_1550(frustum, f);
 
 			if (i == 0) {
-				while (!this.client.worldRenderer.method_1549(entityliving, false) && l != 0L) {
+				while (!this.client.worldRenderer.method_1549(livingEntity, false) && l != 0L) {
 					long l1 = l - System.nanoTime();
 
 					if (l1 < 0L || l1 > 1000000000L) {
@@ -130,22 +131,22 @@ public abstract class GameRendererMixin {
 			GL11.glEnable(2912);
 			GL11.glBindTexture(3553, this.client.textureManager.getTextureId("/terrain.png"));
 			RenderHelper.disableLighting();
-			renderglobal.method_1548(entityliving, 0, (double) f);
+			renderGlobal.method_1548(livingEntity, 0, (double) f);
 			GL11.glShadeModel(7424);
 			RenderHelper.enableLighting();
-			renderglobal.method_1544(entityliving.getPosition(f), frustrum, f);
-			effectrenderer.method_327(entityliving, f);
+			renderGlobal.renderEntities(livingEntity.getPosition(f), frustum, f);
+			effectRenderer.method_327(livingEntity, f);
 			RenderHelper.disableLighting();
 			this.method_1842(0, f);
-			effectrenderer.method_324(entityliving, f);
+			effectRenderer.method_324(livingEntity, f);
 
-			if (this.client.hitResult != null && entityliving.isInFluid(Material.WATER) && entityliving instanceof PlayerEntity) {
-				PlayerEntity player = (PlayerEntity) entityliving;
+			if (this.client.hitResult != null && livingEntity.isInFluid(Material.WATER) && livingEntity instanceof PlayerEntity) {
+				PlayerEntity player = (PlayerEntity) livingEntity;
 				GL11.glDisable(3008);
 
-				if (!ForgeHooksClient.onBlockHighlight(renderglobal, player, this.client.hitResult, 0, player.inventory.getHeldItem(), f)) {
-					renderglobal.method_1547(player, this.client.hitResult, 0, player.inventory.getHeldItem(), f);
-					renderglobal.method_1554(player, this.client.hitResult, 0, player.inventory.getHeldItem(), f);
+				if (!ForgeHooksClient.onBlockHighlight(renderGlobal, player, this.client.hitResult, 0, player.inventory.getHeldItem(), f)) {
+					renderGlobal.method_1547(player, this.client.hitResult, 0, player.inventory.getHeldItem(), f);
+					renderGlobal.method_1554(player, this.client.hitResult, 0, player.inventory.getHeldItem(), f);
 				}
 
 				GL11.glEnable(3008);
@@ -157,13 +158,11 @@ public abstract class GameRendererMixin {
 			GL11.glDisable(2884);
 			GL11.glBindTexture(3553, this.client.textureManager.getTextureId("/terrain.png"));
 
+			// Some stuff is changed by ShockAhPI here.
 			if (this.client.options.fancyGraphics) {
 				if (this.client.options.ao) {
 					GL11.glShadeModel(7425);
 				}
-
-				GL11.glColorMask(false, false, false, false);
-				int i1 = renderglobal.method_1548(entityliving, 1, (double) f);
 
 				if (this.client.options.anaglyph3d) {
 					if (field_2341 == 0) {
@@ -171,30 +170,25 @@ public abstract class GameRendererMixin {
 					} else {
 						GL11.glColorMask(true, false, false, true);
 					}
-				} else {
-					GL11.glColorMask(true, true, true, true);
 				}
 
-				if (i1 > 0) {
-					renderglobal.method_1540(1, (double) f);
-				}
-
+				int i1 = renderGlobal.method_1548(livingEntity, 1, (double) f);
 				GL11.glShadeModel(7424);
 			} else {
-				renderglobal.method_1548(entityliving, 1, (double) f);
+				renderGlobal.method_1548(livingEntity, 1, (double) f);
 			}
 
 			GL11.glDepthMask(true);
 			GL11.glEnable(2884);
 			GL11.glDisable(3042);
 
-			if (this.field_2331 == 1.0 && entityliving instanceof PlayerEntity && this.client.hitResult != null && !entityliving.isInFluid(Material.WATER)) {
-				PlayerEntity player = (PlayerEntity) entityliving;
+			if (this.field_2331 == 1.0 && livingEntity instanceof PlayerEntity && this.client.hitResult != null && !livingEntity.isInFluid(Material.WATER)) {
+				PlayerEntity player = (PlayerEntity) livingEntity;
 				GL11.glDisable(3008);
 
-				if (!ForgeHooksClient.onBlockHighlight(renderglobal, player, this.client.hitResult, 0, player.inventory.getHeldItem(), f)) {
-					renderglobal.method_1547(player, this.client.hitResult, 0, player.inventory.getHeldItem(), f);
-					renderglobal.method_1554(player, this.client.hitResult, 0, player.inventory.getHeldItem(), f);
+				if (!ForgeHooksClient.onBlockHighlight(renderGlobal, player, this.client.hitResult, 0, player.inventory.getHeldItem(), f)) {
+					renderGlobal.method_1547(player, this.client.hitResult, 0, player.inventory.getHeldItem(), f);
+					renderGlobal.method_1554(player, this.client.hitResult, 0, player.inventory.getHeldItem(), f);
 				}
 
 				GL11.glEnable(3008);
@@ -209,7 +203,7 @@ public abstract class GameRendererMixin {
 
 			this.method_1842(0, f);
 			GL11.glEnable(2912);
-			renderglobal.method_1552(f);
+			renderGlobal.method_1552(f);
 			GL11.glDisable(2912);
 			this.method_1842(1, f);
 

@@ -158,7 +158,7 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 				tessellator.vertex((double) (f12 - f13), (double) (0.0F - f14), 0.0, (double) f8, (double) f11);
 				tessellator.vertex((double) (f12 - f13), (double) (1.0F - f14), 0.0, (double) f8, (double) f10);
 				tessellator.vertex((double) (0.0F - f13), (double) (1.0F - f14), 0.0, (double) f6, (double) f10);
-				tessellator.draw();
+				tessellator.tessellate();
 				GL11.glPopMatrix();
 			}
 		}

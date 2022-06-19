@@ -19,13 +19,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldPopulationRegion;
 import net.minecraft.world.chunk.Chunk;
 
+@SuppressWarnings("rawtypes")
 @Mixin(class_66.class)
 public abstract class WorldRendererMixin {
 	@Shadow
 	public boolean field_249;
-
-	@Shadow
-	public static int field_230;
 
 	@Shadow
 	public int field_231;
@@ -69,6 +67,8 @@ public abstract class WorldRendererMixin {
 	@Shadow
 	private boolean field_227;
 
+	@Shadow public static int chunkUpdates;
+
 	/**
 	 * @author Eloraam
 	 * @reason Minecraft Forge client hooks
@@ -76,7 +76,7 @@ public abstract class WorldRendererMixin {
 	@Overwrite
 	public void method_296() {
 		if (this.field_249) {
-			++field_230;
+			++chunkUpdates;
 			int i = this.field_231;
 			int j = this.field_232;
 			int k = this.field_233;
@@ -148,7 +148,7 @@ public abstract class WorldRendererMixin {
 
 				if (flag2) {
 					ForgeHooksClient.afterRenderPass(i2);
-					Tessellator.INSTANCE.draw();
+					Tessellator.INSTANCE.tessellate();
 					GL11.glPopMatrix();
 					GL11.glEndList();
 					Tessellator.INSTANCE.setOffset(0.0, 0.0, 0.0);

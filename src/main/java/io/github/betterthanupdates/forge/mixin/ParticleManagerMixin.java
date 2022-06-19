@@ -118,7 +118,7 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 					}
 				}
 
-				tessellator.draw();
+				tessellator.tessellate();
 			}
 		}
 
@@ -134,7 +134,7 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 				entityfx.method_2002(tessellator, f, f1, f5, f2, f3, f4);
 			}
 
-			tessellator.draw();
+			tessellator.tessellate();
 		}
 	}
 

@@ -1,6 +1,5 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -34,31 +33,17 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 	@Shadow
 	private boolean hasNormals;
 	@Shadow
-	private int field_2068;
-	@Shadow
 	private int vertexAmount;
 	@Shadow
 	private boolean disableColor;
 	@Shadow
-	public boolean drawing;
-	@Shadow
-	private int field_2079;
-	@Shadow
 	private int[] bufferArray;
-	@Shadow
-	private boolean useFloatBuffer;
-	@Shadow
-	private int field_2052;
-	@Shadow
-	private IntBuffer field_2078;
 	@Shadow
 	private ByteBuffer byteBuffer;
 	@Shadow
 	private IntBuffer intBuffer;
 	@Shadow
 	private FloatBuffer floatBuffer;
-	@Shadow
-	public int drawingMode;
 	@Shadow
 	private static boolean useTriangles;
 
@@ -79,15 +64,24 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 	public double yOffset;
 	@Shadow
 	public double zOffset;
+	@Shadow public boolean tessellating;
+	@Shadow private int bufferIndex;
+	@Shadow private int vboIndex;
+	@Shadow private static boolean useVbo;
+	@Shadow private boolean canUseVbo;
+	@Shadow public int drawingMode;
+	@Shadow private int vboCount;
+	@Shadow private IntBuffer vertexBuffer;
+
 	// Forge Fields
 	@Unique
 	public boolean defaultTexture = false;
 	@Unique
 	private int rawBufferSize;
 	@Unique
-	private static int nativeBufferSize = 2097152;
+	private static final int NATIVE_BUFFER_SIZE = 2097152;
 	@Unique
-	private static int trivertsInBuffer = nativeBufferSize / 48 * 6;
+	private static final int TRI_VERTS_IN_BUFFER = NATIVE_BUFFER_SIZE / 48 * 6;
 
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void ctr$overwrite(int par1, CallbackInfo ci) {
@@ -95,11 +89,11 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 		this.hasColor = false;
 		this.hasTexture = false;
 		this.hasNormals = false;
-		this.field_2068 = 0;
+		this.bufferIndex = 0;
 		this.vertexAmount = 0;
 		this.disableColor = false;
-		this.drawing = false;
-		this.field_2079 = 0;
+		this.tessellating = false;
+		this.vboIndex = 0;
 		this.bufferArray = null;
 		this.rawBufferSize = 0;
 	}
@@ -112,40 +106,40 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason Multi-tessellator
 	 */
 	@Overwrite
-	public void draw() {
-		if (!this.drawing) {
+	public void tessellate() {
+		if (!this.tessellating) {
 			throw new IllegalStateException("Not tesselating!");
 		} else {
-			this.drawing = false;
+			this.tessellating = false;
 			int offs = 0;
 
 			while (offs < this.vertexCount) {
 				int vtc;
 
 				if (this.drawingMode == 7 && useTriangles) {
-					vtc = Math.min(this.vertexCount - offs, trivertsInBuffer);
+					vtc = Math.min(this.vertexCount - offs, TRI_VERTS_IN_BUFFER);
 				} else {
-					vtc = Math.min(this.vertexCount - offs, nativeBufferSize >> 5);
+					vtc = Math.min(this.vertexCount - offs, NATIVE_BUFFER_SIZE >> 5);
 				}
 
-				((Buffer) intBuffer).clear();
+				intBuffer.clear();
 				intBuffer.put(this.bufferArray, offs * 8, vtc * 8);
-				((Buffer) byteBuffer).position(0);
-				((Buffer) byteBuffer).limit(vtc * 32);
+				byteBuffer.position(0);
+				byteBuffer.limit(vtc * 32);
 				offs += vtc;
 
-				if (useFloatBuffer) {
-					this.field_2079 = (this.field_2079 + 1) % field_2052;
-					ARBVertexBufferObject.glBindBufferARB(34962, field_2078.get(this.field_2079));
+				if (useVbo) {
+					this.vboIndex = (this.vboIndex + 1) % vboCount;
+					ARBVertexBufferObject.glBindBufferARB(34962, vertexBuffer.get(this.vboIndex));
 					ARBVertexBufferObject.glBufferDataARB(34962, byteBuffer, 35040);
 				}
 
 				if (this.hasTexture) {
-					if (useFloatBuffer) {
+					if (canUseVbo) {
 						GL11.glTexCoordPointer(2, 5126, 32, 12L);
 					} else {
 						floatBuffer.position(3);
@@ -156,10 +150,10 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 				}
 
 				if (this.hasColor) {
-					if (useFloatBuffer) {
+					if (canUseVbo) {
 						GL11.glColorPointer(4, 5121, 32, 20L);
 					} else {
-						((Buffer) byteBuffer).position(20);
+						byteBuffer.position(20);
 						GL11.glColorPointer(4, true, 32, byteBuffer);
 					}
 
@@ -167,20 +161,20 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 				}
 
 				if (this.hasNormals) {
-					if (useFloatBuffer) {
+					if (canUseVbo) {
 						GL11.glNormalPointer(5120, 32, 24L);
 					} else {
-						((Buffer) byteBuffer).position(24);
+						byteBuffer.position(24);
 						GL11.glNormalPointer(32, byteBuffer);
 					}
 
 					GL11.glEnableClientState(32885);
 				}
 
-				if (useFloatBuffer) {
+				if (canUseVbo) {
 					GL11.glVertexPointer(3, 5126, 32, 0L);
 				} else {
-					((Buffer) floatBuffer).position(0);
+					floatBuffer.position(0);
 					GL11.glVertexPointer(3, 32, floatBuffer);
 				}
 
@@ -207,7 +201,7 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 				}
 			}
 
-			if (this.rawBufferSize > 131072 && this.field_2068 < this.rawBufferSize << 3) {
+			if (this.rawBufferSize > 131072 && this.bufferIndex < this.rawBufferSize << 3) {
 				this.rawBufferSize = 0;
 				this.bufferArray = null;
 			}
@@ -217,12 +211,12 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 	}
 
 	/**
-	 * @author Forge
+	 * @author Eloraam
 	 * @reason method instruction order is different from vanilla.
 	 */
 	@Overwrite
 	public void addVertex(double d, double d1, double d2) {
-		if (this.field_2068 >= this.rawBufferSize - 32) {
+		if (this.bufferIndex >= this.rawBufferSize - 32) {
 			if (this.rawBufferSize == 0) {
 				this.rawBufferSize = 65536;
 				this.bufferArray = new int[this.rawBufferSize];
@@ -239,39 +233,39 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 				int j = 8 * (3 - i);
 
 				if (this.hasTexture) {
-					this.bufferArray[this.field_2068 + 3] = this.bufferArray[this.field_2068 - j + 3];
-					this.bufferArray[this.field_2068 + 4] = this.bufferArray[this.field_2068 - j + 4];
+					this.bufferArray[this.bufferIndex + 3] = this.bufferArray[this.bufferIndex - j + 3];
+					this.bufferArray[this.bufferIndex + 4] = this.bufferArray[this.bufferIndex - j + 4];
 				}
 
 				if (this.hasColor) {
-					this.bufferArray[this.field_2068 + 5] = this.bufferArray[this.field_2068 - j + 5];
+					this.bufferArray[this.bufferIndex + 5] = this.bufferArray[this.bufferIndex - j + 5];
 				}
 
-				this.bufferArray[this.field_2068 + 0] = this.bufferArray[this.field_2068 - j + 0];
-				this.bufferArray[this.field_2068 + 1] = this.bufferArray[this.field_2068 - j + 1];
-				this.bufferArray[this.field_2068 + 2] = this.bufferArray[this.field_2068 - j + 2];
+				this.bufferArray[this.bufferIndex + 0] = this.bufferArray[this.bufferIndex - j + 0];
+				this.bufferArray[this.bufferIndex + 1] = this.bufferArray[this.bufferIndex - j + 1];
+				this.bufferArray[this.bufferIndex + 2] = this.bufferArray[this.bufferIndex - j + 2];
 				++this.vertexCount;
-				this.field_2068 += 8;
+				this.bufferIndex += 8;
 			}
 		}
 
 		if (this.hasTexture) {
-			this.bufferArray[this.field_2068 + 3] = Float.floatToRawIntBits((float) this.textureX);
-			this.bufferArray[this.field_2068 + 4] = Float.floatToRawIntBits((float) this.textureY);
+			this.bufferArray[this.bufferIndex + 3] = Float.floatToRawIntBits((float) this.textureX);
+			this.bufferArray[this.bufferIndex + 4] = Float.floatToRawIntBits((float) this.textureY);
 		}
 
 		if (this.hasColor) {
-			this.bufferArray[this.field_2068 + 5] = this.color;
+			this.bufferArray[this.bufferIndex + 5] = this.color;
 		}
 
 		if (this.hasNormals) {
-			this.bufferArray[this.field_2068 + 6] = this.normal;
+			this.bufferArray[this.bufferIndex + 6] = this.normal;
 		}
 
-		this.bufferArray[this.field_2068 + 0] = Float.floatToRawIntBits((float) (d + this.xOffset));
-		this.bufferArray[this.field_2068 + 1] = Float.floatToRawIntBits((float) (d1 + this.yOffset));
-		this.bufferArray[this.field_2068 + 2] = Float.floatToRawIntBits((float) (d2 + this.zOffset));
-		this.field_2068 += 8;
+		this.bufferArray[this.bufferIndex + 0] = Float.floatToRawIntBits((float) (d + this.xOffset));
+		this.bufferArray[this.bufferIndex + 1] = Float.floatToRawIntBits((float) (d1 + this.yOffset));
+		this.bufferArray[this.bufferIndex + 2] = Float.floatToRawIntBits((float) (d2 + this.zOffset));
+		this.bufferIndex += 8;
 		++this.vertexCount;
 	}
 
@@ -283,5 +277,10 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 	@Override
 	public void defaultTexture(boolean defaultTexture) {
 		this.defaultTexture = defaultTexture;
+	}
+
+	@Override
+	public boolean isTessellating() {
+		return tessellating;
 	}
 }

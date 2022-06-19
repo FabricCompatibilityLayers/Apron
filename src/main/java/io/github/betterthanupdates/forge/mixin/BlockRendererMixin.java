@@ -18,8 +18,8 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderer;
 import net.minecraft.world.BlockView;
 
-import io.github.betterthanupdates.forge.client.render.ForgeTessellator;
 import io.github.betterthanupdates.forge.ForgeClientReflection;
+import io.github.betterthanupdates.forge.client.render.ForgeTessellator;
 
 @Mixin(BlockRenderer.class)
 public abstract class BlockRendererMixin {
@@ -391,16 +391,16 @@ public abstract class BlockRendererMixin {
 
 		k1 = 4;
 		switch (i1) {
-		case 0:
-			k1 = 5;
-			break;
-		case 1:
-			k1 = 3;
-		case 2:
-		default:
-			break;
-		case 3:
-			k1 = 2;
+			case 0:
+				k1 = 5;
+				break;
+			case 1:
+				k1 = 3;
+			case 2:
+			default:
+				break;
+			case 3:
+				k1 = 2;
 		}
 
 		if (f17 != 2.0F && (this.renderAllSides || block.isSideRendered(this.blockView, x, y, z - 1, 2))) {
@@ -1350,7 +1350,7 @@ public abstract class BlockRendererMixin {
 				tessellator.start();
 				tessellator.setNormal(0.0F, -1.0F, 0.0F);
 				this.method_47(block, i, -0.5, -0.5, -0.5);
-				tessellator.draw();
+				tessellator.tessellate();
 			} else if (k == 13) {
 				block.method_1605();
 				GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
@@ -1358,46 +1358,46 @@ public abstract class BlockRendererMixin {
 				tessellator.start();
 				tessellator.setNormal(0.0F, -1.0F, 0.0F);
 				this.renderBottomFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(0));
-				tessellator.draw();
+				tessellator.tessellate();
 				tessellator.start();
 				tessellator.setNormal(0.0F, 1.0F, 0.0F);
 				this.renderTopFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(1));
-				tessellator.draw();
+				tessellator.tessellate();
 				tessellator.start();
 				tessellator.setNormal(0.0F, 0.0F, -1.0F);
 				tessellator.addOffset(0.0F, 0.0F, f2);
 				this.renderEastFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(2));
 				tessellator.addOffset(0.0F, 0.0F, -f2);
-				tessellator.draw();
+				tessellator.tessellate();
 				tessellator.start();
 				tessellator.setNormal(0.0F, 0.0F, 1.0F);
 				tessellator.addOffset(0.0F, 0.0F, -f2);
 				this.renderWestFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(3));
 				tessellator.addOffset(0.0F, 0.0F, f2);
-				tessellator.draw();
+				tessellator.tessellate();
 				tessellator.start();
 				tessellator.setNormal(-1.0F, 0.0F, 0.0F);
 				tessellator.addOffset(f2, 0.0F, 0.0F);
 				this.renderNorthFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(4));
 				tessellator.addOffset(-f2, 0.0F, 0.0F);
-				tessellator.draw();
+				tessellator.tessellate();
 				tessellator.start();
 				tessellator.setNormal(1.0F, 0.0F, 0.0F);
 				tessellator.addOffset(-f2, 0.0F, 0.0F);
 				this.renderSouthFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(5));
 				tessellator.addOffset(f2, 0.0F, 0.0F);
-				tessellator.draw();
+				tessellator.tessellate();
 				GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 			} else if (k == 6) {
 				tessellator.start();
 				tessellator.setNormal(0.0F, -1.0F, 0.0F);
 				this.method_56(block, i, -0.5, -0.5, -0.5);
-				tessellator.draw();
+				tessellator.tessellate();
 			} else if (k == 2) {
 				tessellator.start();
 				tessellator.setNormal(0.0F, -1.0F, 0.0F);
 				this.renderTorchTilted(block, -0.5, -0.5, -0.5, 0.0, 0.0);
-				tessellator.draw();
+				tessellator.tessellate();
 			} else if (k == 10) {
 				for (int l = 0; l < 2; ++l) {
 					if (l == 0) {
@@ -1412,27 +1412,27 @@ public abstract class BlockRendererMixin {
 					tessellator.start();
 					tessellator.setNormal(0.0F, -1.0F, 0.0F);
 					this.renderBottomFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(0));
-					tessellator.draw();
+					tessellator.tessellate();
 					tessellator.start();
 					tessellator.setNormal(0.0F, 1.0F, 0.0F);
 					this.renderTopFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(1));
-					tessellator.draw();
+					tessellator.tessellate();
 					tessellator.start();
 					tessellator.setNormal(0.0F, 0.0F, -1.0F);
 					this.renderEastFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(2));
-					tessellator.draw();
+					tessellator.tessellate();
 					tessellator.start();
 					tessellator.setNormal(0.0F, 0.0F, 1.0F);
 					this.renderWestFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(3));
-					tessellator.draw();
+					tessellator.tessellate();
 					tessellator.start();
 					tessellator.setNormal(-1.0F, 0.0F, 0.0F);
 					this.renderNorthFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(4));
-					tessellator.draw();
+					tessellator.tessellate();
 					tessellator.start();
 					tessellator.setNormal(1.0F, 0.0F, 0.0F);
 					this.renderSouthFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(5));
-					tessellator.draw();
+					tessellator.tessellate();
 					GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 				}
 			} else if (k == 11) {
@@ -1461,27 +1461,27 @@ public abstract class BlockRendererMixin {
 					tessellator.start();
 					tessellator.setNormal(0.0F, -1.0F, 0.0F);
 					this.renderBottomFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(0));
-					tessellator.draw();
+					tessellator.tessellate();
 					tessellator.start();
 					tessellator.setNormal(0.0F, 1.0F, 0.0F);
 					this.renderTopFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(1));
-					tessellator.draw();
+					tessellator.tessellate();
 					tessellator.start();
 					tessellator.setNormal(0.0F, 0.0F, -1.0F);
 					this.renderEastFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(2));
-					tessellator.draw();
+					tessellator.tessellate();
 					tessellator.start();
 					tessellator.setNormal(0.0F, 0.0F, 1.0F);
 					this.renderWestFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(3));
-					tessellator.draw();
+					tessellator.tessellate();
 					tessellator.start();
 					tessellator.setNormal(-1.0F, 0.0F, 0.0F);
 					this.renderNorthFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(4));
-					tessellator.draw();
+					tessellator.tessellate();
 					tessellator.start();
 					tessellator.setNormal(1.0F, 0.0F, 0.0F);
 					this.renderSouthFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(5));
-					tessellator.draw();
+					tessellator.tessellate();
 					GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 				}
 
@@ -1499,27 +1499,27 @@ public abstract class BlockRendererMixin {
 			tessellator.start();
 			tessellator.setNormal(0.0F, -1.0F, 0.0F);
 			this.renderBottomFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(0, i));
-			tessellator.draw();
+			tessellator.tessellate();
 			tessellator.start();
 			tessellator.setNormal(0.0F, 1.0F, 0.0F);
 			this.renderTopFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(1, i));
-			tessellator.draw();
+			tessellator.tessellate();
 			tessellator.start();
 			tessellator.setNormal(0.0F, 0.0F, -1.0F);
 			this.renderEastFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(2, i));
-			tessellator.draw();
+			tessellator.tessellate();
 			tessellator.start();
 			tessellator.setNormal(0.0F, 0.0F, 1.0F);
 			this.renderWestFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(3, i));
-			tessellator.draw();
+			tessellator.tessellate();
 			tessellator.start();
 			tessellator.setNormal(-1.0F, 0.0F, 0.0F);
 			this.renderNorthFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(4, i));
-			tessellator.draw();
+			tessellator.tessellate();
 			tessellator.start();
 			tessellator.setNormal(1.0F, 0.0F, 0.0F);
 			this.renderSouthFace(block, 0.0, 0.0, 0.0, block.getTextureForSide(5, i));
-			tessellator.draw();
+			tessellator.tessellate();
 			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		}
 	}

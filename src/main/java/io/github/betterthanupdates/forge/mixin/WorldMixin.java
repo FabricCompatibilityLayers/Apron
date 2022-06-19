@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.BlockEntity;
-import net.minecraft.util.math.Box;
+import net.minecraft.util.math.AxixAlignedBoundingBox;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.LightType;
@@ -54,7 +54,7 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	public abstract Chunk getChunkFromCache(int i, int j);
 
 	@Shadow
-	public abstract boolean canSpawnEntity(Box arg);
+	public abstract boolean canSpawnEntity(AxixAlignedBoundingBox arg);
 
 	/**
 	 * @author Forge
@@ -99,7 +99,7 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	 * @reason
 	 */
 	@Overwrite
-	public boolean method_225(Box axisalignedbb) {
+	public boolean method_225(AxixAlignedBoundingBox axisalignedbb) {
 		int i = MathHelper.floor(axisalignedbb.minX);
 		int j = MathHelper.floor(axisalignedbb.maxX + 1.0);
 		int k = MathHelper.floor(axisalignedbb.minY);
@@ -189,7 +189,7 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 		int j1 = this.getBlockId(j, k, l);
 		Block block = Block.BY_ID[j1];
 		Block block1 = Block.BY_ID[i];
-		Box axisalignedbb = block1.getCollisionShape((World) (Object) this, j, k, l);
+		AxixAlignedBoundingBox axisalignedbb = block1.getCollisionShape((World) (Object) this, j, k, l);
 
 		if (flag) {
 			axisalignedbb = null;

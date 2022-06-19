@@ -122,19 +122,17 @@ accessible field net/minecraft/client/render/Tessellator drawingMode I
 accessible field net/minecraft/client/render/Tessellator xOffset D
 accessible field net/minecraft/client/render/Tessellator yOffset D
 accessible field net/minecraft/client/render/Tessellator zOffset D
-accessible field net/minecraft/client/render/Tessellator drawing Z
+accessible field net/minecraft/client/render/Tessellator tessellating Z
 mutable field net/minecraft/client/render/Tessellator INSTANCE Lnet/minecraft/client/render/Tessellator;
 accessible method net/minecraft/client/render/Tessellator <init> (I)V
 
-accessible field net/minecraft/client/render/WorldRenderer world Lnet/minecraft/world/World;
-accessible field net/minecraft/client/render/WorldRenderer textureManager Lnet/minecraft/client/texture/TextureManager;
-accessible field net/minecraft/client/render/WorldRenderer client Lnet/minecraft/client/Minecraft;
-accessible field net/minecraft/client/render/WorldRenderer blockRenderer Lnet/minecraft/client/render/block/BlockRenderer;
+accessible field net/minecraft/client/render/WorldEventRenderer world Lnet/minecraft/world/World;
+accessible field net/minecraft/client/render/WorldEventRenderer textureManager Lnet/minecraft/client/texture/TextureManager;
+accessible field net/minecraft/client/render/WorldEventRenderer client Lnet/minecraft/client/Minecraft;
+accessible field net/minecraft/client/render/WorldEventRenderer blockRenderer Lnet/minecraft/client/render/block/BlockRenderer;
 
 accessible field net/minecraft/item/ToolItem field_2713 F
 accessible field net/minecraft/item/ToolItem field_2714 I
-
-accessible field net/minecraft/world/World autoSaveInterval I
 
 accessible method net/minecraft/block/Block setHardness (F)Lnet/minecraft/block/Block;
 accessible method net/minecraft/block/Block setLightOpacity (I)Lnet/minecraft/block/Block;
@@ -153,8 +151,10 @@ accessible field net/minecraft/item/Item maxStackSize I
 accessible field net/minecraft/item/Item isRendered3d Z
 accessible field net/minecraft/item/Item hasSubItems Z
 
+accessible method net/minecraft/world/World notifyOfNeighborChange (IIII)V
 accessible field net/minecraft/world/World dimensionData Lnet/minecraft/world/dimension/DimensionData;
 accessible field net/minecraft/world/World properties Lnet/minecraft/world/WorldProperties;
+accessible field net/minecraft/world/World autoSaveInterval I
 
 accessible method net/minecraft/world/dimension/DimensionFile getParentFolder ()Ljava/io/File;
 
@@ -178,3 +178,9 @@ accessible method net/minecraft/client/gui/GuiElement drawLineVertical (IIII)V
 accessible method net/minecraft/client/gui/GuiElement drawLineHorizontal (IIII)V
 accessible method net/minecraft/client/gui/GuiElement fillGradient (IIIIII)V
 accessible field net/minecraft/client/gui/GuiElement zOffset F
+
+accessible method net/minecraft/util/math/Vec3d <init> (DDD)V
+
+accessible method net/minecraft/client/Minecraft loadIntoWorld (Ljava/lang/String;)V
+
+accessible method net/minecraft/entity/player/PlayerEntity method_520 (Lnet/minecraft/entity/Entity;)V

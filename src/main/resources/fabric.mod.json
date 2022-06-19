@@ -43,7 +43,8 @@
     "audiomod.mixins.json",
     "babricated.mixins.json",
     "forge.mixins.json",
-    "modloader.mixins.json"
+    "modloader.mixins.json",
+    "shockahpi.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.13.3",
