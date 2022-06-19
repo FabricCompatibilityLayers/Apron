@@ -18,11 +18,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.client.render.Tessellator;
 
-import io.github.betterthanupdates.babricated.BabricatedTessellator;
+import io.github.betterthanupdates.forge.client.render.ForgeTessellator;
 
 // FIXME
 @Mixin(Tessellator.class)
-public abstract class TessellatorMixin implements BabricatedTessellator {
+public abstract class TessellatorMixin implements ForgeTessellator {
 	@Shadow
 	public static Tessellator INSTANCE;
 	@Shadow
