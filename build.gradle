@@ -109,6 +109,10 @@ java {
 	withSourcesJar()
 }
 
+tasks.withType(JavaCompile) {
+	options.release = 8
+}
+
 jar {
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}" }
