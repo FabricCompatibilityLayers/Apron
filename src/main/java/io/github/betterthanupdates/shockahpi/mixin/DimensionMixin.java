@@ -8,10 +8,9 @@ import net.minecraft.world.dimension.Dimension;
 
 @Mixin(Dimension.class)
 public class DimensionMixin {
-
 	/**
-	 * @author
-	 * @reason
+	 * @author SAPI
+	 * @reason yes
 	 */
 	@Overwrite
 	public static Dimension getByID(int paramInt) {

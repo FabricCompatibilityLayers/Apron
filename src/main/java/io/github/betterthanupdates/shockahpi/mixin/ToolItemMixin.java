@@ -65,28 +65,29 @@ public class ToolItemMixin extends Item implements SAPITool {
 		this.toolBase = this.getToolBase();
 		this.usingSAPI = false;
 
-		for(Block block : blocks) {
+		for (Block block : blocks) {
+			if (block == null) continue;
 			this.mineBlocks.add(new BlockHarvestPower(block.id, 0.0F));
 		}
 	}
 
 	public ToolBase getToolBase() {
-		if (((ToolItem)(Object) this) instanceof PickaxeItem) {
+		if (((ToolItem) (Object) this) instanceof PickaxeItem) {
 			return ToolBase.Pickaxe;
-		} else if (((ToolItem)(Object) this) instanceof AxeItem) {
+		} else if (((ToolItem) (Object) this) instanceof AxeItem) {
 			return ToolBase.Axe;
 		} else {
-			return ((ToolItem)(Object) this) instanceof ShovelItem ? ToolBase.Shovel : null;
+			return ((ToolItem) (Object) this) instanceof ShovelItem ? ToolBase.Shovel : null;
 		}
 	}
 
 	/**
-	 * @author
-	 * @reason
+	 * @author SAPI
+	 * @reason yes
 	 */
 	@Overwrite
 	public int getAttackDamage(Entity entity) {
-		return (int)Math.floor((double)this.baseDamage);
+		return (int) Math.floor((double) this.baseDamage);
 	}
 
 	@Override
@@ -95,8 +96,8 @@ public class ToolItemMixin extends Item implements SAPITool {
 	}
 
 	/**
-	 * @author
-	 * @reason
+	 * @author SAPI
+	 * @reason yes
 	 */
 	@Overwrite
 	public float getStrengthOnBlock(ItemStack stack, Block block) {
@@ -106,7 +107,7 @@ public class ToolItemMixin extends Item implements SAPITool {
 	@Override
 	public boolean canHarvest(Block block) {
 		if (!this.usingSAPI && !this.isBlockOnList(block.id)) {
-			if (((ToolItem)(Object) this) instanceof PickaxeItem) {
+			if (((ToolItem) (Object) this) instanceof PickaxeItem) {
 				if (this.id <= 369) {
 					return false;
 				}
@@ -118,7 +119,7 @@ public class ToolItemMixin extends Item implements SAPITool {
 				if (block.material == Material.METAL && this.basePower >= 40.0F) {
 					return true;
 				}
-			} else if (((ToolItem)(Object) this) instanceof AxeItem) {
+			} else if (((ToolItem) (Object) this) instanceof AxeItem) {
 				if (this.id <= 369) {
 					return false;
 				}
@@ -130,7 +131,7 @@ public class ToolItemMixin extends Item implements SAPITool {
 						|| block.material == Material.PUMPKIN) {
 					return true;
 				}
-			} else if (((ToolItem)(Object) this) instanceof ShovelItem) {
+			} else if (((ToolItem) (Object) this) instanceof ShovelItem) {
 				if (this.id <= 369) {
 					return false;
 				}
@@ -153,13 +154,13 @@ public class ToolItemMixin extends Item implements SAPITool {
 		if (this.toolBase != null && this.toolBase.canHarvest(block, this.getPower())) {
 			return true;
 		} else {
-			for(Material material : this.mineMaterials) {
+			for (Material material : this.mineMaterials) {
 				if (material == block.material) {
 					return true;
 				}
 			}
 
-			for(BlockHarvestPower power : this.mineBlocks) {
+			for (BlockHarvestPower power : this.mineBlocks) {
 				if (block.id == power.blockID || this.getPower() >= power.percentage) {
 					return true;
 				}
@@ -170,13 +171,13 @@ public class ToolItemMixin extends Item implements SAPITool {
 	}
 
 	private boolean isBlockOnList(int blockID) {
-		for(BlockHarvestPower power : this.mineBlocks) {
+		for (BlockHarvestPower power : this.mineBlocks) {
 			if (power.blockID == blockID) {
 				return true;
 			}
 		}
 
-		for(BlockHarvestPower power : this.toolBase.mineBlocks) {
+		for (BlockHarvestPower power : this.toolBase.mineBlocks) {
 			if (power.blockID == blockID) {
 				return true;
 			}

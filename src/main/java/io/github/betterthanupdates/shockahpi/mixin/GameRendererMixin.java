@@ -20,7 +20,6 @@ import net.minecraft.util.math.Vec3d;
 
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
-
 	@Shadow
 	private Minecraft client;
 
@@ -28,17 +27,18 @@ public abstract class GameRendererMixin {
 	private Entity field_2352;
 
 	/**
-	 * @author
-	 * @reason
+	 * @author SAPI
+	 * @reason yes
 	 */
 	@Overwrite
 	public void method_1838(float f) {
 		if (this.client.viewEntity != null) {
 			if (this.client.world != null) {
-				double d = (double)this.client.interactionManager.getBlockReachDistance();
+				double d = (double) this.client.interactionManager.getBlockReachDistance();
 				this.client.hitResult = this.client.viewEntity.raytrace(d, f);
 				double d1 = d;
 				Vec3d vec3d = this.client.viewEntity.getPosition(f);
+
 				if (this.client.hitResult != null) {
 					d1 = this.client.hitResult.field_1988.distanceTo(vec3d);
 				}
@@ -48,8 +48,9 @@ public abstract class GameRendererMixin {
 					d1 = 32.0;
 				} else {
 					float reach = SAPI.reachGetEntity();
-					if (d1 > (double)reach) {
-						d1 = (double)reach;
+
+					if (d1 > (double) reach) {
+						d1 = (double) reach;
 					}
 
 					d = d1;
@@ -67,7 +68,7 @@ public abstract class GameRendererMixin {
 										.viewEntity
 										.boundingBox
 										.duplicateAndExpand(vec3d1.x * d, vec3d1.y * d, vec3d1.z * d)
-										.expand((double)f1, (double)f1, (double)f1)
+										.expand((double) f1, (double) f1, (double) f1)
 						);
 				double d2 = 0.0;
 
@@ -76,6 +77,7 @@ public abstract class GameRendererMixin {
 						float f2 = entity.method_1369();
 						AxixAlignedBoundingBox axisalignedbb = entity.boundingBox.expand((double) f2, (double) f2, (double) f2);
 						HitResult movingobjectposition = axisalignedbb.method_89(vec3d, vec3d2);
+
 						if (axisalignedbb.contains(vec3d)) {
 							if (0.0 < d2 || d2 == 0.0) {
 								this.field_2352 = entity;
@@ -83,6 +85,7 @@ public abstract class GameRendererMixin {
 							}
 						} else if (movingobjectposition != null) {
 							double d3 = vec3d.distanceTo(movingobjectposition.field_1988);
+
 							if (d3 < d2 || d2 == 0.0) {
 								this.field_2352 = entity;
 								d2 = d3;
@@ -94,7 +97,6 @@ public abstract class GameRendererMixin {
 				if (this.field_2352 != null && !(this.client.interactionManager instanceof CreativeClientInteractionManager)) {
 					this.client.hitResult = new HitResult(this.field_2352);
 				}
-
 			}
 		}
 	}

@@ -15,8 +15,8 @@ public class SingleplayerInteractionManagerMixin extends ClientInteractionManage
 	}
 
 	/**
-	 * @author
-	 * @reason
+	 * @author SAPI
+	 * @reason yes
 	 */
 	@Overwrite
 	public float getBlockReachDistance() {

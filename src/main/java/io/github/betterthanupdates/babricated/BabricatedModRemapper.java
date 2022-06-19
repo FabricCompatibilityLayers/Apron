@@ -102,4 +102,9 @@ public final class BabricatedModRemapper implements ModRemapper {
 	public Optional<TinyRemapper.ApplyVisitorProvider> getPostRemappingVisitor() {
 		return Optional.of(new BabricatedPostRemappingVisitor());
 	}
+
+	@Override
+	public Optional<String> getDefaultPackage() {
+		return Optional.of("net/minecraft/");
+	}
 }

@@ -75,7 +75,7 @@ dependencies {
 
 	modImplementation("net.legacyfabric.legacy-fabric-api:legacy-fabric-logger-api-v1:${project.lfapi_version}")
 
-	include modApi("maven.modrinth:mod-remapping-api:1.2.0")
+	include modApi("maven.modrinth:mod-remapping-api:1.3.2")
 	include implementation('org.slick2d:slick2d-core:1.0.2')
 
 	// Done

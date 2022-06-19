@@ -29,6 +29,7 @@ public class FreezeDifficultyScreen extends Screen {
 			this.client.openScreen(null);
 		} else {
 			this.client.statFileWriter.incrementStat(Stats.leaveGame, 1);
+
 			if (this.client.hasWorld()) {
 				this.client.world.disconnect();
 			}
@@ -36,7 +37,6 @@ public class FreezeDifficultyScreen extends Screen {
 			this.client.setWorld(null);
 			this.client.openScreen(new TitleScreen());
 		}
-
 	}
 
 	public void render(int paramInt1, int paramInt2, float paramFloat) {
