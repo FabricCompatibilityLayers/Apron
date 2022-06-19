@@ -26,7 +26,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stat.achievement.Achievement;
 import net.minecraft.util.SleepStatus;
 import net.minecraft.util.io.CompoundTag;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionData;
 

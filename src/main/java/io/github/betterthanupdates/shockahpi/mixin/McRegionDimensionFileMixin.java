@@ -19,13 +19,14 @@ public class McRegionDimensionFileMixin extends DimensionFile {
 	}
 
 	/**
-	 * @author
-	 * @reason
+	 * @author SAPI
+	 * @reason yes
 	 */
 	@Overwrite
 	public ChunkIO getChunkIO(Dimension paramxa) {
 		File localFile1 = this.getParentFolder();
 		DimensionBase localDimensionBase = DimensionBase.getDimByProvider(paramxa.getClass());
+
 		if (localDimensionBase.number != 0) {
 			File localFile2 = new File(localFile1, "DIM" + localDimensionBase.number);
 			localFile2.mkdirs();

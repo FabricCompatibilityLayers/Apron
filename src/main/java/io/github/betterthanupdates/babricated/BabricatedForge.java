@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import fr.catcore.modremapperapi.utils.Constants;
 import modloader.BaseMod;
@@ -18,6 +19,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.spongepowered.include.com.google.common.collect.ImmutableList;
 import shockahpi.ShockAhPI;
 
+import net.minecraft.world.biome.Biome;
+
 @ApiStatus.Internal
 public final class BabricatedForge {
 	public static final String MOD_ID = "babricated-forge";
@@ -30,8 +33,8 @@ public final class BabricatedForge {
 
 	public static final ModContainer MOD_CONTAINER;
 
-	public static final List<? extends BaseMod> BUILTIN_RML_MODS = ImmutableList.of(
-			new ShockAhPI()
+	public static final List<Supplier<? extends BaseMod>> BUILTIN_RML_MODS = ImmutableList.of(
+			ShockAhPI::new
 	);
 
 	static {
@@ -82,5 +85,24 @@ public final class BabricatedForge {
 		}
 
 		return name;
+	}
+
+	public static Biome[] getStandardBiomes() {
+		List<Biome> biomes = new ArrayList<>();
+
+		// Vanilla Biomes
+		biomes.add(Biome.RAINFOREST);
+		biomes.add(Biome.SWAMPLAND);
+		biomes.add(Biome.SEASONAL_FOREST);
+		biomes.add(Biome.FOREST);
+		biomes.add(Biome.SAVANNA);
+		biomes.add(Biome.SHRUBLAND);
+		biomes.add(Biome.TAIGA);
+		biomes.add(Biome.DESERT);
+		biomes.add(Biome.PLAINS);
+		biomes.add(Biome.ICE_DESERT);
+		biomes.add(Biome.TUNDRA);
+
+		return biomes.toArray(new Biome[0]);
 	}
 }

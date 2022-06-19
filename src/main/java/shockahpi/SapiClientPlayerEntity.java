@@ -236,8 +236,10 @@ public class SapiClientPlayerEntity extends AbstractClientPlayerEntity {
 			}
 
 			this.field_505 = this.field_504;
+
 			if (this.portal != 0) {
 				DimensionBase localDimensionBase = DimensionBase.getDimByNumber(this.portal);
+
 				if (this.field_512) {
 					if (!this.world.isClient && this.vehicle != null) {
 						this.startRiding(null);
@@ -252,8 +254,10 @@ public class SapiClientPlayerEntity extends AbstractClientPlayerEntity {
 					}
 
 					this.field_504 += 0.0125F;
+
 					if (this.field_504 >= 1.0F) {
 						this.field_504 = 1.0F;
+
 						if (!this.world.isClient) {
 							this.field_511 = 10;
 							this.client.soundHelper.playSound(localDimensionBase.soundTravel, 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
@@ -278,40 +282,44 @@ public class SapiClientPlayerEntity extends AbstractClientPlayerEntity {
 			}
 
 			this.playerKeypressManager.updatePlayer(this);
+
 			if (this.playerKeypressManager.sneak && this.field_1640 < 0.2F) {
 				this.field_1640 = 0.2F;
 			}
 
-			this.method_1372(this.x - (double)this.width * 0.35, this.boundingBox.minY + 0.5, this.z + (double)this.width * 0.35);
-			this.method_1372(this.x - (double)this.width * 0.35, this.boundingBox.minY + 0.5, this.z - (double)this.width * 0.35);
-			this.method_1372(this.x + (double)this.width * 0.35, this.boundingBox.minY + 0.5, this.z - (double)this.width * 0.35);
-			this.method_1372(this.x + (double)this.width * 0.35, this.boundingBox.minY + 0.5, this.z + (double)this.width * 0.35);
+			this.method_1372(this.x - (double) this.width * 0.35, this.boundingBox.minY + 0.5, this.z + (double) this.width * 0.35);
+			this.method_1372(this.x - (double) this.width * 0.35, this.boundingBox.minY + 0.5, this.z - (double) this.width * 0.35);
+			this.method_1372(this.x + (double) this.width * 0.35, this.boundingBox.minY + 0.5, this.z - (double) this.width * 0.35);
+			this.method_1372(this.x + (double) this.width * 0.35, this.boundingBox.minY + 0.5, this.z + (double) this.width * 0.35);
+
 			if (this.world.difficulty == 0 && this.health < 20 && this.field_1645 % 20 * 12 == 0) {
 				this.addHealth(1);
 			}
 
 			this.inventory.tickInventory();
 			this.field_524 = this.field_525;
-			if (this.field_1051 > 0) {
-				double d1 = this.x + (this.field_1052 - this.x) / (double)this.field_1051;
-				double d2 = this.y + (this.field_1053 - this.y) / (double)this.field_1051;
-				double d3 = this.z + (this.field_1054 - this.z) / (double)this.field_1051;
-				double d4 = this.field_1055 - (double)this.yaw;
 
-				while(d4 < -180.0) {
+			if (this.field_1051 > 0) {
+				double d1 = this.x + (this.field_1052 - this.x) / (double) this.field_1051;
+				double d2 = this.y + (this.field_1053 - this.y) / (double) this.field_1051;
+				double d3 = this.z + (this.field_1054 - this.z) / (double) this.field_1051;
+				double d4 = this.field_1055 - (double) this.yaw;
+
+				while (d4 < -180.0) {
 					d4 += 360.0;
 				}
 
-				while(d4 >= 180.0) {
+				while (d4 >= 180.0) {
 					d4 -= 360.0;
 				}
 
-				this.yaw = (float)((double)this.yaw + d4 / (double)this.field_1051);
-				this.pitch = (float)((double)this.pitch + (this.field_1056 - (double)this.pitch) / (double)this.field_1051);
+				this.yaw = (float) ((double) this.yaw + d4 / (double) this.field_1051);
+				this.pitch = (float) ((double) this.pitch + (this.field_1056 - (double) this.pitch) / (double) this.field_1051);
 				--this.field_1051;
 				this.setPosition(d1, d2, d3);
 				this.setRotation(this.yaw, this.pitch);
 				List<AxixAlignedBoundingBox> localList2 = this.world.method_190(this, this.boundingBox.method_104(0.03125, 0.0, 0.03125));
+
 				if (localList2.size() > 0) {
 					double d5 = 0.0;
 
@@ -337,6 +345,7 @@ public class SapiClientPlayerEntity extends AbstractClientPlayerEntity {
 
 			boolean bool1 = this.method_1334();
 			boolean bool2 = this.method_1335();
+
 			if (this.jumping) {
 				if (bool1) {
 					this.yVelocity += 0.04F;
@@ -352,6 +361,7 @@ public class SapiClientPlayerEntity extends AbstractClientPlayerEntity {
 			this.field_1030 *= 0.9F;
 			this.travel(this.horizontalVelocity, this.forwardVelocity);
 			List<Entity> localList1 = this.world.getEntities(this, this.boundingBox.expand(0.2000000029802322, 0.0, 0.2000000029802322));
+
 			if (localList1 != null && localList1.size() > 0) {
 				for (Entity localEntity : localList1) {
 					if (localEntity.method_1380()) {
@@ -361,7 +371,8 @@ public class SapiClientPlayerEntity extends AbstractClientPlayerEntity {
 			}
 
 			float f1 = MathHelper.sqrt(this.xVelocity * this.xVelocity + this.zVelocity * this.zVelocity);
-			float f2 = (float)Math.atan(-this.yVelocity * 0.2000000029802322) * 15.0F;
+			float f2 = (float) Math.atan(-this.yVelocity * 0.2000000029802322) * 15.0F;
+
 			if (f1 > 0.1F) {
 				f1 = 0.1F;
 			}
@@ -376,8 +387,10 @@ public class SapiClientPlayerEntity extends AbstractClientPlayerEntity {
 
 			this.field_525 += (f1 - this.field_525) * 0.4F;
 			this.field_1044 += (f2 - this.field_1044) * 0.8F;
+
 			if (this.health > 0) {
 				List<Entity> localList = this.world.getEntities(this, this.boundingBox.expand(1.0, 0.0, 1.0));
+
 				if (localList != null) {
 					for (Entity localEntity : localList) {
 						if (!localEntity.removed) {
@@ -386,7 +399,6 @@ public class SapiClientPlayerEntity extends AbstractClientPlayerEntity {
 					}
 				}
 			}
-
 		}
 	}
 

@@ -22,7 +22,7 @@ public abstract class PortalBlockMixin implements ShockAhPIPortalBlock {
 	@Inject(method = "onEntityCollision", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;method_1388()V"))
 	private void sapi$onEntityCollision(World i, int j, int k, int arg2, Entity par5, CallbackInfo ci) {
 		if (par5 instanceof SapiClientPlayerEntity) {
-			((SapiClientPlayerEntity)par5).portal = this.getDimNumber();
+			((SapiClientPlayerEntity) par5).portal = this.getDimNumber();
 		}
 	}
 }

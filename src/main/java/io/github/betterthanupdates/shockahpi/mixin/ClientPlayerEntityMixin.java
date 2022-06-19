@@ -76,8 +76,8 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	}
 
 	/**
-	 * @author
-	 * @reason
+	 * @author SAPI
+	 * @reason yes
 	 */
 	@Overwrite
 	public void method_1924(Stat statbase, int i) {
@@ -85,13 +85,12 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 			if (!statbase.givenByClient) {
 				super.increaseStat(statbase, i);
 			}
-
 		}
 	}
 
 	/**
-	 * @author
-	 * @reason
+	 * @author SAPI
+	 * @reason yes
 	 */
 	@Overwrite
 	public boolean damage(Entity entity, int i) {
@@ -147,8 +146,8 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	}
 
 	/**
-	 * @author
-	 * @reason
+	 * @author SAPI
+	 * @reason yes
 	 */
 	@Overwrite
 	public void closeContainer() {
@@ -227,8 +226,8 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	}
 
 	/**
-	 * @author
-	 * @reason
+	 * @author SAPI
+	 * @reason yes
 	 */
 	@Overwrite
 	public void addHealth(int i) {
@@ -259,8 +258,8 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	}
 
 	/**
-	 * @author
-	 * @reason
+	 * @author SAPI
+	 * @reason yes
 	 */
 	@Overwrite
 	public void tick() {
@@ -292,8 +291,8 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	}
 
 	/**
-	 * @author
-	 * @reason
+	 * @author SAPI
+	 * @reason yes
 	 */
 	@Overwrite
 	public void dropSelectedItem() {
@@ -317,8 +316,10 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 			}
 
 			this.field_505 = this.field_504;
+
 			if (this.portal != 0) {
 				DimensionBase dimensionbase = DimensionBase.getDimByNumber(this.portal);
+
 				if (this.field_512) {
 					if (!this.world.isClient && this.vehicle != null) {
 						this.startRiding(null);
@@ -333,8 +334,10 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 					}
 
 					this.field_504 += 0.0125F;
+
 					if (this.field_504 >= 1.0F) {
 						this.field_504 = 1.0F;
+
 						if (!this.world.isClient) {
 							this.field_511 = 10;
 							this.client.soundHelper.playSound(dimensionbase.soundTravel, 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
@@ -359,40 +362,44 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 			}
 
 			this.playerKeypressManager.updatePlayer(this);
+
 			if (this.playerKeypressManager.sneak && this.field_1640 < 0.2F) {
 				this.field_1640 = 0.2F;
 			}
 
-			this.method_1372(this.x - (double)this.width * 0.35, this.boundingBox.minY + 0.5, this.z + (double)this.width * 0.35);
-			this.method_1372(this.x - (double)this.width * 0.35, this.boundingBox.minY + 0.5, this.z - (double)this.width * 0.35);
-			this.method_1372(this.x + (double)this.width * 0.35, this.boundingBox.minY + 0.5, this.z - (double)this.width * 0.35);
-			this.method_1372(this.x + (double)this.width * 0.35, this.boundingBox.minY + 0.5, this.z + (double)this.width * 0.35);
+			this.method_1372(this.x - (double) this.width * 0.35, this.boundingBox.minY + 0.5, this.z + (double) this.width * 0.35);
+			this.method_1372(this.x - (double) this.width * 0.35, this.boundingBox.minY + 0.5, this.z - (double) this.width * 0.35);
+			this.method_1372(this.x + (double) this.width * 0.35, this.boundingBox.minY + 0.5, this.z - (double) this.width * 0.35);
+			this.method_1372(this.x + (double) this.width * 0.35, this.boundingBox.minY + 0.5, this.z + (double) this.width * 0.35);
+
 			if (this.world.difficulty == 0 && this.health < 20 && this.field_1645 % 20 * 12 == 0) {
 				this.addHealth(1);
 			}
 
 			this.inventory.tickInventory();
 			this.field_524 = this.field_525;
-			if (this.field_1051 > 0) {
-				double d = this.x + (this.field_1052 - this.x) / (double)this.field_1051;
-				double d1 = this.y + (this.field_1053 - this.y) / (double)this.field_1051;
-				double d2 = this.z + (this.field_1054 - this.z) / (double)this.field_1051;
-				double d3 = this.field_1055 - (double)this.yaw;
 
-				while(d3 < -180.0) {
+			if (this.field_1051 > 0) {
+				double d = this.x + (this.field_1052 - this.x) / (double) this.field_1051;
+				double d1 = this.y + (this.field_1053 - this.y) / (double) this.field_1051;
+				double d2 = this.z + (this.field_1054 - this.z) / (double) this.field_1051;
+				double d3 = this.field_1055 - (double) this.yaw;
+
+				while (d3 < -180.0) {
 					d3 += 360.0;
 				}
 
-				while(d3 >= 180.0) {
+				while (d3 >= 180.0) {
 					d3 -= 360.0;
 				}
 
-				this.yaw = (float)((double)this.yaw + d3 / (double)this.field_1051);
-				this.pitch = (float)((double)this.pitch + (this.field_1056 - (double)this.pitch) / (double)this.field_1051);
+				this.yaw = (float) ((double) this.yaw + d3 / (double) this.field_1051);
+				this.pitch = (float) ((double) this.pitch + (this.field_1056 - (double) this.pitch) / (double) this.field_1051);
 				--this.field_1051;
 				this.setPosition(d, d1, d2);
 				this.setRotation(this.yaw, this.pitch);
 				List<AxixAlignedBoundingBox> list2 = this.world.method_190(this, this.boundingBox.method_104(0.03125, 0.0, 0.03125));
+
 				if (list2.size() > 0) {
 					double d4 = 0.0;
 
@@ -418,6 +425,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
 			boolean flag = this.method_1334();
 			boolean flag1 = this.method_1335();
+
 			if (this.jumping) {
 				if (flag) {
 					this.yVelocity += 0.04F;
@@ -433,6 +441,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 			this.field_1030 *= 0.9F;
 			this.travel(this.horizontalVelocity, this.forwardVelocity);
 			List<Entity> list = this.world.getEntities(this, this.boundingBox.expand(0.2000000029802322, 0.0, 0.2000000029802322));
+
 			if (list != null && list.size() > 0) {
 				for (Entity entity : list) {
 					if (entity.method_1380()) {
@@ -442,7 +451,8 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 			}
 
 			float f = MathHelper.sqrt(this.xVelocity * this.xVelocity + this.zVelocity * this.zVelocity);
-			float f1 = (float)Math.atan(-this.yVelocity * 0.2000000029802322) * 15.0F;
+			float f1 = (float) Math.atan(-this.yVelocity * 0.2000000029802322) * 15.0F;
+
 			if (f > 0.1F) {
 				f = 0.1F;
 			}
@@ -457,8 +467,10 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
 			this.field_525 += (f - this.field_525) * 0.4F;
 			this.field_1044 += (f1 - this.field_1044) * 0.8F;
+
 			if (this.health > 0) {
 				List<Entity> list1 = this.world.getEntities(this, this.boundingBox.expand(1.0, 0.0, 1.0));
+
 				if (list1 != null) {
 					for (Entity entity1 : list1) {
 						if (!entity1.removed) {
@@ -467,19 +479,18 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 					}
 				}
 			}
-
 		}
 	}
 
 	/**
-	 * @author
-	 * @reason
+	 * @author SAPI
+	 * @reason yes
 	 */
 	@Overwrite
 	public void respawn() {
 		if (!this.sapi.PAPIrespawn(this)) {
 			this.method_1923();
-			this.networkHandler.sendPacket(new RespawnC2SPacket((byte)this.dimensionId));
+			this.networkHandler.sendPacket(new RespawnC2SPacket((byte) this.dimensionId));
 			DimensionBase.respawn(false, 0);
 		}
 	}

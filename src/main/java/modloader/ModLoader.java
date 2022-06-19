@@ -76,8 +76,6 @@ import net.minecraft.stat.achievement.Achievement;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.HellBiome;
-import net.minecraft.world.biome.SkyBiome;
 import net.minecraft.world.source.WorldSource;
 
 import io.github.betterthanupdates.babricated.BabricatedForge;
@@ -108,7 +106,6 @@ public class ModLoader {
 	private static int nextBlockModelID = 1000;
 	private static final Map<Integer, Map<String, Integer>> overrides = new HashMap<>();
 	public static final Properties props = new Properties();
-	private static Biome[] standardBiomes;
 	private static int terrainSpriteIndex = 0;
 	private static int terrainSpritesLeft = 0;
 	private static String texPack = null;
@@ -253,7 +250,7 @@ public class ModLoader {
 
 	private static void addInternalMod(ClassLoader loader, String filename) {
 		try {
-			String name = filename.replace("/", ".").replace("\\", ".").split("\\.")[0];
+			String name = filename.replace("/", ".").replace("\\", ".").replace(".class", "");
 
 			if (name.contains("$")) {
 				return;
@@ -281,7 +278,7 @@ public class ModLoader {
 
 	private static void addInternalMod(BaseMod mod) {
 		MOD_LIST.add(mod);
-		LOGGER.info("Internal mod loaded: {} {}", mod.getClass().getSimpleName(), mod.Version());
+		LOGGER.info("Internal mod loaded: %s %s", mod.getClass().getSimpleName(), mod.Version());
 	}
 
 	/**
@@ -433,11 +430,12 @@ public class ModLoader {
 		} else if (spawnGroup == null) {
 			throw new IllegalArgumentException("spawnList cannot be null");
 		} else {
-			if (biomes == null) {
-				biomes = standardBiomes;
+			if (biomes == null || biomes.length > 0 && biomes[0] == null) {
+				biomes = BabricatedForge.getStandardBiomes();
 			}
 
 			for (Biome biome : biomes) {
+				if (biome == null) LOGGER.warn("Attempted to add entity %s with spawn group %s to a null biome", entityClass, spawnGroup);
 				List<EntityEntry> list = biome.getSpawnList(spawnGroup);
 
 				if (list != null) {
@@ -688,23 +686,7 @@ public class ModLoader {
 		try {
 			Minecraft client = getMinecraftInstance();
 			if (client != null) client.gameRenderer = new EntityRendererProxy(client);
-			Field[] fieldArray = Biome.class.getDeclaredFields();
-			List<Biome> biomes = new LinkedList<>();
-
-			for (Field field : fieldArray) {
-				Class<?> fieldType = field.getType();
-
-				if ((field.getModifiers() & 8) != 0 && fieldType.isAssignableFrom(Biome.class)) {
-					Biome biome = (Biome) field.get(null);
-
-					if (!(biome instanceof HellBiome) && !(biome instanceof SkyBiome)) {
-						biomes.add(biome);
-					}
-				}
-			}
-
-			standardBiomes = biomes.toArray(new Biome[0]);
-		} catch (SecurityException | IllegalArgumentException | IllegalAccessException var10) {
+		} catch (SecurityException | IllegalArgumentException var10) {
 			MOD_LOGGER.throwing("ModLoader", "init", var10);
 			ThrowException(var10);
 			throw new RuntimeException(var10);
@@ -744,7 +726,7 @@ public class ModLoader {
 
 			readFromClassPath(source);
 
-			BUILTIN_RML_MODS.forEach(ModLoader::addInternalMod);
+			BUILTIN_RML_MODS.forEach(supplier -> addInternalMod(supplier.get()));
 
 			LOGGER.info("Done initializing.");
 			props.setProperty("loggingLevel", cfgLoggingLevel.getName());
@@ -1053,7 +1035,7 @@ public class ModLoader {
 				}
 
 				String name = entry.getName();
-				String[] nameParts = name.split("/");
+				String[] nameParts = name.replace("\\", "/").split("/");
 				String fileName = nameParts[nameParts.length - 1];
 
 				if (!entry.isDirectory() && (fileName.startsWith("mod_") && fileName.endsWith(".class"))) {
@@ -1146,8 +1128,10 @@ public class ModLoader {
 								}
 
 								String name = entry.getName();
+								String[] parts = name.replace("\\", "/").split("/");
+								String fileName = parts[parts.length - 1];
 
-								if (!entry.isDirectory() && name.startsWith("mod_") && name.endsWith(".class")) {
+								if (!entry.isDirectory() && fileName.startsWith("mod_") && fileName.endsWith(".class")) {
 									addInternalMod(loader, name);
 								}
 							}
@@ -1342,7 +1326,7 @@ public class ModLoader {
 			throw new IllegalArgumentException("spawnList cannot be null");
 		} else {
 			if (biomes == null) {
-				biomes = standardBiomes;
+				biomes = BabricatedForge.getStandardBiomes();
 			}
 
 			for (Biome biome : biomes) {

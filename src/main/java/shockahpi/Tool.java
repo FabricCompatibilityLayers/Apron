@@ -52,7 +52,7 @@ public class Tool extends Item implements SAPITool {
 	}
 
 	public int getAttackDamage(Entity entity) {
-		return (int)Math.floor((double)this.baseDamage);
+		return (int) Math.floor((double) this.baseDamage);
 	}
 
 	@Override
@@ -69,13 +69,13 @@ public class Tool extends Item implements SAPITool {
 		if (this.toolBase != null && this.toolBase.canHarvest(block, this.getPower())) {
 			return true;
 		} else {
-			for(Material material : this.mineMaterials) {
+			for (Material material : this.mineMaterials) {
 				if (material == block.material) {
 					return true;
 				}
 			}
 
-			for(BlockHarvestPower power : this.mineBlocks) {
+			for (BlockHarvestPower power : this.mineBlocks) {
 				if (block.id == power.blockID || this.getPower() >= power.percentage) {
 					return true;
 				}
