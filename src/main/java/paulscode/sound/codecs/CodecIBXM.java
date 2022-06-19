@@ -20,10 +20,10 @@ import paulscode.sound.SoundBuffer;
 import paulscode.sound.SoundSystemConfig;
 import paulscode.sound.SoundSystemLogger;
 
+@SuppressWarnings("unused")
 public class CodecIBXM implements ICodec {
-	private static final boolean GET = false;
-	private static final boolean SET = true;
-	private static final boolean XXX = false;
+	private static final SoundSystemLogger LOGGER = SoundSystemConfig.getLogger();
+
 	private boolean endOfStream = false;
 	private boolean initialized = false;
 	private AudioFormat myAudioFormat = null;
@@ -32,7 +32,6 @@ public class CodecIBXM implements ICodec {
 	private Module module;
 	private int songDuration;
 	private int playPosition;
-	private SoundSystemLogger logger = SoundSystemConfig.getLogger();
 
 	public CodecIBXM() {
 	}
@@ -44,12 +43,13 @@ public class CodecIBXM implements ICodec {
 	public boolean initialize(URL url) {
 		this.initialized(true, false);
 		this.cleanup();
+
 		if (url == null) {
 			this.errorMessage("url null in method 'initialize'");
 			this.cleanup();
 			return false;
 		} else {
-			InputStream is = null;
+			InputStream is;
 
 			try {
 				is = url.openStream();
@@ -72,10 +72,11 @@ public class CodecIBXM implements ICodec {
 			} catch (IllegalArgumentException var9) {
 				this.errorMessage("Illegal argument in method 'initialize'");
 				this.printStackTrace(var9);
+
 				if (is != null) {
 					try {
 						is.close();
-					} catch (IOException var6) {
+					} catch (IOException ignored) {
 					}
 				}
 
@@ -83,10 +84,11 @@ public class CodecIBXM implements ICodec {
 			} catch (IOException var10) {
 				this.errorMessage("Error loading module in method 'initialize'");
 				this.printStackTrace(var10);
+
 				if (is != null) {
 					try {
 						is.close();
-					} catch (IOException var5) {
+					} catch (IOException ignored) {
 					}
 				}
 
@@ -96,7 +98,7 @@ public class CodecIBXM implements ICodec {
 			if (is != null) {
 				try {
 					is.close();
-				} catch (IOException var7) {
+				} catch (IOException ignored) {
 				}
 			}
 
@@ -122,6 +124,7 @@ public class CodecIBXM implements ICodec {
 		} else {
 			int bufferFrameSize = SoundSystemConfig.getStreamingBufferSize() / 4;
 			int frames = this.songDuration - this.playPosition;
+
 			if (frames > bufferFrameSize) {
 				frames = bufferFrameSize;
 			}
@@ -133,6 +136,7 @@ public class CodecIBXM implements ICodec {
 				byte[] outputBuffer = new byte[frames * 4];
 				this.ibxm.get_audio(outputBuffer, frames);
 				this.playPosition += frames;
+
 				if (this.playPosition >= this.songDuration) {
 					this.endOfStream(true, true);
 				}
@@ -161,6 +165,7 @@ public class CodecIBXM implements ICodec {
 
 			while (!this.endOfStream(false, false) && totalBytes < SoundSystemConfig.getMaxFileSize()) {
 				int frames = this.songDuration - this.playPosition;
+
 				if (frames > bufferFrameSize) {
 					frames = bufferFrameSize;
 				}
@@ -169,6 +174,7 @@ public class CodecIBXM implements ICodec {
 				totalBytes += frames * 4;
 				fullBuffer = appendByteArrays(fullBuffer, outputBuffer, frames * 4);
 				this.playPosition += frames;
+
 				if (this.playPosition >= this.songDuration) {
 					this.endOfStream(true, true);
 				}
@@ -198,12 +204,14 @@ public class CodecIBXM implements ICodec {
 		DataInputStream data_input_stream = new DataInputStream(input);
 		byte[] xm_header = new byte[60];
 		data_input_stream.readFully(xm_header);
+
 		if (FastTracker2.is_xm(xm_header)) {
 			return FastTracker2.load_xm(xm_header, data_input_stream);
 		} else {
 			byte[] s3m_header = new byte[96];
 			System.arraycopy(xm_header, 0, s3m_header, 0, 60);
 			data_input_stream.readFully(s3m_header, 60, 36);
+
 			if (ScreamTracker3.is_s3m(s3m_header)) {
 				return ScreamTracker3.load_s3m(s3m_header, data_input_stream);
 			} else {
@@ -242,6 +250,7 @@ public class CodecIBXM implements ICodec {
 
 	private static byte[] trimArray(byte[] array, int maxLength) {
 		byte[] trimmedArray = null;
+
 		if (array != null && array.length > maxLength) {
 			trimmedArray = new byte[maxLength];
 			System.arraycopy(array, 0, trimmedArray, 0, maxLength);
@@ -260,7 +269,6 @@ public class CodecIBXM implements ICodec {
 			buffer[i] = buffer[i + 1];
 			buffer[i + 1] = b;
 		}
-
 	}
 
 	private static byte[] convertAudioBytes(byte[] audio_bytes, boolean two_bytes_data) {
@@ -268,6 +276,7 @@ public class CodecIBXM implements ICodec {
 		dest.order(ByteOrder.nativeOrder());
 		ByteBuffer src = ByteBuffer.wrap(audio_bytes);
 		src.order(ByteOrder.LITTLE_ENDIAN);
+
 		if (two_bytes_data) {
 			ShortBuffer dest_short = dest.asShortBuffer();
 			ShortBuffer src_short = src.asShortBuffer();
@@ -282,6 +291,7 @@ public class CodecIBXM implements ICodec {
 		}
 
 		dest.rewind();
+
 		if (!dest.hasArray()) {
 			byte[] arrayBackedBuffer = new byte[dest.capacity()];
 			dest.get(arrayBackedBuffer);
@@ -297,20 +307,17 @@ public class CodecIBXM implements ICodec {
 			return null;
 		} else {
 			byte[] newArray;
+
 			if (arrayOne == null) {
 				newArray = new byte[length];
 				System.arraycopy(arrayTwo, 0, newArray, 0, length);
-				byte[] var6 = null;
 			} else if (arrayTwo == null) {
 				newArray = new byte[arrayOne.length];
 				System.arraycopy(arrayOne, 0, newArray, 0, arrayOne.length);
-				byte[] var4 = null;
 			} else {
 				newArray = new byte[arrayOne.length + length];
 				System.arraycopy(arrayOne, 0, newArray, 0, arrayOne.length);
 				System.arraycopy(arrayTwo, 0, newArray, arrayOne.length, length);
-				byte[] var5 = null;
-				byte[] var7 = null;
 			}
 
 			return newArray;
@@ -318,10 +325,10 @@ public class CodecIBXM implements ICodec {
 	}
 
 	private void errorMessage(String message) {
-		this.logger.errorMessage("CodecWav", message, 0);
+		LOGGER.errorMessage("CodecWav", message, 0);
 	}
 
 	private void printStackTrace(Exception e) {
-		this.logger.printStackTrace(e, 1);
+		LOGGER.printStackTrace(e, 1);
 	}
 }

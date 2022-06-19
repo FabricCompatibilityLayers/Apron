@@ -2,7 +2,6 @@ package io.github.betterthanupdates.audiomod.mixin;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Random;
@@ -26,6 +25,8 @@ import net.minecraft.client.sound.SoundHelper;
 import net.minecraft.client.sound.SoundMap;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
+
+import io.github.betterthanupdates.babricated.api.BabricatedApi;
 
 @Mixin(SoundHelper.class)
 public abstract class SoundHelperMixin {
@@ -56,54 +57,56 @@ public abstract class SoundHelperMixin {
 	@Unique
 	private final SoundMap cave = new SoundMap();
 	@Unique
-	private Minecraft mc;
+	private Minecraft client;
 	@Unique
-	private static final int MUSINTERVAL = 6000;
+	private static final int MUSIC_INTERVAL = 6000;
 
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void audiomod$ctr(CallbackInfo ci) {
-		this.musicCountdown = this.rand.nextInt(MUSINTERVAL);
+		this.musicCountdown = this.rand.nextInt(MUSIC_INTERVAL);
 	}
 
 	@Inject(method = "acceptOptions", at = @At("RETURN"))
-	private void audiomod$acceptOptions(GameOptions paramkv, CallbackInfo ci) {
+	private void audiomod$acceptOptions(GameOptions options, CallbackInfo ci) {
 		loadModAudio("./resources/mod/sound", this.sounds);
 		loadModAudio("./resources/mod/streaming", this.streaming);
 		loadModAudio("./resources/mod/music", this.music);
 		loadModAudio("./resources/mod/cavemusic", this.cave);
 
-		try {
-			Field minecraft = Minecraft.class.getDeclaredFields()[1];
-			minecraft.setAccessible(true);
-			this.mc = (Minecraft) minecraft.get(null);
-		} catch (Throwable ignored) {
-		}
+		this.client = (Minecraft) BabricatedApi.getInstance().getGame();
 	}
 
+	/**
+	 * @author Risugami
+	 */
 	private static void loadModAudio(String folder, SoundMap array) {
 		File base = new File(FabricLoader.getInstance().getGameDir().toFile(), folder);
 
-		try {
-			walkFolder(base, base, array);
-		} catch (IOException var4) {
-			var4.printStackTrace();
-		}
+		walkFolder(base, base, array);
 	}
 
-	private static void walkFolder(File root, File folder, SoundMap array) throws IOException {
+	/**
+	 * @author Risugami
+	 */
+	private static void walkFolder(File root, File folder, SoundMap sounds) {
 		if (folder.exists() || folder.mkdirs()) {
 			File[] files = folder.listFiles();
 
 			if (files != null && files.length > 0) {
 				for (File file : files) {
 					if (!file.getName().startsWith(".")) {
-						BasicFileAttributes basicFileAttributes = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
+						try {
+							BasicFileAttributes f = Files.readAttributes(file.toPath(), BasicFileAttributes.class);
 
-						if (basicFileAttributes.isDirectory()) {
-							walkFolder(root, file, array);
-						} else if (basicFileAttributes.isRegularFile()) {
-							String path = file.getPath().substring(root.getPath().length() + 1).replace('\\', '/');
-							array.addSound(path, file);
+							if (f.isDirectory()) {
+								walkFolder(root, file, sounds);
+							} else if (f.isRegularFile()) {
+								String path = file.getPath().substring(root.getPath().length() + 1)
+										.replace('\\', '/');
+								sounds.addSound(path, file);
+							}
+						} catch (IOException ignored) {
+							// Simply don't load the file.
 						}
 					}
 				}
@@ -111,21 +114,21 @@ public abstract class SoundHelperMixin {
 		}
 	}
 
-	@Inject(method = "setLibsAndCodecs", at = @At(value = "INVOKE_ASSIGN", target = "Lpaulscode/sound/SoundSystemConfig;setCodec(Ljava/lang/String;Ljava/lang/Class;)V", ordinal = 2, shift = At.Shift.AFTER, remap = false))
+	/**
+	 * @author Risugami
+	 * @reason IBXM audio codec for Paul's SoundSystem
+	 */
+	@Inject(method = "setLibsAndCodecs", at = @At(value = "INVOKE", ordinal = 2, shift = At.Shift.AFTER, remap = false,
+			target = "Lpaulscode/sound/SoundSystemConfig;setCodec(Ljava/lang/String;Ljava/lang/Class;)V"))
 	private void audiomod$setLibsAndCodecs(CallbackInfo ci) {
-		try {
-			Class.forName("paulscode.sound.codecs.CodecIBXM");
-			SoundSystemConfig.setCodec("xm", CodecIBXM.class);
-			SoundSystemConfig.setCodec("s3m", CodecIBXM.class);
-			SoundSystemConfig.setCodec("mod", CodecIBXM.class);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+		SoundSystemConfig.setCodec("xm", CodecIBXM.class);
+		SoundSystemConfig.setCodec("s3m", CodecIBXM.class);
+		SoundSystemConfig.setCodec("mod", CodecIBXM.class);
 	}
 
 	/**
 	 * @author Risugami
-	 * @reason
+	 * @reason AudioMod patches
 	 */
 	@Overwrite
 	public void updateMusicVolume() {
@@ -144,7 +147,7 @@ public abstract class SoundHelperMixin {
 
 	/**
 	 * @author Risugami
-	 * @reason
+	 * @reason AudioMod patches
 	 */
 	@Overwrite
 	public void handleBackgroundMusic() {
@@ -156,19 +159,19 @@ public abstract class SoundHelperMixin {
 				}
 
 				SoundEntry entry;
-				if (this.mc != null
-						&& this.mc.player != null
-						&& !this.mc
+				if (this.client != null
+						&& this.client.player != null
+						&& !this.client
 						.player
 						.world
-						.isAboveGroundCached(MathHelper.floor(this.mc.player.x), MathHelper.floor(this.mc.player.y), MathHelper.floor(this.mc.player.z))) {
+						.isAboveGroundCached(MathHelper.floor(this.client.player.x), MathHelper.floor(this.client.player.y), MathHelper.floor(this.client.player.z))) {
 					entry = this.cave.getRandomSound();
 				} else {
 					entry = this.music.getRandomSound();
 				}
 
 				if (entry != null) {
-					this.musicCountdown = this.rand.nextInt(MUSINTERVAL) + MUSINTERVAL;
+					this.musicCountdown = this.rand.nextInt(MUSIC_INTERVAL) + MUSIC_INTERVAL;
 					soundSystem.backgroundMusic("BgMusic", entry.soundUrl, entry.soundName, false);
 					soundSystem.setVolume("BgMusic", this.gameOptions.musicVolume);
 					soundSystem.play("BgMusic");
@@ -179,16 +182,16 @@ public abstract class SoundHelperMixin {
 
 	/**
 	 * @author Risugami
-	 * @reason
+	 * @reason AudioMod patches
 	 */
 	@Overwrite
-	public void setSoundPosition(LivingEntity paramls, float paramFloat) {
+	public void setSoundPosition(LivingEntity entity, float paramFloat) {
 		if (initialized && this.gameOptions.soundVolume != 0.0F && soundSystem != null) {
-			if (paramls != null) {
-				float f1 = paramls.prevYaw + (paramls.yaw - paramls.prevYaw) * paramFloat;
-				double d1 = paramls.prevX + (paramls.x - paramls.prevX) * (double) paramFloat;
-				double d2 = paramls.prevY + (paramls.y - paramls.prevY) * (double) paramFloat;
-				double d3 = paramls.prevZ + (paramls.z - paramls.prevZ) * (double) paramFloat;
+			if (entity != null) {
+				float f1 = entity.prevYaw + (entity.yaw - entity.prevYaw) * paramFloat;
+				double d1 = entity.prevX + (entity.x - entity.prevX) * (double) paramFloat;
+				double d2 = entity.prevY + (entity.y - entity.prevY) * (double) paramFloat;
+				double d3 = entity.prevZ + (entity.z - entity.prevZ) * (double) paramFloat;
 				float f2 = MathHelper.cos(-f1 * (float) (Math.PI / 180.0) - (float) Math.PI);
 				float f3 = MathHelper.sin(-f1 * (float) (Math.PI / 180.0) - (float) Math.PI);
 				float f4 = -f3;
@@ -205,10 +208,10 @@ public abstract class SoundHelperMixin {
 
 	/**
 	 * @author Risugami
-	 * @reason
+	 * @reason AudioMod patches
 	 */
 	@Overwrite
-	public void playStreaming(String paramString, float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5) {
+	public void playStreaming(String soundId, float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5) {
 		if (initialized && this.gameOptions.soundVolume != 0.0F && soundSystem != null) {
 			String str = "streaming";
 
@@ -216,8 +219,8 @@ public abstract class SoundHelperMixin {
 				soundSystem.stop("streaming");
 			}
 
-			if (paramString != null) {
-				SoundEntry entry = this.streaming.getRandomSoundForId(paramString);
+			if (soundId != null) {
+				SoundEntry entry = this.streaming.getRandomSoundForId(soundId);
 
 				if (entry != null && paramFloat4 > 0.0F) {
 					if (soundSystem.playing("BgMusic")) {
@@ -235,7 +238,7 @@ public abstract class SoundHelperMixin {
 
 	/**
 	 * @author Risugami
-	 * @reason
+	 * @reason AudioMod patches
 	 */
 	@Overwrite
 	public void playSound(String paramString, float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5) {
@@ -266,7 +269,7 @@ public abstract class SoundHelperMixin {
 
 	/**
 	 * @author Risugami
-	 * @reason
+	 * @reason AudioMod patches
 	 */
 	@Overwrite
 	public void playSound(String paramString, float paramFloat1, float paramFloat2) {

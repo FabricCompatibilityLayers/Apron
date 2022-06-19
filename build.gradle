@@ -118,6 +118,7 @@ jar {
 		rename { "${it}_${project.archivesBaseName}" }
 	}
 	from("FORGE_LICENSE")
+	from("PAULSCODE_LICENSE")
 }
 
 // configure the maven publication
