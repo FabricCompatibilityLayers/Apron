@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.AxixAlignedBoundingBox;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -108,7 +108,7 @@ public class ExplosionMixin {
 		int l1 = MathHelper.floor(this.y + (double) this.power + 1.0);
 		int i2 = MathHelper.floor(this.z - (double) this.power - 1.0);
 		int j2 = MathHelper.floor(this.z + (double) this.power + 1.0);
-		List list = this.world.getEntities(this.cause, Box.createAndAddToList((double) k, (double) k1, (double) i2, (double) i1, (double) l1, (double) j2));
+		List list = this.world.getEntities(this.cause, AxixAlignedBoundingBox.createAndAddToList((double) k, (double) k1, (double) i2, (double) i1, (double) l1, (double) j2));
 		Vec3d vec3d = Vec3d.from(this.x, this.y, this.z);
 
 		for (int k2 = 0; k2 < list.size(); ++k2) {

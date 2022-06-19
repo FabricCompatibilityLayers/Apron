@@ -70,7 +70,7 @@ public abstract class PistonRendererMixin extends BlockEntityRenderer {
 			}
 
 			tessellator.setOffset(0.0, 0.0, 0.0);
-			tessellator.draw();
+			tessellator.tessellate();
 			ForgeHooksClient.afterBlockRender(block, this.field_1131);
 			RenderHelper.enableLighting();
 		}

@@ -181,13 +181,13 @@ public abstract class ClientPlayPacketHandlerMixin {
 	private void modloader$openContainer(OpenContainerS2CPacket packet, CallbackInfo ci) {
 		int type = packet.inventoryType;
 		switch (type) {
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-			return;
-		default:
-			ModLoaderMp.HandleGUI(packet);
+			case 0:
+			case 1:
+			case 2:
+			case 3:
+				return;
+			default:
+				ModLoaderMp.HandleGUI(packet);
 		}
 	}
 }

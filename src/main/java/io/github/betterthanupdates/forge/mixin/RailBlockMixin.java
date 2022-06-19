@@ -113,10 +113,10 @@ public abstract class RailBlockMixin extends Block {
 				}
 
 				if (flag2) {
-					world.updateAdjacentBlocks(i, j - 1, k, this.id);
+					world.updateNeighbors(i, j - 1, k, this.id);
 
 					if (j1 == 2 || j1 == 3 || j1 == 4 || j1 == 5) {
-						world.updateAdjacentBlocks(i, j + 1, k, this.id);
+						world.updateNeighbors(i, j + 1, k, this.id);
 					}
 				}
 			} else if (l > 0

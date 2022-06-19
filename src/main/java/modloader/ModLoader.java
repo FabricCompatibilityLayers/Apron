@@ -921,9 +921,9 @@ public class ModLoader {
 			LOGGER.debug("Initialized");
 		}
 
-		if (texPack == null || !Objects.equals(client.options.skin, texPack)) {
+		if (texPack == null || !Objects.equals(client.options.activeTexturePack, texPack)) {
 			texturesAdded = false;
-			texPack = client.options.skin;
+			texPack = client.options.activeTexturePack;
 		}
 
 		if (!texturesAdded && client.textureManager != null) {

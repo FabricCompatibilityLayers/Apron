@@ -16,31 +16,31 @@ public class BabricatedPostRemappingVisitor implements TinyRemapper.ApplyVisitor
 					@Override
 					public void visitFieldInsn(int opcode, String fieldOwner, String fieldName, String fieldDescriptor) {
 						switch (fieldOwner) {
-						case "net/minecraft/class_67":
-							if (fieldName.equals("renderingWorldRenderer")) {
-								fieldOwner = "io/github/betterthanupdates/forge/ForgeClientReflection";
-								fieldName = "Tessellator$renderingWorldRenderer";
-							}
+							case "net/minecraft/class_67":
+								if (fieldName.equals("renderingWorldRenderer")) {
+									fieldOwner = "io/github/betterthanupdates/forge/ForgeClientReflection";
+									fieldName = "Tessellator$renderingWorldRenderer";
+								}
 
-							break;
-						case "net/minecraft/class_13":
-							if (fieldName.equals("cfgGrassFix")) {
-								fieldOwner = "io/github/betterthanupdates/forge/ForgeClientReflection";
-								fieldName = "BlockRenderer$cfgGrassFix";
-							} else if (fieldName.equals("redstoneColors")) {
-								fieldOwner = "io/github/betterthanupdates/forge/ForgeClientReflection";
-								fieldName = "BlockRenderer$redstoneColors";
-							}
+								break;
+							case "net/minecraft/class_13":
+								if (fieldName.equals("cfgGrassFix")) {
+									fieldOwner = "io/github/betterthanupdates/forge/ForgeClientReflection";
+									fieldName = "BlockRenderer$cfgGrassFix";
+								} else if (fieldName.equals("redstoneColors")) {
+									fieldOwner = "io/github/betterthanupdates/forge/ForgeClientReflection";
+									fieldName = "BlockRenderer$redstoneColors";
+								}
 
-							break;
-						case "net/minecraft/class_328":
-							if (fieldName.equals("disableValidation")) {
-								fieldOwner = "io/github/betterthanupdates/forge/ForgeReflection";
-								fieldName = "TrapdoorBlock$disableValidation";
-							}
+								break;
+							case "net/minecraft/class_328":
+								if (fieldName.equals("disableValidation")) {
+									fieldOwner = "io/github/betterthanupdates/forge/ForgeReflection";
+									fieldName = "TrapdoorBlock$disableValidation";
+								}
 
-							break;
-						}
+								break;
+							}
 
 						super.visitFieldInsn(opcode, fieldOwner, fieldName, fieldDescriptor);
 					}
@@ -48,13 +48,13 @@ public class BabricatedPostRemappingVisitor implements TinyRemapper.ApplyVisitor
 					@Override
 					public void visitMethodInsn(int opcode, String methodOwner, String methodName, String methodDescriptor, boolean isInterface) {
 						switch (methodOwner) {
-						case "net/minecraft/class_13":
-							if (methodName.equals("setRedstoneColors")) {
-								methodOwner = "io/github/betterthanupdates/forge/ForgeClientReflection";
-								methodName = "BlockRenderer$setRedstoneColors";
-							}
+							case "net/minecraft/class_13":
+								if (methodName.equals("setRedstoneColors")) {
+									methodOwner = "io/github/betterthanupdates/forge/ForgeClientReflection";
+									methodName = "BlockRenderer$setRedstoneColors";
+								}
 
-							break;
+								break;
 						}
 
 						super.visitMethodInsn(opcode, methodOwner, methodName, methodDescriptor, isInterface);

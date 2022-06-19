@@ -3,6 +3,8 @@ package io.github.betterthanupdates.forge.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import shockahpi.Loc;
+import shockahpi.SAPI;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.ClientInteractionManager;
@@ -61,6 +63,11 @@ public class SingleplayerInteractionManagerMixin extends ClientInteractionManage
 		}
 
 		if (flag && flag1) {
+			// ShockAhPI hook
+			if (SAPI.interceptHarvest(this.client.world, this.client.player, new Loc(i, j, k), i1, j1)) {
+				return true;
+			}
+
 			Block.BY_ID[i1].afterBreak(this.client.world, this.client.player, i, j, k, j1);
 		}
 

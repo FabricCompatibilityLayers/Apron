@@ -33,13 +33,14 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 	protected abstract void method_517(int i);
 
 	@Shadow
-	protected boolean sleeping;
-
-	@Shadow
 	private int sleepTimer;
 
 	@Shadow
 	public Vec3i bedPosition;
+
+	@Shadow public abstract boolean isLyingOnBed();
+
+	@Shadow protected boolean lyingOnBed;
 
 	private PlayerEntityMixin(World arg) {
 		super(arg);
@@ -126,7 +127,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 			return customSleep;
 		} else {
 			if (!this.world.isClient) {
-				if (this.isSleeping() || !this.isAlive()) {
+				if (this.isLyingOnBed() || !this.isAlive()) {
 					return SleepStatus.YOU_SLEEPING_OR_DEAD;
 				}
 
@@ -152,17 +153,17 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 				float f = 0.5F;
 				float f1 = 0.5F;
 				switch (i1) {
-				case 0:
-					f1 = 0.9F;
-					break;
-				case 1:
-					f = 0.1F;
-					break;
-				case 2:
-					f1 = 0.1F;
-					break;
-				case 3:
-					f = 0.9F;
+					case 0:
+						f1 = 0.9F;
+						break;
+					case 1:
+						f = 0.1F;
+						break;
+					case 2:
+						f1 = 0.1F;
+						break;
+					case 3:
+						f = 0.9F;
 				}
 
 				this.method_517(i1);
@@ -171,7 +172,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 				this.setPosition((double) ((float) i + 0.5F), (double) ((float) j + 0.9375F), (double) ((float) k + 0.5F));
 			}
 
-			this.sleeping = true;
+			this.lyingOnBed = true;
 			this.sleepTimer = 0;
 			this.bedPosition = new Vec3i(i, j, k);
 			this.xVelocity = this.zVelocity = this.yVelocity = 0.0;

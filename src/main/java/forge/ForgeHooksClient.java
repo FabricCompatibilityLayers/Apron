@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.render.WorldEventRenderer;
 import net.minecraft.client.render.block.BlockRenderer;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,6 +28,7 @@ import net.minecraft.util.hit.HitResult;
 
 import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
 import io.github.betterthanupdates.forge.ForgeClientReflection;
+import io.github.betterthanupdates.forge.client.render.ForgeTessellator;
 
 @SuppressWarnings({"unused", "BooleanMethodIsAlwaysInverted"})
 @Environment(EnvType.CLIENT)
@@ -56,7 +57,7 @@ public class ForgeHooksClient {
 	public ForgeHooksClient() {
 	}
 
-	public static boolean onBlockHighlight(WorldRenderer renderGlobal, PlayerEntity player, HitResult mop, int i, ItemStack itemstack, float f) {
+	public static boolean onBlockHighlight(WorldEventRenderer renderGlobal, PlayerEntity player, HitResult mop, int i, ItemStack itemstack, float f) {
 		for (IHighlightHandler handler : highlightHandlers) {
 			if (handler.onBlockHighlight(renderGlobal, player, mop, i, itemstack, f)) {
 				return true;
@@ -107,9 +108,9 @@ public class ForgeHooksClient {
 		}
 
 		if (!inWorld) {
-			if (Tessellator.INSTANCE.drawing) {
+			if (((ForgeTessellator) Tessellator.INSTANCE).isTessellating()) {
 				int mode = Tessellator.INSTANCE.drawingMode;
-				Tessellator.INSTANCE.draw();
+				Tessellator.INSTANCE.tessellate();
 				Tessellator.INSTANCE.start(mode);
 			}
 
@@ -123,9 +124,9 @@ public class ForgeHooksClient {
 		if (inWorld) {
 			Tessellator.INSTANCE = defaultTessellator;
 		} else {
-			if (Tessellator.INSTANCE.drawing) {
+			if (((ForgeTessellator) Tessellator.INSTANCE).isTessellating()) {
 				int mode = Tessellator.INSTANCE.drawingMode;
-				Tessellator.INSTANCE.draw();
+				Tessellator.INSTANCE.tessellate();
 				Tessellator.INSTANCE.start(mode);
 			}
 
@@ -149,8 +150,8 @@ public class ForgeHooksClient {
 
 		for (Pair<Integer, Integer> l : renderTextureList) {
 			GL11.glBindTexture(3553, l.first());
-			Tessellator t = tessellators.get(l);
-			t.draw();
+			Tessellator tessellator = tessellators.get(l);
+			tessellator.tessellate();
 		}
 
 		GL11.glBindTexture(3553, textureManager.getTextureId("/terrain.png"));
