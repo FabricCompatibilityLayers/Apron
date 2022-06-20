@@ -26,7 +26,7 @@ import net.minecraft.world.dimension.DimensionFile;
 import io.github.betterthanupdates.babricated.api.BabricatedApi;
 
 /**
- * AKA "mod_SAPI".
+ * AKA "mod_SAPI" after remapping.
  */
 public class ShockAhPI extends BaseMod {
 	@MLProp

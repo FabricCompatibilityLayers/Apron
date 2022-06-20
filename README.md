@@ -1,7 +1,18 @@
 # Babricated Forge
 
-Risugami's ModLoader and ModLoaderMP, Minecraft Forge, ShockAhPI, AudioMod,
-and several other useful APIs and patches implemented in the Babric toolchain.
+Babricated Forge adds a compatibility layer between Fabric and several legacy modding APIs.
+In essence, it is a complete reimplementation of the API mods of yesteryear.
+
+Babricated Forge supports the following APIs and mods, with more surely to come:
+
+- [x] Risugami's ModLoader
+- [x] Risugami's ModLoaderMP
+- [x] Minecraft Forge
+- [x] ShockAhPI
+- [x] AudioMod (Works with MultiMC!)
+- [ ] ModOptionsAPI
+- [ ] GuiAPI
+- [ ] PlayerAPI
 
 ## Setup
 
@@ -16,4 +27,3 @@ Please see [LICENSE](./LICENSE "The MIT License") for more information.
 
 All Minecraft Forge code included is available under the Minecraft Forge Public License.
 Please see [FORGE_LICENSE](./FORGE_LICENSE "The Minecraft Forge Public License") for more information.
-

@@ -7,7 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.stat.achievement.Achievement;
 
 /**
- * Achievement Page.
+ * aka "ACPage" after remapping.
  * @author ShockAh
  */
 @SuppressWarnings("unused")
