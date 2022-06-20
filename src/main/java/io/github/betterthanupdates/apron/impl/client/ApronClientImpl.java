@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.include.com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
@@ -61,6 +62,21 @@ public final class ApronClientImpl implements ApronApi, ClientModInitializer {
 		return null;
 	}
 
+	@Override
+	public String getModLoaderVersion() {
+		return "ModLoader Beta 1.7.3";
+	}
+
+	@Override
+	public String translate(String key) {
+		return TranslationStorage.getInstance().translate(key);
+	}
+
+	@Override
+	public String translate(String key, Object... args) {
+		return TranslationStorage.getInstance().translate(key, args);
+	}
+
 	@Nullable
 	public TextureManager getTextureManager() {
 		Minecraft client = (Minecraft) getGame();
@@ -84,5 +100,20 @@ public final class ApronClientImpl implements ApronApi, ClientModInitializer {
 	public void onInitializeClient() {
 		ApronApi.super.onInitialize();
 		instance = this;
+	}
+
+	@Override
+	public boolean isClient() {
+		return true;
+	}
+
+	@Override
+	public String getUsedItemSpritesString() {
+		return "1111111111111111111111111111111111111101111111011111111111111001111111111111111111111111111011111111100110000011111110000000001111111001100000110000000100000011000000010000001100000000000000110000000000000000000000000000000000000000000000001100000000000000";
+	}
+
+	@Override
+	public String getUsedTerrainSpritesString() {
+		return "1111111111111111111111111111110111111111111111111111110111111111111111111111000111111011111111111111001111111110111111111111100011111111000010001111011110000000111111000000000011111100000000001111000000000111111000000000001101000000000001111111111111000011";
 	}
 }

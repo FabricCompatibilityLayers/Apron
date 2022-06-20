@@ -3,6 +3,9 @@ package modloader;
 import java.util.Map;
 import java.util.Random;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -12,6 +15,7 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
@@ -32,6 +36,7 @@ public abstract class BaseMod {
 	 *
 	 * @param renderers HashMap of the renderers. key is an entity class, value is the renderer.
 	 */
+	@Environment(EnvType.CLIENT)
 	public void AddRenderer(Map<Class<? extends Entity>, EntityRenderer> renderers) {
 	}
 
@@ -78,6 +83,7 @@ public abstract class BaseMod {
 	 *
 	 * @param event Reference to the key pressed.
 	 */
+	@Environment(EnvType.CLIENT)
 	public void KeyboardEvent(KeyBinding event) {
 	}
 
@@ -93,8 +99,13 @@ public abstract class BaseMod {
 	 * @param client Instance of the {@link Minecraft} class
 	 * @return true to continue ticking, or false to stop ticking
 	 */
+	@Environment(EnvType.CLIENT)
 	public boolean OnTickInGame(Minecraft client) {
 		return false;
+	}
+
+	@Environment(EnvType.SERVER)
+	public void OnTickInGame(MinecraftServer minecraftServer) {
 	}
 
 	/**
@@ -104,6 +115,7 @@ public abstract class BaseMod {
 	 * @param screen Current screen that is open
 	 * @return true to continue ticking, or false to stop ticking
 	 */
+	@Environment(EnvType.CLIENT)
 	public boolean OnTickInGUI(Minecraft client, Screen screen) {
 		return false;
 	}
@@ -113,6 +125,7 @@ public abstract class BaseMod {
 	 *
 	 * @param client Instance of the {@link Minecraft} class.
 	 */
+	@Environment(EnvType.CLIENT)
 	public void RegisterAnimation(Minecraft client) {
 	}
 
@@ -124,6 +137,7 @@ public abstract class BaseMod {
 	 * @param metadata of block. Damage on an item
 	 * @param modelID  ID of block model to render
 	 */
+	@Environment(EnvType.CLIENT)
 	public void RenderInvBlock(BlockRenderer renderer, Block block, int metadata, int modelID) {
 	}
 
@@ -139,6 +153,7 @@ public abstract class BaseMod {
 	 * @param modelID  ID of block model to render
 	 * @return true if model was rendered.
 	 */
+	@Environment(EnvType.CLIENT)
 	public boolean RenderWorldBlock(BlockRenderer renderer, BlockView world, int x, int y, int z, Block block, int modelID) {
 		return false;
 	}
