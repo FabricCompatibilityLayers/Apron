@@ -74,6 +74,7 @@ public interface ApronApi extends ModInitializer {
 	@Nullable PlayerEntity getPlayer();
 
 	String getModLoaderVersion();
+	String getModLoaderMPVersion();
 
 	String translate(String key);
 

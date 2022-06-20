@@ -1,8 +1,12 @@
 package modloader;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.GameRenderer;
 
+@Environment(EnvType.CLIENT)
 public class EntityRendererProxy extends GameRenderer {
 	private final Minecraft game;
 

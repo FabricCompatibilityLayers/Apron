@@ -68,6 +68,11 @@ public final class ApronClientImpl implements ApronApi, ClientModInitializer {
 	}
 
 	@Override
+	public String getModLoaderMPVersion() {
+		return "Babric 1.7.3";
+	}
+
+	@Override
 	public String translate(String key) {
 		return TranslationStorage.getInstance().translate(key);
 	}

@@ -3,9 +3,18 @@ package modloadermp;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import modloader.ModLoader;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 
 import net.minecraft.network.PacketHandler;
 import net.minecraft.packet.AbstractPacket;
+import net.minecraft.server.entity.player.ServerPlayerEntity;
+import net.minecraft.server.network.ServerPlayPacketHandler;
 
 public class Packet230ModLoader extends AbstractPacket {
 	private static final int MAX_DATA_LENGTH = 65535;
@@ -14,6 +23,8 @@ public class Packet230ModLoader extends AbstractPacket {
 	public int[] dataInt = new int[0];
 	public float[] dataFloat = new float[0];
 	public String[] dataString = new String[0];
+	@Environment(EnvType.SERVER)
+	private static Map<PacketHandler, ServerPlayerEntity> playerMap = new HashMap<>();
 
 	public Packet230ModLoader() {
 	}
@@ -126,7 +137,18 @@ public class Packet230ModLoader extends AbstractPacket {
 
 	@Override
 	public void apply(PacketHandler netHandler) {
-		ModLoaderMp.HandleAllPackets(this);
+		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+			ModLoaderMp.HandleAllPackets(this);
+		} else {
+			ServerPlayerEntity entityplayermp = null;
+			if (playerMap.containsKey(netHandler)) {
+				entityplayermp = playerMap.get(netHandler);
+			} else if (netHandler instanceof ServerPlayPacketHandler) {
+				entityplayermp = ((ServerPlayPacketHandler) netHandler).player;
+			}
+
+			ModLoaderMp.HandleAllPackets(this, entityplayermp);
+		}
 	}
 
 	@Override
