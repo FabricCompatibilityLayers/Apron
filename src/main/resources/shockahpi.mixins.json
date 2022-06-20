@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "io.github.betterthanupdates.shockahpi.mixin",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [
+  "client": [
     "ClientPlayerEntityMixin",
     "PortalBlockMixin",
     "AchievementsScreenMixin",
@@ -15,8 +15,6 @@
     "McRegionDimensionFileMixin",
     "DungeonFeatureMixin",
     "WorldMixin"
-  ],
-  "client": [
   ],
   "injectors": {
     "defaultRequire": 1

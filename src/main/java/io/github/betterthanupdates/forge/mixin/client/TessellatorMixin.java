@@ -1,10 +1,12 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.forge.mixin.client;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.Arrays;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.lwjgl.opengl.ARBVertexBufferObject;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,6 +22,7 @@ import net.minecraft.client.render.Tessellator;
 import io.github.betterthanupdates.forge.client.render.ForgeTessellator;
 
 // FIXME
+@Environment(EnvType.CLIENT)
 @Mixin(Tessellator.class)
 public abstract class TessellatorMixin implements ForgeTessellator {
 	@Shadow

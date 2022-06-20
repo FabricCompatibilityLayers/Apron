@@ -1,7 +1,9 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.forge.mixin.client;
 
 import forge.ForgeHooks;
 import forge.IUseItemFirst;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
@@ -11,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+@Environment(EnvType.CLIENT)
 @Mixin(ClientInteractionManager.class)
 public class ClientInteractionManagerMixin {
 	/**

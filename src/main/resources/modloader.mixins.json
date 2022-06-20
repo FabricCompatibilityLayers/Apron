@@ -18,7 +18,6 @@
     "client.ServerChunkCacheMixin"
   ],
   "server": [
-    "server.CraftingResultSlotMixin",
     "server.MinecraftServerMixin",
     "server.CommandManagerMixin",
     "server.ServerEntityTrackerMixin",

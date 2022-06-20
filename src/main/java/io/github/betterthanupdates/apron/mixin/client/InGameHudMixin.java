@@ -1,9 +1,11 @@
-package io.github.betterthanupdates.apron.mixin;
+package io.github.betterthanupdates.apron.mixin.client;
 
 import static io.github.betterthanupdates.apron.Apron.fabricModsLoaded;
 import static io.github.betterthanupdates.apron.Apron.rmlModsLoaded;
 import static io.github.betterthanupdates.apron.Apron.versionString;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiElement;
 import net.minecraft.client.gui.InGameHud;
 
+@Environment(EnvType.CLIENT)
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin extends GuiElement {
 	@Shadow

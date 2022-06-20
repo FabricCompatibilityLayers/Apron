@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.apron.mixin;
+package io.github.betterthanupdates.apron.mixin.client;
 
 import static io.github.betterthanupdates.apron.Apron.fabricModsLoaded;
 import static io.github.betterthanupdates.apron.Apron.rmlModsLoaded;
@@ -6,6 +6,8 @@ import static io.github.betterthanupdates.apron.Apron.rmlModsLoaded;
 import java.util.Objects;
 
 import modloader.ModLoader;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,6 +22,7 @@ import net.minecraft.client.gui.screen.menu.TitleScreen;
 
 import io.github.betterthanupdates.apron.Apron;
 
+@Environment(EnvType.CLIENT)
 @Mixin(TitleScreen.class)
 public abstract class TitleScreenMixin extends Screen {
 	@Shadow

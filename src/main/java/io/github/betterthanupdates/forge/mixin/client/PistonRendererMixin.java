@@ -1,6 +1,8 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.forge.mixin.client;
 
 import forge.ForgeHooksClient;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -16,6 +18,7 @@ import net.minecraft.client.render.entity.block.BlockEntityRenderer;
 import net.minecraft.client.render.entity.block.PistonRenderer;
 import net.minecraft.entity.block.PistonBlockEntity;
 
+@Environment(EnvType.CLIENT)
 @Mixin(PistonRenderer.class)
 public abstract class PistonRendererMixin extends BlockEntityRenderer {
 	@Shadow

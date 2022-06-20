@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.forge.mixin.client;
 
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
@@ -6,6 +6,8 @@ import java.nio.Buffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -18,6 +20,7 @@ import net.minecraft.client.util.GLAllocationUtils;
 
 import io.github.betterthanupdates.forge.ForgeClientReflection;
 
+@Environment(EnvType.CLIENT)
 @Mixin(TextureManager.class)
 public abstract class TextureManagerMixin {
 	@Shadow
