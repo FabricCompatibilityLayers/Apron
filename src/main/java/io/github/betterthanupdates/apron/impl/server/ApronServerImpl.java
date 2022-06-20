@@ -65,6 +65,11 @@ public final class ApronServerImpl implements ApronApi, DedicatedServerModInitia
 	}
 
 	@Override
+	public String getModLoaderMPVersion() {
+		return "Beta 1.6.6v4";
+	}
+
+	@Override
 	public String translate(String key) {
 		return Internationalization.translate(key);
 	}
