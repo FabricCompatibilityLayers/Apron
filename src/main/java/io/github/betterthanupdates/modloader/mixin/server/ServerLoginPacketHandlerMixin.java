@@ -17,7 +17,6 @@ import net.minecraft.server.network.ServerLoginPacketHandler;
 @Environment(EnvType.SERVER)
 @Mixin(ServerLoginPacketHandler.class)
 public abstract class ServerLoginPacketHandlerMixin extends PacketHandler {
-
 	@Inject(method = "complete", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void modloader$complete(LoginRequestPacket par1, CallbackInfo ci, ServerPlayerEntity entityplayermp) {
 		if (entityplayermp != null) ModLoaderMp.HandleAllLogins(entityplayermp);

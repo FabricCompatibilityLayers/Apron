@@ -77,36 +77,38 @@ public final class ApronModRemapper implements ModRemapper {
 
 				// ModLoaderMP mappings
 				list.add("NetClientHandlerEntity", "modloadermp/NetClientHandlerEntity");
+
+				// ShockAhPI
+				list.add("ACPage", "shockahpi/AchievementPage");
+				list.add("AnimBase", "shockahpi/AnimBase");
+				list.add("AnimPulse", "shockahpi/AnimPulse");
+				list.add("AnimShift", "shockahpi/AnimShift");
+				list.add("BlockHarvestPower", "shockahpi/BlockHarvestPower");
+				list.add("DimensionBase", "shockahpi/DimensionBase");
+				list.add("DimensionNether", "shockahpi/DimensionNether");
+				list.add("DimensionOverworld", "shockahpi/DimensionOverworld");
+				list.add("DungeonLoot", "shockahpi/DungeonLoot");
+				list.add("GuiYesNoFreezeDifficulty", "shockahpi/FreezeDifficultyScreen");
+				list.add("GenDeposit", "shockahpi/GenDeposit");
+				list.add("IInterceptBlockSet", "shockahpi/IInterceptBlockSet");
+				list.add("IInterceptHarvest", "shockahpi/IInterceptHarvest");
+				list.add("INBT", "shockahpi/INBT");
+				list.add("IReachBlock", "shockahpi/IReachBlock");
+				list.add("IReachEntity", "shockahpi/IReachEntity");
+				list.add("Loc", "shockahpi/Loc");
+				list.add("mod_SAPI", "shockahpi/ShockAhPI");
+				list.add("PlayerBase", "shockahpi/PlayerBase");
+				list.add("SAPI", "shockahpi/SAPI");
+				list.add("SAPIEntityPlayerSP", "shockahpi/SapiClientPlayerEntity");
+				list.add("Tool", "shockahpi/Tool");
+				list.add("ToolBase", "shockahpi/ToolBase");
 				break;
 			case SERVER:
 				// ModLoaderMP mappings
+				list.add("EntityTrackerEntry2", "modloadermp/EntityTrackerEntry2");
+				list.add("Pair", "modloadermp/Pair");
 				break;
 		}
-
-		// ShockAhPI
-		list.add("ACPage", "shockahpi/AchievementPage");
-		list.add("AnimBase", "shockahpi/AnimBase");
-		list.add("AnimPulse", "shockahpi/AnimPulse");
-		list.add("AnimShift", "shockahpi/AnimShift");
-		list.add("BlockHarvestPower", "shockahpi/BlockHarvestPower");
-		list.add("DimensionBase", "shockahpi/DimensionBase");
-		list.add("DimensionNether", "shockahpi/DimensionNether");
-		list.add("DimensionOverworld", "shockahpi/DimensionOverworld");
-		list.add("DungeonLoot", "shockahpi/DungeonLoot");
-		list.add("GuiYesNoFreezeDifficulty", "shockahpi/FreezeDifficultyScreen");
-		list.add("GenDeposit", "shockahpi/GenDeposit");
-		list.add("IInterceptBlockSet", "shockahpi/IInterceptBlockSet");
-		list.add("IInterceptHarvest", "shockahpi/IInterceptHarvest");
-		list.add("INBT", "shockahpi/INBT");
-		list.add("IReachBlock", "shockahpi/IReachBlock");
-		list.add("IReachEntity", "shockahpi/IReachEntity");
-		list.add("Loc", "shockahpi/Loc");
-		list.add("mod_SAPI", "shockahpi/ShockAhPI");
-		list.add("PlayerBase", "shockahpi/PlayerBase");
-		list.add("SAPI", "shockahpi/SAPI");
-		list.add("SAPIEntityPlayerSP", "shockahpi/SapiClientPlayerEntity");
-		list.add("Tool", "shockahpi/Tool");
-		list.add("ToolBase", "shockahpi/ToolBase");
 	}
 
 	@Override
