@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.modloader.mixin;
+package io.github.betterthanupdates.modloader.mixin.client;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

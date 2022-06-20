@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.modloader.mixin;
+package io.github.betterthanupdates.modloader.mixin.client;
 
 import java.awt.Panel;
 import java.io.StringWriter;
@@ -8,6 +8,8 @@ import java.util.Date;
 
 import modloader.BaseMod;
 import modloader.ModLoader;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import net.minecraft.applet.GameStartupErrorPanel;
 
+@Environment(EnvType.CLIENT)
 @Mixin(GameStartupErrorPanel.class)
 public abstract class GameStartupErrorPanelMixin extends Panel {
 	private static StringWriter stringWriter = new StringWriter();

@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.modloader.mixin;
+package io.github.betterthanupdates.modloader.mixin.client;
 
 import java.lang.reflect.Field;
 
@@ -28,13 +28,14 @@ import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.entity.projectile.ThrownEggEntity;
 import net.minecraft.network.ClientPlayPacketHandler;
+import net.minecraft.network.PacketHandler;
 import net.minecraft.packet.play.EntitySpawnS2CPacket;
 import net.minecraft.packet.play.OpenContainerS2CPacket;
 import net.minecraft.world.World;
 
 @Environment(EnvType.CLIENT)
 @Mixin(ClientPlayPacketHandler.class)
-public abstract class ClientPlayPacketHandlerMixin {
+public abstract class ClientPlayPacketHandlerMixin extends PacketHandler {
 	@Shadow
 	private ClientWorld world;
 
