@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.modloader.mixin;
+package io.github.betterthanupdates.modloader.mixin.client;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;

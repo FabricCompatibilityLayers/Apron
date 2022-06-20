@@ -4,18 +4,27 @@
   "package": "io.github.betterthanupdates.modloader.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "DisconnectPacketMixin",
     "DispenserBlockMixin",
     "FurnaceBlockEntityMixin",
-    "ItemEntityMixin",
-    "ServerChunkCacheMixin"
+    "FurnaceOutputSlotMixin"
   ],
   "client": [
-    "ClientPlayPacketHandlerMixin",
-    "DisconnectingScreenMixin",
-    "EntityRenderDispatcherMixin",
-    "FurnaceOutputSlotMixin",
-    "GameStartupErrorPanelMixin"
+    "client.ClientPlayPacketHandlerMixin",
+    "client.DisconnectingScreenMixin",
+    "client.DisconnectPacketMixin",
+    "client.EntityRenderDispatcherMixin",
+    "client.ItemEntityMixin",
+    "client.GameStartupErrorPanelMixin",
+    "client.ServerChunkCacheMixin"
+  ],
+  "server": [
+    "server.CraftingResultSlotMixin",
+    "server.MinecraftServerMixin",
+    "server.CommandManagerMixin",
+    "server.ServerEntityTrackerMixin",
+    "server.ServerLoginPacketHandlerMixin",
+    "server.TrackedEntityMixin",
+    "server.ServerWorldSourceMixin"
   ],
   "injectors": {
     "defaultRequire": 1

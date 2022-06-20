@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.modloader.mixin;
+package io.github.betterthanupdates.modloader.mixin.client;
 
 import modloader.ModLoader;
 import org.spongepowered.asm.mixin.Mixin;

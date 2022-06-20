@@ -1,6 +1,8 @@
 package io.github.betterthanupdates.modloader.mixin;
 
 import modloader.ModLoader;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,6 +45,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 	 * @reason idk
 	 * TODO(halotroop2288): rewrite as an {@link Inject} Mixin
 	 */
+	@Environment(EnvType.CLIENT)
 	@Overwrite
 	public void tick() {
 		int j = this.burnTime > 0 ? 1 : 0;
@@ -99,6 +102,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 	 * @reason idk
 	 * TODO(halotroop2288): rewrite as an {@link Inject} Mixin
 	 */
+	@Environment(EnvType.CLIENT)
 	@Overwrite
 	public void craftRecipe() {
 		if (this.canAcceptRecipeOutput()) {
