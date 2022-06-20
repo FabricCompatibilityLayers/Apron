@@ -57,7 +57,6 @@ public class ModLoaderMp {
 	@Environment(EnvType.SERVER)
 	private static final List<String> bannedMods = new ArrayList<>();
 
-
 	@Environment(EnvType.CLIENT)
 	public static void Init() {
 		if (!hasInit) {
@@ -70,7 +69,6 @@ public class ModLoaderMp {
 		if (!hasInit) {
 			init();
 		}
-
 	}
 
 	@Environment(EnvType.CLIENT)
@@ -242,6 +240,7 @@ public class ModLoaderMp {
 		if (!APRON.isClient()) {
 			try {
 				File file = ModLoader.getMinecraftServerInstance().getFile("banned-mods.txt");
+
 				if (!file.exists()) {
 					file.createNewFile();
 				}
@@ -249,7 +248,8 @@ public class ModLoaderMp {
 				BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(Files.newInputStream(file.toPath())));
 
 				String s;
-				while((s = bufferedreader.readLine()) != null) {
+
+				while ((s = bufferedreader.readLine()) != null) {
 					bannedMods.add(s);
 				}
 			} catch (IOException var9) {
@@ -379,13 +379,13 @@ public class ModLoaderMp {
 
 		sendModCheck(entityplayermp);
 
-		for(int i = 0; i < ModLoader.getLoadedMods().size(); ++i) {
+		for (int i = 0; i < ModLoader.getLoadedMods().size(); ++i) {
 			BaseMod basemod = ModLoader.getLoadedMods().get(i);
+
 			if (basemod instanceof BaseModMp) {
-				((BaseModMp)basemod).HandleLogin(entityplayermp);
+				((BaseModMp) basemod).HandleLogin(entityplayermp);
 			}
 		}
-
 	}
 
 	@Environment(EnvType.SERVER)
@@ -395,18 +395,20 @@ public class ModLoaderMp {
 		}
 
 		if (packet230modloader.modId == "ModLoaderMP".hashCode()) {
-			switch(packet230modloader.packetType) {
-			case 0:
-				handleModCheckResponse(packet230modloader, entityplayermp);
-				break;
-			case 1:
-				handleSendKey(packet230modloader, entityplayermp);
+			switch (packet230modloader.packetType) {
+				case 0:
+					handleModCheckResponse(packet230modloader, entityplayermp);
+					break;
+				case 1:
+					handleSendKey(packet230modloader, entityplayermp);
 			}
 		} else {
-			for(int i = 0; i < ModLoader.getLoadedMods().size(); ++i) {
+			for (int i = 0; i < ModLoader.getLoadedMods().size(); ++i) {
 				BaseMod basemod = ModLoader.getLoadedMods().get(i);
+
 				if (basemod instanceof BaseModMp) {
-					BaseModMp basemodmp = (BaseModMp)basemod;
+					BaseModMp basemodmp = (BaseModMp) basemod;
+
 					if (basemodmp.getId() == packet230modloader.modId) {
 						basemodmp.HandlePacket(packet230modloader, entityplayermp);
 						break;
@@ -422,7 +424,7 @@ public class ModLoaderMp {
 			init();
 		}
 
-		for(Map.Entry<Class<? extends Entity>, Pair<Integer, Integer>> entry : entityTrackerMap.entrySet()) {
+		for (Map.Entry<Class<? extends Entity>, Pair<Integer, Integer>> entry : entityTrackerMap.entrySet()) {
 			if (entry.getKey().isInstance(entity)) {
 				entitytracker.trackEntity(entity, entry.getValue().getLeft(), entry.getValue().getRight(), true);
 				return;
@@ -458,11 +460,10 @@ public class ModLoaderMp {
 	@Environment(EnvType.SERVER)
 	private static void sendPacketToAll(AbstractPacket packet) {
 		if (packet != null) {
-			for(int i = 0; i < ModLoader.getMinecraftServerInstance().serverPlayerConnectionManager.players.size(); ++i) {
-				((ServerPlayerEntity)ModLoader.getMinecraftServerInstance().serverPlayerConnectionManager.players.get(i)).packetHandler.send(packet);
+			for (int i = 0; i < ModLoader.getMinecraftServerInstance().serverPlayerConnectionManager.players.size(); ++i) {
+				((ServerPlayerEntity) ModLoader.getMinecraftServerInstance().serverPlayerConnectionManager.players.get(i)).packetHandler.send(packet);
 			}
 		}
-
 	}
 
 	@Environment(EnvType.SERVER)
@@ -510,8 +511,9 @@ public class ModLoaderMp {
 	@Environment(EnvType.SERVER)
 	private static void handleModCheckResponse(Packet230ModLoader packet230modloader, ServerPlayerEntity entityplayermp) {
 		StringBuilder stringbuilder = new StringBuilder();
+
 		if (packet230modloader.dataString.length != 0) {
-			for(int i = 0; i < packet230modloader.dataString.length; ++i) {
+			for (int i = 0; i < packet230modloader.dataString.length; ++i) {
 				if (packet230modloader.dataString[i].lastIndexOf("mod_") != -1) {
 					if (stringbuilder.length() != 0) {
 						stringbuilder.append(", ");
@@ -538,15 +540,17 @@ public class ModLoaderMp {
 
 		ArrayList<String> arraylist1 = new ArrayList<>();
 
-		for(int l = 0; l < ModLoader.getLoadedMods().size(); ++l) {
-			BaseModMp basemodmp = (BaseModMp)ModLoader.getLoadedMods().get(l);
+		for (int l = 0; l < ModLoader.getLoadedMods().size(); ++l) {
+			BaseModMp basemodmp = (BaseModMp) ModLoader.getLoadedMods().get(l);
+
 			if (basemodmp.hasClientSide() && basemodmp.toString().lastIndexOf("mod_") != -1) {
 				String s = basemodmp.toString().substring(basemodmp.toString().lastIndexOf("mod_"));
 				boolean flag = false;
 
-				for(int l1 = 0; l1 < packet230modloader.dataString.length; ++l1) {
+				for (int l1 = 0; l1 < packet230modloader.dataString.length; ++l1) {
 					if (packet230modloader.dataString[l1].lastIndexOf("mod_") != -1) {
 						String s1 = packet230modloader.dataString[l1].substring(packet230modloader.dataString[l1].lastIndexOf("mod_"));
+
 						if (s.equals(s1)) {
 							flag = true;
 							break;
@@ -606,10 +610,12 @@ public class ModLoaderMp {
 			int i = packet230modloader.dataInt[0];
 			int j = packet230modloader.dataInt[1];
 
-			for(int k = 0; k < ModLoader.getLoadedMods().size(); ++k) {
+			for (int k = 0; k < ModLoader.getLoadedMods().size(); ++k) {
 				BaseMod basemod = ModLoader.getLoadedMods().get(k);
+
 				if (basemod instanceof BaseModMp) {
-					BaseModMp basemodmp = (BaseModMp)basemod;
+					BaseModMp basemodmp = (BaseModMp) basemod;
+
 					if (basemodmp.getId() == i) {
 						basemodmp.HandleSendKey(entityplayermp, j);
 						break;
@@ -621,10 +627,11 @@ public class ModLoaderMp {
 
 	@Environment(EnvType.SERVER)
 	public static void getCommandInfo(CommandSource icommandlistener) {
-		for(int i = 0; i < ModLoader.getLoadedMods().size(); ++i) {
+		for (int i = 0; i < ModLoader.getLoadedMods().size(); ++i) {
 			BaseMod basemod = ModLoader.getLoadedMods().get(i);
+
 			if (basemod instanceof BaseModMp) {
-				BaseModMp basemodmp = (BaseModMp)basemod;
+				BaseModMp basemodmp = (BaseModMp) basemod;
 				basemodmp.GetCommandInfo(icommandlistener);
 			}
 		}
@@ -634,10 +641,12 @@ public class ModLoaderMp {
 	public static boolean handleCommand(String s, String s1, CommandSource icommandlistener, CommandManager consolecommandhandler) {
 		boolean flag = false;
 
-		for(int i = 0; i < ModLoader.getLoadedMods().size(); ++i) {
+		for (int i = 0; i < ModLoader.getLoadedMods().size(); ++i) {
 			BaseMod basemod = ModLoader.getLoadedMods().get(i);
+
 			if (basemod instanceof BaseModMp) {
-				BaseModMp basemodmp = (BaseModMp)basemod;
+				BaseModMp basemodmp = (BaseModMp) basemod;
+
 				if (basemodmp.HandleCommand(s, s1, icommandlistener, consolecommandhandler)) {
 					flag = true;
 				}
@@ -696,6 +705,7 @@ public class ModLoaderMp {
 		ai1[2] = j;
 		ai1[3] = k;
 		ai1[4] = l;
+
 		if (i1 != 0) {
 			System.arraycopy(ai, 0, ai1, 5, ai.length);
 		}

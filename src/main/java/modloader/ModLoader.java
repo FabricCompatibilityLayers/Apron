@@ -11,8 +11,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -1027,7 +1025,7 @@ public class ModLoader {
 		if (minecraftserver.worlds != null && minecraftserver.worlds[0] != null) {
 			l = minecraftserver.worlds[0].getWorldTime();
 
-			for(Entry<BaseMod, Boolean> entry : inGameHooks.entrySet()) {
+			for (Entry<BaseMod, Boolean> entry : inGameHooks.entrySet()) {
 				if (clock != l || !entry.getValue()) {
 					entry.getKey().OnTickInGame(minecraftserver);
 				}
@@ -1766,8 +1764,7 @@ public class ModLoader {
 		}
 
 		if (entityplayer instanceof ServerPlayerEntity) {
-			ServerPlayerEntity entityplayermp = (ServerPlayerEntity)entityplayer;
-
+			ServerPlayerEntity entityplayermp = (ServerPlayerEntity) entityplayer;
 			entityplayermp.method_314();
 			int j = entityplayermp.field_260;
 			entityplayermp.packetHandler.send(new OpenContainerS2CPacket(j, i, iinventory.getContainerName(), iinventory.getInventorySize()));
@@ -1775,6 +1772,5 @@ public class ModLoader {
 			entityplayermp.container.currentContainerId = j;
 			entityplayermp.container.addListener(entityplayermp);
 		}
-
 	}
 }

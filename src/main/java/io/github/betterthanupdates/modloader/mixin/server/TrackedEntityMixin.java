@@ -33,7 +33,7 @@ public class TrackedEntityMixin {
 		if (entitytrackerentry2 != null) {
 			try {
 				if (this.entityToSync instanceof ISpawnable) {
-					Packet230ModLoader packet = ((ISpawnable)this.entityToSync).getSpawnPacket();
+					Packet230ModLoader packet = ((ISpawnable) this.entityToSync).getSpawnPacket();
 					packet.modId = "Spawn".hashCode();
 
 					if (entitytrackerentry2.entityId > 127) {
@@ -49,7 +49,7 @@ public class TrackedEntityMixin {
 					Field field = this.entityToSync.getClass().getField("owner");
 
 					if (Entity.class.isAssignableFrom(field.getType())) {
-						Entity entity = (Entity)field.get(this.entityToSync);
+						Entity entity = (Entity) field.get(this.entityToSync);
 						cir.setReturnValue(new EntitySpawnS2CPacket(
 								this.entityToSync, entitytrackerentry2.entityId, entity == null ? this.entityToSync.entityId : entity.entityId
 						));

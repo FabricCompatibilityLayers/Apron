@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import modloader.ModLoader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -141,6 +140,7 @@ public class Packet230ModLoader extends AbstractPacket {
 			ModLoaderMp.HandleAllPackets(this);
 		} else {
 			ServerPlayerEntity entityplayermp = null;
+
 			if (playerMap.containsKey(netHandler)) {
 				entityplayermp = playerMap.get(netHandler);
 			} else if (netHandler instanceof ServerPlayPacketHandler) {

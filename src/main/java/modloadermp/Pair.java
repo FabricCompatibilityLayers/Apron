@@ -1,5 +1,9 @@
 package modloadermp;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+@Environment(EnvType.SERVER)
 public class Pair<L, R> {
 	private final L left;
 	private final R right;
@@ -27,7 +31,7 @@ public class Pair<L, R> {
 		} else if (!(obj instanceof Pair)) {
 			return false;
 		} else {
-			Pair<?, ?> pair = (Pair<?, ?>)obj;
+			Pair<?, ?> pair = (Pair<?, ?>) obj;
 			return this.left.equals(pair.getLeft()) && this.right.equals(pair.getRight());
 		}
 	}

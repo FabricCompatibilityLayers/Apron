@@ -23,7 +23,6 @@ import net.minecraft.server.world.ServerWorld;
 @Environment(EnvType.SERVER)
 @Mixin(CommandManager.class)
 public abstract class CommandManagerMixin {
-
 	@Shadow
 	private MinecraftServer server;
 
@@ -52,6 +51,7 @@ public abstract class CommandManagerMixin {
 		CommandSource icommandlistener = servercommand.source;
 		String s1 = icommandlistener.getName();
 		ServerPlayerConnectionManager serverconfigurationmanager = this.server.serverPlayerConnectionManager;
+
 		if (s.toLowerCase().startsWith("help") || s.toLowerCase().startsWith("?")) {
 			this.sendHelp(icommandlistener);
 		} else if (s.toLowerCase().startsWith("list")) {
@@ -61,11 +61,12 @@ public abstract class CommandManagerMixin {
 			this.server.stopRunning();
 		} else if (s.toLowerCase().startsWith("save-all")) {
 			this.sendFeedbackAndLog(s1, "Forcing save..");
+
 			if (serverconfigurationmanager != null) {
 				serverconfigurationmanager.updateAllPlayers();
 			}
 
-			for(int i = 0; i < this.server.worlds.length; ++i) {
+			for (int i = 0; i < this.server.worlds.length; ++i) {
 				ServerWorld worldserver = this.server.worlds[i];
 				worldserver.saveLevel(true, null);
 			}
@@ -74,14 +75,14 @@ public abstract class CommandManagerMixin {
 		} else if (s.toLowerCase().startsWith("save-off")) {
 			this.sendFeedbackAndLog(s1, "Disabling level saving..");
 
-			for(int j = 0; j < this.server.worlds.length; ++j) {
+			for (int j = 0; j < this.server.worlds.length; ++j) {
 				ServerWorld worldserver1 = this.server.worlds[j];
 				worldserver1.field_275 = true;
 			}
 		} else if (s.toLowerCase().startsWith("save-on")) {
 			this.sendFeedbackAndLog(s1, "Enabling level saving..");
 
-			for(int k = 0; k < this.server.worlds.length; ++k) {
+			for (int k = 0; k < this.server.worlds.length; ++k) {
 				ServerWorld worldserver2 = this.server.worlds[k];
 				worldserver2.field_275 = false;
 			}
@@ -108,6 +109,7 @@ public abstract class CommandManagerMixin {
 			serverconfigurationmanager.addBan(s6);
 			this.sendFeedbackAndLog(s1, "Banning " + s6);
 			ServerPlayerEntity entityplayermp = serverconfigurationmanager.getServerPlayer(s6);
+
 			if (entityplayermp != null) {
 				entityplayermp.packetHandler.kick("Banned by admin");
 			}
@@ -119,8 +121,9 @@ public abstract class CommandManagerMixin {
 			String s8 = s.substring(s.indexOf(" ")).trim();
 			ServerPlayerEntity entityplayermp1 = null;
 
-			for(int l = 0; l < serverconfigurationmanager.players.size(); ++l) {
-				ServerPlayerEntity entityplayermp5 = (ServerPlayerEntity)serverconfigurationmanager.players.get(l);
+			for (int l = 0; l < serverconfigurationmanager.players.size(); ++l) {
+				ServerPlayerEntity entityplayermp5 = (ServerPlayerEntity) serverconfigurationmanager.players.get(l);
+
 				if (entityplayermp5.name.equalsIgnoreCase(s8)) {
 					entityplayermp1 = entityplayermp5;
 				}
@@ -134,9 +137,11 @@ public abstract class CommandManagerMixin {
 			}
 		} else if (s.toLowerCase().startsWith("tp ")) {
 			String[] as = s.split(" ");
+
 			if (as.length == 3) {
 				ServerPlayerEntity entityplayermp2 = serverconfigurationmanager.getServerPlayer(as[1]);
 				ServerPlayerEntity entityplayermp3 = serverconfigurationmanager.getServerPlayer(as[2]);
+
 				if (entityplayermp2 == null) {
 					icommandlistener.sendFeedback("Can't find user " + as[1] + ". No tp.");
 				} else if (entityplayermp3 == null) {
@@ -153,18 +158,22 @@ public abstract class CommandManagerMixin {
 			}
 		} else if (s.toLowerCase().startsWith("give ")) {
 			String[] as1 = s.split(" ");
+
 			if (as1.length != 3 && as1.length != 4) {
 				return;
 			}
 
 			String s9 = as1[1];
 			ServerPlayerEntity entityplayermp4 = serverconfigurationmanager.getServerPlayer(s9);
+
 			if (entityplayermp4 != null) {
 				try {
 					int j1 = Integer.parseInt(as1[2]);
+
 					if (Item.byId[j1] != null) {
 						this.sendFeedbackAndLog(s1, "Giving " + entityplayermp4.name + " some " + j1);
 						int i2 = 1;
+
 						if (as1.length > 3) {
 							i2 = this.parseIntOrElse(as1[3], 1);
 						}
@@ -189,6 +198,7 @@ public abstract class CommandManagerMixin {
 			}
 		} else if (s.toLowerCase().startsWith("time ")) {
 			String[] as2 = s.split(" ");
+
 			if (as2.length != 3) {
 				return;
 			}
@@ -197,17 +207,18 @@ public abstract class CommandManagerMixin {
 
 			try {
 				int i1 = Integer.parseInt(as2[2]);
+
 				if ("add".equalsIgnoreCase(s10)) {
-					for(int k1 = 0; k1 < this.server.worlds.length; ++k1) {
+					for (int k1 = 0; k1 < this.server.worlds.length; ++k1) {
 						ServerWorld worldserver3 = this.server.worlds[k1];
-						worldserver3.setWorldTime(worldserver3.getWorldTime() + (long)i1);
+						worldserver3.setWorldTime(worldserver3.getWorldTime() + (long) i1);
 					}
 
 					this.sendFeedbackAndLog(s1, "Added " + i1 + " to time");
 				} else if ("set".equalsIgnoreCase(s10)) {
-					for(int l1 = 0; l1 < this.server.worlds.length; ++l1) {
+					for (int l1 = 0; l1 < this.server.worlds.length; ++l1) {
 						ServerWorld worldserver4 = this.server.worlds[l1];
-						worldserver4.setWorldTime((long)i1);
+						worldserver4.setWorldTime((long) i1);
 					}
 
 					this.sendFeedbackAndLog(s1, "Set time to " + i1);
@@ -223,12 +234,14 @@ public abstract class CommandManagerMixin {
 			serverconfigurationmanager.sendToAll(new ChatMessagePacket("§d[Server] " + s));
 		} else if (s.toLowerCase().startsWith("tell ")) {
 			String[] as3 = s.split(" ");
+
 			if (as3.length >= 3) {
 				s = s.substring(s.indexOf(" ")).trim();
 				s = s.substring(s.indexOf(" ")).trim();
 				LOGGER.info("[" + s1 + "->" + as3[1] + "] " + s);
 				s = "§7" + s1 + " whispers " + s;
 				LOGGER.info(s);
+
 				if (!serverconfigurationmanager.trySendPacket(as3[1], new ChatMessagePacket(s))) {
 					icommandlistener.sendFeedback("There's no player by that name online.");
 				}

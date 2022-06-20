@@ -20,7 +20,6 @@ import net.minecraft.server.world.ServerWorld;
 @Environment(EnvType.SERVER)
 @Mixin(MinecraftServer.class)
 public abstract class MinecraftServerMixin implements Runnable, CommandSource {
-
 	@Shadow
 	protected abstract boolean start();
 
@@ -60,10 +59,11 @@ public abstract class MinecraftServerMixin implements Runnable, CommandSource {
 			if (this.start()) {
 				long l = System.currentTimeMillis();
 
-				for(long l1 = 0L; this.running; Thread.sleep(1L)) {
+				for (long l1 = 0L; this.running; Thread.sleep(1L)) {
 					ModLoader.OnTick((MinecraftServer) (Object) this);
 					long l2 = System.currentTimeMillis();
 					long l3 = l2 - l;
+
 					if (l3 > 2000L) {
 						logger.warning("Can't keep up! Did the system time change, or is the server overloaded?");
 						l3 = 2000L;
@@ -76,18 +76,19 @@ public abstract class MinecraftServerMixin implements Runnable, CommandSource {
 
 					l1 += l3;
 					l = l2;
+
 					if (this.worlds[0].canSkipNight()) {
 						this.skipNight();
 						l1 = 0L;
 					} else {
-						while(l1 > 50L) {
+						while (l1 > 50L) {
 							l1 -= 50L;
 							this.skipNight();
 						}
 					}
 				}
 			} else {
-				while(this.running) {
+				while (this.running) {
 					this.processQueuedCommands();
 
 					try {
@@ -101,7 +102,7 @@ public abstract class MinecraftServerMixin implements Runnable, CommandSource {
 			var336.printStackTrace();
 			logger.log(Level.SEVERE, "Unexpected exception", var336);
 
-			while(this.running) {
+			while (this.running) {
 				this.processQueuedCommands();
 
 				try {
@@ -125,9 +126,7 @@ public abstract class MinecraftServerMixin implements Runnable, CommandSource {
 				} finally {
 					System.exit(0);
 				}
-
 			}
-
 		}
 	}
 }
