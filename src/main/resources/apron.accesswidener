@@ -184,3 +184,7 @@ accessible method net/minecraft/util/math/Vec3d <init> (DDD)V
 accessible method net/minecraft/client/Minecraft loadIntoWorld (Ljava/lang/String;)V
 
 accessible method net/minecraft/entity/player/PlayerEntity method_520 (Lnet/minecraft/entity/Entity;)V
+
+## ModLoaderMP Server
+accessible method net/minecraft/server/entity/player/ServerPlayerEntity method_314 ()V
+accessible field net/minecraft/server/entity/player/ServerPlayerEntity field_260 I

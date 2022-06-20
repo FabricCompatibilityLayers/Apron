@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -58,6 +60,7 @@ import net.minecraft.client.render.entity.block.BlockEntityRenderer;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.Session;
+import net.minecraft.container.Container;
 import net.minecraft.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityEntry;
@@ -65,17 +68,23 @@ import net.minecraft.entity.EntityRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.packet.play.OpenContainerS2CPacket;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeRegistry;
 import net.minecraft.recipe.SmeltingRecipeRegistry;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.entity.player.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
 import net.minecraft.stat.achievement.Achievement;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.source.NetherWorldSource;
+import net.minecraft.world.source.OverworldWorldSource;
 import net.minecraft.world.source.WorldSource;
 
 import io.github.betterthanupdates.apron.Apron;
@@ -83,8 +92,14 @@ import io.github.betterthanupdates.apron.api.ApronApi;
 
 @SuppressWarnings("unused")
 public class ModLoader {
+	// Apron
+	static final ApronApi APRON = ApronApi.getInstance();
+
+	@Environment(EnvType.CLIENT)
 	private static final List<TextureBinder> ANIM_LIST = new LinkedList<>();
+	@Environment(EnvType.CLIENT)
 	private static final Map<Integer, BaseMod> BLOCK_MODELS = new HashMap<>();
+	@Environment(EnvType.CLIENT)
 	private static final Map<Integer, Boolean> BLOCK_SPECIAL_INV = new HashMap<>();
 	private static final File CONFIG_DIR = new File(Minecraft.getGameDirectory(), "/config/");
 	private static final File CONFIG_FILE = new File(CONFIG_DIR, "ModLoader.cfg");
@@ -94,9 +109,11 @@ public class ModLoader {
 	private static boolean hasInit = false;
 	private static int highestEntityId = 3000;
 	private static final Map<BaseMod, Boolean> inGameHooks = new HashMap<>();
+	@Environment(EnvType.CLIENT)
 	private static final Map<BaseMod, Boolean> inGUIHooks = new HashMap<>();
 	private static int itemSpriteIndex = 0;
 	private static int itemSpritesLeft = 0;
+	@Environment(EnvType.CLIENT)
 	private static final Map<BaseMod, Map<KeyBinding, boolean[]>> keyList = new HashMap<>();
 	private static final File LOG_FILE = new File(Minecraft.getGameDirectory(), "ModLoader.txt");
 	private static final java.util.logging.Logger MOD_LOGGER = java.util.logging.Logger.getLogger("ModLoader");
@@ -108,14 +125,13 @@ public class ModLoader {
 	public static final Properties props = new Properties();
 	private static int terrainSpriteIndex = 0;
 	private static int terrainSpritesLeft = 0;
+	@Environment(EnvType.CLIENT)
 	private static String texPack = null;
+	@Environment(EnvType.CLIENT)
 	private static boolean texturesAdded = false;
 	private static final boolean[] USED_ITEM_SPRITES = new boolean[256];
 	private static final boolean[] USED_TERRAIN_SPRITES = new boolean[256];
-	public static final String VERSION = "ModLoader Beta 1.7.3";
-
-	// Apron
-	static final ApronApi APRON = ApronApi.getInstance();
+	public static final String VERSION = APRON.getModLoaderVersion();
 
 	/**
 	 * Used to give your achievement a readable name and description.
@@ -132,10 +148,14 @@ public class ModLoader {
 
 				if (split.length == 2) {
 					String key = split[1];
-					AddLocalization("achievement." + key, name);
-					AddLocalization("achievement." + key + ".desc", description);
-					achievement.name = TranslationStorage.getInstance().translate("achievement." + key);
-					achievement.description = TranslationStorage.getInstance().translate("achievement." + key + ".desc");
+
+					if (APRON.isClient()) {
+						AddLocalization("achievement." + key, name);
+						AddLocalization("achievement." + key + ".desc", description);
+					}
+
+					achievement.name = APRON.translate("achievement." + key);
+					achievement.description = APRON.translate("achievement." + key + ".desc");
 				} else {
 					achievement.name = name;
 					achievement.description = description;
@@ -177,6 +197,7 @@ public class ModLoader {
 	 *
 	 * @param rendererMap renderers to add
 	 */
+	@Environment(EnvType.CLIENT)
 	public static void AddAllRenderers(Map<Class<? extends Entity>, EntityRenderer> rendererMap) {
 		if (!hasInit) {
 			init();
@@ -193,6 +214,7 @@ public class ModLoader {
 	 *
 	 * @param textureBinder animation instance to register
 	 */
+	@Environment(EnvType.CLIENT)
 	public static void addAnimation(TextureBinder textureBinder) {
 		LOGGER.debug("Adding animation " + textureBinder.toString());
 
@@ -214,21 +236,23 @@ public class ModLoader {
 	 */
 	@SuppressWarnings("unused")
 	public static int AddArmor(String armor) {
-		try {
-			String[] existingArmor = PlayerRenderer.armorTypes;
-			List<String> existingArmorList = Arrays.asList(existingArmor);
-			List<String> combinedList = new ArrayList<>(existingArmorList);
+		if (APRON.isClient()) {
+			try {
+				String[] existingArmor = PlayerRenderer.armorTypes;
+				List<String> existingArmorList = Arrays.asList(existingArmor);
+				List<String> combinedList = new ArrayList<>(existingArmorList);
 
-			if (!combinedList.contains(armor)) {
-				combinedList.add(armor);
+				if (!combinedList.contains(armor)) {
+					combinedList.add(armor);
+				}
+
+				int index = combinedList.indexOf(armor);
+				PlayerRenderer.armorTypes = combinedList.toArray(new String[0]);
+				return index;
+			} catch (IllegalArgumentException e) {
+				MOD_LOGGER.throwing("ModLoader", "AddArmor", e);
+				ThrowException("An impossible error has occured!", e);
 			}
-
-			int index = combinedList.indexOf(armor);
-			PlayerRenderer.armorTypes = combinedList.toArray(new String[0]);
-			return index;
-		} catch (IllegalArgumentException e) {
-			MOD_LOGGER.throwing("ModLoader", "AddArmor", e);
-			ThrowException("An impossible error has occured!", e);
 		}
 
 		return -1;
@@ -240,6 +264,7 @@ public class ModLoader {
 	 * @param key   tag for string
 	 * @param value string to add
 	 */
+	@Environment(EnvType.CLIENT)
 	public static void AddLocalization(String key, String value) {
 		Properties props = TranslationStorage.getInstance().translations;
 
@@ -288,6 +313,7 @@ public class ModLoader {
 	 * @param name     The name to give
 	 */
 	@SuppressWarnings("unused")
+	@Environment(EnvType.CLIENT)
 	public static void AddName(Object instance, String name) {
 		String tag = null;
 
@@ -412,7 +438,7 @@ public class ModLoader {
 	 * @param spawnGroup   group to spawn the entity in
 	 */
 	public static void AddSpawn(Class<? extends LivingEntity> entityClass, int weightedProb, SpawnGroup spawnGroup) {
-		AddSpawn(entityClass, weightedProb, spawnGroup, (Biome) null);
+		AddSpawn(entityClass, weightedProb, spawnGroup, (Biome[]) null);
 	}
 
 	/**
@@ -435,7 +461,11 @@ public class ModLoader {
 			}
 
 			for (Biome biome : biomes) {
-				if (biome == null) LOGGER.warn("Attempted to add entity %s with spawn group %s to a null biome", entityClass, spawnGroup);
+				if (biome == null) {
+					LOGGER.warn("Attempted to add entity %s with spawn group %s to a null biome", entityClass, spawnGroup);
+					continue;
+				}
+
 				List<EntityEntry> list = biome.getSpawnList(spawnGroup);
 
 				if (list != null) {
@@ -465,7 +495,7 @@ public class ModLoader {
 	 * @param spawnGroup The spawn group to add entity to (Monster, Creature, or Water)
 	 */
 	public static void AddSpawn(String entityName, int chance, SpawnGroup spawnGroup) {
-		AddSpawn(entityName, chance, spawnGroup, (Biome) null);
+		AddSpawn(entityName, chance, spawnGroup, (Biome[]) null);
 	}
 
 	/**
@@ -537,6 +567,12 @@ public class ModLoader {
 		return (Minecraft) ApronApi.getInstance().getGame();
 	}
 
+	@Nullable
+	@Environment(EnvType.SERVER)
+	public static MinecraftServer getMinecraftServerInstance() {
+		return (MinecraftServer) APRON.getGame();
+	}
+
 	/**
 	 * Used for getting value of private fields.
 	 *
@@ -578,6 +614,7 @@ public class ModLoader {
 	@SuppressWarnings("unchecked")
 	public static <T, E> T getPrivateValue(Class<? super E> instanceClass, E instance, String fieldName) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
 		try {
+			fieldName = Apron.getRemappedFieldName(instanceClass, fieldName);
 			Field f = instanceClass.getDeclaredField(fieldName);
 			f.setAccessible(true);
 			return (T) f.get(instance);
@@ -597,8 +634,12 @@ public class ModLoader {
 	 */
 	public static int getUniqueBlockModelID(BaseMod mod, boolean full3DItem) {
 		int id = nextBlockModelID++;
-		BLOCK_MODELS.put(id, mod);
-		BLOCK_SPECIAL_INV.put(id, full3DItem);
+
+		if (APRON.isClient()) {
+			BLOCK_MODELS.put(id, mod);
+			BLOCK_SPECIAL_INV.put(id, full3DItem);
+		}
+
 		return id;
 	}
 
@@ -666,8 +707,8 @@ public class ModLoader {
 
 	private static void init() {
 		hasInit = true;
-		String usedItemSpritesString = "1111111111111111111111111111111111111101111111011111111111111001111111111111111111111111111011111111100110000011111110000000001111111001100000110000000100000011000000010000001100000000000000110000000000000000000000000000000000000000000000001100000000000000";
-		String usedTerrainSpritesString = "1111111111111111111111111111110111111111111111111111110111111111111111111111000111111011111111111111001111111110111111111111100011111111000010001111011110000000111111000000000011111100000000001111000000000111111000000000001101000000000001111111111111000011";
+		String usedItemSpritesString = APRON.getUsedItemSpritesString();
+		String usedTerrainSpritesString = APRON.getUsedTerrainSpritesString();
 
 		for (int i = 0; i < 256; ++i) {
 			USED_ITEM_SPRITES[i] = usedItemSpritesString.charAt(i) == '1';
@@ -683,13 +724,15 @@ public class ModLoader {
 			}
 		}
 
-		try {
-			Minecraft client = getMinecraftInstance();
-			if (client != null) client.gameRenderer = new EntityRendererProxy(client);
-		} catch (SecurityException | IllegalArgumentException var10) {
-			MOD_LOGGER.throwing("ModLoader", "init", var10);
-			ThrowException(var10);
-			throw new RuntimeException(var10);
+		if (APRON.isClient()) {
+			try {
+				Minecraft client = getMinecraftInstance();
+				if (client != null) client.gameRenderer = new EntityRendererProxy(client);
+			} catch (SecurityException | IllegalArgumentException var10) {
+				MOD_LOGGER.throwing("ModLoader", "init", var10);
+				ThrowException(var10);
+				throw new RuntimeException(var10);
+			}
 		}
 
 		try {
@@ -739,11 +782,13 @@ public class ModLoader {
 				}
 			}
 
-			Minecraft client = getMinecraftInstance();
+			if (APRON.isClient()) {
+				Minecraft client = getMinecraftInstance();
 
-			if (client != null) {
-				client.options.keyBindings = RegisterAllKeys(client.options.keyBindings);
-				client.options.load();
+				if (client != null) {
+					client.options.keyBindings = RegisterAllKeys(client.options.keyBindings);
+					client.options.load();
+				}
 			}
 
 			initStats();
@@ -810,6 +855,7 @@ public class ModLoader {
 	 * @param gui The type of GUI to check for. If null, will check for any GUI
 	 * @return true if GUI is open
 	 */
+	@Environment(EnvType.CLIENT)
 	public static boolean isGUIOpen(@Nullable Class<? extends Screen> gui) {
 		Minecraft client = getMinecraftInstance();
 		if (client == null) return false;
@@ -831,7 +877,7 @@ public class ModLoader {
 		Class<?> chk;
 
 		try {
-			chk = Class.forName(modName);
+			chk = Class.forName(modName, false, ModLoader.class.getClassLoader());
 		} catch (ClassNotFoundException var4) {
 			return false;
 		}
@@ -871,6 +917,7 @@ public class ModLoader {
 	 * @throws FileNotFoundException if the image is not found
 	 * @throws Exception             if the image is corrupted
 	 */
+	@Environment(EnvType.CLIENT)
 	public static BufferedImage loadImage(TextureManager textureManager, String path)
 			throws FileNotFoundException, Exception {
 		TexturePackManager packManager = textureManager.texturePackManager;
@@ -906,6 +953,7 @@ public class ModLoader {
 	 *
 	 * @param client instance of the game class
 	 */
+	@Environment(EnvType.CLIENT)
 	public static void OnTick(Minecraft client) {
 		if (!hasInit) {
 			init();
@@ -967,12 +1015,35 @@ public class ModLoader {
 		clock = newClock;
 	}
 
+	@Environment(EnvType.SERVER)
+	public static void OnTick(MinecraftServer minecraftserver) {
+		if (!hasInit) {
+			init();
+			LOGGER.debug("Initialized");
+		}
+
+		long l = 0L;
+
+		if (minecraftserver.worlds != null && minecraftserver.worlds[0] != null) {
+			l = minecraftserver.worlds[0].getWorldTime();
+
+			for(Entry<BaseMod, Boolean> entry : inGameHooks.entrySet()) {
+				if (clock != l || !entry.getValue()) {
+					entry.getKey().OnTickInGame(minecraftserver);
+				}
+			}
+		}
+
+		clock = l;
+	}
+
 	/**
 	 * Opens GUI for use with mods.
 	 *
 	 * @param player instance to open GUI for
 	 * @param screen instance of GUI to open for player
 	 */
+	@Environment(EnvType.CLIENT)
 	public static void OpenGUI(PlayerEntity player, Screen screen) {
 		if (!hasInit) {
 			init();
@@ -1002,16 +1073,26 @@ public class ModLoader {
 			LOGGER.debug("Initialized");
 		}
 
-		Random rnd = new Random(world.getSeed());
-		long xSeed = rnd.nextLong() / 2L * 2L + 1L;
-		long zSeed = rnd.nextLong() / 2L * 2L + 1L;
-		rnd.setSeed((long) chunkX * xSeed + (long) chunkZ * zSeed ^ world.getSeed());
+		if (APRON.isClient()) {
+			Random rnd = new Random(world.getSeed());
+			long xSeed = rnd.nextLong() / 2L * 2L + 1L;
+			long zSeed = rnd.nextLong() / 2L * 2L + 1L;
+			rnd.setSeed((long) chunkX * xSeed + (long) chunkZ * zSeed ^ world.getSeed());
 
-		for (BaseMod mod : MOD_LIST) {
-			if (source.toString().equals("RandomLevelSource")) {
-				mod.GenerateSurface(world, rnd, chunkX << 4, chunkZ << 4);
-			} else if (source.toString().equals("HellRandomLevelSource")) {
-				mod.GenerateNether(world, rnd, chunkX << 4, chunkZ << 4);
+			for (BaseMod mod : MOD_LIST) {
+				if (source.toString().equals("RandomLevelSource")) {
+					mod.GenerateSurface(world, rnd, chunkX << 4, chunkZ << 4);
+				} else if (source.toString().equals("HellRandomLevelSource")) {
+					mod.GenerateNether(world, rnd, chunkX << 4, chunkZ << 4);
+				}
+			}
+		} else {
+			for (BaseMod mod : MOD_LIST) {
+				if (source instanceof OverworldWorldSource) {
+					mod.GenerateSurface(world, world.rand, chunkX, chunkZ);
+				} else if (source instanceof NetherWorldSource) {
+					mod.GenerateNether(world, world.rand, chunkX, chunkZ);
+				}
 			}
 		}
 	}
@@ -1067,7 +1148,7 @@ public class ModLoader {
 
 	@SuppressWarnings({"SameParameterValue", "BulkFileAttributesRead"})
 	private static void readFromModFolder(File folder) throws IOException, IllegalArgumentException, SecurityException {
-		ClassLoader loader = Minecraft.class.getClassLoader();
+		ClassLoader loader = ModLoader.class.getClassLoader();
 
 		if (!folder.isDirectory()) {
 			throw new IllegalArgumentException("folder must be a Directory.");
@@ -1148,6 +1229,7 @@ public class ModLoader {
 	 * @param keyBindings Array of the original keys
 	 * @return the appended array
 	 */
+	@Environment(EnvType.CLIENT)
 	public static KeyBinding[] RegisterAllKeys(KeyBinding[] keyBindings) {
 		List<KeyBinding> combinedList = new LinkedList<>(Arrays.asList(keyBindings));
 
@@ -1163,6 +1245,7 @@ public class ModLoader {
 	 *
 	 * @param manager Reference to texture cache
 	 */
+	@Environment(EnvType.CLIENT)
 	public static void RegisterAllTextureOverrides(TextureManager manager) {
 		ANIM_LIST.clear();
 		Minecraft client = getMinecraftInstance();
@@ -1212,8 +1295,11 @@ public class ModLoader {
 	@SuppressWarnings("unchecked")
 	public static void RegisterBlock(@NotNull Block block, Class<? extends BlockItem> itemClass) {
 		try {
-			List<Block> list = (List<Block>) Session.defaultCreativeInventory;
-			list.add(block);
+			if (APRON.isClient()) {
+				List<Block> list = (List<Block>) Session.defaultCreativeInventory;
+				list.add(block);
+			}
+
 			int id = block.id;
 			BlockItem item;
 
@@ -1256,6 +1342,7 @@ public class ModLoader {
 	 * @param keyBinding  reference to the key to register. Define this in your mod file
 	 * @param allowRepeat when true the command will repeat. When false, only called once per press
 	 */
+	@Environment(EnvType.CLIENT)
 	public static void RegisterKey(BaseMod mod, KeyBinding keyBinding, boolean allowRepeat) {
 		Map<KeyBinding, boolean[]> keyMap = keyList.get(mod);
 
@@ -1274,7 +1361,8 @@ public class ModLoader {
 	 * @param id               The given name of entity. Used for saving
 	 */
 	public static void RegisterTileEntity(Class<? extends BlockEntity> blockEntityClass, String id) {
-		RegisterTileEntity(blockEntityClass, id, null);
+		BlockEntity.register(blockEntityClass, id);
+		if (APRON.isClient()) RegisterTileEntity(blockEntityClass, id, null);
 	}
 
 	/**
@@ -1284,11 +1372,10 @@ public class ModLoader {
 	 * @param id               The given name of entity. Used for saving
 	 * @param renderer         Block entity renderer to assign this block entity
 	 */
+	@Environment(EnvType.CLIENT)
 	@SuppressWarnings("unchecked")
 	public static void RegisterTileEntity(Class<? extends BlockEntity> blockEntityClass, String id, BlockEntityRenderer renderer) {
 		try {
-			BlockEntity.register(blockEntityClass, id);
-
 			if (renderer != null) {
 				BlockEntityRenderDispatcher ref = BlockEntityRenderDispatcher.INSTANCE;
 				Map<Class<? extends BlockEntity>, BlockEntityRenderer> renderers = (Map<Class<? extends BlockEntity>, BlockEntityRenderer>) ref.customRenderers;
@@ -1308,7 +1395,7 @@ public class ModLoader {
 	 * @param spawnGroup  The spawn group to remove entity from. (Monster, Creature, or Water)
 	 */
 	public static void RemoveSpawn(Class<? extends LivingEntity> entityClass, SpawnGroup spawnGroup) {
-		RemoveSpawn(entityClass, spawnGroup, (Biome) null);
+		RemoveSpawn(entityClass, spawnGroup, (Biome[]) null);
 	}
 
 	/**
@@ -1346,7 +1433,7 @@ public class ModLoader {
 	 * @param spawnGroup The spawn group to remove the entity from (Monster, Creature, or Water)
 	 */
 	public static void RemoveSpawn(String entityName, SpawnGroup spawnGroup) {
-		RemoveSpawn(entityName, spawnGroup, (Biome) null);
+		RemoveSpawn(entityName, spawnGroup, (Biome[]) null);
 	}
 
 	/**
@@ -1371,6 +1458,7 @@ public class ModLoader {
 	 * @param modelID ID of block model
 	 * @return true if block should be rendered using {@link #RenderInvBlock(BlockRenderer, Block, int, int)}
 	 */
+	@Environment(EnvType.CLIENT)
 	public static boolean RenderBlockIsItemFull3D(int modelID) {
 		if (!BLOCK_SPECIAL_INV.containsKey(modelID)) {
 			return modelID == 16;
@@ -1387,6 +1475,7 @@ public class ModLoader {
 	 * @param metadata of block; Damage on an item
 	 * @param modelID  ID of block model to render
 	 */
+	@Environment(EnvType.CLIENT)
 	public static void RenderInvBlock(BlockRenderer renderer, Block block, int metadata, int modelID) {
 		BaseMod mod = BLOCK_MODELS.get(modelID);
 
@@ -1407,6 +1496,7 @@ public class ModLoader {
 	 * @param modelID  ID of block model to render
 	 * @return true if model was rendered
 	 */
+	@Environment(EnvType.CLIENT)
 	public static boolean RenderWorldBlock(BlockRenderer renderer, BlockView world, int x, int y, int z, Block block, int modelID) {
 		BaseMod mod = BLOCK_MODELS.get(modelID);
 		return mod != null && mod.RenderWorldBlock(renderer, world, x, y, z, block, modelID);
@@ -1447,6 +1537,7 @@ public class ModLoader {
 	 * @param enable   whether to add or remove from list
 	 * @param useClock if true will only run once each tick on game clock, if false once every render frame
 	 */
+	@Environment(EnvType.CLIENT)
 	public static void SetInGUIHook(BaseMod mod, boolean enable, boolean useClock) {
 		if (enable) {
 			inGUIHooks.put(mod, useClock);
@@ -1641,12 +1732,18 @@ public class ModLoader {
 	 * @param e       the error to show
 	 */
 	public static void ThrowException(String message, Throwable e) {
-		Minecraft client = getMinecraftInstance();
+		LOGGER.error(message, e);
 
-		if (client != null) {
-			client.showGameStartupError(new GameStartupError(message, e));
+		if (APRON.isClient()) {
+			Minecraft client = getMinecraftInstance();
+
+			if (client != null) {
+				client.showGameStartupError(new GameStartupError(message, e));
+			} else {
+				throw new RuntimeException(message, e);
+			}
 		} else {
-			throw new RuntimeException(e);
+			throw new RuntimeException(message, e);
 		}
 	}
 
@@ -1655,5 +1752,29 @@ public class ModLoader {
 	}
 
 	private ModLoader() {
+	}
+
+	@Environment(EnvType.SERVER)
+	public static void Init(MinecraftServer minecraftserver) {
+		init();
+	}
+
+	@Environment(EnvType.SERVER)
+	public static void OpenGUI(PlayerEntity entityplayer, int i, Inventory iinventory, Container container) {
+		if (!hasInit) {
+			init();
+		}
+
+		if (entityplayer instanceof ServerPlayerEntity) {
+			ServerPlayerEntity entityplayermp = (ServerPlayerEntity)entityplayer;
+
+			entityplayermp.method_314();
+			int j = entityplayermp.field_260;
+			entityplayermp.packetHandler.send(new OpenContainerS2CPacket(j, i, iinventory.getContainerName(), iinventory.getInventorySize()));
+			entityplayermp.container = container;
+			entityplayermp.container.currentContainerId = j;
+			entityplayermp.container.addListener(entityplayermp);
+		}
+
 	}
 }
