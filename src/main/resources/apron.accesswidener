@@ -189,3 +189,5 @@ accessible method net/minecraft/entity/player/PlayerEntity method_520 (Lnet/mine
 accessible method net/minecraft/server/entity/player/ServerPlayerEntity method_314 ()V
 accessible field net/minecraft/server/entity/player/ServerPlayerEntity field_260 I
 accessible field net/minecraft/server/network/ServerPlayPacketHandler player Lnet/minecraft/server/entity/player/ServerPlayerEntity;
+
+accessible class argo/jdom/JsonListenerToJdomAdapter$NodeContainer

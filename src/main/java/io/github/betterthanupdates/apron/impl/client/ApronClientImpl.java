@@ -27,7 +27,7 @@ public final class ApronClientImpl implements ApronApi, ClientModInitializer {
 	public static ApronClientImpl instance;
 
 	@Nullable
-	private static Minecraft client = (Minecraft) FabricLoaderImpl.INSTANCE.getGameInstance();
+	private Minecraft client;
 
 	@Nullable
 	public World getWorld() {
@@ -95,7 +95,7 @@ public final class ApronClientImpl implements ApronApi, ClientModInitializer {
 
 	@Override
 	public Runnable getGame() {
-		return client;
+		return this.client;
 	}
 
 	/**
@@ -104,6 +104,7 @@ public final class ApronClientImpl implements ApronApi, ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		ApronApi.super.onInitialize();
+		this.client = (Minecraft) FabricLoaderImpl.INSTANCE.getGameInstance();
 		instance = this;
 	}
 
