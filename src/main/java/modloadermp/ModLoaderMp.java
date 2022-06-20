@@ -308,14 +308,8 @@ public class ModLoaderMp {
 
 	@Environment(EnvType.CLIENT)
 	private static void sendPacket(Packet230ModLoader packet) {
-		if (!packet230Received) return;
-
-		World world = APRON.getWorld();
-
-		if (world != null && world.isClient) {
-			((Minecraft) Objects.requireNonNull(APRON.getGame())).getPacketHandler().sendPacket(packet);
-		} else {
-			((MinecraftServer) Objects.requireNonNull(APRON.getGame())).serverPlayerConnectionManager.sendToAll(packet);
+		if (packet230Received && ModLoader.getMinecraftInstance().world != null && ModLoader.getMinecraftInstance().world.isClient) {
+			ModLoader.getMinecraftInstance().getPacketHandler().sendPacket(packet);
 		}
 	}
 
