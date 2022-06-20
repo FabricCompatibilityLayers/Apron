@@ -1,7 +1,7 @@
 package modloader;
 
-import static io.github.betterthanupdates.babricated.BabricatedForge.BUILTIN_RML_MODS;
-import static io.github.betterthanupdates.babricated.BabricatedForge.MOD_CACHE_FOLDER;
+import static io.github.betterthanupdates.apron.Apron.BUILTIN_RML_MODS;
+import static io.github.betterthanupdates.apron.Apron.MOD_CACHE_FOLDER;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -78,8 +78,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.source.WorldSource;
 
-import io.github.betterthanupdates.babricated.BabricatedForge;
-import io.github.betterthanupdates.babricated.api.BabricatedApi;
+import io.github.betterthanupdates.apron.Apron;
+import io.github.betterthanupdates.apron.api.ApronApi;
 
 @SuppressWarnings("unused")
 public class ModLoader {
@@ -100,7 +100,7 @@ public class ModLoader {
 	private static final Map<BaseMod, Map<KeyBinding, boolean[]>> keyList = new HashMap<>();
 	private static final File LOG_FILE = new File(Minecraft.getGameDirectory(), "ModLoader.txt");
 	private static final java.util.logging.Logger MOD_LOGGER = java.util.logging.Logger.getLogger("ModLoader");
-	public static final Logger LOGGER = Logger.get("Babricated Forge", "ModLoader");
+	public static final Logger LOGGER = Logger.get("Apron", "ModLoader");
 	private static FileHandler logHandler = null;
 	private static final LinkedList<BaseMod> MOD_LIST = new LinkedList<>();
 	private static int nextBlockModelID = 1000;
@@ -114,8 +114,8 @@ public class ModLoader {
 	private static final boolean[] USED_TERRAIN_SPRITES = new boolean[256];
 	public static final String VERSION = "ModLoader Beta 1.7.3";
 
-	// Babricated
-	static final BabricatedApi BAPI = BabricatedApi.getInstance();
+	// Apron
+	static final ApronApi APRON = ApronApi.getInstance();
 
 	/**
 	 * Used to give your achievement a readable name and description.
@@ -431,7 +431,7 @@ public class ModLoader {
 			throw new IllegalArgumentException("spawnList cannot be null");
 		} else {
 			if (biomes == null || biomes.length > 0 && biomes[0] == null) {
-				biomes = BabricatedForge.getStandardBiomes();
+				biomes = APRON.getStandardBiomes();
 			}
 
 			for (Biome biome : biomes) {
@@ -534,7 +534,7 @@ public class ModLoader {
 	@Nullable
 	@Environment(EnvType.CLIENT)
 	public static Minecraft getMinecraftInstance() {
-		return (Minecraft) BabricatedApi.getInstance().getGame();
+		return (Minecraft) ApronApi.getInstance().getGame();
 	}
 
 	/**
@@ -716,7 +716,7 @@ public class ModLoader {
 				LOGGER.error("Path to mod folder is not a directory!");
 			}
 
-			for (Path rootPath : BabricatedForge.MOD_CONTAINER.getRootPaths()) {
+			for (Path rootPath : Apron.MOD_CONTAINER.getRootPaths()) {
 				try {
 					readFromClassPath(rootPath.toFile());
 				} catch (UnsupportedOperationException ignored) {
@@ -1326,7 +1326,7 @@ public class ModLoader {
 			throw new IllegalArgumentException("spawnList cannot be null");
 		} else {
 			if (biomes == null) {
-				biomes = BabricatedForge.getStandardBiomes();
+				biomes = APRON.getStandardBiomes();
 			}
 
 			for (Biome biome : biomes) {
@@ -1506,7 +1506,7 @@ public class ModLoader {
 	 */
 	public static <T, E> void setPrivateValue(Class<? super T> instanceClass, T instance, String fieldName, E value) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
 		try {
-			fieldName = BabricatedForge.getRemappedFieldName(instanceClass, fieldName);
+			fieldName = Apron.getRemappedFieldName(instanceClass, fieldName);
 			Field f = instanceClass.getDeclaredField(fieldName);
 
 			if (field_modifiers == null) {

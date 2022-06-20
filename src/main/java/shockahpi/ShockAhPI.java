@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionData;
 import net.minecraft.world.dimension.DimensionFile;
 
-import io.github.betterthanupdates.babricated.api.BabricatedApi;
+import io.github.betterthanupdates.apron.api.ApronApi;
 
 /**
  * AKA "mod_SAPI" after remapping.
@@ -78,7 +78,7 @@ public class ShockAhPI extends BaseMod {
 			AbstractClientPlayerEntity player = game.player;
 
 			if (player != null && !(player instanceof SapiClientPlayerEntity)) {
-				SapiClientPlayerEntity newPlayer = new SapiClientPlayerEntity((Minecraft) BabricatedApi.getInstance().getGame(),
+				SapiClientPlayerEntity newPlayer = new SapiClientPlayerEntity((Minecraft) ApronApi.getInstance().getGame(),
 						player.world, game.session, player.dimensionId);
 				CompoundTag tag = new CompoundTag();
 				player.writeNBT(tag);

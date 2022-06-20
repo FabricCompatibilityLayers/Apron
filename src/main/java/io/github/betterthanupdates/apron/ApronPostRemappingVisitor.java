@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.babricated;
+package io.github.betterthanupdates.apron;
 
 import net.fabricmc.tinyremapper.TinyRemapper;
 import net.fabricmc.tinyremapper.api.TrClass;
@@ -6,7 +6,7 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-public class BabricatedPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvider {
+public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvider {
 	@Override
 	public ClassVisitor insertApplyVisitor(TrClass cls, ClassVisitor next) {
 		return new ClassVisitor(Opcodes.ASM9, next) {

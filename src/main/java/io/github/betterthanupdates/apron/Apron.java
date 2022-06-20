@@ -1,7 +1,6 @@
-package io.github.betterthanupdates.babricated;
+package io.github.betterthanupdates.apron;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -19,11 +18,9 @@ import org.jetbrains.annotations.ApiStatus;
 import org.spongepowered.include.com.google.common.collect.ImmutableList;
 import shockahpi.ShockAhPI;
 
-import net.minecraft.world.biome.Biome;
-
 @ApiStatus.Internal
-public final class BabricatedForge {
-	public static final String MOD_ID = "babricated-forge";
+public final class Apron {
+	public static final String MOD_ID = "apron";
 	public static long fabricModCount = 0, rmlModCount = 0;
 
 	// Logging
@@ -38,7 +35,7 @@ public final class BabricatedForge {
 	);
 
 	static {
-		LOGGER = Logger.get("Babricated Forge");
+		LOGGER = Logger.get("Apron");
 
 		MOD_CACHE_FOLDER = new File(Constants.VERSIONED_FOLDER, "mods");
 
@@ -56,7 +53,7 @@ public final class BabricatedForge {
 	 * @return the string to replace it with
 	 */
 	public static String versionString(final String original) {
-		return "Babricated Minecraft 1.7.3" + (original.endsWith(" (") ? " (" : "");
+		return "Minecraft Beta 1.7.3" + (original.endsWith(" (") ? " (" : "");
 	}
 
 	/**
@@ -85,24 +82,5 @@ public final class BabricatedForge {
 		}
 
 		return name;
-	}
-
-	public static Biome[] getStandardBiomes() {
-		List<Biome> biomes = new ArrayList<>();
-
-		// Vanilla Biomes
-		biomes.add(Biome.RAINFOREST);
-		biomes.add(Biome.SWAMPLAND);
-		biomes.add(Biome.SEASONAL_FOREST);
-		biomes.add(Biome.FOREST);
-		biomes.add(Biome.SAVANNA);
-		biomes.add(Biome.SHRUBLAND);
-		biomes.add(Biome.TAIGA);
-		biomes.add(Biome.DESERT);
-		biomes.add(Biome.PLAINS);
-		biomes.add(Biome.ICE_DESERT);
-		biomes.add(Biome.TUNDRA);
-
-		return biomes.toArray(new Biome[0]);
 	}
 }

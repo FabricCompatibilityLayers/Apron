@@ -14,16 +14,16 @@ import net.minecraft.block.Block;
 import net.minecraft.client.render.block.BlockRenderer;
 import net.minecraft.item.Item;
 
-import io.github.betterthanupdates.babricated.api.BabricatedApi;
-import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
+import io.github.betterthanupdates.apron.api.ApronApi;
+import io.github.betterthanupdates.apron.impl.client.ApronClientImpl;
 
 @SuppressWarnings("unused")
 @Environment(EnvType.CLIENT)
 public class MinecraftForgeClient {
 	private static final ICustomItemRenderer[] customItemRenderers = new ICustomItemRenderer[Item.byId.length];
 
-	// Babricated
-	private static final ClientUtil BAPI = (ClientUtil) BabricatedApi.getInstance();
+	// Apron
+	private static final ApronClientImpl BAPI = (ApronClientImpl) ApronApi.getInstance();
 
 	public MinecraftForgeClient() {
 	}

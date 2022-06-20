@@ -9,7 +9,7 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.render.TextureBinder;
 
-import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
+import io.github.betterthanupdates.apron.impl.client.ApronClientImpl;
 
 @SuppressWarnings("unused")
 @Environment(EnvType.CLIENT)
@@ -25,7 +25,7 @@ public class ModTextureStatic extends TextureBinder {
 		super(slot);
 		this.textureSize = size;
 		this.renderMode = dst;
-		this.bindTexture(ClientUtil.instance.getTextureManager());
+		this.bindTexture(ApronClientImpl.instance.getTextureManager());
 		int targetWidth = GL11.glGetTexLevelParameteri(3553, 0, 4096) / 16;
 		int targetHeight = GL11.glGetTexLevelParameteri(3553, 0, 4097) / 16;
 		int width = source.getWidth();

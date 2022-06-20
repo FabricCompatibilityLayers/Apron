@@ -1,7 +1,8 @@
-package io.github.betterthanupdates.babricated.impl.server;
+package io.github.betterthanupdates.apron.impl.server;
 
 import java.util.List;
 
+import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -10,12 +11,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
-import io.github.betterthanupdates.babricated.BabricatedForge;
-import io.github.betterthanupdates.babricated.api.BabricatedApi;
+import io.github.betterthanupdates.apron.api.ApronApi;
 
-public class ServerUtil implements BabricatedApi {
+public final class ApronServerImpl implements ApronApi, DedicatedServerModInitializer {
 	@ApiStatus.Internal
-	public static BabricatedApi instance;
+	public static ApronApi instance;
+
+	private static final MinecraftServer server = (MinecraftServer) FabricLoaderImpl.INSTANCE.getGameInstance();
 
 	@Override
 	public @Nullable Runnable getGame() {
@@ -56,13 +58,12 @@ public class ServerUtil implements BabricatedApi {
 		return getPlayers().get(0);
 	}
 
+	/**
+	 * This will set the {@link #instance} so that this implementation can be used by the API.
+	 */
 	@Override
 	public void onInitializeServer() {
-		if (instance == null) {
-			instance = this;
-			BabricatedForge.LOGGER.info("Server Util is now ready");
-		} else {
-			throw new RuntimeException("Server Util initialized more than once!");
-		}
+		ApronApi.super.onInitialize();
+		instance = this;
 	}
 }

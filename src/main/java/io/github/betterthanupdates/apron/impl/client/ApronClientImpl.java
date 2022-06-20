@@ -1,9 +1,8 @@
-package io.github.betterthanupdates.babricated.impl.client;
-
-import static io.github.betterthanupdates.babricated.BabricatedForge.LOGGER;
+package io.github.betterthanupdates.apron.impl.client;
 
 import java.util.List;
 
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +13,7 @@ import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 
-import io.github.betterthanupdates.babricated.api.BabricatedApi;
+import io.github.betterthanupdates.apron.api.ApronApi;
 
 /**
  * Provides quick access to fields in the {@link Minecraft client}.<br>
@@ -22,12 +21,12 @@ import io.github.betterthanupdates.babricated.api.BabricatedApi;
  * If any method inside this class is called before the client is initialized,
  * something has gone horribly wrong.
  */
-public final class ClientUtil implements BabricatedApi {
+public final class ApronClientImpl implements ApronApi, ClientModInitializer {
 	@ApiStatus.Internal
-	public static ClientUtil instance;
+	public static ApronClientImpl instance;
 
 	@Nullable
-	private static Minecraft client = null;
+	private static Minecraft client = (Minecraft) FabricLoaderImpl.INSTANCE.getGameInstance();
 
 	@Nullable
 	public World getWorld() {
@@ -79,17 +78,11 @@ public final class ClientUtil implements BabricatedApi {
 	}
 
 	/**
-	 * This will print a line when this class officially becomes usable.<br>
-	 * If it's used any time before then, it's <i>probably</i> going to break something.
+	 * This will set the {@link #instance} so that this implementation can be used by the API.
 	 */
 	@Override
 	public void onInitializeClient() {
-		if (instance == null) {
-			instance = this;
-			client = (Minecraft) FabricLoaderImpl.INSTANCE.getGameInstance();
-			LOGGER.info("Client Util is now ready");
-		} else {
-			throw new RuntimeException("Client Util initialized more than once!");
-		}
+		ApronApi.super.onInitialize();
+		instance = this;
 	}
 }

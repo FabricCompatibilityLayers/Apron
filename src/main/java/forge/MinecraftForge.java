@@ -19,7 +19,7 @@ import io.github.betterthanupdates.forge.item.ToolEffectiveness;
 
 @SuppressWarnings("unused")
 public class MinecraftForge {
-	static final Logger LOGGER = Logger.get("Babricated Forge", "Minecraft Forge");
+	static final Logger LOGGER = Logger.get("Apron", "Minecraft Forge");
 
 	private static final LinkedList<IBucketHandler> bucketHandlers = new LinkedList<>();
 

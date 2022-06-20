@@ -1,10 +1,19 @@
 {
   "schemaVersion": 1,
-  "id": "babricated-forge",
+  "id": "apron",
   "version": "${version}",
-  "name": "Babricated Forge",
-  "description": "A compatibility layer to load Forge mods with Fabric.",
+  "name": "Apron",
+  "description": "A compatibility layer for legacy API mods.\n- Risugami's ModLoader\n- Risugami's ModLoaderMP\n- Minecraft Forge\n- AudioMod\n- ShockAhPI",
   "authors": [
+    {
+      "name": "Better Than Updates",
+      "contact": {
+        "sources": "https://github.com/Better-Than-Updates-MC/babricated-forge",
+        "issues": "https://github.com/Better-Than-Updates-MC/babricated-forge/issues"
+      }
+    }
+  ],
+  "contributors": [
     {
       "name": "CatCore",
       "contact": {
@@ -25,23 +34,23 @@
     "issues": "https://github.com/Better-Than-Updates-MC/babricated-forge/issues"
   },
   "license": "MIT",
-  "icon": "assets/babricated-forge/icon.png",
+  "icon": "assets/apron/icon.png",
   "environment": "*",
   "entrypoints": {
     "client": [
-      "io.github.betterthanupdates.babricated.impl.client.ClientUtil"
+      "io.github.betterthanupdates.apron.impl.client.ApronClientImpl"
     ],
     "server": [
-      "io.github.betterthanupdates.babricated.impl.server.ServerUtil"
+      "io.github.betterthanupdates.apron.impl.server.ApronServerImpl"
     ],
     "mod-remapper-api:modremapper": [
-      "io.github.betterthanupdates.babricated.BabricatedModRemapper"
+      "io.github.betterthanupdates.apron.ApronModRemapper"
     ]
   },
-  "accessWidener": "forge.accesswidener",
+  "accessWidener": "apron.accesswidener",
   "mixins": [
+    "apron.mixins.json",
     "audiomod.mixins.json",
-    "babricated.mixins.json",
     "forge.mixins.json",
     "modloader.mixins.json",
     "shockahpi.mixins.json"
@@ -50,5 +59,8 @@
     "fabricloader": ">=0.13.3",
     "minecraft": "1.0.0-beta.7.3",
     "mod-remapping-api": "*"
+  },
+  "conflicts": {
+    "modloader": "<2.0.0"
   }
 }

@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "io.github.betterthanupdates.babricated.mixin",
+  "package": "io.github.betterthanupdates.apron.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "BlockMixin",

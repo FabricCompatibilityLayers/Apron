@@ -26,8 +26,12 @@ import net.minecraft.client.sound.SoundMap;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
-import io.github.betterthanupdates.babricated.api.BabricatedApi;
+import io.github.betterthanupdates.apron.api.ApronApi;
 
+/**
+ * Believe it or not, this is all of AudioMod!
+ * @see paulscode.sound.codecs.CodecIBXM
+ */
 @Mixin(SoundHelper.class)
 public abstract class SoundHelperMixin {
 	@Shadow
@@ -73,7 +77,7 @@ public abstract class SoundHelperMixin {
 		loadModAudio("./resources/mod/music", this.music);
 		loadModAudio("./resources/mod/cavemusic", this.cave);
 
-		this.client = (Minecraft) BabricatedApi.getInstance().getGame();
+		this.client = (Minecraft) ApronApi.getInstance().getGame();
 	}
 
 	/**

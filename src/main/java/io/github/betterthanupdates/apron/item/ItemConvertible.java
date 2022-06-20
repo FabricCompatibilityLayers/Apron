@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.babricated.item;
+package io.github.betterthanupdates.apron.item;
 
 import org.jetbrains.annotations.Nullable;
 

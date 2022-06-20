@@ -26,7 +26,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.HitResult;
 
-import io.github.betterthanupdates.babricated.impl.client.ClientUtil;
+import io.github.betterthanupdates.apron.impl.client.ApronClientImpl;
 import io.github.betterthanupdates.forge.ForgeClientReflection;
 import io.github.betterthanupdates.forge.client.render.ForgeTessellator;
 
@@ -48,9 +48,9 @@ public class ForgeHooksClient {
 	static Tessellator defaultTessellator = null;
 	static int renderPass = -1;
 
-	// Babricated
+	// Apron
 	@NotNull
-	private static final ClientUtil BAPI = ClientUtil.instance;
+	private static final ApronClientImpl BAPI = ApronClientImpl.instance;
 	@NotNull
 	private static final TextureManager textureManager = Objects.requireNonNull(BAPI.getTextureManager());
 

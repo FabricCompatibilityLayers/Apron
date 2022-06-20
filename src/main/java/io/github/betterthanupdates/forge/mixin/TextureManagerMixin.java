@@ -61,7 +61,7 @@ public abstract class TextureManagerMixin {
 		} else {
 			try {
 				if (ForgeClientReflection.Tessellator$renderingWorldRenderer) {
-					Logger.get("Babricated Forge", "Minecraft Forge").warn("Texture %s not preloaded, will cause render glitches!", s);
+					Logger.get("Apron", "Minecraft Forge").warn("Texture %s not preloaded, will cause render glitches!", s);
 				}
 
 				((Buffer) this.field_1249).clear();

@@ -18,7 +18,7 @@ import net.minecraft.packet.play.OpenContainerS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
-import io.github.betterthanupdates.babricated.api.BabricatedApi;
+import io.github.betterthanupdates.apron.api.ApronApi;
 
 @SuppressWarnings("unused")
 public class ModLoaderMp {
@@ -29,8 +29,8 @@ public class ModLoaderMp {
 	private static final Map<Integer, NetClientHandlerEntity> NET_CLIENT_HANDLER_MAP = new HashMap<>();
 	private static final Map<Integer, BaseModMp> GUI_MOD_MAP = new HashMap<>();
 
-	// Babricated
-	private static final BabricatedApi BAPI = BabricatedApi.getInstance();
+	// Apron
+	private static final ApronApi APRON = ApronApi.getInstance();
 
 	public static void Init() {
 		if (!ModLoaderMp.hasInit) {
@@ -61,9 +61,9 @@ public class ModLoaderMp {
 
 			if (netclienthandlerentity != null && ISpawnable.class.isAssignableFrom(netclienthandlerentity.entityClass)) {
 				try {
-					Entity entity = netclienthandlerentity.entityClass.getConstructor(World.class).newInstance(BAPI.getWorld());
+					Entity entity = netclienthandlerentity.entityClass.getConstructor(World.class).newInstance(APRON.getWorld());
 					((ISpawnable) entity).spawn(packet);
-					ClientWorld world = (ClientWorld) BAPI.getWorld();
+					ClientWorld world = (ClientWorld) APRON.getWorld();
 
 					if (world != null) {
 						world.method_1495(entity.entityId, entity);
@@ -137,7 +137,7 @@ public class ModLoaderMp {
 		final Screen guiScreen = basemodmp.HandleGUI(packet.inventoryType);
 
 		if (guiScreen != null) {
-			PlayerEntity player = BAPI.getPlayer();
+			PlayerEntity player = APRON.getPlayer();
 
 			if (player != null) {
 				ModLoader.OpenGUI(player, guiScreen);
@@ -243,12 +243,12 @@ public class ModLoaderMp {
 	private static void sendPacket(Packet230ModLoader packet) {
 		if (!packet230Received) return;
 
-		World world = BAPI.getWorld();
+		World world = APRON.getWorld();
 
 		if (world != null && world.isClient) {
-			((Minecraft) Objects.requireNonNull(BAPI.getGame())).getPacketHandler().sendPacket(packet);
+			((Minecraft) Objects.requireNonNull(APRON.getGame())).getPacketHandler().sendPacket(packet);
 		} else {
-			((MinecraftServer) Objects.requireNonNull(BAPI.getGame())).serverPlayerConnectionManager.sendToAll(packet);
+			((MinecraftServer) Objects.requireNonNull(APRON.getGame())).serverPlayerConnectionManager.sendToAll(packet);
 		}
 	}
 

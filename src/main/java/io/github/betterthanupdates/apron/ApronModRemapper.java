@@ -1,7 +1,6 @@
-package io.github.betterthanupdates.babricated;
+package io.github.betterthanupdates.apron;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,43 +9,43 @@ import java.util.Optional;
 import fr.catcore.modremapperapi.api.ModRemapper;
 import fr.catcore.modremapperapi.api.RemapLibrary;
 import fr.catcore.modremapperapi.remapping.RemapUtil;
-import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.tinyremapper.TinyRemapper;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
-public final class BabricatedModRemapper implements ModRemapper {
+public final class ApronModRemapper implements ModRemapper {
 	@Override
 	public String[] getJarFolders() {
 		return new String[0];
 	}
 
 	private Path getLibPath(String name) {
-		return BabricatedForge.MOD_CONTAINER.findPath("./libs/" + name + ".zip").orElseThrow(RuntimeException::new);
+		return Apron.MOD_CONTAINER.findPath("./libs/" + name + ".zip").orElseThrow(RuntimeException::new);
 	}
 
 	@Override
 	public RemapLibrary[] getRemapLibraries() {
 		RemapLibrary[] libraries = new RemapLibrary[0];
-		switch (FabricLoader.getInstance().getEnvironmentType()) {
-			case CLIENT:
-				libraries = new RemapLibrary[] {
-					new RemapLibrary(getLibPath("modloader-b1.7.3"), new ArrayList<>(), "modloader.zip"),
-					new RemapLibrary(getLibPath("modloadermp-1.7.3-unofficial-v2"), new ArrayList<>(), "modloadermp-client.zip"),
-					new RemapLibrary(getLibPath("minecraftforge-client-1.0.7-20110907"), new ArrayList<>(), "forge-client.zip"),
-					new RemapLibrary(getLibPath("audiomod-b1.7.3"), new ArrayList<>(), "audiomod.zip"),
-					new RemapLibrary(getLibPath("shockahpi-r8"), new ArrayList<>(), "shockahpi.zip")
-				};
-				break;
-			case SERVER:
-				libraries = new RemapLibrary[] {
-					new RemapLibrary(getLibPath("modloadermp-1.7.3-unofficial-server-v2"), new ArrayList<>(), "modloadermp-server.zip"),
-					new RemapLibrary(getLibPath("minecraftforge-server-1.0.7-20110907"), new ArrayList<>(), "forge-server.zip")
-				};
-				break;
-		}
 
 		return libraries;
+	}
+
+	@Override
+	public void addRemapLibraries(List<RemapLibrary> libraries, EnvType environment) {
+		switch (environment) {
+			case CLIENT:
+				libraries.add(new RemapLibrary(getLibPath("modloader-b1.7.3"), "modloader.zip"));
+				libraries.add(new RemapLibrary(getLibPath("modloadermp-1.7.3-unofficial-v2"), "modloadermp-client.zip"));
+				libraries.add(new RemapLibrary(getLibPath("minecraftforge-client-1.0.7-20110907"), "forge-client.zip"));
+				libraries.add(new RemapLibrary(getLibPath("audiomod-b1.7.3"), "audiomod.zip"));
+				libraries.add(new RemapLibrary(getLibPath("shockahpi-r8"), "shockahpi.zip"));
+				break;
+			case SERVER:
+				libraries.add(new RemapLibrary(getLibPath("modloadermp-1.7.3-unofficial-server-v2"), "modloadermp-server.zip"));
+				libraries.add(new RemapLibrary(getLibPath("minecraftforge-server-1.0.7-20110907"), "forge-server.zip"));
+				break;
+		}
 	}
 
 	@Override
@@ -100,7 +99,7 @@ public final class BabricatedModRemapper implements ModRemapper {
 
 	@Override
 	public Optional<TinyRemapper.ApplyVisitorProvider> getPostRemappingVisitor() {
-		return Optional.of(new BabricatedPostRemappingVisitor());
+		return Optional.of(new ApronPostRemappingVisitor());
 	}
 
 	@Override
