@@ -1,5 +1,7 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.forge.mixin.client;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -13,6 +15,7 @@ import net.minecraft.packet.play.PlayerDiggingC2SPacket;
 
 import io.github.betterthanupdates.forge.block.ForgeBlock;
 
+@Environment(EnvType.CLIENT)
 @Mixin(MultiplayerClientInteractionManager.class)
 public abstract class MultiplayerClientInteractionManagerMixin extends ClientInteractionManager {
 	@Shadow

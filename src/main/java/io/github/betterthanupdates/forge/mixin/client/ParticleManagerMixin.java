@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.forge.mixin.client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.Random;
 
 import forge.BlockTextureParticles;
 import forge.ITextureProvider;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -24,6 +26,7 @@ import net.minecraft.world.World;
 
 import io.github.betterthanupdates.forge.client.particle.ForgeParticleManager;
 
+@Environment(EnvType.CLIENT)
 @Mixin(ParticleManager.class)
 public abstract class ParticleManagerMixin implements ForgeParticleManager {
 	@Shadow

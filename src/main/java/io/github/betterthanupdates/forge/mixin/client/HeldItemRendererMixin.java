@@ -1,8 +1,10 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.forge.mixin.client;
 
 import forge.ForgeHooksClient;
 import forge.ICustomItemRenderer;
 import forge.MinecraftForgeClient;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -17,6 +19,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+@Environment(EnvType.CLIENT)
 @Mixin(HeldItemRenderer.class)
 public class HeldItemRendererMixin {
 	@Shadow

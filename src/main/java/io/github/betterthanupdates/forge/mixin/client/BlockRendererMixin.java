@@ -1,6 +1,8 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.forge.mixin.client;
 
 import modloader.ModLoader;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -21,6 +23,7 @@ import net.minecraft.world.BlockView;
 import io.github.betterthanupdates.forge.ForgeClientReflection;
 import io.github.betterthanupdates.forge.client.render.ForgeTessellator;
 
+@Environment(EnvType.CLIENT)
 @Mixin(BlockRenderer.class)
 public abstract class BlockRendererMixin {
 	@Shadow

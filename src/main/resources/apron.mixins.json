@@ -5,13 +5,13 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "BlockMixin",
-    "InGameHudMixin",
     "ItemEntityMixin",
     "ItemMixin",
-    "ItemStackMixin",
-    "TitleScreenMixin"
+    "ItemStackMixin"
   ],
   "client": [
+    "client.InGameHudMixin",
+    "client.TitleScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

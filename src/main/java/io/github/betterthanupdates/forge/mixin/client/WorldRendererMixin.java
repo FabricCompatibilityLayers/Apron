@@ -1,9 +1,11 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.forge.mixin.client;
 
 import java.util.HashSet;
 import java.util.List;
 
 import forge.ForgeHooksClient;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -20,6 +22,7 @@ import net.minecraft.world.WorldPopulationRegion;
 import net.minecraft.world.chunk.Chunk;
 
 @SuppressWarnings("rawtypes")
+@Environment(EnvType.CLIENT)
 @Mixin(class_66.class)
 public abstract class WorldRendererMixin {
 	@Shadow
