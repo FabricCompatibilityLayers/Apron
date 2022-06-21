@@ -197,10 +197,7 @@ public class ModLoader {
 	 */
 	@Environment(EnvType.CLIENT)
 	public static void AddAllRenderers(Map<Class<? extends Entity>, EntityRenderer> rendererMap) {
-		if (!hasInit) {
-			init();
-			LOGGER.debug("Initialized");
-		}
+		init();
 
 		for (BaseMod mod : MOD_LIST) {
 			mod.AddRenderer(rendererMap);
@@ -704,7 +701,8 @@ public class ModLoader {
 	}
 
 	private static void init() {
-		hasInit = true;
+		if (hasInit) return;
+
 		String usedItemSpritesString = APRON.getUsedItemSpritesString();
 		String usedTerrainSpritesString = APRON.getUsedTerrainSpritesString();
 
@@ -801,6 +799,9 @@ public class ModLoader {
 
 			throw new RuntimeException(e);
 		}
+
+		hasInit = true;
+		LOGGER.debug("Initialized");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -953,10 +954,7 @@ public class ModLoader {
 	 */
 	@Environment(EnvType.CLIENT)
 	public static void OnTick(Minecraft client) {
-		if (!hasInit) {
-			init();
-			LOGGER.debug("Initialized");
-		}
+		init();
 
 		if (texPack == null || !Objects.equals(client.options.activeTexturePack, texPack)) {
 			texturesAdded = false;
@@ -1015,10 +1013,7 @@ public class ModLoader {
 
 	@Environment(EnvType.SERVER)
 	public static void OnTick(MinecraftServer server) {
-		if (!hasInit) {
-			init();
-			LOGGER.debug("Initialized");
-		}
+		init();
 
 		long l = 0L;
 
@@ -1043,10 +1038,7 @@ public class ModLoader {
 	 */
 	@Environment(EnvType.CLIENT)
 	public static void OpenGUI(PlayerEntity player, Screen screen) {
-		if (!hasInit) {
-			init();
-			LOGGER.debug("Initialized");
-		}
+		init();
 
 		Minecraft client = getMinecraftInstance();
 
@@ -1066,10 +1058,7 @@ public class ModLoader {
 	 * @param world  World to generate blocks in
 	 */
 	public static void PopulateChunk(WorldSource source, int chunkX, int chunkZ, World world) {
-		if (!hasInit) {
-			init();
-			LOGGER.debug("Initialized");
-		}
+		init();
 
 		if (APRON.isClient()) {
 			Random rnd = new Random(world.getSeed());
