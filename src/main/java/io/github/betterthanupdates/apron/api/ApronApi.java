@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +19,7 @@ import io.github.betterthanupdates.apron.impl.server.ApronServerImpl;
 public interface ApronApi extends ModInitializer {
 	@NotNull
 	static ApronApi getInstance() {
-		switch (FabricLoader.getInstance().getEnvironmentType()) {
+		switch (Apron.getEnvironment()) {
 			case SERVER:
 				return ApronServerImpl.instance;
 			case CLIENT:

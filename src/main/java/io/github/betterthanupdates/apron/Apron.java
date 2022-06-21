@@ -9,6 +9,7 @@ import fr.catcore.modremapperapi.utils.Constants;
 import modloader.BaseMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.MappingResolver;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
 import net.fabricmc.mapping.tree.ClassDef;
@@ -69,18 +70,27 @@ public final class Apron {
 		return fabricModCount + " Fabric mods";
 	}
 
-	public static String getRemappedFieldName(Class<?> instanceClass, String name) {
-		for (ClassDef classDef : FabricLauncherBase.getLauncher().getMappingConfiguration().getMappings().getClasses()) {
-			if (classDef.getName(FabricLoader.getInstance().getMappingResolver().getCurrentRuntimeNamespace())
-					.replace(".", "/").equals(instanceClass.getName().replace(".", "/"))) {
-				for (FieldDef fieldDef : classDef.getFields()) {
-					if (Objects.equals(fieldDef.getName(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT ? "client" : "server"), name)) {
-						return fieldDef.getName(FabricLoader.getInstance().getMappingResolver().getCurrentRuntimeNamespace());
+	public static String getRemappedFieldName(Class<?> type, String name) {
+		final MappingResolver resolver = FabricLoader.getInstance().getMappingResolver();
+
+		for (ClassDef def : FabricLauncherBase.getLauncher().getMappingConfiguration().getMappings().getClasses()) {
+			if (def.getName(resolver.getCurrentRuntimeNamespace())
+					.replace(".", "/").equals(type.getName().replace(".", "/"))) {
+				for (FieldDef fieldDef : def.getFields()) {
+					if (Objects.equals(fieldDef.getName(getEnvironment().equals(EnvType.CLIENT) ? "client" : "server"), name)) {
+						return fieldDef.getName(resolver.getCurrentRuntimeNamespace());
 					}
 				}
 			}
 		}
 
 		return name;
+	}
+
+	/**
+	 * A shortcut to the Fabric Environment getter.
+	 */
+	public static EnvType getEnvironment() {
+		return FabricLoader.getInstance().getEnvironmentType();
 	}
 }

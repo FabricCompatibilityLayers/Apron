@@ -1,38 +1,53 @@
 package modloadermp;
 
+import java.util.AbstractMap;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+/**
+ * A pair is a common type to use for storing two pieces of data together.<br>
+ * Pairs are effectively the exact same thing as {@link java.util.AbstractMap.SimpleEntry}.
+ *
+ * @param <L> The type of data to store on the left.
+ * @param <R> The type of data to store on the right.
+ * @see java.util.AbstractMap.SimpleEntry
+ */
+@Deprecated
 @Environment(EnvType.SERVER)
-public class Pair<L, R> {
-	private final L left;
-	private final R right;
-
-	public Pair(L obj, R obj1) {
-		this.left = obj;
-		this.right = obj1;
+public class Pair<L, R> extends AbstractMap.SimpleEntry<L, R> {
+	public Pair(L left, R right) {
+		super(left, right);
 	}
 
+	/**
+	 * @return {@link #getKey()}
+	 * @see #getKey()
+	 */
 	public L getLeft() {
-		return this.left;
+		return this.getKey();
 	}
 
+	/**
+	 * @return {@link #getValue()} ()}
+	 * @see #getValue()
+	 */
 	public R getRight() {
-		return this.right;
+		return this.getValue();
 	}
 
+	@Override
 	public int hashCode() {
-		return this.left.hashCode() ^ this.right.hashCode();
+		return this.getLeft().hashCode() ^ this.getRight().hashCode();
 	}
 
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		} else if (!(obj instanceof Pair)) {
+	@Override
+	public boolean equals(Object other) {
+		if (!(other instanceof Pair)) {
 			return false;
 		} else {
-			Pair<?, ?> pair = (Pair<?, ?>) obj;
-			return this.left.equals(pair.getLeft()) && this.right.equals(pair.getRight());
+			Pair<?, ?> pair = (Pair<?, ?>) other;
+			return this.getLeft().equals(pair.getLeft()) && this.getRight().equals(pair.getRight());
 		}
 	}
 }
