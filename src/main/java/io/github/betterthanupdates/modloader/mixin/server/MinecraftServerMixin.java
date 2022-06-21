@@ -93,36 +93,36 @@ public abstract class MinecraftServerMixin implements Runnable, CommandSource {
 
 					try {
 						Thread.sleep(10L);
-					} catch (InterruptedException var335) {
-						var335.printStackTrace();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 				}
 			}
-		} catch (Throwable var336) {
-			var336.printStackTrace();
-			logger.log(Level.SEVERE, "Unexpected exception", var336);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			logger.log(Level.SEVERE, "Unexpected exception", e);
 
 			while (this.running) {
 				this.processQueuedCommands();
 
 				try {
 					Thread.sleep(10L);
-				} catch (InterruptedException var334) {
-					var334.printStackTrace();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
 		} finally {
 			try {
 				this.stopServer();
 				this.stopped = true;
-			} catch (Throwable var332) {
-				var332.printStackTrace();
+			} catch (Throwable e) {
+				e.printStackTrace();
 			} finally {
 				try {
 					this.stopServer();
 					this.stopped = true;
-				} catch (Throwable var330) {
-					var330.printStackTrace();
+				} catch (Throwable e) {
+					e.printStackTrace();
 				} finally {
 					System.exit(0);
 				}

@@ -270,8 +270,8 @@ public class AchievementsScreenMixin extends Screen implements SAPIAchievementsS
 				if (this.statsFileWriter.isAchievementUnlocked(ny1)) {
 					try {
 						this.textRenderer.drawTextWithShadow(Internationalization.translate("achievement.taken"), k6, j7 + j8 + 4, -7302913);
-					} catch (Exception var28) {
-						var28.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
 				}
 			} else {
@@ -281,13 +281,14 @@ public class AchievementsScreenMixin extends Screen implements SAPIAchievementsS
 					int k8 = this.textRenderer.method_1902(s3, i8);
 					this.fillGradient(k6 - 3, j7 - 3, k6 + i8 + 3, j7 + k8 + 12 + 3, -1073741824, -1073741824);
 					this.textRenderer.method_1904(s3, k6, j7 + 12, i8, -9416624);
-				} catch (Exception var27) {
-					var27.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 
-			this.textRenderer.drawTextWithShadow(
-							s1, k6, j7, this.statsFileWriter.isAchievementUnlockable(ny1) ? (ny1.isUnusual() ? -128 : -1) : (ny1.isUnusual() ? -8355776 : -8355712)
+			this.textRenderer.drawTextWithShadow(s1, k6, j7,
+					this.statsFileWriter.isAchievementUnlockable(ny1) ? (ny1.isUnusual() ? -128 : -1) : (ny1.isUnusual()
+							? -8355776 : -8355712)
 			);
 		}
 

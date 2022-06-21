@@ -57,9 +57,9 @@ public class TrackedEntityMixin {
 						throw new Exception(String.format("Entity's owner field must be of type Entity, but it is of type %s.", field.getType()));
 					}
 				}
-			} catch (Exception var4) {
-				ModLoader.getLogger().throwing("EntityTrackerEntry", "getSpawnPacket", var4);
-				ModLoader.ThrowException(String.format("Error sending spawn packet for entity of type %s.", this.entityToSync.getClass()), var4);
+			} catch (Exception e) {
+				ModLoader.getLogger().throwing("EntityTrackerEntry", "getSpawnPacket", e);
+				ModLoader.ThrowException(String.format("Error sending spawn packet for entity of type %s.", this.entityToSync.getClass()), e);
 				cir.setReturnValue(null);
 			}
 		}

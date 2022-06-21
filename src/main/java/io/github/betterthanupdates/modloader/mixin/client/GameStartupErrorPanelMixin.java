@@ -60,8 +60,8 @@ public abstract class GameStartupErrorPanelMixin extends Panel {
 			str3 = str3 + "LWJGL: " + Sys.getVersion() + "\n";
 			str2 = GL11.glGetString(7936);
 			str3 = str3 + "OpenGL: " + GL11.glGetString(7937) + " version " + GL11.glGetString(7938) + ", " + GL11.glGetString(7936) + "\n";
-		} catch (Throwable var9) {
-			str3 = str3 + "[failed to get system properties (" + var9 + ")]\n";
+		} catch (Throwable e) {
+			str3 = str3 + "[failed to get system properties (" + e + ")]\n";
 		}
 
 		str3 = str3 + "\n";
