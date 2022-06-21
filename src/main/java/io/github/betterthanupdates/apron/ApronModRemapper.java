@@ -10,9 +10,11 @@ import fr.catcore.modremapperapi.api.ModRemapper;
 import fr.catcore.modremapperapi.api.RemapLibrary;
 import fr.catcore.modremapperapi.remapping.RemapUtil;
 import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.metadata.CustomValue;
+import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.fabricmc.tinyremapper.TinyRemapper;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 @ApiStatus.Internal
 public final class ApronModRemapper implements ModRemapper {
@@ -23,13 +25,6 @@ public final class ApronModRemapper implements ModRemapper {
 
 	private Path getLibPath(String name) {
 		return Apron.MOD_CONTAINER.findPath("./libs/" + name + ".zip").orElseThrow(RuntimeException::new);
-	}
-
-	@Override
-	public RemapLibrary[] getRemapLibraries() {
-		RemapLibrary[] libraries = new RemapLibrary[0];
-
-		return libraries;
 	}
 
 	@Override
@@ -57,57 +52,24 @@ public final class ApronModRemapper implements ModRemapper {
 	// TODO: Rename classes on right side to fit Yarn standards
 	@Override
 	public void getMappingList(RemapUtil.MappingList list) {
-		// ModLoader mappings
-		list.add("BaseMod", "modloader/BaseMod");
-		list.add("MLProp", "modloader/MLProp");
-		list.add("ModLoader", "modloader/ModLoader");
+		addMappingsFromMetadata(list, null);
+		addMappingsFromMetadata(list, Apron.getEnvironment());
+	}
 
-		// ModLoaderMP mappings
-		list.add("BaseModMp", "modloadermp/BaseModMp");
-		list.add("ISpawnable", "modloadermp/ISpawnable");
-		list.add("ModLoaderMp", "modloadermp/ModLoaderMp");
-		list.add("Packet230ModLoader", "modloadermp/Packet230ModLoader");
+	/**
+	 * Adds mappings directly from Apron's fabric.mod.json file.
+	 * @param list the mappings list for Mod Remapping API
+	 * @param environment the current Minecraft environment, provided by Fabric Loader
+	 */
+	private void addMappingsFromMetadata(RemapUtil.MappingList list, @Nullable EnvType environment) {
+		final ModMetadata metadata = Apron.MOD_CONTAINER.getMetadata();
+		final String custom = "apron:" + (environment == null ? "common" : environment.name().toLowerCase());
 
-		switch (FabricLoader.getInstance().getEnvironmentType()) {
-			case CLIENT:
-				// ModLoader mappings
-				list.add("EntityRendererProxy", "modloader/EntityRendererProxy");
-				list.add("ModTextureAnimation", "modloader/ModTextureAnimation");
-				list.add("ModTextureStatic", "modloader/ModTextureStatic");
-
-				// ModLoaderMP mappings
-				list.add("NetClientHandlerEntity", "modloadermp/NetClientHandlerEntity");
-
-				// ShockAhPI
-				list.add("ACPage", "shockahpi/AchievementPage");
-				list.add("AnimBase", "shockahpi/AnimBase");
-				list.add("AnimPulse", "shockahpi/AnimPulse");
-				list.add("AnimShift", "shockahpi/AnimShift");
-				list.add("BlockHarvestPower", "shockahpi/BlockHarvestPower");
-				list.add("DimensionBase", "shockahpi/DimensionBase");
-				list.add("DimensionNether", "shockahpi/DimensionNether");
-				list.add("DimensionOverworld", "shockahpi/DimensionOverworld");
-				list.add("DungeonLoot", "shockahpi/DungeonLoot");
-				list.add("GuiYesNoFreezeDifficulty", "shockahpi/FreezeDifficultyScreen");
-				list.add("GenDeposit", "shockahpi/GenDeposit");
-				list.add("IInterceptBlockSet", "shockahpi/IInterceptBlockSet");
-				list.add("IInterceptHarvest", "shockahpi/IInterceptHarvest");
-				list.add("INBT", "shockahpi/INBT");
-				list.add("IReachBlock", "shockahpi/IReachBlock");
-				list.add("IReachEntity", "shockahpi/IReachEntity");
-				list.add("Loc", "shockahpi/Loc");
-				list.add("mod_SAPI", "shockahpi/ShockAhPI");
-				list.add("PlayerBase", "shockahpi/PlayerBase");
-				list.add("SAPI", "shockahpi/SAPI");
-				list.add("SAPIEntityPlayerSP", "shockahpi/SapiClientPlayerEntity");
-				list.add("Tool", "shockahpi/Tool");
-				list.add("ToolBase", "shockahpi/ToolBase");
-				break;
-			case SERVER:
-				// ModLoaderMP mappings
-				list.add("EntityTrackerEntry2", "modloadermp/EntityTrackerEntry2");
-				list.add("Pair", "modloadermp/Pair");
-				break;
+		for (Map.Entry<String, CustomValue> mapping : metadata.getCustomValue(custom).getAsObject()) {
+			final String obfuscated = mapping.getKey();
+			final String intermediary = mapping.getValue().getAsString();
+			list.add(obfuscated, intermediary);
+			Apron.LOGGER.debug("%s remapped to %s for compatibility.", intermediary, obfuscated);
 		}
 	}
 

@@ -59,5 +59,52 @@
     "fabricloader": ">=0.13.3",
     "minecraft": "1.0.0-beta.7.3",
     "mod-remapping-api": "*"
+  },
+  "custom": {
+    "apron:common": {
+      "BaseMod": "modloader/BaseMod",
+      "MLProp": "modloader/MLProp",
+      "ModLoader": "modloader/ModLoader",
+
+      "BaseModMp": "modloadermp/BaseModMp",
+      "ISpawnable": "modloadermp/ISpawnable",
+      "ModLoaderMp": "modloadermp/ModLoaderMp",
+      "Packet230ModLoader": "modloadermp/ModLoaderPacket"
+    },
+    "apron:client": {
+      "EntityRendererProxy": "modloader/EntityRendererProxy",
+      "ModTextureAnimation": "modloader/ModTextureAnimation",
+      "ModTextureStatic": "modloader/ModTextureStatic",
+
+      "NetClientHandlerEntity": "modloadermp/NetClientHandlerEntity",
+
+      "ACPage": "shockahpi/AchievementPage",
+      "AnimBase": "shockahpi/AnimBase",
+      "AnimPulse": "shockahpi/AnimPulse",
+      "AnimShift": "shockahpi/AnimShift",
+      "BlockHarvestPower": "shockahpi/BlockHarvestPower",
+      "DimensionBase": "shockahpi/DimensionBase",
+      "DimensionNether": "shockahpi/DimensionNether",
+      "DimensionOverworld": "shockahpi/DimensionOverworld",
+      "DungeonLoot": "shockahpi/DungeonLoot",
+      "GuiYesNoFreezeDifficulty": "shockahpi/FreezeDifficultyScreen",
+      "GenDeposit": "shockahpi/GenDeposit",
+      "IInterceptBlockSet": "shockahpi/IInterceptBlockSet",
+      "IInterceptHarvest": "shockahpi/IInterceptHarvest",
+      "INBT": "shockahpi/INBT",
+      "IReachBlock": "shockahpi/IReachBlock",
+      "IReachEntity": "shockahpi/IReachEntity",
+      "Loc": "shockahpi/Loc",
+      "mod_SAPI": "shockahpi/ShockAhPI",
+      "PlayerBase": "shockahpi/PlayerBase",
+      "SAPI": "shockahpi/SAPI",
+      "SAPIEntityPlayerSP": "shockahpi/SapiClientPlayerEntity",
+      "Tool": "shockahpi/Tool",
+      "ToolBase": "shockahpi/ToolBase"
+    },
+    "apron:server": {
+      "EntityTrackerEntry2": "modloadermp/EntityTrackerEntry",
+      "Pair": "modloadermp/Pair"
+    }
   }
 }

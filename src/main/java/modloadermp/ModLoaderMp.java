@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +15,9 @@ import modloader.BaseMod;
 import modloader.ModLoader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import org.jetbrains.annotations.NotNull;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.container.Container;
@@ -29,7 +32,6 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.CommandSource;
 import net.minecraft.server.entity.player.ServerPlayerEntity;
 import net.minecraft.server.network.ServerEntityTracker;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 
 import io.github.betterthanupdates.apron.api.ApronApi;
@@ -49,9 +51,9 @@ public class ModLoaderMp {
 	@Environment(EnvType.CLIENT)
 	private static final Map<Integer, BaseModMp> GUI_MOD_MAP = new HashMap<>();
 	@Environment(EnvType.SERVER)
-	private static final Map<Class<? extends Entity>, Pair<Integer, Integer>> entityTrackerMap = new HashMap<>();
+	private static final Map<Class<? extends Entity>, AbstractMap.SimpleEntry<Integer, Integer>> entityTrackerMap = new HashMap<>();
 	@Environment(EnvType.SERVER)
-	private static final Map<Class<? extends Entity>, EntityTrackerEntry2> entityTrackerEntryMap = new HashMap<>();
+	private static final Map<Class<? extends Entity>, EntityTrackerEntry> entityTrackerEntryMap = new HashMap<>();
 	@Environment(EnvType.SERVER)
 	private static final List<String> bannedMods = new ArrayList<>();
 
@@ -70,7 +72,7 @@ public class ModLoaderMp {
 	}
 
 	@Environment(EnvType.CLIENT)
-	public static void HandleAllPackets(final Packet230ModLoader packet) {
+	public static void HandleAllPackets(final ModLoaderPacket packet) {
 		if (!hasInit) {
 			init();
 		}
@@ -135,7 +137,7 @@ public class ModLoaderMp {
 	}
 
 	@Environment(EnvType.CLIENT)
-	public static void SendPacket(BaseModMp basemodmp, Packet230ModLoader packet) {
+	public static void SendPacket(BaseModMp basemodmp, ModLoaderPacket packet) {
 		if (!hasInit) {
 			init();
 		}
@@ -219,28 +221,32 @@ public class ModLoaderMp {
 			ModLoader.getLogger().throwing(NAME, "SendKey", e);
 			ModLoader.ThrowException("baseModMp cannot be null.", e);
 		} else {
-			final Packet230ModLoader packet230modloader = new Packet230ModLoader();
-			packet230modloader.modId = NAME.hashCode();
-			packet230modloader.packetType = 1;
-			packet230modloader.dataInt = new int[] {basemodmp.getId(), i};
-			sendPacket(packet230modloader);
+			final ModLoaderPacket modloaderPacket = new ModLoaderPacket();
+			modloaderPacket.modId = NAME.hashCode();
+			modloaderPacket.packetType = 1;
+			modloaderPacket.dataInt = new int[] {basemodmp.getId(), i};
+			sendPacket(modloaderPacket);
 		}
 	}
 
-	public static void Log(final String s) {
-		ModLoader.getLogger().fine(s);
+	public static void Log(final String message) {
+		ModLoader.LOGGER.debug(message);
 	}
 
 	private static void init() {
 		hasInit = true;
-		AbstractPacket.register(230, true, true, Packet230ModLoader.class);
+		AbstractPacket.register(230, true, true, ModLoaderPacket.class);
 
 		if (!APRON.isClient()) {
 			try {
-				File file = ModLoader.getMinecraftServerInstance().getFile("banned-mods.txt");
+				MinecraftServer server = ((MinecraftServer) APRON.getGame());
 
-				if (!file.exists()) {
-					file.createNewFile();
+				if (server == null) return;
+
+				File file = server.getFile("banned-mods.txt");
+
+				if (!file.exists() || file.createNewFile()) {
+					Log("Could not get or create banned mods config file.");
 				}
 
 				BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(Files.newInputStream(file.toPath())));
@@ -261,8 +267,8 @@ public class ModLoaderMp {
 	}
 
 	@Environment(EnvType.CLIENT)
-	private static void handleModCheck(Packet230ModLoader originalPacket) {
-		Packet230ModLoader newPacket = new Packet230ModLoader();
+	private static void handleModCheck(ModLoaderPacket originalPacket) {
+		ModLoaderPacket newPacket = new ModLoaderPacket();
 		newPacket.modId = "ModLoaderMP".hashCode();
 		newPacket.packetType = 0;
 		newPacket.dataString = new String[ModLoader.getLoadedMods().size()];
@@ -275,7 +281,7 @@ public class ModLoaderMp {
 	}
 
 	@Environment(EnvType.CLIENT)
-	private static void handleTileEntityPacket(Packet230ModLoader packet) {
+	private static void handleTileEntityPacket(ModLoaderPacket packet) {
 		if (packet.dataInt != null && packet.dataInt.length >= 5) {
 			int i = packet.dataInt[0];
 			int j = packet.dataInt[1];
@@ -305,9 +311,13 @@ public class ModLoaderMp {
 	}
 
 	@Environment(EnvType.CLIENT)
-	private static void sendPacket(Packet230ModLoader packet) {
-		if (packet230Received && ModLoader.getMinecraftInstance().world != null && ModLoader.getMinecraftInstance().world.isClient) {
-			ModLoader.getMinecraftInstance().getPacketHandler().sendPacket(packet);
+	private static void sendPacket(ModLoaderPacket packet) {
+		Minecraft client = (Minecraft) APRON.getGame();
+
+		if (client == null) return;
+
+		if (packet230Received && client.world != null && client.world.isClient) {
+			client.getPacketHandler().sendPacket(packet);
 		}
 	}
 
@@ -337,7 +347,7 @@ public class ModLoaderMp {
 		if (entityTrackerMap.containsKey(class1)) {
 			System.out.println("RegisterEntityTracker error: entityClass already registered.");
 		} else {
-			entityTrackerMap.put(class1, new Pair<>(i, j));
+			entityTrackerMap.put(class1, new AbstractMap.SimpleEntry<>(i, j));
 		}
 	}
 
@@ -359,7 +369,7 @@ public class ModLoaderMp {
 		if (entityTrackerEntryMap.containsKey(class1)) {
 			System.out.println("RegisterEntityTrackerEntry error: entityClass already registered.");
 		} else {
-			entityTrackerEntryMap.put(class1, new EntityTrackerEntry2(i, flag));
+			entityTrackerEntryMap.put(class1, new EntityTrackerEntry(i, flag));
 		}
 	}
 
@@ -381,18 +391,18 @@ public class ModLoaderMp {
 	}
 
 	@Environment(EnvType.SERVER)
-	public static void HandleAllPackets(Packet230ModLoader packet230modloader, ServerPlayerEntity entityplayermp) {
+	public static void HandleAllPackets(ModLoaderPacket modloaderPacket, ServerPlayerEntity entityplayermp) {
 		if (!hasInit) {
 			init();
 		}
 
-		if (packet230modloader.modId == "ModLoaderMP".hashCode()) {
-			switch (packet230modloader.packetType) {
+		if (modloaderPacket.modId == "ModLoaderMP".hashCode()) {
+			switch (modloaderPacket.packetType) {
 				case 0:
-					handleModCheckResponse(packet230modloader, entityplayermp);
+					handleModCheckResponse(modloaderPacket, entityplayermp);
 					break;
 				case 1:
-					handleSendKey(packet230modloader, entityplayermp);
+					handleSendKey(modloaderPacket, entityplayermp);
 			}
 		} else {
 			for (int i = 0; i < ModLoader.getLoadedMods().size(); ++i) {
@@ -401,8 +411,8 @@ public class ModLoaderMp {
 				if (basemod instanceof BaseModMp) {
 					BaseModMp basemodmp = (BaseModMp) basemod;
 
-					if (basemodmp.getId() == packet230modloader.modId) {
-						basemodmp.HandlePacket(packet230modloader, entityplayermp);
+					if (basemodmp.getId() == modloaderPacket.modId) {
+						basemodmp.HandlePacket(modloaderPacket, entityplayermp);
 						break;
 					}
 				}
@@ -416,16 +426,16 @@ public class ModLoaderMp {
 			init();
 		}
 
-		for (Map.Entry<Class<? extends Entity>, Pair<Integer, Integer>> entry : entityTrackerMap.entrySet()) {
+		for (Map.Entry<Class<? extends Entity>, AbstractMap.SimpleEntry<Integer, Integer>> entry : entityTrackerMap.entrySet()) {
 			if (entry.getKey().isInstance(entity)) {
-				entitytracker.trackEntity(entity, entry.getValue().getLeft(), entry.getValue().getRight(), true);
+				entitytracker.trackEntity(entity, entry.getValue().getKey(), entry.getValue().getValue(), true);
 				return;
 			}
 		}
 	}
 
 	@Environment(EnvType.SERVER)
-	public static EntityTrackerEntry2 HandleEntityTrackerEntries(Entity entity) {
+	public static EntityTrackerEntry HandleEntityTrackerEntries(Entity entity) {
 		if (!hasInit) {
 			init();
 		}
@@ -434,7 +444,7 @@ public class ModLoaderMp {
 	}
 
 	@Environment(EnvType.SERVER)
-	public static void SendPacketToAll(BaseModMp basemodmp, Packet230ModLoader packet230modloader) {
+	public static void SendPacketToAll(BaseModMp basemodmp, ModLoaderPacket modloaderPacket) {
 		if (!hasInit) {
 			init();
 		}
@@ -444,74 +454,70 @@ public class ModLoaderMp {
 			ModLoader.getLogger().throwing("ModLoaderMP", "SendPacketToAll", illegalargumentexception);
 			ModLoader.ThrowException("baseModMp cannot be null.", illegalargumentexception);
 		} else {
-			packet230modloader.modId = basemodmp.getId();
-			sendPacketToAll(packet230modloader);
+			modloaderPacket.modId = basemodmp.getId();
+			sendPacketToAll(modloaderPacket);
 		}
 	}
 
 	@Environment(EnvType.SERVER)
 	private static void sendPacketToAll(AbstractPacket packet) {
-		if (packet != null) {
-			for (int i = 0; i < ModLoader.getMinecraftServerInstance().serverPlayerConnectionManager.players.size(); ++i) {
-				((ServerPlayerEntity) ModLoader.getMinecraftServerInstance().serverPlayerConnectionManager.players.get(i)).packetHandler.send(packet);
-			}
+		MinecraftServer server = (MinecraftServer) APRON.getGame();
+
+		if (server != null && packet != null) {
+			server.serverPlayerConnectionManager.sendToAll(packet);
 		}
 	}
 
 	@Environment(EnvType.SERVER)
-	public static void SendPacketTo(BaseModMp basemodmp, ServerPlayerEntity entityplayermp, Packet230ModLoader packet230modloader) {
+	public static void SendPacketTo(BaseModMp mod, ServerPlayerEntity player, ModLoaderPacket packet) {
 		if (!hasInit) {
 			init();
 		}
 
-		if (basemodmp == null) {
-			IllegalArgumentException illegalargumentexception = new IllegalArgumentException("baseModMp cannot be null.");
-			ModLoader.getLogger().throwing("ModLoaderMP", "SendPacketTo", illegalargumentexception);
-			ModLoader.ThrowException("baseModMp cannot be null.", illegalargumentexception);
+		if (mod == null) {
+			IllegalArgumentException e = new IllegalArgumentException("mod cannot be null.");
+			ModLoader.getLogger().throwing("ModLoaderMP", "SendPacketTo", e);
+			ModLoader.ThrowException("mod cannot be null.", e);
 		} else {
-			packet230modloader.modId = basemodmp.getId();
-			sendPacketTo(entityplayermp, packet230modloader);
+			packet.modId = mod.getId();
+			sendPacketTo(player, packet);
 		}
 	}
 
+	/**
+	 * @param player The player to find the world of
+	 * @return the world that the player is currently in.
+	 */
 	@Environment(EnvType.SERVER)
-	public static World GetPlayerWorld(PlayerEntity entityplayer) {
-		ServerWorld[] aworldserver = ModLoader.getMinecraftServerInstance().worlds;
-
-		for (ServerWorld serverWorld : aworldserver) {
-			if (serverWorld.players.contains(entityplayer)) {
-				return serverWorld;
-			}
-		}
-
-		return null;
+	public static World GetPlayerWorld(@NotNull PlayerEntity player) {
+		return player.world; // used to iterate over all worlds, then iterate over all players in each world to check
 	}
 
 	@Environment(EnvType.SERVER)
-	private static void sendPacketTo(ServerPlayerEntity entityplayermp, Packet230ModLoader packet230modloader) {
-		entityplayermp.packetHandler.send(packet230modloader);
+	private static void sendPacketTo(ServerPlayerEntity player, ModLoaderPacket packet) {
+		player.packetHandler.send(packet);
 	}
 
 	@Environment(EnvType.SERVER)
-	private static void sendModCheck(ServerPlayerEntity entityplayermp) {
-		Packet230ModLoader packet230modloader = new Packet230ModLoader();
-		packet230modloader.modId = "ModLoaderMP".hashCode();
-		packet230modloader.packetType = 0;
-		sendPacketTo(entityplayermp, packet230modloader);
+	private static void sendModCheck(ServerPlayerEntity player) {
+		ModLoaderPacket packet = new ModLoaderPacket();
+		packet.modId = "ModLoaderMP".hashCode();
+		packet.packetType = 0;
+		sendPacketTo(player, packet);
 	}
 
 	@Environment(EnvType.SERVER)
-	private static void handleModCheckResponse(Packet230ModLoader packet230modloader, ServerPlayerEntity entityplayermp) {
+	private static void handleModCheckResponse(ModLoaderPacket modloaderPacket, ServerPlayerEntity entityplayermp) {
 		StringBuilder stringbuilder = new StringBuilder();
 
-		if (packet230modloader.dataString.length != 0) {
-			for (int i = 0; i < packet230modloader.dataString.length; ++i) {
-				if (packet230modloader.dataString[i].lastIndexOf("mod_") != -1) {
+		if (modloaderPacket.dataString.length != 0) {
+			for (int i = 0; i < modloaderPacket.dataString.length; ++i) {
+				if (modloaderPacket.dataString[i].lastIndexOf("mod_") != -1) {
 					if (stringbuilder.length() != 0) {
 						stringbuilder.append(", ");
 					}
 
-					stringbuilder.append(packet230modloader.dataString[i].substring(packet230modloader.dataString[i].lastIndexOf("mod_")));
+					stringbuilder.append(modloaderPacket.dataString[i].substring(modloaderPacket.dataString[i].lastIndexOf("mod_")));
 				}
 			}
 		} else {
@@ -522,10 +528,10 @@ public class ModLoaderMp {
 		ArrayList<String> arraylist = new ArrayList<>();
 
 		for (String bannedMod : bannedMods) {
-			for (int k = 0; k < packet230modloader.dataString.length; ++k) {
-				if (packet230modloader.dataString[k].lastIndexOf("mod_") != -1
-						&& packet230modloader.dataString[k].substring(packet230modloader.dataString[k].lastIndexOf("mod_")).startsWith(bannedMod)) {
-					arraylist.add(packet230modloader.dataString[k]);
+			for (int k = 0; k < modloaderPacket.dataString.length; ++k) {
+				if (modloaderPacket.dataString[k].lastIndexOf("mod_") != -1
+					&& modloaderPacket.dataString[k].substring(modloaderPacket.dataString[k].lastIndexOf("mod_")).startsWith(bannedMod)) {
+					arraylist.add(modloaderPacket.dataString[k]);
 				}
 			}
 		}
@@ -539,9 +545,9 @@ public class ModLoaderMp {
 				String s = basemodmp.toString().substring(basemodmp.toString().lastIndexOf("mod_"));
 				boolean flag = false;
 
-				for (int l1 = 0; l1 < packet230modloader.dataString.length; ++l1) {
-					if (packet230modloader.dataString[l1].lastIndexOf("mod_") != -1) {
-						String s1 = packet230modloader.dataString[l1].substring(packet230modloader.dataString[l1].lastIndexOf("mod_"));
+				for (int l1 = 0; l1 < modloaderPacket.dataString.length; ++l1) {
+					if (modloaderPacket.dataString[l1].lastIndexOf("mod_") != -1) {
+						String s1 = modloaderPacket.dataString[l1].substring(modloaderPacket.dataString[l1].lastIndexOf("mod_"));
 
 						if (s.equals(s1)) {
 							flag = true;
@@ -595,12 +601,12 @@ public class ModLoaderMp {
 	}
 
 	@Environment(EnvType.SERVER)
-	private static void handleSendKey(Packet230ModLoader packet230modloader, ServerPlayerEntity entityplayermp) {
-		if (packet230modloader.dataInt.length != 2) {
+	private static void handleSendKey(ModLoaderPacket modloaderPacket, ServerPlayerEntity entityplayermp) {
+		if (modloaderPacket.dataInt.length != 2) {
 			System.out.println("SendKey packet received with missing data.");
 		} else {
-			int i = packet230modloader.dataInt[0];
-			int j = packet230modloader.dataInt[1];
+			int i = modloaderPacket.dataInt[0];
+			int j = modloaderPacket.dataInt[1];
 
 			for (int k = 0; k < ModLoader.getLoadedMods().size(); ++k) {
 				BaseMod basemod = ModLoader.getLoadedMods().get(k);
@@ -655,14 +661,13 @@ public class ModLoaderMp {
 	}
 
 	@Environment(EnvType.SERVER)
-	public static void sendChatToAll(String s) {
-		List<ServerPlayerEntity> list = ModLoader.getMinecraftServerInstance().serverPlayerConnectionManager.players;
+	public static void sendChatToAll(String encodedMessage) {
+		MinecraftServer server = (MinecraftServer) APRON.getGame();
 
-		for (ServerPlayerEntity entityplayermp : list) {
-			entityplayermp.packetHandler.send(new ChatMessagePacket(s));
+		if (server != null) {
+			server.serverPlayerConnectionManager.sendToAll(new ChatMessagePacket(encodedMessage));
+			MinecraftServer.logger.info(encodedMessage);
 		}
-
-		MinecraftServer.logger.info(s);
 	}
 
 	@Environment(EnvType.SERVER)
@@ -672,24 +677,29 @@ public class ModLoaderMp {
 	}
 
 	@Environment(EnvType.SERVER)
-	public static void sendChatToOps(String s) {
-		List<ServerPlayerEntity> list = ModLoader.getMinecraftServerInstance().serverPlayerConnectionManager.players;
+	public static void sendChatToOps(String encodedMessage) {
+		MinecraftServer server = (MinecraftServer) APRON.getGame();
 
-		for (ServerPlayerEntity entityplayermp : list) {
-			if (ModLoader.getMinecraftServerInstance().serverPlayerConnectionManager.isOp(entityplayermp.name)) {
-				entityplayermp.packetHandler.send(new ChatMessagePacket(s));
+		if (server == null) return;
+
+		for (Object object : server.serverPlayerConnectionManager.players) {
+			if (object instanceof ServerPlayerEntity) {
+				ServerPlayerEntity player = (ServerPlayerEntity) object;
+
+				if (server.serverPlayerConnectionManager.isOp(player.name)) {
+					player.packetHandler.send(new ChatMessagePacket(encodedMessage));
+					MinecraftServer.logger.info(encodedMessage);
+				}
 			}
 		}
-
-		MinecraftServer.logger.info(s);
 	}
 
 	@Environment(EnvType.SERVER)
 	public static AbstractPacket GetTileEntityPacket(BaseModMp basemodmp, int i, int j, int k, int l, int[] ai, float[] af, String[] as) {
-		Packet230ModLoader packet230modloader = new Packet230ModLoader();
-		packet230modloader.modId = "ModLoaderMP".hashCode();
-		packet230modloader.packetType = 1;
-		packet230modloader.worldPacket = true;
+		ModLoaderPacket modloaderPacket = new ModLoaderPacket();
+		modloaderPacket.modId = "ModLoaderMP".hashCode();
+		modloaderPacket.packetType = 1;
+		modloaderPacket.worldPacket = true;
 		int i1 = ai != null ? ai.length : 0;
 		int[] ai1 = new int[i1 + 5];
 		ai1[0] = basemodmp.getId();
@@ -702,14 +712,14 @@ public class ModLoaderMp {
 			System.arraycopy(ai, 0, ai1, 5, ai.length);
 		}
 
-		packet230modloader.dataInt = ai1;
-		packet230modloader.dataFloat = af;
-		packet230modloader.dataString = as;
-		return packet230modloader;
+		modloaderPacket.dataInt = ai1;
+		modloaderPacket.dataFloat = af;
+		modloaderPacket.dataString = as;
+		return modloaderPacket;
 	}
 
 	@Environment(EnvType.SERVER)
-	public static void SendTileEntityPacket(BlockEntity tileentity) {
-		sendPacketToAll(tileentity.getPacketContents());
+	public static void SendTileEntityPacket(BlockEntity blockEntity) {
+		sendPacketToAll(blockEntity.getPacketContents());
 	}
 }

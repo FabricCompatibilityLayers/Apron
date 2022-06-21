@@ -81,7 +81,7 @@ dependencies {
 	// Done
 //	modRuntimeOnly(group: "remapped.client", name: "modloader", version: "b1.7.3")
 //	modRuntimeOnly(group: "remapped.client", name: "modloadermp-1.7.3-unofficial", version: "v2")
-//	modRuntimeOnly(group: "remapped.server", name: "modloadermp-1.7.3-unofficial-server", version: "v2")
+	modRuntimeOnly(group: "remapped.server", name: "modloadermp-1.7.3-unofficial-server", version: "v2")
 //	modRuntimeOnly(group: "remapped.client", name: "minecraftforge-client", version: "1.0.7-20110907")
 //	modRuntimeOnly(group: "remapped.client", name: "audiomod", version: "b1.7.3")
 //	modRuntimeOnly(group: "remapped.client", name: "shockahpi", version: "r8")
@@ -114,7 +114,7 @@ java {
 }
 
 tasks.withType(JavaCompile) {
-	options.release = 8
+	options.release.set 8
 }
 
 jar {

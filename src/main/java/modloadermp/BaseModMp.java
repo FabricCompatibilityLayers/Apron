@@ -3,12 +3,13 @@ package modloadermp;
 import modloader.BaseMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.loader.api.FabricLoader;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.CommandSource;
 import net.minecraft.server.entity.player.ServerPlayerEntity;
+
+import io.github.betterthanupdates.apron.Apron;
 
 @SuppressWarnings("unused")
 public abstract class BaseModMp extends BaseMod {
@@ -20,7 +21,7 @@ public abstract class BaseModMp extends BaseMod {
 	}
 
 	public void ModsLoaded() {
-		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+		if (Apron.getEnvironment().equals(EnvType.CLIENT)) {
 			ModLoaderMp.Init();
 		} else {
 			ModLoaderMp.InitModLoaderMp();
@@ -28,7 +29,7 @@ public abstract class BaseModMp extends BaseMod {
 	}
 
 	@Environment(EnvType.CLIENT)
-	public void HandlePacket(final Packet230ModLoader packet) {
+	public void HandlePacket(final ModLoaderPacket packet) {
 	}
 
 	@Environment(EnvType.CLIENT)
@@ -41,7 +42,7 @@ public abstract class BaseModMp extends BaseMod {
 	}
 
 	@Environment(EnvType.SERVER)
-	public void HandlePacket(Packet230ModLoader packet230modloader, ServerPlayerEntity entityplayermp) {
+	public void HandlePacket(ModLoaderPacket modloaderPacket, ServerPlayerEntity entityplayermp) {
 	}
 
 	@Environment(EnvType.SERVER)

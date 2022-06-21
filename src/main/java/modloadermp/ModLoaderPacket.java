@@ -8,15 +8,18 @@ import java.util.Map;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.loader.api.FabricLoader;
 
 import net.minecraft.network.PacketHandler;
 import net.minecraft.packet.AbstractPacket;
 import net.minecraft.server.entity.player.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayPacketHandler;
 
-public class Packet230ModLoader extends AbstractPacket {
-	private static final int MAX_DATA_LENGTH = 65535;
+import io.github.betterthanupdates.apron.api.ApronApi;
+
+public class ModLoaderPacket extends AbstractPacket {
+	private static final ApronApi APRON = ApronApi.getInstance();
+	private static final int MAX_DATA_LENGTH = 0xFFFF;
+
 	public int modId;
 	public int packetType;
 	public int[] dataInt = new int[0];
@@ -25,7 +28,7 @@ public class Packet230ModLoader extends AbstractPacket {
 	@Environment(EnvType.SERVER)
 	private static Map<PacketHandler, ServerPlayerEntity> playerMap = new HashMap<>();
 
-	public Packet230ModLoader() {
+	public ModLoaderPacket() {
 	}
 
 	@Override
@@ -136,18 +139,18 @@ public class Packet230ModLoader extends AbstractPacket {
 
 	@Override
 	public void apply(PacketHandler netHandler) {
-		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+		if (APRON.isClient()) {
 			ModLoaderMp.HandleAllPackets(this);
 		} else {
-			ServerPlayerEntity entityplayermp = null;
+			ServerPlayerEntity player = null;
 
 			if (playerMap.containsKey(netHandler)) {
-				entityplayermp = playerMap.get(netHandler);
+				player = playerMap.get(netHandler);
 			} else if (netHandler instanceof ServerPlayPacketHandler) {
-				entityplayermp = ((ServerPlayPacketHandler) netHandler).player;
+				player = ((ServerPlayPacketHandler) netHandler).player;
 			}
 
-			ModLoaderMp.HandleAllPackets(this, entityplayermp);
+			ModLoaderMp.HandleAllPackets(this, player);
 		}
 	}
 
