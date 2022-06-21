@@ -14,32 +14,32 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 @Mixin(ButtonBlock.class)
 public abstract class ButtonBlockMixin extends Block {
 	@Shadow
-	protected abstract boolean method_1048(World arg, int i, int j, int k);
+	protected abstract boolean method_1048(World world, int x, int y, int z);
 
-	protected ButtonBlockMixin(int i, Material arg) {
-		super(i, arg);
+	protected ButtonBlockMixin(int blockId, Material material) {
+		super(blockId, material);
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public boolean canPlaceAt(World world, int i, int j, int k, int l) {
-		if (l == 2 && ((ForgeWorld) world).isBlockSolidOnSide(i, j, k + 1, 2)) {
+	public boolean canPlaceAt(World world, int x, int y, int z, int side) {
+		if (side == 2 && ((ForgeWorld) world).isBlockSolidOnSide(x, y, z + 1, 2)) {
 			return true;
-		} else if (l == 3 && ((ForgeWorld) world).isBlockSolidOnSide(i, j, k - 1, 3)) {
+		} else if (side == 3 && ((ForgeWorld) world).isBlockSolidOnSide(x, y, z - 1, 3)) {
 			return true;
-		} else if (l == 4 && ((ForgeWorld) world).isBlockSolidOnSide(i + 1, j, k, 4)) {
+		} else if (side == 4 && ((ForgeWorld) world).isBlockSolidOnSide(x + 1, y, z, 4)) {
 			return true;
 		} else {
-			return l == 5 && ((ForgeWorld) world).isBlockSolidOnSide(i - 1, j, k, 5);
+			return side == 5 && ((ForgeWorld) world).isBlockSolidOnSide(x - 1, y, z, 5);
 		}
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k) {
@@ -53,8 +53,8 @@ public abstract class ButtonBlockMixin extends Block {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void onBlockPlaced(World world, int i, int j, int k, int l) {
@@ -78,8 +78,8 @@ public abstract class ButtonBlockMixin extends Block {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	private int method_1047(World world, int i, int j, int k) {
@@ -95,8 +95,8 @@ public abstract class ButtonBlockMixin extends Block {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {

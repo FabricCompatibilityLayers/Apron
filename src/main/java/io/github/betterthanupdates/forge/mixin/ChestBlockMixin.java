@@ -21,8 +21,8 @@ public abstract class ChestBlockMixin extends BlockWithEntity {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean canUse(World world, int i, int j, int k, PlayerEntity playerEntity) {

@@ -85,7 +85,7 @@ public class AchievementsScreenMixin extends Screen implements SAPIAchievementsS
 
 	/**
 	 * @author SAPI
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	protected void method_1998(int i1, int j1, float f) {

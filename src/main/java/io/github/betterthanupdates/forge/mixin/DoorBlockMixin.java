@@ -14,15 +14,15 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 @Mixin(DoorBlock.class)
 public abstract class DoorBlockMixin extends Block {
 	@Shadow
-	public abstract void method_837(World arg, int i, int j, int k, boolean bl);
+	public abstract void method_837(World world, int x, int y, int z, boolean bl);
 
-	protected DoorBlockMixin(int i, Material arg) {
-		super(i, arg);
+	protected DoorBlockMixin(int blockId, Material material) {
+		super(blockId, material);
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {
@@ -65,15 +65,15 @@ public abstract class DoorBlockMixin extends Block {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public boolean canPlaceAt(World world, int i, int j, int k) {
-		if (j >= 127) {
+	public boolean canPlaceAt(World world, int x, int y, int z) {
+		if (y >= 127) {
 			return false;
 		} else {
-			return ((ForgeWorld) world).isBlockSolidOnSide(i, j - 1, k, 1) && super.canPlaceAt(world, i, j, k) && super.canPlaceAt(world, i, j + 1, k);
+			return ((ForgeWorld) world).isBlockSolidOnSide(x, y - 1, z, 1) && super.canPlaceAt(world, x, y, z) && super.canPlaceAt(world, x, y + 1, z);
 		}
 	}
 }

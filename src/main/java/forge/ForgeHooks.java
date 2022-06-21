@@ -67,22 +67,22 @@ public class ForgeHooks {
 		if (block.material.doesRequireTool()) {
 			return true;
 		} else {
-			ItemStack itemstack = player.inventory.getHeldItem();
+			ItemStack stack = player.inventory.getHeldItem();
 
-			if (itemstack == null) {
+			if (stack == null) {
 				return false;
 			} else {
-				ForgeTool tc = toolClasses.get(itemstack.itemId);
+				ForgeTool tc = toolClasses.get(stack.itemId);
 
 				if (tc == null) {
-					return itemstack.isEffectiveOn(block);
+					return stack.isEffectiveOn(block);
 				} else {
 					Integer bhl = toolHarvestLevels.get(new ToolEffectiveness(block.id, meta, tc.toolClass));
 
 					if (bhl == null) {
-						return itemstack.isEffectiveOn(block);
+						return stack.isEffectiveOn(block);
 					} else {
-						return bhl <= tc.harvestLevel && itemstack.isEffectiveOn(block);
+						return bhl <= tc.harvestLevel && stack.isEffectiveOn(block);
 					}
 				}
 			}

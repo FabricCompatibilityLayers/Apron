@@ -17,8 +17,8 @@ import net.minecraft.world.World;
 @Mixin(ClientInteractionManager.class)
 public class ClientInteractionManagerMixin {
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean method_1712(PlayerEntity player, World world, ItemStack stack) {
@@ -40,30 +40,30 @@ public class ClientInteractionManagerMixin {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement forge hooks
 	 */
 	@Overwrite
-	public boolean useItemOnBlock(PlayerEntity player, World world, ItemStack itemstack, int i, int j, int k, int l) {
-		if (itemstack != null && itemstack.getItem() instanceof IUseItemFirst) {
-			IUseItemFirst iuif = (IUseItemFirst) itemstack.getItem();
+	public boolean useItemOnBlock(PlayerEntity player, World world, ItemStack stack, int x, int y, int z, int side) {
+		if (stack != null && stack.getItem() instanceof IUseItemFirst) {
+			IUseItemFirst iuif = (IUseItemFirst) stack.getItem();
 
-			if (iuif.onItemUseFirst(itemstack, player, world, i, j, k, l)) {
+			if (iuif.onItemUseFirst(stack, player, world, x, y, z, side)) {
 				return true;
 			}
 		}
 
-		int i1 = world.getBlockId(i, j, k);
+		int i1 = world.getBlockId(x, y, z);
 
-		if (i1 > 0 && Block.BY_ID[i1].canUse(world, i, j, k, player)) {
+		if (i1 > 0 && Block.BY_ID[i1].canUse(world, x, y, z, player)) {
 			return true;
-		} else if (itemstack == null) {
+		} else if (stack == null) {
 			return false;
-		} else if (!itemstack.useOnBlock(player, world, i, j, k, l)) {
+		} else if (!stack.useOnBlock(player, world, x, y, z, side)) {
 			return false;
 		} else {
-			if (itemstack.count == 0) {
-				ForgeHooks.onDestroyCurrentItem(player, itemstack);
+			if (stack.count == 0) {
+				ForgeHooks.onDestroyCurrentItem(player, stack);
 			}
 
 			return true;

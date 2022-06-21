@@ -20,7 +20,7 @@ public class McRegionDimensionFileMixin extends DimensionFile {
 
 	/**
 	 * @author SAPI
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	public ChunkIO getChunkIO(Dimension paramxa) {

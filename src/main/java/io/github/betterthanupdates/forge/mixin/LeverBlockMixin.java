@@ -14,15 +14,15 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 @Mixin(LeverBlock.class)
 public abstract class LeverBlockMixin extends Block {
 	@Shadow
-	protected abstract boolean method_1785(World arg, int i, int j, int k);
+	protected abstract boolean method_1785(World world, int i, int j, int k);
 
-	protected LeverBlockMixin(int i, Material arg) {
-		super(i, arg);
+	protected LeverBlockMixin(int blockId, Material material) {
+		super(blockId, material);
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k, int l) {
@@ -40,8 +40,8 @@ public abstract class LeverBlockMixin extends Block {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k) {
@@ -57,8 +57,8 @@ public abstract class LeverBlockMixin extends Block {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void onBlockPlaced(World world, int i, int j, int k, int l) {
@@ -96,8 +96,8 @@ public abstract class LeverBlockMixin extends Block {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {

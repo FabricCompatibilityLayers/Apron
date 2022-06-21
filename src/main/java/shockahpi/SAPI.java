@@ -73,9 +73,9 @@ public final class SAPI {
 	}
 
 	public static boolean interceptHarvest(World world, PlayerEntity player, Loc pos, int i, int j) {
-		for (IInterceptHarvest iinterceptharvest : harvestIntercepts) {
-			if (iinterceptharvest.canIntercept(world, player, pos, i, j)) {
-				iinterceptharvest.intercept(world, player, pos, i, j);
+		for (IInterceptHarvest harvestInterceptor : harvestIntercepts) {
+			if (harvestInterceptor.canIntercept(world, player, pos, i, j)) {
+				harvestInterceptor.intercept(world, player, pos, i, j);
 				return true;
 			}
 		}

@@ -52,7 +52,7 @@ public abstract class BlockRendererMixin {
 	public int field_55;
 
 	@Shadow
-	public abstract boolean renderStandardBlock(Block arg, int i, int j, int k);
+	public abstract boolean renderStandardBlock(Block block, int x, int y, int z);
 
 	@Shadow
 	public abstract boolean renderFluid(Block arg, int i, int j, int k);
@@ -259,8 +259,8 @@ public abstract class BlockRendererMixin {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean render(Block block, int x, int y, int z) {
@@ -307,8 +307,8 @@ public abstract class BlockRendererMixin {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean renderBed(Block block, int x, int y, int z) {
@@ -459,8 +459,8 @@ public abstract class BlockRendererMixin {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean renderRedstoneDust(Block block, int i, int j, int k) {
@@ -660,8 +660,8 @@ public abstract class BlockRendererMixin {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean method_50(Block block, int i, int j, int k, float f, float f1, float f2) {
@@ -1193,8 +1193,8 @@ public abstract class BlockRendererMixin {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean method_58(Block block, int i, int j, int k, float f, float f1, float f2) {
@@ -1331,8 +1331,8 @@ public abstract class BlockRendererMixin {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void method_48(Block block, int i, float f) {
@@ -1528,8 +1528,8 @@ public abstract class BlockRendererMixin {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public static boolean method_42(int i) {

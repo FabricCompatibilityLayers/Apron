@@ -44,8 +44,8 @@ public abstract class ChunkMixin {
 	public boolean field_967;
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean setBlockWithMetadata(int i, int j, int k, int l, int i1) {
@@ -101,8 +101,8 @@ public abstract class ChunkMixin {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean method_860(int i, int j, int k, int l) {

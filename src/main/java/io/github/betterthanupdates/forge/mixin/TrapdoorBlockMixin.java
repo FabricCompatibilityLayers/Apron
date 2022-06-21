@@ -15,25 +15,25 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 @Mixin(TrapdoorBlock.class)
 public abstract class TrapdoorBlockMixin extends Block {
 	@Shadow
-	public abstract void method_1059(World arg, int i, int j, int k, boolean bl);
+	public abstract void method_1059(World world, int x, int y, int z, boolean bl);
 
-	protected TrapdoorBlockMixin(int i, Material arg) {
-		super(i, arg);
+	protected TrapdoorBlockMixin(int blockId, Material material) {
+		super(blockId, material);
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {
+	public void onAdjacentBlockUpdate(World world, int x, int y, int z, int side) {
 		if (!world.isClient) {
-			int i1 = world.getBlockMeta(i, j, k);
-			int j1 = i;
-			int k1 = k;
+			int i1 = world.getBlockMeta(x, y, z);
+			int j1 = x;
+			int k1 = z;
 
 			if ((i1 & 3) == 0) {
-				k1 = k + 1;
+				k1 = z + 1;
 			}
 
 			if ((i1 & 3) == 1) {
@@ -41,28 +41,28 @@ public abstract class TrapdoorBlockMixin extends Block {
 			}
 
 			if ((i1 & 3) == 2) {
-				j1 = i + 1;
+				j1 = x + 1;
 			}
 
 			if ((i1 & 3) == 3) {
 				--j1;
 			}
 
-			if (!ForgeReflection.TrapdoorBlock$disableValidation && !((ForgeWorld) world).isBlockSolidOnSide(j1, j, k1, (i1 & 3) + 2)) {
-				world.setBlock(i, j, k, 0);
-				this.drop(world, i, j, k, i1);
+			if (!ForgeReflection.TrapdoorBlock$disableValidation && !((ForgeWorld) world).isBlockSolidOnSide(j1, y, k1, (i1 & 3) + 2)) {
+				world.setBlock(x, y, z, 0);
+				this.drop(world, x, y, z, i1);
 			}
 
-			if (l > 0 && Block.BY_ID[l].getEmitsRedstonePower()) {
-				boolean flag = world.hasRedstonePower(i, j, k);
-				this.method_1059(world, i, j, k, flag);
+			if (side > 0 && Block.BY_ID[side].getEmitsRedstonePower()) {
+				boolean flag = world.hasRedstonePower(x, y, z);
+				this.method_1059(world, x, y, z, flag);
 			}
 		}
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k, int l) {

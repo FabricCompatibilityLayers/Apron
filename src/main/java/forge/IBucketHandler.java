@@ -9,5 +9,5 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public interface IBucketHandler {
-	ItemStack fillCustomBucket(World arg, int i, int j, int k);
+	ItemStack fillCustomBucket(World world, int i, int j, int k);
 }

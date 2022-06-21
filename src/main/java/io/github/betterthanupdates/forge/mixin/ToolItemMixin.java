@@ -21,7 +21,7 @@ public class ToolItemMixin extends Item implements ForgeItem {
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack itemstack, Block block, int md) {
-		return ForgeHooks.isToolEffective(itemstack, block, md) ? this.field_2713 : this.getStrengthOnBlock(itemstack, block);
+	public float getStrVsBlock(ItemStack stack, Block block, int meta) {
+		return ForgeHooks.isToolEffective(stack, block, meta) ? this.field_2713 : this.getStrengthOnBlock(stack, block);
 	}
 }

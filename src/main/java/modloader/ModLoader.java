@@ -1014,7 +1014,7 @@ public class ModLoader {
 	}
 
 	@Environment(EnvType.SERVER)
-	public static void OnTick(MinecraftServer minecraftserver) {
+	public static void OnTick(MinecraftServer server) {
 		if (!hasInit) {
 			init();
 			LOGGER.debug("Initialized");
@@ -1022,12 +1022,12 @@ public class ModLoader {
 
 		long l = 0L;
 
-		if (minecraftserver.worlds != null && minecraftserver.worlds[0] != null) {
-			l = minecraftserver.worlds[0].getWorldTime();
+		if (server.worlds != null && server.worlds[0] != null) {
+			l = server.worlds[0].getWorldTime();
 
 			for (Entry<BaseMod, Boolean> entry : inGameHooks.entrySet()) {
 				if (clock != l || !entry.getValue()) {
-					entry.getKey().OnTickInGame(minecraftserver);
+					entry.getKey().OnTickInGame(server);
 				}
 			}
 		}
@@ -1753,21 +1753,21 @@ public class ModLoader {
 	}
 
 	@Environment(EnvType.SERVER)
-	public static void Init(MinecraftServer minecraftserver) {
+	public static void Init(MinecraftServer server) {
 		init();
 	}
 
 	@Environment(EnvType.SERVER)
-	public static void OpenGUI(PlayerEntity entityplayer, int i, Inventory iinventory, Container container) {
+	public static void OpenGUI(PlayerEntity player, int i, Inventory inventory, Container container) {
 		if (!hasInit) {
 			init();
 		}
 
-		if (entityplayer instanceof ServerPlayerEntity) {
-			ServerPlayerEntity entityplayermp = (ServerPlayerEntity) entityplayer;
+		if (player instanceof ServerPlayerEntity) {
+			ServerPlayerEntity entityplayermp = (ServerPlayerEntity) player;
 			entityplayermp.method_314();
 			int j = entityplayermp.field_260;
-			entityplayermp.packetHandler.send(new OpenContainerS2CPacket(j, i, iinventory.getContainerName(), iinventory.getInventorySize()));
+			entityplayermp.packetHandler.send(new OpenContainerS2CPacket(j, i, inventory.getContainerName(), inventory.getInventorySize()));
 			entityplayermp.container = container;
 			entityplayermp.container.currentContainerId = j;
 			entityplayermp.container.addListener(entityplayermp);

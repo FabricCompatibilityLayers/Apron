@@ -19,7 +19,7 @@ import net.minecraft.world.feature.Feature;
 public abstract class DungeonFeatureMixin extends Feature {
 	/**
 	 * @author SAPI
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	public boolean generate(World paramfd, Random paramRandom, int paramInt1, int paramInt2, int paramInt3) {
@@ -136,7 +136,7 @@ public abstract class DungeonFeatureMixin extends Feature {
 
 	/**
 	 * @author SAPI
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	private ItemStack getRandomChestItem(Random paramRandom) {
@@ -145,7 +145,7 @@ public abstract class DungeonFeatureMixin extends Feature {
 
 	/**
 	 * @author SAPI
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	private String getRandomEntity(Random paramRandom) {

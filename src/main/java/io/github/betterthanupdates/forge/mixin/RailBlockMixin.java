@@ -23,28 +23,28 @@ public abstract class RailBlockMixin extends Block {
 	private boolean field_1262;
 
 	@Shadow
-	protected abstract boolean method_1103(World arg, int i, int j, int k, int l, boolean bl, int m);
+	protected abstract boolean method_1103(World world, int x, int y, int z, int l, boolean bl, int m);
 
 	@Shadow
-	protected abstract void method_1104(World arg, int i, int j, int k, boolean bl);
+	protected abstract void method_1104(World world, int x, int y, int z, boolean bl);
 
-	protected RailBlockMixin(int i, Material arg) {
-		super(i, arg);
+	protected RailBlockMixin(int blockId, Material material) {
+		super(blockId, material);
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason provide a sane way of knowing whether a block is a rail
 	 */
 	@Overwrite
-	public static final boolean method_1109(World world, int i, int j, int k) {
-		int l = world.getBlockId(i, j, k);
+	public static final boolean method_1109(World world, int x, int y, int z) {
+		int l = world.getBlockId(x, y, z);
 		return Block.BY_ID[l] instanceof RailBlock;
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public static final boolean isRail(int i) {
@@ -52,8 +52,8 @@ public abstract class RailBlockMixin extends Block {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k) {
@@ -61,8 +61,8 @@ public abstract class RailBlockMixin extends Block {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {

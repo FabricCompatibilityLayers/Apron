@@ -14,15 +14,15 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 @Mixin(TorchBlock.class)
 public abstract class TorchBlockMixin extends Block {
 	@Shadow
-	protected abstract boolean method_1675(World arg, int i, int j, int k);
+	protected abstract boolean method_1675(World world, int x, int y, int z);
 
-	protected TorchBlockMixin(int i, Material arg) {
-		super(i, arg);
+	protected TorchBlockMixin(int blockId, Material material) {
+		super(blockId, material);
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	private boolean method_1674(World world, int i, int j, int k) {
@@ -30,8 +30,8 @@ public abstract class TorchBlockMixin extends Block {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k) {
@@ -47,8 +47,8 @@ public abstract class TorchBlockMixin extends Block {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void onBlockPlaced(World world, int i, int j, int k, int l) {
@@ -78,8 +78,8 @@ public abstract class TorchBlockMixin extends Block {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void onBlockPlaced(World world, int i, int j, int k) {
@@ -99,8 +99,8 @@ public abstract class TorchBlockMixin extends Block {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {

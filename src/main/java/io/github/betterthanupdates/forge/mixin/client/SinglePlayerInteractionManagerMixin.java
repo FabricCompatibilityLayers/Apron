@@ -61,7 +61,7 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 	}
 
 	/**
-	 * @author Forge
+	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
 	@Overwrite
@@ -79,7 +79,7 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 	}
 
 	/**
-	 * @author Forge
+	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
 	@Overwrite

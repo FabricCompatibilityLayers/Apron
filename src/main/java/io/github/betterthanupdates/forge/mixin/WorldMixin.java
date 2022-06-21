@@ -27,16 +27,16 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	public Dimension dimension;
 
 	@Shadow
-	public abstract boolean isBlockLoaded(int i, int j, int k);
+	public abstract boolean isBlockLoaded(int x, int y, int z);
 
 	@Shadow
-	public abstract boolean isAboveGround(int i, int j, int k);
+	public abstract boolean isAboveGround(int x, int y, int z);
 
 	@Shadow
-	public abstract int method_164(LightType arg, int i, int j, int k);
+	public abstract int method_164(LightType lightType, int x, int y, int z);
 
 	@Shadow
-	public abstract void method_166(LightType arg, int i, int j, int k, int l, int m, int n);
+	public abstract void method_166(LightType lightType, int x1, int y1, int z1, int x2, int y2, int z2);
 
 	@Shadow
 	public abstract boolean method_155(int i, int j, int k, int l, int m, int n);
@@ -51,14 +51,14 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	public List blockEntities;
 
 	@Shadow
-	public abstract Chunk getChunkFromCache(int i, int j);
+	public abstract Chunk getChunkFromCache(int chunkX, int chunkZ);
 
 	@Shadow
-	public abstract boolean canSpawnEntity(AxixAlignedBoundingBox arg);
+	public abstract boolean canSpawnEntity(AxixAlignedBoundingBox box);
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean isAir(int i, int j, int k) {
@@ -67,45 +67,45 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public void method_165(LightType enumskyblock, int i, int j, int k, int l) {
-		if (!this.dimension.halvesMapping || enumskyblock != LightType.field_2757) {
-			if (this.isBlockLoaded(i, j, k)) {
-				if (enumskyblock == LightType.field_2757) {
-					if (this.isAboveGround(i, j, k)) {
+	public void method_165(LightType lightType, int x, int y, int z, int l) {
+		if (!this.dimension.halvesMapping || lightType != LightType.field_2757) {
+			if (this.isBlockLoaded(x, y, z)) {
+				if (lightType == LightType.field_2757) {
+					if (this.isAboveGround(x, y, z)) {
 						l = 15;
 					}
-				} else if (enumskyblock == LightType.field_2758) {
-					int i1 = this.getBlockId(i, j, k);
-					int bl = i1 == 0 ? 0 : ((ForgeBlock) Block.BY_ID[i1]).getLightValue(this, i, j, k);
+				} else if (lightType == LightType.field_2758) {
+					int i1 = this.getBlockId(x, y, z);
+					int bl = i1 == 0 ? 0 : ((ForgeBlock) Block.BY_ID[i1]).getLightValue(this, x, y, z);
 
 					if (bl > l) {
 						l = bl;
 					}
 				}
 
-				if (this.method_164(enumskyblock, i, j, k) != l) {
-					this.method_166(enumskyblock, i, j, k, i, j, k);
+				if (this.method_164(lightType, x, y, z) != l) {
+					this.method_166(lightType, x, y, z, x, y, z);
 				}
 			}
 		}
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public boolean method_225(AxixAlignedBoundingBox axisalignedbb) {
-		int i = MathHelper.floor(axisalignedbb.minX);
-		int j = MathHelper.floor(axisalignedbb.maxX + 1.0);
-		int k = MathHelper.floor(axisalignedbb.minY);
-		int l = MathHelper.floor(axisalignedbb.maxY + 1.0);
-		int i1 = MathHelper.floor(axisalignedbb.minZ);
-		int j1 = MathHelper.floor(axisalignedbb.maxZ + 1.0);
+	public boolean method_225(AxixAlignedBoundingBox box) {
+		int i = MathHelper.floor(box.minX);
+		int j = MathHelper.floor(box.maxX + 1.0);
+		int k = MathHelper.floor(box.minY);
+		int l = MathHelper.floor(box.maxY + 1.0);
+		int i1 = MathHelper.floor(box.minZ);
+		int j1 = MathHelper.floor(box.maxZ + 1.0);
 
 		if (this.method_155(i, k, i1, j, l, j1)) {
 			for (int k1 = i; k1 < j; ++k1) {
@@ -129,8 +129,8 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void setBlockEntity(int i, int j, int k, BlockEntity tileentity) {
@@ -165,8 +165,8 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean canSuffocate(int i, int j, int k) {
@@ -181,8 +181,8 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean canPlaceBlock(int i, int j, int k, int l, boolean flag, int i1) {

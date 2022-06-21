@@ -42,8 +42,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 
 	@Shadow protected boolean lyingOnBed;
 
-	private PlayerEntityMixin(World arg) {
-		super(arg);
+	private PlayerEntityMixin(World world) {
+		super(world);
 	}
 
 	/**
@@ -75,8 +75,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	protected void applyDamage(int i) {
@@ -105,8 +105,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void breakHeldItem() {
@@ -116,8 +116,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public SleepStatus trySleep(int i, int j, int k) {
