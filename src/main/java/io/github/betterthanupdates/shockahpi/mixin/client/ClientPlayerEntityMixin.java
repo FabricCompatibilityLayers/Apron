@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.shockahpi.mixin;
+package io.github.betterthanupdates.shockahpi.mixin.client;
 
 import java.util.ArrayList;
 import java.util.List;

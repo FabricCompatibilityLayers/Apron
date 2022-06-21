@@ -5,20 +5,17 @@ import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import shockahpi.Loc;
-import shockahpi.SAPI;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.ClientInteractionManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.SingleplayerInteractionManager;
-import net.minecraft.item.ItemStack;
 
 import io.github.betterthanupdates.forge.block.ForgeBlock;
 
 @Environment(EnvType.CLIENT)
 @Mixin(SingleplayerInteractionManager.class)
-public class SingleplayerInteractionManagerMixin extends ClientInteractionManager {
+public class SinglePlayerInteractionManagerMixin extends ClientInteractionManager {
 	@Shadow
 	private float damage;
 
@@ -40,64 +37,31 @@ public class SingleplayerInteractionManagerMixin extends ClientInteractionManage
 	@Shadow
 	private float oldDamage;
 
-	public SingleplayerInteractionManagerMixin(Minecraft minecraft) {
-		super(minecraft);
+	public SinglePlayerInteractionManagerMixin(Minecraft client) {
+		super(client);
 	}
 
 	/**
 	 * @author Forge
-	 * @reason
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public boolean method_1716(int i, int j, int k, int l) {
-		int i1 = this.client.world.getBlockId(i, j, k);
-		int j1 = this.client.world.getBlockMeta(i, j, k);
-		boolean flag = super.method_1716(i, j, k, l);
-		ItemStack itemstack = this.client.player.getHeldItem();
-		boolean flag1 = ((ForgeBlock) Block.BY_ID[i1]).canHarvestBlock(this.client.player, j1);
-
-		if (itemstack != null) {
-			itemstack.postMine(i1, i, j, k, this.client.player);
-
-			if (itemstack.count == 0) {
-				itemstack.unusedEmptyMethod1(this.client.player);
-				this.client.player.breakHeldItem();
-			}
-		}
-
-		if (flag && flag1) {
-			// ShockAhPI hook
-			if (SAPI.interceptHarvest(this.client.world, this.client.player, new Loc(i, j, k), i1, j1)) {
-				return true;
-			}
-
-			Block.BY_ID[i1].afterBreak(this.client.world, this.client.player, i, j, k, j1);
-		}
-
-		return flag;
-	}
-
-	/**
-	 * @author Forge
-	 * @reason
-	 */
-	@Overwrite
-	public void method_1707(int i, int j, int k, int l) {
-		this.client.world.method_172(this.client.player, i, j, k, l);
-		int i1 = this.client.world.getBlockId(i, j, k);
+	public void method_1707(int x, int y, int z, int l) {
+		this.client.world.method_172(this.client.player, x, y, z, l);
+		int i1 = this.client.world.getBlockId(x, y, z);
 
 		if (i1 > 0 && this.damage == 0.0F) {
-			Block.BY_ID[i1].activate(this.client.world, i, j, k, this.client.player);
+			Block.BY_ID[i1].activate(this.client.world, x, y, z, this.client.player);
 		}
 
-		if (i1 > 0 && ((ForgeBlock) Block.BY_ID[i1]).blockStrength(this.client.world, this.client.player, i, j, k) >= 1.0F) {
-			this.method_1716(i, j, k, l);
+		if (i1 > 0 && ((ForgeBlock) Block.BY_ID[i1]).blockStrength(this.client.world, this.client.player, x, y, z) >= 1.0F) {
+			this.method_1716(x, y, z, l);
 		}
 	}
 
 	/**
 	 * @author Forge
-	 * @reason
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void method_1721(int i, int j, int k, int l) {
@@ -114,7 +78,7 @@ public class SingleplayerInteractionManagerMixin extends ClientInteractionManage
 				Block block = Block.BY_ID[i1];
 				this.damage += ((ForgeBlock) block).blockStrength(this.client.world, this.client.player, i, j, k);
 
-				if (this.field_2186 % 4.0F == 0.0F && block != null) {
+				if (this.field_2186 % 4.0F == 0.0F) {
 					this.client.soundHelper.playSound(
 							block.sounds.getWalkSound(),
 							(float) i + 0.5F,

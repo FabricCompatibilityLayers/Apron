@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.audiomod.mixin;
+package io.github.betterthanupdates.audiomod.mixin.client;
 
 import java.io.File;
 import java.io.IOException;

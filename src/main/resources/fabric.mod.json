@@ -50,15 +50,30 @@
   "accessWidener": "apron.accesswidener",
   "mixins": [
     "apron.mixins.json",
-    "audiomod.mixins.json",
-    "forge.mixins.json",
-    "modloader.mixins.json",
-    "shockahpi.mixins.json"
+    {
+      "config": "audiomod.mixins.json",
+      "environment": "client"
+    },
+    {
+      "config": "forge.mixins.json",
+      "environment": "*"
+    },
+    {
+      "config": "modloader.mixins.json",
+      "environment": "*"
+    },
+    {
+      "config": "shockahpi.mixins.json",
+      "environment": "client"
+    }
   ],
   "depends": {
     "fabricloader": ">=0.13.3",
     "minecraft": "1.0.0-beta.7.3",
-    "mod-remapping-api": "*"
+    "mod-remapping-api": ">=1.3.2"
+  },
+  "recommends": {
+    "modmenu": "^2.0.0"
   },
   "custom": {
     "apron:common": {

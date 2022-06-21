@@ -1,14 +1,14 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "io.github.betterthanupdates.shockahpi.mixin",
+  "package": "io.github.betterthanupdates.shockahpi.mixin.client",
   "compatibilityLevel": "JAVA_8",
   "client": [
     "ClientPlayerEntityMixin",
     "PortalBlockMixin",
     "AchievementsScreenMixin",
     "GameRendererMixin",
-    "SingleplayerInteractionManagerMixin",
+    "SinglePlayerInteractionManagerMixin",
     "ToolItemMixin",
     "DimensionMixin",
     "DimensionFileMixin",

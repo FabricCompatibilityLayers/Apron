@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.shockahpi.mixin;
+package io.github.betterthanupdates.shockahpi.mixin.client;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;

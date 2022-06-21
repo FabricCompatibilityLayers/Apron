@@ -38,7 +38,7 @@
     "client.ParticleManagerMixin",
     "client.PistonRendererMixin",
     "client.PlayerRendererMixin",
-    "client.SingleplayerInteractionManagerMixin",
+    "client.SinglePlayerInteractionManagerMixin",
     "client.TessellatorMixin",
     "client.TextureManagerMixin",
     "client.WorldRendererMixin"
