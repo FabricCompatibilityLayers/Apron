@@ -8,6 +8,7 @@ import modloader.BaseMod;
 import modloader.ModLoader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,12 +30,17 @@ import net.minecraft.util.io.CompoundTag;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionData;
 
+import io.github.betterthanupdates.apron.api.ApronApi;
+
 /**
  * ShockAhPi - Adding new possibilities in 3... 2... 1...
  * @author ShockAh
  */
-@SuppressWarnings({"unused", "UnusedReturnValue"})
+@SuppressWarnings({"unused", "UnusedReturnValue", "BooleanMethodIsAlwaysInverted"})
 public final class SAPI {
+	// Apron
+	private static final ApronApi APRON = ApronApi.getInstance();
+
 	private static final ArrayList<IInterceptHarvest> harvestIntercepts = new ArrayList<>();
 	private static final ArrayList<IInterceptBlockSet> setIntercepts = new ArrayList<>();
 	private static final ArrayList<IReachBlock> reachesBlock = new ArrayList<>();
@@ -86,9 +92,8 @@ public final class SAPI {
 			double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
 			double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
 			ItemEntity itemEntity = new ItemEntity(world,
-					(double) pos.x + d,
-					(double) pos.y + d1,
-					(double) pos.z + d2, new ItemStack(stack.itemId, 1,
+					pos.x + d, pos.y + d1, pos.z + d2,
+					new ItemStack(stack.itemId, 1,
 					stack.getDamage()));
 			itemEntity.pickupDelay = 10;
 			world.spawnEntity(itemEntity);
@@ -117,26 +122,50 @@ public final class SAPI {
 		reachesEntity.add(reachEntity);
 	}
 
+	/**
+	 * The original implementation from SAPI. This is kept for legacy purposes.
+	 * @return the modified value if modded, or exactly 4f if not.
+	 */
+	@Deprecated
 	@Environment(EnvType.CLIENT)
 	public static float reachGetBlock() {
-		ItemStack stack = ModLoader.getMinecraftInstance().player.inventory.getHeldItem();
+		return reachGetBlock(4f);
+	}
 
-		for (IReachBlock reachBlock : reachesBlock) {
-			if (reachBlock.reachBlockItemMatches(stack)) {
-				return reachBlock.getReachBlock(stack);
+	/**
+	 * A better implementation for the internal mixin.
+	 * @param original the value that would originally be returned
+	 * @return the modified value if modded, the original value if not.
+	 */
+	@ApiStatus.Internal
+	@Environment(EnvType.CLIENT)
+	public static float reachGetBlock(float original) {
+		PlayerEntity player = APRON.getPlayer();
+
+		if (player != null) {
+			ItemStack heldStack = player.getHeldItem();
+
+			for (IReachBlock reachBlock : reachesBlock) {
+				if (reachBlock.reachBlockItemMatches(heldStack)) {
+					return reachBlock.getReachBlock(heldStack);
+				}
 			}
 		}
 
-		return 4F;
+		return original;
 	}
 
 	@Environment(EnvType.CLIENT)
 	public static float reachGetEntity() {
-		ItemStack handStack = ModLoader.getMinecraftInstance().player.inventory.getHeldItem();
+		PlayerEntity player = APRON.getPlayer();
 
-		for (IReachEntity reach : reachesEntity) {
-			if (reach.reachEntityItemMatches(handStack)) {
-				return reach.getReachEntity(handStack);
+		if (player != null) {
+			ItemStack heldStack = player.getHeldItem();
+
+			for (IReachEntity reach : reachesEntity) {
+				if (reach.reachEntityItemMatches(heldStack)) {
+					return reach.getReachEntity(heldStack);
+				}
 			}
 		}
 
