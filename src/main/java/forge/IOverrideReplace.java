@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 
 @SuppressWarnings("unused")
 public interface IOverrideReplace {
-	boolean canReplaceBlock(World arg, int i, int j, int k, int l);
+	boolean canReplaceBlock(World world, int i, int j, int k, int l);
 
 	boolean getReplacedSuccess();
 }

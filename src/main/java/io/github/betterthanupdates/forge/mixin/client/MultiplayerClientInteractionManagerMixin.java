@@ -48,13 +48,13 @@ public abstract class MultiplayerClientInteractionManagerMixin extends ClientInt
 	@Shadow
 	private int field_2614;
 
-	public MultiplayerClientInteractionManagerMixin(Minecraft minecraft) {
-		super(minecraft);
+	public MultiplayerClientInteractionManagerMixin(Minecraft client) {
+		super(client);
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void method_1707(int i, int j, int k, int l) {
@@ -81,8 +81,8 @@ public abstract class MultiplayerClientInteractionManagerMixin extends ClientInt
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void method_1721(int i, int j, int k, int l) {

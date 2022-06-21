@@ -49,8 +49,8 @@ public class ExplosionMixin {
 	private Random random;
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void kaboomPhase1() {
@@ -61,9 +61,9 @@ public class ExplosionMixin {
 			for (int l = 0; l < i; ++l) {
 				for (int j1 = 0; j1 < i; ++j1) {
 					if (j == 0 || j == i - 1 || l == 0 || l == i - 1 || j1 == 0 || j1 == i - 1) {
-						double d = (double) ((float) j / ((float) i - 1.0F) * 2.0F - 1.0F);
-						double d1 = (double) ((float) l / ((float) i - 1.0F) * 2.0F - 1.0F);
-						double d2 = (double) ((float) j1 / ((float) i - 1.0F) * 2.0F - 1.0F);
+						double d = (float) j / ((float) i - 1.0F) * 2.0F - 1.0F;
+						double d1 = (float) l / ((float) i - 1.0F) * 2.0F - 1.0F;
+						double d2 = (float) j1 / ((float) i - 1.0F) * 2.0F - 1.0F;
 						double d3 = Math.sqrt(d * d + d1 * d1 + d2 * d2);
 						d /= d3;
 						d1 /= d3;

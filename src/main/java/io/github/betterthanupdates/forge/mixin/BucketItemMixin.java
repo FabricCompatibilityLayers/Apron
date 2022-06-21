@@ -28,11 +28,11 @@ public class BucketItemMixin extends Item {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public ItemStack use(ItemStack itemstack, World world, PlayerEntity player) {
+	public ItemStack use(ItemStack stack, World world, PlayerEntity player) {
 		float f = 1.0F;
 		float f1 = player.prevPitch + (player.pitch - player.prevPitch) * f;
 		float f2 = player.prevYaw + (player.yaw - player.prevYaw) * f;
@@ -48,32 +48,32 @@ public class BucketItemMixin extends Item {
 		float f9 = f3 * f5;
 		double d3 = 5.0;
 		Vec3d vec3d1 = vec3d.translate((double) f7 * d3, (double) f6 * d3, (double) f9 * d3);
-		HitResult movingobjectposition = world.method_161(vec3d, vec3d1, this.liquidBlockId == 0);
+		HitResult hitResult = world.method_161(vec3d, vec3d1, this.liquidBlockId == 0);
 
-		if (movingobjectposition != null) {
-			if (movingobjectposition.type == HitType.field_789) {
-				int i = movingobjectposition.x;
-				int j = movingobjectposition.y;
-				int k = movingobjectposition.z;
+		if (hitResult != null) {
+			if (hitResult.type == HitType.field_789) {
+				int x = hitResult.x;
+				int y = hitResult.y;
+				int z = hitResult.z;
 
-				if (!world.method_171(player, i, j, k)) {
-					return itemstack;
+				if (!world.method_171(player, x, y, z)) {
+					return stack;
 				}
 
 				if (this.liquidBlockId == 0) {
-					ItemStack customBucket = MinecraftForge.fillCustomBucket(world, i, j, k);
+					ItemStack customBucket = MinecraftForge.fillCustomBucket(world, x, y, z);
 
 					if (customBucket != null) {
 						return customBucket;
 					}
 
-					if (world.getMaterial(i, j, k) == Material.WATER && world.getBlockMeta(i, j, k) == 0) {
-						world.setBlock(i, j, k, 0);
+					if (world.getMaterial(x, y, z) == Material.WATER && world.getBlockMeta(x, y, z) == 0) {
+						world.setBlock(x, y, z, 0);
 						return new ItemStack(Item.WATER_BUCKET);
 					}
 
-					if (world.getMaterial(i, j, k) == Material.LAVA && world.getBlockMeta(i, j, k) == 0) {
-						world.setBlock(i, j, k, 0);
+					if (world.getMaterial(x, y, z) == Material.LAVA && world.getBlockMeta(x, y, z) == 0) {
+						world.setBlock(x, y, z, 0);
 						return new ItemStack(Item.LAVA_BUCKET);
 					}
 				} else {
@@ -81,49 +81,49 @@ public class BucketItemMixin extends Item {
 						return new ItemStack(Item.BUCKET);
 					}
 
-					if (movingobjectposition.field_1987 == 0) {
-						--j;
+					if (hitResult.field_1987 == 0) {
+						--y;
 					}
 
-					if (movingobjectposition.field_1987 == 1) {
-						++j;
+					if (hitResult.field_1987 == 1) {
+						++y;
 					}
 
-					if (movingobjectposition.field_1987 == 2) {
-						--k;
+					if (hitResult.field_1987 == 2) {
+						--z;
 					}
 
-					if (movingobjectposition.field_1987 == 3) {
-						++k;
+					if (hitResult.field_1987 == 3) {
+						++z;
 					}
 
-					if (movingobjectposition.field_1987 == 4) {
-						--i;
+					if (hitResult.field_1987 == 4) {
+						--x;
 					}
 
-					if (movingobjectposition.field_1987 == 5) {
-						++i;
+					if (hitResult.field_1987 == 5) {
+						++x;
 					}
 
-					if (world.isAir(i, j, k) || !world.getMaterial(i, j, k).isSolid()) {
+					if (world.isAir(x, y, z) || !world.getMaterial(x, y, z).isSolid()) {
 						if (world.dimension.evaporatesWater && this.liquidBlockId == Block.FLOWING_WATER.id) {
 							world.playSound(d + 0.5, d1 + 0.5, d2 + 0.5, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 
 							for (int l = 0; l < 8; ++l) {
-								world.addParticle("largesmoke", (double) i + Math.random(), (double) j + Math.random(), (double) k + Math.random(), 0.0, 0.0, 0.0);
+								world.addParticle("largesmoke", (double) x + Math.random(), (double) y + Math.random(), (double) z + Math.random(), 0.0, 0.0, 0.0);
 							}
 						} else {
-							world.placeBlockWithMetaData(i, j, k, this.liquidBlockId, 0);
+							world.placeBlockWithMetaData(x, y, z, this.liquidBlockId, 0);
 						}
 
 						return new ItemStack(Item.BUCKET);
 					}
 				}
-			} else if (this.liquidBlockId == 0 && movingobjectposition.field_1989 instanceof CowEntity) {
+			} else if (this.liquidBlockId == 0 && hitResult.field_1989 instanceof CowEntity) {
 				return new ItemStack(Item.MILK);
 			}
 		}
 
-		return itemstack;
+		return stack;
 	}
 }

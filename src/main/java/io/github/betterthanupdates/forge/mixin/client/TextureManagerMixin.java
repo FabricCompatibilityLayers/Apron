@@ -51,7 +51,7 @@ public abstract class TextureManagerMixin {
 	private BufferedImage missingTexImage;
 
 	/**
-	 * @author Forge
+	 * @author Eloraam
 	 * @reason Add Forge warning
 	 */
 	@Overwrite
@@ -105,7 +105,7 @@ public abstract class TextureManagerMixin {
 	}
 
 	/**
-	 * @author Forge
+	 * @author Eloraam
 	 * @reason short -> char
 	 */
 	@Overwrite

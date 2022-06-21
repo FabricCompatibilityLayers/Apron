@@ -29,33 +29,33 @@ public class HeldItemRendererMixin {
 	private BlockRenderer blockRenderer;
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public void render(LivingEntity livingEntity, ItemStack itemstack) {
+	public void render(LivingEntity livingEntity, ItemStack stack) {
 		GL11.glPushMatrix();
-		ICustomItemRenderer customRenderer = MinecraftForgeClient.getCustomItemRenderer(itemstack.itemId);
+		ICustomItemRenderer customRenderer = MinecraftForgeClient.getCustomItemRenderer(stack.itemId);
 
 		if (customRenderer != null) {
 			GL11.glBindTexture(3553, this.client.textureManager.getTextureId("/terrain.png"));
-			ForgeHooksClient.overrideTexture(itemstack.getItem());
-			ForgeHooksClient.renderCustomItem(customRenderer, this.blockRenderer, itemstack.itemId, itemstack.getMeta(), livingEntity.getBrightnessAtEyes(1.0F));
-		} else if (itemstack.itemId < 256 && BlockRenderer.method_42(Block.BY_ID[itemstack.itemId].getRenderType())) {
+			ForgeHooksClient.overrideTexture(stack.getItem());
+			ForgeHooksClient.renderCustomItem(customRenderer, this.blockRenderer, stack.itemId, stack.getMeta(), livingEntity.getBrightnessAtEyes(1.0F));
+		} else if (stack.itemId < 256 && BlockRenderer.method_42(Block.BY_ID[stack.itemId].getRenderType())) {
 			GL11.glBindTexture(3553, this.client.textureManager.getTextureId("/terrain.png"));
-			ForgeHooksClient.overrideTexture(Block.BY_ID[itemstack.itemId]);
-			this.blockRenderer.method_48(Block.BY_ID[itemstack.itemId], itemstack.getMeta(), livingEntity.getBrightnessAtEyes(1.0F));
+			ForgeHooksClient.overrideTexture(Block.BY_ID[stack.itemId]);
+			this.blockRenderer.method_48(Block.BY_ID[stack.itemId], stack.getMeta(), livingEntity.getBrightnessAtEyes(1.0F));
 		} else {
-			if (itemstack.itemId < 256) {
+			if (stack.itemId < 256) {
 				GL11.glBindTexture(3553, this.client.textureManager.getTextureId("/terrain.png"));
-				ForgeHooksClient.overrideTexture(Block.BY_ID[itemstack.itemId]);
+				ForgeHooksClient.overrideTexture(Block.BY_ID[stack.itemId]);
 			} else {
 				GL11.glBindTexture(3553, this.client.textureManager.getTextureId("/gui/items.png"));
-				ForgeHooksClient.overrideTexture(Item.byId[itemstack.itemId]);
+				ForgeHooksClient.overrideTexture(Item.byId[stack.itemId]);
 			}
 
 			Tessellator tessellator = Tessellator.INSTANCE;
-			int i = livingEntity.getHeldItemTexture(itemstack);
+			int i = livingEntity.getHeldItemTexture(stack);
 			float f = ((float) (i % 16 * 16) + 0.0F) / 256.0F;
 			float f1 = ((float) (i % 16 * 16) + 15.99F) / 256.0F;
 			float f2 = ((float) (i / 16 * 16) + 0.0F) / 256.0F;

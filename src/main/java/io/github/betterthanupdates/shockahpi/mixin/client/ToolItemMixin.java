@@ -83,7 +83,7 @@ public class ToolItemMixin extends Item implements SAPITool {
 
 	/**
 	 * @author SAPI
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	public int getAttackDamage(Entity entity) {
@@ -97,7 +97,7 @@ public class ToolItemMixin extends Item implements SAPITool {
 
 	/**
 	 * @author SAPI
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	public float getStrengthOnBlock(ItemStack stack, Block block) {

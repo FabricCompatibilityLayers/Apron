@@ -9,5 +9,5 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
 public interface ISpecialResistance {
-	float getSpecialExplosionResistance(World arg, int i, int j, int k, double d, double e, double f, Entity arg2);
+	float getSpecialExplosionResistance(World world, int i, int j, int k, double d, double e, double f, Entity entity);
 }

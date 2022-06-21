@@ -39,14 +39,14 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 	private Random rand;
 
 	@Shadow
-	public abstract void addParticle(ParticleEntity arg);
+	public abstract void addParticle(ParticleEntity particle);
 
 	@Unique
 	private List<BlockTextureParticles> effectList = new ArrayList<>();
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void method_320() {
@@ -79,8 +79,8 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void method_324(Entity entity, float f) {
@@ -142,8 +142,8 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void method_323(World world) {
@@ -161,8 +161,8 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void addBlockBreakParticles(int i, int j, int k, int l, int i1) {
@@ -189,8 +189,8 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void addBlockClickParticle(int i, int j, int k, int l) {

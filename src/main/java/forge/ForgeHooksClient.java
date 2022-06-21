@@ -57,9 +57,9 @@ public class ForgeHooksClient {
 	public ForgeHooksClient() {
 	}
 
-	public static boolean onBlockHighlight(WorldEventRenderer renderGlobal, PlayerEntity player, HitResult mop, int i, ItemStack itemstack, float f) {
+	public static boolean onBlockHighlight(WorldEventRenderer renderGlobal, PlayerEntity player, HitResult mop, int i, ItemStack stack, float f) {
 		for (IHighlightHandler handler : highlightHandlers) {
-			if (handler.onBlockHighlight(renderGlobal, player, mop, i, itemstack, f)) {
+			if (handler.onBlockHighlight(renderGlobal, player, mop, i, stack, f)) {
 				return true;
 			}
 		}

@@ -25,8 +25,8 @@ public abstract class PistonRendererMixin extends BlockEntityRenderer {
 	private BlockRenderer field_1131;
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void render(PistonBlockEntity piston, double d, double d1, double d2, float f) {

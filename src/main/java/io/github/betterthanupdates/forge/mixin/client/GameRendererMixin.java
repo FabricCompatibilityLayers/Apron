@@ -58,8 +58,8 @@ public abstract class GameRendererMixin {
 	protected abstract void method_1845(float f, int i);
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void method_1841(float f, long l) {

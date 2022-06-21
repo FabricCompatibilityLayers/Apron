@@ -22,7 +22,7 @@ public abstract class DimensionFileMixin implements DimensionData {
 
 	/**
 	 * @author SAPI
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	public ChunkIO getChunkIO(Dimension paramxa) {

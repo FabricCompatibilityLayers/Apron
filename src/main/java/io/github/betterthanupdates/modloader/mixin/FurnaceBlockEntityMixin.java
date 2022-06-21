@@ -29,7 +29,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 	public int fuelTime;
 
 	@Shadow
-	protected abstract int getFuelTime(ItemStack arg);
+	protected abstract int getFuelTime(ItemStack stack);
 
 	@Shadow
 	private ItemStack[] inventory;

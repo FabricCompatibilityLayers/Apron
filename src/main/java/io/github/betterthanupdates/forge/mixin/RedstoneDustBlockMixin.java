@@ -15,13 +15,13 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(RedstoneDustBlock.class)
 public class RedstoneDustBlockMixin extends Block {
-	protected RedstoneDustBlockMixin(int i, Material arg) {
-		super(i, arg);
+	protected RedstoneDustBlockMixin(int blockId, Material material) {
+		super(blockId, material);
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k) {
@@ -29,8 +29,8 @@ public class RedstoneDustBlockMixin extends Block {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public static boolean method_1287(BlockView blockView, int i, int j, int k, int l) {

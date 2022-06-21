@@ -10,7 +10,7 @@ import net.minecraft.world.dimension.Dimension;
 public class DimensionMixin {
 	/**
 	 * @author SAPI
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	public static Dimension getByID(int paramInt) {

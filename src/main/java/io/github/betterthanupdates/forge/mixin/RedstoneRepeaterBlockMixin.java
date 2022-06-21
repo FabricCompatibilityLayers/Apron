@@ -12,25 +12,25 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(RedstoneRepeaterBlock.class)
 public class RedstoneRepeaterBlockMixin extends Block {
-	protected RedstoneRepeaterBlockMixin(int i, Material arg) {
-		super(i, arg);
+	protected RedstoneRepeaterBlockMixin(int blockId, Material material) {
+		super(blockId, material);
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public boolean canPlaceAt(World world, int i, int j, int k) {
-		return !((ForgeWorld) world).isBlockSolidOnSide(i, j - 1, k, 1) ? false : super.canPlaceAt(world, i, j, k);
+	public boolean canPlaceAt(World world, int x, int y, int z) {
+		return !((ForgeWorld) world).isBlockSolidOnSide(x, y - 1, z, 1) ? false : super.canPlaceAt(world, x, y, z);
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public boolean canGrow(World world, int i, int j, int k) {
-		return !((ForgeWorld) world).isBlockSolidOnSide(i, j - 1, k, 1) ? false : super.canGrow(world, i, j, k);
+	public boolean canGrow(World world, int x, int y, int z) {
+		return !((ForgeWorld) world).isBlockSolidOnSide(x, y - 1, z, 1) ? false : super.canGrow(world, x, y, z);
 	}
 }

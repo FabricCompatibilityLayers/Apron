@@ -28,20 +28,20 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer {
 	@Shadow
 	private BipedEntityModel field_296;
 
-	public PlayerRendererMixin(EntityModel arg, float f) {
-		super(arg, f);
+	private PlayerRendererMixin(EntityModel entityModel, float f) {
+		super(entityModel, f);
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	protected boolean render(PlayerEntity player, int i, float f) {
-		ItemStack itemstack = player.inventory.getArmorItem(3 - i);
+		ItemStack stack = player.inventory.getArmorItem(3 - i);
 
-		if (itemstack != null) {
-			Item item = itemstack.getItem();
+		if (stack != null) {
+			Item item = stack.getItem();
 
 			if (item instanceof ArmorItem) {
 				ArmorItem armor = (ArmorItem) item;

@@ -9,5 +9,5 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SleepStatus;
 
 public interface ISleepHandler {
-	SleepStatus sleepInBedAt(PlayerEntity arg, int i, int j, int k);
+	SleepStatus sleepInBedAt(PlayerEntity player, int x, int y, int z);
 }

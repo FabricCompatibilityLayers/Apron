@@ -39,8 +39,8 @@ public class class_417Mixin {
 	public LightType field_1673;
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void method_1402(World world) {

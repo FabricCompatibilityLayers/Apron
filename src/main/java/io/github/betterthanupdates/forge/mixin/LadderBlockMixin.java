@@ -13,8 +13,8 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(LadderBlock.class)
 public abstract class LadderBlockMixin extends Block implements ForgeBlock {
-	protected LadderBlockMixin(int i, Material arg) {
-		super(i, arg);
+	protected LadderBlockMixin(int blockId, Material material) {
+		super(blockId, material);
 	}
 
 	@Override
@@ -23,8 +23,8 @@ public abstract class LadderBlockMixin extends Block implements ForgeBlock {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public boolean canPlaceAt(World world, int i, int j, int k) {
@@ -38,8 +38,8 @@ public abstract class LadderBlockMixin extends Block implements ForgeBlock {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge Hooks
 	 */
 	@Overwrite
 	public void onBlockPlaced(World world, int i, int j, int k, int l) {
@@ -65,8 +65,8 @@ public abstract class LadderBlockMixin extends Block implements ForgeBlock {
 	}
 
 	/**
-	 * @author Forge
-	 * @reason
+	 * @author Eloraam
+	 * @reason implement Forge hooks
 	 */
 	@Overwrite
 	public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {

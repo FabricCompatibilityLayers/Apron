@@ -51,7 +51,7 @@ public abstract class MinecraftServerMixin implements Runnable, CommandSource {
 
 	/**
 	 * @author Risugami
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite(remap = false)
 	public void run() {
@@ -107,8 +107,8 @@ public abstract class MinecraftServerMixin implements Runnable, CommandSource {
 
 				try {
 					Thread.sleep(10L);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
 				}
 			}
 		} finally {

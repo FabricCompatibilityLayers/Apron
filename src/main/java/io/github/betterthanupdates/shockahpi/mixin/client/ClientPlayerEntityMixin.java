@@ -45,8 +45,8 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	@Shadow
 	public ClientPlayPacketHandler networkHandler;
 
-	public ClientPlayerEntityMixin(Minecraft minecraft, World arg, Session arg2, int i) {
-		super(minecraft, arg, arg2, i);
+	public ClientPlayerEntityMixin(Minecraft client, World world, Session arg2, int i) {
+		super(client, world, arg2, i);
 	}
 
 	@Shadow
@@ -77,7 +77,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
 	/**
 	 * @author SAPI
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	public void method_1924(Stat statbase, int i) {
@@ -90,7 +90,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
 	/**
 	 * @author SAPI
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	public boolean damage(Entity entity, int i) {
@@ -147,7 +147,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
 	/**
 	 * @author SAPI
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	public void closeContainer() {
@@ -227,7 +227,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
 	/**
 	 * @author SAPI
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	public void addHealth(int i) {
@@ -259,7 +259,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
 	/**
 	 * @author SAPI
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	public void tick() {
@@ -292,7 +292,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
 	/**
 	 * @author SAPI
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	public void dropSelectedItem() {
@@ -302,9 +302,9 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	}
 
 	@Override
-	public void dropItem(ItemStack itemstack) {
-		if (!this.sapi.PAPIdropPlayerItem(this, itemstack)) {
-			super.dropItem(itemstack);
+	public void dropItem(ItemStack stack) {
+		if (!this.sapi.PAPIdropPlayerItem(this, stack)) {
+			super.dropItem(stack);
 		}
 	}
 
@@ -484,7 +484,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
 	/**
 	 * @author SAPI
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	public void respawn() {

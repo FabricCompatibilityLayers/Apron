@@ -43,7 +43,7 @@ public abstract class CommandManagerMixin {
 
 	/**
 	 * @author Risugami
-	 * @reason yes
+	 * @reason
 	 */
 	@Overwrite
 	public void processCommand(Command servercommand) {
