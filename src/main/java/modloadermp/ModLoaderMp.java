@@ -59,23 +59,17 @@ public class ModLoaderMp {
 
 	@Environment(EnvType.CLIENT)
 	public static void Init() {
-		if (!hasInit) {
-			init();
-		}
+		init();
 	}
 
 	@Environment(EnvType.SERVER)
 	public static void InitModLoaderMp() {
-		if (!hasInit) {
-			init();
-		}
+		init();
 	}
 
 	@Environment(EnvType.CLIENT)
 	public static void HandleAllPackets(final ModLoaderPacket packet) {
-		if (!hasInit) {
-			init();
-		}
+		init();
 
 		packet230Received = true;
 
@@ -125,9 +119,7 @@ public class ModLoaderMp {
 
 	@Environment(EnvType.CLIENT)
 	public static NetClientHandlerEntity HandleNetClientHandlerEntities(final int aInteger1) {
-		if (!hasInit) {
-			init();
-		}
+		init();
 
 		if (NET_CLIENT_HANDLER_MAP.containsKey(aInteger1)) {
 			return NET_CLIENT_HANDLER_MAP.get(aInteger1);
@@ -138,9 +130,7 @@ public class ModLoaderMp {
 
 	@Environment(EnvType.CLIENT)
 	public static void SendPacket(BaseModMp basemodmp, ModLoaderPacket packet) {
-		if (!hasInit) {
-			init();
-		}
+		init();
 
 		if (basemodmp == null) {
 			IllegalArgumentException e = new IllegalArgumentException("baseModMp cannot be null.");
@@ -154,9 +144,7 @@ public class ModLoaderMp {
 
 	@Environment(EnvType.CLIENT)
 	public static void RegisterGUI(final BaseModMp basemodmp, final int i) {
-		if (!hasInit) {
-			init();
-		}
+		init();
 
 		if (GUI_MOD_MAP.containsKey(i)) {
 			Log("RegisterGUI error: inventoryType already registered.");
@@ -167,9 +155,7 @@ public class ModLoaderMp {
 
 	@Environment(EnvType.CLIENT)
 	public static void HandleGUI(final OpenContainerS2CPacket packet) {
-		if (!hasInit) {
-			init();
-		}
+		init();
 
 		final BaseModMp basemodmp = GUI_MOD_MAP.get(packet.inventoryType);
 		final Screen guiScreen = basemodmp.HandleGUI(packet.inventoryType);
@@ -193,9 +179,7 @@ public class ModLoaderMp {
 
 	@Environment(EnvType.CLIENT)
 	public static void RegisterNetClientHandlerEntity(Class<? extends Entity> class1, boolean flag, int i) {
-		if (!hasInit) {
-			init();
-		}
+		init();
 
 		if (i > 255) {
 			Log("RegisterNetClientHandlerEntity error: entityId cannot be greater than 255.");
@@ -212,9 +196,7 @@ public class ModLoaderMp {
 
 	@Environment(EnvType.CLIENT)
 	public static void SendKey(final BaseModMp basemodmp, final int i) {
-		if (!hasInit) {
-			init();
-		}
+		init();
 
 		if (basemodmp == null) {
 			final IllegalArgumentException e = new IllegalArgumentException("baseModMp cannot be null.");
@@ -234,7 +216,8 @@ public class ModLoaderMp {
 	}
 
 	private static void init() {
-		hasInit = true;
+		if (hasInit) return;
+
 		AbstractPacket.register(230, true, true, ModLoaderPacket.class);
 
 		if (!APRON.isClient()) {
@@ -263,6 +246,7 @@ public class ModLoaderMp {
 			}
 		}
 
+		hasInit = true;
 		Log(NAME + " " + VERSION + " Initialized");
 	}
 
@@ -340,9 +324,7 @@ public class ModLoaderMp {
 
 	@Environment(EnvType.SERVER)
 	public static void RegisterEntityTracker(Class<? extends Entity> class1, int i, int j) {
-		if (!hasInit) {
-			init();
-		}
+		init();
 
 		if (entityTrackerMap.containsKey(class1)) {
 			System.out.println("RegisterEntityTracker error: entityClass already registered.");
@@ -358,9 +340,7 @@ public class ModLoaderMp {
 
 	@Environment(EnvType.SERVER)
 	public static void RegisterEntityTrackerEntry(Class<? extends Entity> class1, boolean flag, int i) {
-		if (!hasInit) {
-			init();
-		}
+		init();
 
 		if (i > 255) {
 			System.out.println("RegisterEntityTrackerEntry error: entityId cannot be greater than 255.");
@@ -375,9 +355,7 @@ public class ModLoaderMp {
 
 	@Environment(EnvType.SERVER)
 	public static void HandleAllLogins(ServerPlayerEntity entityplayermp) {
-		if (!hasInit) {
-			init();
-		}
+		init();
 
 		sendModCheck(entityplayermp);
 
@@ -392,9 +370,7 @@ public class ModLoaderMp {
 
 	@Environment(EnvType.SERVER)
 	public static void HandleAllPackets(ModLoaderPacket modloaderPacket, ServerPlayerEntity entityplayermp) {
-		if (!hasInit) {
-			init();
-		}
+		init();
 
 		if (modloaderPacket.modId == "ModLoaderMP".hashCode()) {
 			switch (modloaderPacket.packetType) {
@@ -422,9 +398,7 @@ public class ModLoaderMp {
 
 	@Environment(EnvType.SERVER)
 	public static void HandleEntityTrackers(ServerEntityTracker entitytracker, Entity entity) {
-		if (!hasInit) {
-			init();
-		}
+		init();
 
 		for (Map.Entry<Class<? extends Entity>, AbstractMap.SimpleEntry<Integer, Integer>> entry : entityTrackerMap.entrySet()) {
 			if (entry.getKey().isInstance(entity)) {
@@ -436,18 +410,14 @@ public class ModLoaderMp {
 
 	@Environment(EnvType.SERVER)
 	public static EntityTrackerEntry HandleEntityTrackerEntries(Entity entity) {
-		if (!hasInit) {
-			init();
-		}
+		init();
 
 		return entityTrackerEntryMap.getOrDefault(entity.getClass(), null);
 	}
 
 	@Environment(EnvType.SERVER)
 	public static void SendPacketToAll(BaseModMp basemodmp, ModLoaderPacket modloaderPacket) {
-		if (!hasInit) {
-			init();
-		}
+		init();
 
 		if (basemodmp == null) {
 			IllegalArgumentException illegalargumentexception = new IllegalArgumentException("baseModMp cannot be null.");
@@ -470,9 +440,7 @@ public class ModLoaderMp {
 
 	@Environment(EnvType.SERVER)
 	public static void SendPacketTo(BaseModMp mod, ServerPlayerEntity player, ModLoaderPacket packet) {
-		if (!hasInit) {
-			init();
-		}
+		init();
 
 		if (mod == null) {
 			IllegalArgumentException e = new IllegalArgumentException("mod cannot be null.");
