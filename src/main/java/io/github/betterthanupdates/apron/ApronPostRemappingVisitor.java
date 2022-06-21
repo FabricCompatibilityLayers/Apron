@@ -9,6 +9,7 @@ import org.objectweb.asm.Opcodes;
 public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvider {
 	@Override
 	public ClassVisitor insertApplyVisitor(TrClass cls, ClassVisitor next) {
+		final String className = cls.getName();
 		return new ClassVisitor(Opcodes.ASM9, next) {
 			@Override
 			public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
