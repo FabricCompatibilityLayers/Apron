@@ -93,8 +93,8 @@ public abstract class TextureManagerMixin {
 
 				this.textures.put(s, i);
 				return i;
-			} catch (RuntimeException var6) {
-				var6.printStackTrace();
+			} catch (RuntimeException e) {
+				e.printStackTrace();
 				GLAllocationUtils.genTextures(this.field_1249);
 				int j = this.field_1249.get(0);
 				this.bindImageToId(this.missingTexImage, j);

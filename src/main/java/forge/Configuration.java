@@ -76,7 +76,7 @@ public class Configuration {
 		try {
 			Integer.parseInt(prop.value);
 			return prop;
-		} catch (NumberFormatException var6) {
+		} catch (NumberFormatException e) {
 			prop.value = Integer.toString(defaultValue);
 			return prop;
 		}
@@ -195,8 +195,8 @@ public class Configuration {
 					}
 				}
 			}
-		} catch (IOException var12) {
-			var12.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -237,8 +237,8 @@ public class Configuration {
 				buffer.close();
 				fileoutputstream.close();
 			}
-		} catch (IOException var3) {
-			var3.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

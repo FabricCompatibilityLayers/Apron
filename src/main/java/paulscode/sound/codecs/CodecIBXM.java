@@ -53,9 +53,9 @@ public class CodecIBXM implements ICodec {
 
 			try {
 				is = url.openStream();
-			} catch (IOException var8) {
+			} catch (IOException e) {
 				this.errorMessage("Unable to open stream in method 'initialize'");
-				this.printStackTrace(var8);
+				this.printStackTrace(e);
 				return false;
 			}
 
@@ -69,9 +69,9 @@ public class CodecIBXM implements ICodec {
 
 			try {
 				this.setModule(loadModule(is));
-			} catch (IllegalArgumentException var9) {
+			} catch (IllegalArgumentException e) {
 				this.errorMessage("Illegal argument in method 'initialize'");
-				this.printStackTrace(var9);
+				this.printStackTrace(e);
 
 				if (is != null) {
 					try {
@@ -81,9 +81,9 @@ public class CodecIBXM implements ICodec {
 				}
 
 				return false;
-			} catch (IOException var10) {
+			} catch (IOException e) {
 				this.errorMessage("Error loading module in method 'initialize'");
-				this.printStackTrace(var10);
+				this.printStackTrace(e);
 
 				if (is != null) {
 					try {

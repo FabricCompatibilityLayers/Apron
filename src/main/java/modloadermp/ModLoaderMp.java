@@ -256,9 +256,9 @@ public class ModLoaderMp {
 				while ((s = bufferedreader.readLine()) != null) {
 					bannedMods.add(s);
 				}
-			} catch (IOException var9) {
-				ModLoader.getLogger().throwing("ModLoader", "init", var9);
-				ModLoader.ThrowException("ModLoaderMultiplayer", var9);
+			} catch (IOException e) {
+				ModLoader.getLogger().throwing("ModLoader", "init", e);
+				ModLoader.ThrowException("ModLoaderMultiplayer", e);
 				return;
 			}
 		}

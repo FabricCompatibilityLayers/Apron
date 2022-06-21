@@ -190,7 +190,7 @@ public abstract class CommandManagerMixin {
 					} else {
 						icommandlistener.sendFeedback("There's no item with id " + j1);
 					}
-				} catch (NumberFormatException var11) {
+				} catch (NumberFormatException e) {
 					icommandlistener.sendFeedback("There's no item with id " + as1[2]);
 				}
 			} else {
@@ -225,7 +225,7 @@ public abstract class CommandManagerMixin {
 				} else {
 					icommandlistener.sendFeedback("Unknown method, use either \"add\" or \"set\"");
 				}
-			} catch (NumberFormatException var12) {
+			} catch (NumberFormatException e) {
 				icommandlistener.sendFeedback("Unable to convert time value, " + as2[2]);
 			}
 		} else if (s.toLowerCase().startsWith("say ")) {

@@ -292,10 +292,10 @@ public class ModLoader {
 			BaseMod mod = (BaseMod) modClass.getDeclaredConstructor().newInstance();
 			MOD_LIST.add(mod);
 			LOGGER.debug("Mod Loaded: \"" + mod + "\" from " + filename);
-		} catch (Throwable var6) {
+		} catch (Throwable e) {
 			LOGGER.debug("Failed to load mod from \"" + filename + "\"");
-			MOD_LOGGER.throwing("ModLoader", "addMod", var6);
-			ThrowException(var6);
+			MOD_LOGGER.throwing("ModLoader", "addMod", e);
+			ThrowException(e);
 		}
 	}
 
@@ -361,10 +361,10 @@ public class ModLoader {
 			int i = getUniqueSpriteIndex(fileToOverride);
 			addOverride(fileToOverride, fileToAdd, i);
 			return i;
-		} catch (Throwable var3) {
-			MOD_LOGGER.throwing("ModLoader", "addOverride", var3);
-			ThrowException(var3);
-			throw new RuntimeException(var3);
+		} catch (Throwable e) {
+			MOD_LOGGER.throwing("ModLoader", "addOverride", e);
+			ThrowException(e);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -589,9 +589,9 @@ public class ModLoader {
 			Field f = instanceClass.getDeclaredFields()[fieldIndex];
 			f.setAccessible(true);
 			return (T) f.get(instance);
-		} catch (IllegalAccessException var4) {
-			MOD_LOGGER.throwing("ModLoader", "getPrivateValue", var4);
-			ThrowException("An impossible error has occured!", var4);
+		} catch (IllegalAccessException e) {
+			MOD_LOGGER.throwing("ModLoader", "getPrivateValue", e);
+			ThrowException("An impossible error has occured!", e);
 			return null;
 		}
 	}
@@ -616,9 +616,9 @@ public class ModLoader {
 			Field f = instanceClass.getDeclaredField(fieldName);
 			f.setAccessible(true);
 			return (T) f.get(instance);
-		} catch (IllegalAccessException var4) {
-			MOD_LOGGER.throwing("ModLoader", "getPrivateValue", var4);
-			ThrowException("An impossible error has occured!", var4);
+		} catch (IllegalAccessException e) {
+			MOD_LOGGER.throwing("ModLoader", "getPrivateValue", e);
+			ThrowException("An impossible error has occured!", e);
 			return null;
 		}
 	}
@@ -726,10 +726,10 @@ public class ModLoader {
 			try {
 				Minecraft client = getMinecraftInstance();
 				if (client != null) client.gameRenderer = new EntityRendererProxy(client);
-			} catch (SecurityException | IllegalArgumentException var10) {
-				MOD_LOGGER.throwing("ModLoader", "init", var10);
-				ThrowException(var10);
-				throw new RuntimeException(var10);
+			} catch (SecurityException | IllegalArgumentException e) {
+				MOD_LOGGER.throwing("ModLoader", "init", e);
+				ThrowException(e);
+				throw new RuntimeException(e);
 			}
 		}
 
@@ -791,15 +791,15 @@ public class ModLoader {
 
 			initStats();
 			saveConfig();
-		} catch (Throwable var9) {
-			MOD_LOGGER.throwing("ModLoader", "init", var9);
-			ThrowException("ModLoader has failed to initialize.", var9);
+		} catch (Throwable e) {
+			MOD_LOGGER.throwing("ModLoader", "init", e);
+			ThrowException("ModLoader has failed to initialize.", e);
 
 			if (logHandler != null) {
 				logHandler.close();
 			}
 
-			throw new RuntimeException(var9);
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -876,7 +876,7 @@ public class ModLoader {
 
 		try {
 			chk = Class.forName(modName, false, ModLoader.class.getClassLoader());
-		} catch (ClassNotFoundException var4) {
+		} catch (ClassNotFoundException e) {
 			return false;
 		}
 
@@ -1266,10 +1266,10 @@ public class ModLoader {
 					BufferedImage im = loadImage(manager, overlayPath);
 					TextureBinder anim = new ModTextureStatic(index, dst, im);
 					manager.addTextureBinder(anim);
-				} catch (Exception var11) {
-					MOD_LOGGER.throwing("ModLoader", "RegisterAllTextureOverrides", var11);
-					ThrowException(var11);
-					throw new RuntimeException(var11);
+				} catch (Exception e) {
+					MOD_LOGGER.throwing("ModLoader", "RegisterAllTextureOverrides", e);
+					ThrowException(e);
+					throw new RuntimeException(e);
 				}
 			}
 		}
@@ -1327,9 +1327,9 @@ public class ModLoader {
 	public static void RegisterEntityID(Class<? extends Entity> entityClass, String entityName, int entityId) {
 		try {
 			EntityRegistry.register(entityClass, entityName, entityId);
-		} catch (IllegalArgumentException var4) {
-			MOD_LOGGER.throwing("ModLoader", "RegisterEntityID", var4);
-			ThrowException(var4);
+		} catch (IllegalArgumentException e) {
+			MOD_LOGGER.throwing("ModLoader", "RegisterEntityID", e);
+			ThrowException(e);
 		}
 	}
 
@@ -1574,9 +1574,9 @@ public class ModLoader {
 			}
 
 			f.set(instance, value);
-		} catch (IllegalAccessException | NoSuchFieldException var6) {
-			MOD_LOGGER.throwing("ModLoader", "setPrivateValue", var6);
-			ThrowException("An impossible error has occured!", var6);
+		} catch (IllegalAccessException | NoSuchFieldException e) {
+			MOD_LOGGER.throwing("ModLoader", "setPrivateValue", e);
+			ThrowException("An impossible error has occured!", e);
 		}
 	}
 
@@ -1611,9 +1611,9 @@ public class ModLoader {
 
 			f.setAccessible(true);
 			f.set(instance, value);
-		} catch (IllegalAccessException var6) {
-			MOD_LOGGER.throwing("ModLoader", "setPrivateValue", var6);
-			ThrowException("An impossible error has occured!", var6);
+		} catch (IllegalAccessException e) {
+			MOD_LOGGER.throwing("ModLoader", "setPrivateValue", e);
+			ThrowException("An impossible error has occured!", e);
 		}
 	}
 

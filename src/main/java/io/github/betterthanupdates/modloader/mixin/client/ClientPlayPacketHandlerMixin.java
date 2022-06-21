@@ -140,9 +140,9 @@ public abstract class ClientPlayPacketHandlerMixin extends PacketHandler {
 						field.set(obj, entity1);
 					}
 				}
-			} catch (Exception var12) {
-				ModLoader.getLogger().throwing("NetClientHandler", "handleVehicleSpawn", var12);
-				ModLoader.ThrowException(String.format("Error initializing entity of type %s.", packet23vehiclespawn.type), var12);
+			} catch (Exception e) {
+				ModLoader.getLogger().throwing("NetClientHandler", "handleVehicleSpawn", e);
+				ModLoader.ThrowException(String.format("Error initializing entity of type %s.", packet23vehiclespawn.type), e);
 				return;
 			}
 		}
