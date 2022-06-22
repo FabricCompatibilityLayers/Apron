@@ -28,36 +28,37 @@ public class Configuration {
 	public static final int BLOCK_PROPERTY = 1;
 	public static final int ITEM_PROPERTY = 2;
 	File file;
-	public TreeMap<String, Property> blockProperties = new TreeMap<>();
-	public TreeMap<String, Property> itemProperties = new TreeMap<>();
-	public TreeMap<String, Property> generalProperties = new TreeMap<>();
+	public TreeMap<String, Property> blockProperties = new TreeMap();
+	public TreeMap<String, Property> itemProperties = new TreeMap();
+	public TreeMap<String, Property> generalProperties = new TreeMap();
 
 	public Configuration(File file) {
 		this.file = file;
 	}
 
-	public Property getOrCreateBlockIdProperty(String key, int defaultId) {
+	public forge.Property getOrCreateBlockIdProperty(String key, int defaultId) {
 		if (this.configBlocks == null) {
 			this.configBlocks = new boolean[Block.BY_ID.length];
 
-			Arrays.fill(this.configBlocks, false);
+			for(int i = 0; i < this.configBlocks.length; ++i) {
+				this.configBlocks[i] = false;
+			}
 		}
 
 		if (this.blockProperties.containsKey(key)) {
-			Property property = this.getOrCreateIntProperty(key, BLOCK_PROPERTY, defaultId);
+			forge.Property property = this.getOrCreateIntProperty(key, 1, defaultId);
 			this.configBlocks[Integer.parseInt(property.value)] = true;
 			return property;
 		} else {
-			Property property = new Property();
+			forge.Property property = new forge.Property();
 			this.blockProperties.put(key, property);
 			property.name = key;
-
 			if (Block.BY_ID[defaultId] == null && !this.configBlocks[defaultId]) {
 				property.value = Integer.toString(defaultId);
 				this.configBlocks[defaultId] = true;
 				return property;
 			} else {
-				for (int j = Block.BY_ID.length - 1; j >= 0; --j) {
+				for(int j = Block.BY_ID.length - 1; j >= 0; --j) {
 					if (Block.BY_ID[j] == null && !this.configBlocks[j]) {
 						property.value = Integer.toString(j);
 						this.configBlocks[j] = true;
@@ -70,45 +71,45 @@ public class Configuration {
 		}
 	}
 
-	public Property getOrCreateIntProperty(String key, int kind, int defaultValue) {
-		Property prop = this.getOrCreateProperty(key, kind, Integer.toString(defaultValue));
+	public forge.Property getOrCreateIntProperty(String key, int kind, int defaultValue) {
+		forge.Property prop = this.getOrCreateProperty(key, kind, Integer.toString(defaultValue));
 
 		try {
 			Integer.parseInt(prop.value);
 			return prop;
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException var6) {
 			prop.value = Integer.toString(defaultValue);
 			return prop;
 		}
 	}
 
-	public Property getOrCreateBooleanProperty(String key, int kind, boolean defaultValue) {
-		Property prop = this.getOrCreateProperty(key, kind, Boolean.toString(defaultValue));
-
-		if (!"true".equalsIgnoreCase(prop.value) && !"false".equalsIgnoreCase(prop.value)) {
+	public forge.Property getOrCreateBooleanProperty(String key, int kind, boolean defaultValue) {
+		forge.Property prop = this.getOrCreateProperty(key, kind, Boolean.toString(defaultValue));
+		if (!"true".equals(prop.value.toLowerCase()) && !"false".equals(prop.value.toLowerCase())) {
 			prop.value = Boolean.toString(defaultValue);
+			return prop;
+		} else {
+			return prop;
 		}
-
-		return prop;
 	}
 
-	public Property getOrCreateProperty(String key, int kind, String defaultValue) {
+	public forge.Property getOrCreateProperty(String key, int kind, String defaultValue) {
 		TreeMap<String, Property> source = null;
-		switch (kind) {
-			case GENERAL_PROPERTY:
-				source = this.generalProperties;
-				break;
-			case BLOCK_PROPERTY:
-				source = this.blockProperties;
-				break;
-			case ITEM_PROPERTY:
-				source = this.itemProperties;
+		switch(kind) {
+		case 0:
+			source = this.generalProperties;
+			break;
+		case 1:
+			source = this.blockProperties;
+			break;
+		case 2:
+			source = this.itemProperties;
 		}
 
 		if (source.containsKey(key)) {
-			return source.get(key);
+			return (forge.Property)source.get(key);
 		} else if (defaultValue != null) {
-			Property property = new Property();
+			forge.Property property = new forge.Property();
 			source.put(key, property);
 			property.name = key;
 			property.value = defaultValue;
@@ -133,56 +134,54 @@ public class Configuration {
 				BufferedReader buffer = new BufferedReader(new InputStreamReader(fileinputstream, "8859_1"));
 				TreeMap<String, Property> currentMap = null;
 
-				while (true) {
+				while(true) {
 					String line = buffer.readLine();
-
-					if (line == null) break;
+					if (line == null) {
+						break;
+					}
 
 					int nameStart = -1;
 					int nameEnd = -1;
 					boolean skip = false;
 
-					for (int i = 0; i < line.length() && !skip; ++i) {
+					for(int i = 0; i < line.length() && !skip; ++i) {
 						if (!Character.isLetterOrDigit(line.charAt(i)) && line.charAt(i) != '.') {
 							if (!Character.isWhitespace(line.charAt(i))) {
-								switch (line.charAt(i)) {
-									case '#':
-										skip = true;
-										break;
-									case '=':
-										String propertyName = line.substring(nameStart, nameEnd + 1);
+								switch(line.charAt(i)) {
+								case '#':
+									skip = true;
+									break;
+								case '=':
+									String propertyName = line.substring(nameStart, nameEnd + 1);
+									if (currentMap == null) {
+										throw new RuntimeException("property " + propertyName + " has no scope");
+									}
 
-										if (currentMap == null) {
-											throw new RuntimeException("property " + propertyName + " has no scope");
+									forge.Property prop = new forge.Property();
+									prop.name = propertyName;
+									prop.value = line.substring(i + 1);
+									i = line.length();
+									currentMap.put(propertyName, prop);
+									break;
+								case '{':
+									String scopeName = line.substring(nameStart, nameEnd + 1);
+									if (scopeName.equals("general")) {
+										currentMap = this.generalProperties;
+									} else if (scopeName.equals("block")) {
+										currentMap = this.blockProperties;
+									} else {
+										if (!scopeName.equals("item")) {
+											throw new RuntimeException("unknown section " + scopeName);
 										}
 
-										Property prop = new Property();
-										prop.name = propertyName;
-										prop.value = line.substring(i + 1);
-										i = line.length();
-										currentMap.put(propertyName, prop);
-										break;
-									case '{':
-										String scopeName = line.substring(nameStart, nameEnd + 1);
-
-										if (scopeName.equals("general")) {
-											currentMap = this.generalProperties;
-										} else if (scopeName.equals("block")) {
-											currentMap = this.blockProperties;
-										} else {
-											if (!scopeName.equals("item")) {
-												throw new RuntimeException("unknown section " + scopeName);
-											}
-
-											currentMap = this.itemProperties;
-										}
-
-										break;
-									case '}':
-										currentMap = null;
-										break;
-									default:
-										throw new RuntimeException("unknown character " + line.charAt(i));
+										currentMap = this.itemProperties;
+									}
+									break;
+								case '}':
+									currentMap = null;
+									break;
+								default:
+									throw new RuntimeException("unknown character " + line.charAt(i));
 								}
 							}
 						} else {
@@ -195,9 +194,10 @@ public class Configuration {
 					}
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException var12) {
+			var12.printStackTrace();
 		}
+
 	}
 
 	public void save() {
@@ -237,13 +237,14 @@ public class Configuration {
 				buffer.close();
 				fileoutputstream.close();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException var3) {
+			var3.printStackTrace();
 		}
+
 	}
 
 	private void writeProperties(BufferedWriter buffer, Collection<Property> props) throws IOException {
-		for (Property property : props) {
+		for(forge.Property property : props) {
 			if (property.comment != null) {
 				buffer.write("   # " + property.comment + "\r\n");
 			}
@@ -251,5 +252,6 @@ public class Configuration {
 			buffer.write("   " + property.name + "=" + property.value);
 			buffer.write("\r\n");
 		}
+
 	}
 }

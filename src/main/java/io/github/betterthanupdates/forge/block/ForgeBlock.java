@@ -1,14 +1,22 @@
 package io.github.betterthanupdates.forge.block;
 
+import java.util.Random;
+
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.BlockView;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 /**
  * New methods for {@link net.minecraft.block.Block} by Minecraft Forge.
  */
 public interface ForgeBlock {
-	int getLightValue(BlockView blockView, int x, int y, int z);
+	int quantityDropped(int i, Random random);
+
+	int quantityDropped(int i, Random random, ItemStack stack);
+
+	int damageDropped(int i, ItemStack stack);
+
+	int idDropped(int i, Random random, ItemStack stack);
 
 	boolean isLadder();
 

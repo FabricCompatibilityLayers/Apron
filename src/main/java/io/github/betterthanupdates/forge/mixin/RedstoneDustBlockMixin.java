@@ -2,12 +2,14 @@ package io.github.betterthanupdates.forge.mixin;
 
 import forge.IConnectRedstone;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.RedstoneDustBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.number.BedMagicNumbers;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
@@ -19,37 +21,19 @@ public class RedstoneDustBlockMixin extends Block {
 		super(blockId, material);
 	}
 
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Overwrite
-	public boolean canPlaceAt(World world, int i, int j, int k) {
-		return ((ForgeWorld) world).isBlockSolidOnSide(i, j - 1, k, 1);
+	@Redirect(method = {"canPlaceAt"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z"))
+	private boolean reforged$isBlockSolidOnSide(World instance, int j, int k, int i) {
+		return ((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, 1);
 	}
 
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Overwrite
-	public static boolean method_1287(BlockView blockView, int i, int j, int k, int l) {
-		int i1 = blockView.getBlockId(i, j, k);
-
-		if (i1 == Block.REDSTONE_DUST.id) {
-			return true;
-		} else if (i1 == 0) {
-			return false;
-		} else if (Block.BY_ID[i1] instanceof IConnectRedstone) {
-			IConnectRedstone icr = (IConnectRedstone) Block.BY_ID[i1];
-			return icr.canConnectRedstone(blockView, i, j, k, l);
-		} else if (Block.BY_ID[i1].getEmitsRedstonePower()) {
-			return true;
-		} else if (i1 != Block.REDSTONE_REPEATER.id && i1 != Block.REDSTONE_REPEATER_LIT.id) {
-			return false;
-		} else {
-			int j1 = blockView.getBlockMeta(i, j, k);
-			return l == BedMagicNumbers.field_793[j1 & 3];
+	@Inject(method = "method_1287", cancellable = true, at = @At("HEAD"))
+	private static void reforged$canConnectRedstone(BlockView iblockaccess, int i, int j, int k, int l, CallbackInfoReturnable<Boolean> cir) {
+		int id = iblockaccess.getBlockId(i, j, k);
+		if (id != Block.REDSTONE_DUST.id &&
+				id != 0 &&
+				Block.BY_ID[id] instanceof IConnectRedstone) {
+			IConnectRedstone icr = (IConnectRedstone)Block.BY_ID[id];
+			cir.setReturnValue(icr.canConnectRedstone(iblockaccess, i, j, k, l));
 		}
 	}
 }

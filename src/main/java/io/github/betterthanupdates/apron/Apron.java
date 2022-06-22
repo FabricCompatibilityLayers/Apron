@@ -17,7 +17,7 @@ import net.fabricmc.mapping.tree.FieldDef;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
 import org.jetbrains.annotations.ApiStatus;
 import org.spongepowered.include.com.google.common.collect.ImmutableList;
-import shockahpi.ShockAhPI;
+import reforged.mod_Reforged;
 
 @ApiStatus.Internal
 public final class Apron {
@@ -32,7 +32,7 @@ public final class Apron {
 	public static final ModContainer MOD_CONTAINER;
 
 	public static final List<Supplier<? extends BaseMod>> BUILTIN_RML_MODS = ImmutableList.of(
-			ShockAhPI::new
+			mod_Reforged::new
 	);
 
 	static {

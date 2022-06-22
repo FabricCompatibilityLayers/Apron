@@ -19,47 +19,61 @@ public abstract class AnimBase extends TextureBinder {
 	protected int[][] fileBuf;
 	protected int[][] frame;
 	protected int size;
-	public Mode mdSet = new Mode(AnimBase.this::setPixel);
-	public Mode mdAdd = new Mode((x, y, color) -> this.setPixel(x, y, AnimBase.add(new Color(AnimBase.this.frame[x][y]), color)));
-	public Mode mdSubtract = new Mode((x, y, color) -> this.setPixel(x, y, AnimBase.subtract(new Color(AnimBase.this.frame[x][y]), color)));
-	public Mode mdBlend = new Mode((x, y, color) -> this.setPixel(x, y, AnimBase.blend(new Color(AnimBase.this.frame[x][y]), color)));
+	public AnimBase.Mode mdSet = new AnimBase.Mode() {
+		@Override
+		public void draw(int x, int y, Color color) {
+			AnimBase.this.setPixel(x, y, color);
+		}
+	};
+	public AnimBase.Mode mdAdd = new AnimBase.Mode() {
+		@Override
+		public void draw(int x, int y, Color color) {
+			AnimBase.this.setPixel(x, y, AnimBase.add(new Color(AnimBase.this.frame[x][y]), color));
+		}
+	};
+	public AnimBase.Mode mdSubtract = new AnimBase.Mode() {
+		@Override
+		public void draw(int x, int y, Color color) {
+			AnimBase.this.setPixel(x, y, AnimBase.subtract(new Color(AnimBase.this.frame[x][y]), color));
+		}
+	};
+	public AnimBase.Mode mdBlend = new AnimBase.Mode() {
+		@Override
+		public void draw(int x, int y, Color color) {
+			AnimBase.this.setPixel(x, y, AnimBase.blend(new Color(AnimBase.this.frame[x][y]), color));
+		}
+	};
 
 	public AnimBase(int spriteID, String spritePath) {
 		super(spriteID);
-		this.size = (int) Math.sqrt(this.grid.length / 4f);
+		this.size = (int)Math.sqrt((double)(this.grid.length / 4));
 		this.fileBuf = new int[this.size][this.size];
 		this.frame = new int[this.size][this.size];
 
 		try {
-			BufferedImage spriteSheet;
-			int xx;
-			int yy;
-
 			if (spritePath.isEmpty()) {
-				URL spriteSheetLocation = Objects.requireNonNull(Minecraft.class.getResource(
-						this.renderMode == 0 ? "/terrain.png" : "/gui/items.png"),
-						"Could not load sprite sheet!");
-				spriteSheet = ImageIO.read(spriteSheetLocation);
-				xx = spriteID % 16 * this.size;
-				yy = (int) Math.floor(spriteID / 16f) * this.size;
+				BufferedImage bufImage = ImageIO.read(Minecraft.class.getResource(this.renderMode == 0 ? "/terrain.png" : "/gui/items.png"));
+				int xx = spriteID % 16 * this.size;
+				int yy = (int)Math.floor((double)(spriteID / 16)) * this.size;
 
-				for (int y = 0; y < this.size; ++y) {
-					for (int x = 0; x < this.size; ++x) {
-						this.fileBuf[x][y] = spriteSheet.getRGB(xx + x, yy + y);
+				for(int y = 0; y < this.size; ++y) {
+					for(int x = 0; x < this.size; ++x) {
+						this.fileBuf[x][y] = bufImage.getRGB(xx + x, yy + y);
 					}
 				}
 			} else {
-				spriteSheet = ImageIO.read(Objects.requireNonNull(Minecraft.class.getResource(spritePath), "Could not find sprite!"));
+				BufferedImage bufImage = ImageIO.read(Minecraft.class.getResource(spritePath));
 
-				for (xx = 0; xx < this.size; ++xx) {
-					for (yy = 0; yy < this.size; ++yy) {
-						this.fileBuf[yy][xx] = spriteSheet.getRGB(yy, xx);
+				for(int y = 0; y < this.size; ++y) {
+					for(int x = 0; x < this.size; ++x) {
+						this.fileBuf[x][y] = bufImage.getRGB(x, y);
 					}
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException var8) {
+			var8.printStackTrace();
 		}
+
 	}
 
 	public void updateTexture() {
@@ -71,31 +85,27 @@ public abstract class AnimBase extends TextureBinder {
 	public abstract void animFrame();
 
 	protected void getCleanFrame() {
-		for (int y = 0; y < this.size; ++y) {
-			for (int x = 0; x < this.size; ++x) {
+		for(int y = 0; y < this.size; ++y) {
+			for(int x = 0; x < this.size; ++x) {
 				this.frame[x][y] = this.fileBuf[x][y];
 			}
 		}
+
 	}
 
 	protected void copyFrameToArray() {
-		for (int y = 0; y < this.size; ++y) {
-			for (int x = 0; x < this.size; ++x) {
+		for(int y = 0; y < this.size; ++y) {
+			for(int x = 0; x < this.size; ++x) {
 				int index = this.getXYIndex(x, y);
-				this.grid[index * 4 + 0] = (byte) (this.frame[x][y] >> 16 & 255);
-				this.grid[index * 4 + 1] = (byte) (this.frame[x][y] >> 8 & 255);
-				this.grid[index * 4 + 2] = (byte) (this.frame[x][y] & 255);
-				this.grid[index * 4 + 3] = (byte) (this.frame[x][y] >> 24 & 255);
+				this.grid[index * 4 + 0] = (byte)(this.frame[x][y] >> 16 & 0xFF);
+				this.grid[index * 4 + 1] = (byte)(this.frame[x][y] >> 8 & 0xFF);
+				this.grid[index * 4 + 2] = (byte)(this.frame[x][y] & 0xFF);
+				this.grid[index * 4 + 3] = (byte)(this.frame[x][y] >> 24 & 0xFF);
 			}
 		}
+
 	}
 
-	/**
-	 * Sets the color of a pixel at a certain position on screen.
-	 * @param x screen x position
-	 * @param y screen y position
-	 * @param color color of pixel
-	 */
 	private void setPixel(int x, int y, Color color) {
 		if (this.inImage(x, y)) {
 			this.frame[x][y] = color.getRGB();
@@ -114,7 +124,7 @@ public abstract class AnimBase extends TextureBinder {
 		this.drawPoint(x, y, color, this.mdSet);
 	}
 
-	protected void drawPoint(int x, int y, Color color, Mode mode) {
+	protected void drawPoint(int x, int y, Color color, AnimBase.Mode mode) {
 		mode.draw(x, y, color);
 	}
 
@@ -122,66 +132,59 @@ public abstract class AnimBase extends TextureBinder {
 		this.drawRect(x1, y1, x2, y2, color, this.mdSet);
 	}
 
-	protected void drawRect(int x1, int y1, int x2, int y2, Color color, Mode mode) {
+	protected void drawRect(int x1, int y1, int x2, int y2, Color color, AnimBase.Mode mode) {
 		int xS = Math.min(x1, x2);
 		int yS = Math.min(y1, y2);
 		int xE = Math.max(x1, x2);
 		int yE = Math.max(y1, y2);
 
-		for (int y = yS; y < yE; ++y) {
-			for (int x = xS; x < xE; ++x) {
+		for(int y = yS; y < yE; ++y) {
+			for(int x = xS; x < xE; ++x) {
 				this.drawPoint(x, y, color, mode);
 			}
 		}
+
 	}
 
-	@SuppressWarnings({"SuspiciousNameCombination", "SameParameterValue"})
 	protected void shiftFrame(int h, int v, boolean wrapH, boolean wrapV) {
 		int[] line = new int[this.size];
-
 		if (wrapH) {
-			while (true) {
-				if (h >= 0) {
-					h %= this.size;
-					break;
-				}
-
+			while(h < 0) {
 				h += this.size;
 			}
+
+			h %= this.size;
 		}
 
 		if (wrapV) {
-			while (v < 0) {
+			while(v < 0) {
 				v += this.size;
 			}
 
 			v %= this.size;
 		}
 
-		int x;
-		int y;
-
 		if (h != 0) {
 			if (wrapH) {
-				for (x = 0; x < this.size; ++x) {
-					for (y = 0; y < this.size; ++y) {
-						line[y] = this.frame[y][x];
+				for(int y = 0; y < this.size; ++y) {
+					for(int x = 0; x < this.size; ++x) {
+						line[x] = this.frame[x][y];
 					}
 
-					for (y = 0; y < this.size; ++y) {
-						this.frame[y][x] = line[(y + h) % this.size];
+					for(int x = 0; x < this.size; ++x) {
+						this.frame[x][y] = line[(x + h) % this.size];
 					}
 				}
 			} else {
-				for (x = 0; x < this.size; ++x) {
-					for (y = 0; y < this.size; ++y) {
-						line[y] = this.frame[y][x];
-						this.frame[y][x] = 0;
+				for(int y = 0; y < this.size; ++y) {
+					for(int x = 0; x < this.size; ++x) {
+						line[x] = this.frame[x][y];
+						this.frame[x][y] = 0;
 					}
 
-					for (y = 0; y < this.size; ++y) {
-						if (this.inImage(y + h, x)) {
-							this.frame[y + h][x] = line[y];
+					for(int x = 0; x < this.size; ++x) {
+						if (this.inImage(x + h, y)) {
+							this.frame[x + h][y] = line[x];
 						}
 					}
 				}
@@ -190,23 +193,23 @@ public abstract class AnimBase extends TextureBinder {
 
 		if (v != 0) {
 			if (wrapV) {
-				for (x = 0; x < this.size; ++x) {
-					for (y = 0; y < this.size; ++y) {
+				for(int x = 0; x < this.size; ++x) {
+					for(int y = 0; y < this.size; ++y) {
 						line[y] = this.frame[x][y];
 					}
 
-					for (y = 0; y < this.size; ++y) {
+					for(int y = 0; y < this.size; ++y) {
 						this.frame[x][y] = line[(y + v) % this.size];
 					}
 				}
 			} else {
-				for (x = 0; x < this.size; ++x) {
-					for (y = 0; y < this.size; ++y) {
+				for(int x = 0; x < this.size; ++x) {
+					for(int y = 0; y < this.size; ++y) {
 						line[y] = this.frame[x][y];
 						this.frame[x][y] = 0;
 					}
 
-					for (y = 0; y < this.size; ++y) {
+					for(int y = 0; y < this.size; ++y) {
 						if (this.inImage(x, y + v)) {
 							this.frame[x][y + v] = line[y];
 						}
@@ -214,113 +217,83 @@ public abstract class AnimBase extends TextureBinder {
 				}
 			}
 		}
+
 	}
 
 	protected void flipFrame(boolean h, boolean v) {
-		int swap;
-		int y;
-		int x;
-
 		if (h) {
-			for (y = 0; y < this.size / 2; ++y) {
-				for (x = 0; x < this.size; ++x) {
-					swap = this.frame[y][x];
-					this.frame[y][x] = this.frame[this.size - 1 - y][x];
-					this.frame[this.size - 1 - y][x] = swap;
+			for(int x = 0; x < this.size / 2; ++x) {
+				for(int y = 0; y < this.size; ++y) {
+					int swap = this.frame[x][y];
+					this.frame[x][y] = this.frame[this.size - 1 - x][y];
+					this.frame[this.size - 1 - x][y] = swap;
 				}
 			}
 		}
 
 		if (v) {
-			for (y = 0; y < this.size / 2; ++y) {
-				for (x = 0; x < this.size; ++x) {
-					swap = this.frame[x][y];
+			for(int y = 0; y < this.size / 2; ++y) {
+				for(int x = 0; x < this.size; ++x) {
+					int swap = this.frame[x][y];
 					this.frame[x][y] = this.frame[x][this.size - 1 - y];
 					this.frame[x][this.size - 1 - y] = swap;
 				}
 			}
 		}
+
 	}
 
 	public static Color add(Color c1, Color c2) {
-		float value = (float) c2.getAlpha() / 255.0F;
+		float value = (float)c2.getAlpha() / 255.0F;
 		int R = c1.getRed();
-		R = (int) ((float) R + (float) c2.getRed() * value);
+		R = (int)((float)R + (float)c2.getRed() * value);
 		R = Math.min(R, 255);
 		int G = c1.getGreen();
-		G = (int) ((float) G + (float) c2.getGreen() * value);
+		G = (int)((float)G + (float)c2.getGreen() * value);
 		G = Math.min(G, 255);
 		int B = c1.getBlue();
-		B = (int) ((float) B + (float) c2.getBlue() * value);
+		B = (int)((float)B + (float)c2.getBlue() * value);
 		B = Math.min(B, 255);
 		int A = c1.getAlpha();
 		return new Color(R, G, B, A);
 	}
 
 	public static Color subtract(Color c1, Color c2) {
-		float value = (float) c2.getAlpha() / 255.0F;
+		float value = (float)c2.getAlpha() / 255.0F;
 		int R = c1.getRed();
-		R = (int) ((float) R - (float) c2.getRed() * value);
+		R = (int)((float)R - (float)c2.getRed() * value);
 		R = Math.max(R, 0);
 		int G = c1.getGreen();
-		G = (int) ((float) G - (float) c2.getGreen() * value);
+		G = (int)((float)G - (float)c2.getGreen() * value);
 		G = Math.max(G, 0);
 		int B = c1.getBlue();
-		B = (int) ((float) B - (float) c2.getBlue() * value);
+		B = (int)((float)B - (float)c2.getBlue() * value);
 		B = Math.max(B, 0);
 		int A = c1.getAlpha();
 		return new Color(R, G, B, A);
 	}
 
-	public static Color merge(Color color1, Color color2, float multiplier) {
-		multiplier = Math.min(Math.max(multiplier, 0.0F), 1.0F); // Clamp
-		float R = (float) color1.getRed() - ((float) color1.getRed() - (float) color2.getRed()) * multiplier;
-		float G = (float) color1.getGreen() - ((float) color1.getGreen() - (float) color2.getGreen()) * multiplier;
-		float B = (float) color1.getBlue() - ((float) color1.getBlue() - (float) color2.getBlue()) * multiplier;
-		float A = (float) color1.getAlpha() - ((float) color1.getAlpha() - (float) color2.getAlpha()) * multiplier;
+	public static Color merge(Color c1, Color c2, float value) {
+		value = Math.min(Math.max(value, 0.0F), 1.0F);
+		float R = (float)c1.getRed() - ((float)c1.getRed() - (float)c2.getRed()) * value;
+		float G = (float)c1.getGreen() - ((float)c1.getGreen() - (float)c2.getGreen()) * value;
+		float B = (float)c1.getBlue() - ((float)c1.getBlue() - (float)c2.getBlue()) * value;
+		float A = (float)c1.getAlpha() - ((float)c1.getAlpha() - (float)c2.getAlpha()) * value;
 		return new Color(R / 255.0F, G / 255.0F, B / 255.0F, A / 255.0F);
 	}
 
-	/**
-	 * @return both input colors multiplied together
-	 */
-	public static Color blend(Color color1, Color color2) {
-		float R = (float) color1.getRed() / 255.0F * ((float) color2.getRed() / 255.0F);
-		float G = (float) color1.getGreen() / 255.0F * ((float) color2.getGreen() / 255.0F);
-		float B = (float) color1.getBlue() / 255.0F * ((float) color2.getBlue() / 255.0F);
-		float A = (float) color1.getAlpha() / 255.0F * ((float) color2.getAlpha() / 255.0F);
+	public static Color blend(Color c1, Color c2) {
+		float R = (float)c1.getRed() / 255.0F * ((float)c2.getRed() / 255.0F);
+		float G = (float)c1.getGreen() / 255.0F * ((float)c2.getGreen() / 255.0F);
+		float B = (float)c1.getBlue() / 255.0F * ((float)c2.getBlue() / 255.0F);
+		float A = (float)c1.getAlpha() / 255.0F * ((float)c2.getAlpha() / 255.0F);
 		return new Color(R, G, B, A);
 	}
 
-	public static class Mode {
-		@Nullable
-		private final Draw draw;
-
+	public abstract class Mode {
 		public Mode() {
-			this.draw = null;
 		}
 
-		/**
-		 * Added to allow use of lambda.
-		 * @param draw what you would override {@link #draw(int, int, Color)} with in lambda form
-		 */
-		private Mode(@NotNull Draw draw) {
-			this.draw = draw;
-		}
-
-		/**
-		 * Draw a pixel.
-		 * @param x screen x position
-		 * @param y screen y position
-		 * @param color color of the pixel
-		 */
-		public void draw(int x, int y, Color color) {
-			if (this.draw != null) this.draw.accept(x, y, color);
-		}
-
-		@FunctionalInterface
-		private interface Draw {
-			void accept(int x, int y, Color color);
-		}
+		public abstract void draw(int i, int j, Color color);
 	}
 }

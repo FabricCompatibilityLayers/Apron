@@ -84,7 +84,9 @@
       "BaseModMp": "modloadermp/BaseModMp",
       "ISpawnable": "modloadermp/ISpawnable",
       "ModLoaderMp": "modloadermp/ModLoaderMp",
-      "Packet230ModLoader": "modloadermp/ModLoaderPacket"
+      "Packet230ModLoader": "modloadermp/ModLoaderPacket",
+
+      "mod_Reforged": "reforged/mod_Reforged"
     },
     "apron:client": {
       "EntityRendererProxy": "modloader/EntityRendererProxy",
@@ -93,7 +95,7 @@
 
       "NetClientHandlerEntity": "modloadermp/NetClientHandlerEntity",
 
-      "ACPage": "shockahpi/AchievementPage",
+      "ACPage": "shockahpi/ACPage",
       "AnimBase": "shockahpi/AnimBase",
       "AnimPulse": "shockahpi/AnimPulse",
       "AnimShift": "shockahpi/AnimShift",
@@ -102,19 +104,13 @@
       "DimensionNether": "shockahpi/DimensionNether",
       "DimensionOverworld": "shockahpi/DimensionOverworld",
       "DungeonLoot": "shockahpi/DungeonLoot",
-      "GuiYesNoFreezeDifficulty": "shockahpi/FreezeDifficultyScreen",
       "GenDeposit": "shockahpi/GenDeposit",
       "IInterceptBlockSet": "shockahpi/IInterceptBlockSet",
       "IInterceptHarvest": "shockahpi/IInterceptHarvest",
-      "INBT": "shockahpi/INBT",
-      "IReachBlock": "shockahpi/IReachBlock",
-      "IReachEntity": "shockahpi/IReachEntity",
+      "IReach": "shockahpi/IReach",
       "Loc": "shockahpi/Loc",
-      "mod_SAPI": "shockahpi/ShockAhPI",
-      "PlayerBase": "shockahpi/PlayerBase",
+      "PlayerBaseSAPI": "shockahpi/PlayerBaseSAPI",
       "SAPI": "shockahpi/SAPI",
-      "SAPIEntityPlayerSP": "shockahpi/SapiClientPlayerEntity",
-      "Tool": "shockahpi/Tool",
       "ToolBase": "shockahpi/ToolBase"
     },
     "apron:server": {

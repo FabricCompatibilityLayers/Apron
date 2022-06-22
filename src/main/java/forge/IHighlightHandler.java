@@ -11,5 +11,5 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.HitResult;
 
 public interface IHighlightHandler {
-	boolean onBlockHighlight(WorldEventRenderer renderer, PlayerEntity player, HitResult result, int i, ItemStack stack, float f);
+	boolean onBlockHighlight(WorldEventRenderer arg, PlayerEntity arg2, HitResult arg3, int i, ItemStack arg4, float f);
 }

@@ -7,9 +7,11 @@ package forge;
 
 import static forge.MinecraftForge.LOGGER;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,36 +27,37 @@ import io.github.betterthanupdates.forge.item.ToolEffectiveness;
 
 @SuppressWarnings("unused")
 public class ForgeHooks {
-	static LinkedList<ICraftingHandler> craftingHandlers = new LinkedList<>();
-	static LinkedList<IDestroyToolHandler> destroyToolHandlers = new LinkedList<>();
-	static LinkedList<ISleepHandler> sleepHandlers = new LinkedList<>();
+	static LinkedList<ICraftingHandler> craftingHandlers = new LinkedList();
+	static LinkedList<IDestroyToolHandler> destroyToolHandlers = new LinkedList();
+	static LinkedList<ISleepHandler> sleepHandlers = new LinkedList();
 	public static final int majorVersion = 1;
 	public static final int minorVersion = 0;
 	public static final int revisionVersion = 6;
 	static boolean toolInit = false;
-	static HashMap<Integer, ForgeTool> toolClasses = new HashMap<>();
-	static HashMap<ToolEffectiveness, Integer> toolHarvestLevels = new HashMap<>();
-	static HashSet<ToolEffectiveness> toolEffectiveness = new HashSet<>();
+	static HashMap toolClasses = new HashMap();
+	static HashMap toolHarvestLevels = new HashMap();
+	static HashSet toolEffectiveness = new HashSet();
 
 	public ForgeHooks() {
 	}
 
 	public static void onTakenFromCrafting(PlayerEntity player, ItemStack ist, Inventory craftMatrix) {
-		for (forge.ICraftingHandler handler : craftingHandlers) {
+		for(forge.ICraftingHandler handler : craftingHandlers) {
 			handler.onTakenFromCrafting(player, ist, craftMatrix);
 		}
+
 	}
 
 	public static void onDestroyCurrentItem(PlayerEntity player, ItemStack orig) {
-		for (forge.IDestroyToolHandler handler : destroyToolHandlers) {
+		for(forge.IDestroyToolHandler handler : destroyToolHandlers) {
 			handler.onDestroyCurrentItem(player, orig);
 		}
+
 	}
 
 	public static SleepStatus sleepInBedAt(PlayerEntity player, int i, int j, int k) {
-		for (forge.ISleepHandler handler : sleepHandlers) {
+		for(forge.ISleepHandler handler : sleepHandlers) {
 			SleepStatus status = handler.sleepInBedAt(player, i, j, k);
-
 			if (status != null) {
 				return status;
 			}
@@ -63,49 +66,53 @@ public class ForgeHooks {
 		return null;
 	}
 
-	public static boolean canHarvestBlock(Block block, PlayerEntity player, int meta) {
-		if (block.material.doesRequireTool()) {
+	public static boolean canHarvestBlock(Block bl, PlayerEntity player, int md) {
+		if (bl.material.doesRequireTool()) {
 			return true;
 		} else {
-			ItemStack stack = player.inventory.getHeldItem();
+			ItemStack itemstack = player.inventory.getHeldItem();
+			return itemstack == null ? false : canToolHarvestBlock(bl, md, itemstack);
+		}
+	}
 
-			if (stack == null) {
-				return false;
+	public static boolean canToolHarvestBlock(Block bl, int md, ItemStack itemstack) {
+		List tc = (List)toolClasses.get(itemstack.itemId);
+		if (tc == null) {
+			return itemstack.isEffectiveOn(bl);
+		} else {
+			Object[] ta = tc.toArray();
+			String cls = (String)ta[0];
+			int hvl = (int) ta[1];
+			if (cls.equalsIgnoreCase("paxel")) {
+				return true;
 			} else {
-				ForgeTool tc = toolClasses.get(stack.itemId);
-
-				if (tc == null) {
-					return stack.isEffectiveOn(block);
+				Integer bhl = (Integer)toolHarvestLevels.get(Arrays.asList(bl.id, md, cls));
+				if (bhl == null) {
+					return itemstack.isEffectiveOn(bl);
 				} else {
-					Integer bhl = toolHarvestLevels.get(new ToolEffectiveness(block.id, meta, tc.toolClass));
-
-					if (bhl == null) {
-						return stack.isEffectiveOn(block);
-					} else {
-						return bhl <= tc.harvestLevel && stack.isEffectiveOn(block);
-					}
+					return bhl > hvl ? false : itemstack.isEffectiveOn(bl);
 				}
 			}
 		}
 	}
 
 	public static float blockStrength(Block bl, PlayerEntity player, int md) {
-		float bh = ((ForgeBlock) bl).getHardness(md);
-
+		float bh = bl.getHardness(md);
 		if (bh < 0.0F) {
 			return 0.0F;
 		} else {
-			return !canHarvestBlock(bl, player, md) ? 1.0F / bh / 100.0F : ((ForgePlayerEntity) player).getCurrentPlayerStrVsBlock(bl, md) / bh / 30.0F;
+			return !canHarvestBlock(bl, player, md) ? 1.0F / bh / 100.0F : player.getCurrentPlayerStrVsBlock(bl, md) / bh / 30.0F;
 		}
 	}
 
-	public static boolean isToolEffective(ItemStack tool, Block block, int meta) {
-		ForgeTool tc = toolClasses.get(tool.itemId);
-
+	public static boolean isToolEffective(ItemStack ist, Block bl, int md) {
+		List tc = (List)toolClasses.get(ist.itemId);
 		if (tc == null) {
 			return false;
 		} else {
-			return toolEffectiveness.contains(new ToolEffectiveness(block.id, meta, tc.toolClass));
+			Object[] ta = tc.toArray();
+			String cls = (String)ta[0];
+			return cls.equalsIgnoreCase("paxel") ? true : toolEffectiveness.contains(Arrays.asList(bl.id, md, cls));
 		}
 	}
 
@@ -140,33 +147,37 @@ public class ForgeHooks {
 			MinecraftForge.setBlockHarvestLevel(Block.REDSTONE_ORE_LIT, "pickaxe", 2);
 			MinecraftForge.removeBlockEffectiveness(Block.REDSTONE_ORE, "pickaxe");
 			MinecraftForge.removeBlockEffectiveness(Block.REDSTONE_ORE_LIT, "pickaxe");
-			Block[] pickaxeEffective = new Block[] {
-				Block.COBBLESTONE,
-				Block.DOUBLE_STONE_SLAB,
-				Block.STONE_SLAB,
-				Block.STONE,
-				Block.SANDSTONE,
-				Block.MOSSY_COBBLESTONE,
-				Block.IRON_ORE,
-				Block.IRON_BLOCK,
-				Block.COAL_ORE,
-				Block.GOLD_BLOCK,
-				Block.GOLD_ORE,
-				Block.DIAMOND_ORE,
-				Block.DIAMOND_BLOCK,
-				Block.ICE,
-				Block.NETHERRACK,
-				Block.LAPIS_LAZULI_ORE,
-				Block.LAPIS_LAZULI_BLOCK
+			Block[] pickeff = new Block[]{
+					Block.COBBLESTONE,
+					Block.DOUBLE_STONE_SLAB,
+					Block.STONE_SLAB,
+					Block.STONE,
+					Block.SANDSTONE,
+					Block.MOSSY_COBBLESTONE,
+					Block.IRON_ORE,
+					Block.IRON_BLOCK,
+					Block.COAL_ORE,
+					Block.GOLD_BLOCK,
+					Block.GOLD_ORE,
+					Block.DIAMOND_ORE,
+					Block.DIAMOND_BLOCK,
+					Block.ICE,
+					Block.NETHERRACK,
+					Block.LAPIS_LAZULI_ORE,
+					Block.LAPIS_LAZULI_BLOCK
 			};
 
-			for (Block block : pickaxeEffective) {
-				MinecraftForge.setBlockHarvestLevel(block, "pickaxe", 0);
+			for(Block bl : pickeff) {
+				MinecraftForge.setBlockHarvestLevel(bl, "pickaxe", 0);
 			}
+
 		}
 	}
 
+	public static void touch() {
+	}
+
 	static {
-		LOGGER.info("MinecraftForge V%d.%d.%d Initialized\n", majorVersion, minorVersion, revisionVersion);
+		System.out.printf("MinecraftForge V%d.%d.%d Initialized\n", 1, 0, 6);
 	}
 }

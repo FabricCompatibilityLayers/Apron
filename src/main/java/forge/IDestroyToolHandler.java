@@ -9,5 +9,5 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 public interface IDestroyToolHandler {
-	void onDestroyCurrentItem(PlayerEntity player, ItemStack stack);
+	void onDestroyCurrentItem(PlayerEntity arg, ItemStack arg2);
 }

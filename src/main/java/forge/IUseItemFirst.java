@@ -10,5 +10,5 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public interface IUseItemFirst {
-	boolean onItemUseFirst(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int l);
+	boolean onItemUseFirst(ItemStack arg, PlayerEntity arg2, World arg3, int i, int j, int k, int l);
 }

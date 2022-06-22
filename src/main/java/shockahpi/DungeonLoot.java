@@ -24,15 +24,14 @@ public class DungeonLoot {
 
 	public ItemStack getStack() {
 		int damage = 0;
-
 		if (this.loot.itemId <= 255) {
 			if (Block.BY_ID[this.loot.itemId].getBaseColor(1) != 1) {
 				damage = this.loot.getMeta();
-			} else if (!this.loot.getItem().isRendered3d()) {
+			} else if (!this.loot.getItem().isRendered3d) {
 				damage = this.loot.getMeta();
 			}
 		}
 
-		return new ItemStack(this.loot.itemId, this.min + (new Random()).nextInt(this.max - this.min + 1), damage);
+		return new ItemStack(this.loot.itemId, this.min + new Random().nextInt(this.max - this.min + 1), damage);
 	}
 }

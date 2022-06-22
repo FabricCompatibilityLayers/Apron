@@ -8,6 +8,7 @@ import net.minecraft.world.World;
  * @author ShockAh
  */
 public interface IInterceptHarvest {
-	boolean canIntercept(World world, PlayerEntity player, Loc pos, int i, int j);
-	void intercept(World world, PlayerEntity player, Loc pos, int i, int j);
+	boolean canIntercept(World arg, PlayerEntity arg2, Loc loc, int i, int j);
+
+	void intercept(World arg, PlayerEntity arg2, Loc loc, int i, int j);
 }

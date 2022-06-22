@@ -1,7 +1,8 @@
 package io.github.betterthanupdates.forge.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.RedstoneRepeaterBlock;
@@ -16,21 +17,8 @@ public class RedstoneRepeaterBlockMixin extends Block {
 		super(blockId, material);
 	}
 
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Overwrite
-	public boolean canPlaceAt(World world, int x, int y, int z) {
-		return !((ForgeWorld) world).isBlockSolidOnSide(x, y - 1, z, 1) ? false : super.canPlaceAt(world, x, y, z);
-	}
-
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Overwrite
-	public boolean canGrow(World world, int x, int y, int z) {
-		return !((ForgeWorld) world).isBlockSolidOnSide(x, y - 1, z, 1) ? false : super.canGrow(world, x, y, z);
+	@Redirect(method = {"canPlaceAt", "canGrow"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z"))
+	private boolean reforged$isBlockSolidOnSide(World instance, int j, int k, int i) {
+		return ((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, 1);
 	}
 }

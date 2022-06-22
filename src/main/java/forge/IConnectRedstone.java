@@ -8,5 +8,5 @@ package forge;
 import net.minecraft.world.BlockView;
 
 public interface IConnectRedstone {
-	boolean canConnectRedstone(BlockView blockView, int x, int y, int z, int side);
+	boolean canConnectRedstone(BlockView arg, int i, int j, int k, int l);
 }

@@ -82,7 +82,7 @@ dependencies {
 	// Done
 //	modRuntimeOnly(group: "remapped.client", name: "modloader", version: "b1.7.3")
 //	modRuntimeOnly(group: "remapped.client", name: "modloadermp-1.7.3-unofficial", version: "v2")
-	modRuntimeOnly(group: "remapped.server", name: "modloadermp-1.7.3-unofficial-server", version: "v2")
+//	modRuntimeOnly(group: "remapped.server", name: "modloadermp-1.7.3-unofficial-server", version: "v2")
 //	modRuntimeOnly(group: "remapped.client", name: "minecraftforge-client", version: "1.0.7-20110907")
 //	modRuntimeOnly(group: "remapped.client", name: "audiomod", version: "b1.7.3")
 //	modRuntimeOnly(group: "remapped.client", name: "shockahpi", version: "r8")
@@ -92,6 +92,15 @@ dependencies {
 //	modRuntimeOnly(group: "remapped.client", name: "guiapi0.11.0", version: "1.7")
 //	modRuntimeOnly(group: "remapped.client", name: "modoptionsapi", version: "v0.7")
 //	modRuntimeOnly(group: "remapped.client", name: "guiapipatch", version: "v0.7")
+
+	// Concern
+	modRuntimeOnly(files("./concern/ModLoader B1.7.3.zip"))
+	modRuntimeOnly(files("./concern/ModLoaderMp 1.7.3 Unofficial v2.zip"))
+	modRuntimeOnly(files("./concern/shockahpi-r5.1.zip"))
+	modRuntimeOnly(files("./concern/reforged-client-1.0.1.zip"))
+	modRuntimeOnly(files("./concern/ReforgedSAPI Client.zip"))
+	modRuntimeOnly(files("./concern/playerapi-1.7.3-v1.7.zip"))
+	modRuntimeOnly(files("./concern/Aether1.7.3 V1.02.zip"))
 }
 
 checkstyle {

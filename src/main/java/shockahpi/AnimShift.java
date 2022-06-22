@@ -1,24 +1,22 @@
 package shockahpi;
 
 public class AnimShift extends AnimBase {
-	private final int x;
-	private final int y;
+	private final int h;
+	private final int v;
 
-	public AnimShift(int spriteID, String spritePath, int x, int y) {
+	public AnimShift(int spriteID, String spritePath, int h, int v) {
 		super(spriteID, spritePath);
-		this.x = x;
-		this.y = y;
+		this.h = h;
+		this.v = v;
 		this.getCleanFrame();
 	}
 
-	@Override
 	public void updateTexture() {
 		this.animFrame();
 		this.copyFrameToArray();
 	}
 
-	@Override
 	public void animFrame() {
-		this.shiftFrame(this.x, this.y, true, true);
+		this.shiftFrame(this.h, this.v, true, true);
 	}
 }

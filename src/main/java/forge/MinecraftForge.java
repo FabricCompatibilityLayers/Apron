@@ -5,32 +5,36 @@
 
 package forge;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
-
-import net.legacyfabric.fabric.api.logger.v1.Logger;
+import java.util.List;
+import java.util.TreeMap;
 
 import net.minecraft.block.Block;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import io.github.betterthanupdates.forge.item.ForgeTool;
-import io.github.betterthanupdates.forge.item.ToolEffectiveness;
-
 @SuppressWarnings("unused")
 public class MinecraftForge {
-	static final Logger LOGGER = Logger.get("Apron", "Minecraft Forge");
+	private static LinkedList<IBucketHandler> bucketHandlers = new LinkedList();
+	public static boolean disableVersionCheckCrash = false;
+	private static LinkedList<IOreHandler> oreHandlers = new LinkedList();
+	private static TreeMap<String, List<ItemStack>> oreDict = new TreeMap();
 
-	private static final LinkedList<IBucketHandler> bucketHandlers = new LinkedList<>();
+	public MinecraftForge() {
+	}
 
-	/**
-	 * @deprecated
-	 */
-	public static void registerCustomBucketHander(IBucketHandler handler) {
+	/** @deprecated */
+	public static void registerCustomBucketHander(forge.IBucketHandler handler) {
 		bucketHandlers.add(handler);
 	}
 
-	public static void registerCustomBucketHandler(IBucketHandler handler) {
+	public static void registerCustomBucketHandler(forge.IBucketHandler handler) {
 		bucketHandlers.add(handler);
 	}
 
@@ -46,10 +50,9 @@ public class MinecraftForge {
 		ForgeHooks.craftingHandlers.add(handler);
 	}
 
-	public static ItemStack fillCustomBucket(World world, int i, int j, int k) {
-		for (IBucketHandler handler : bucketHandlers) {
-			ItemStack stack = handler.fillCustomBucket(world, i, j, k);
-
+	public static ItemStack fillCustomBucket(World w, int i, int j, int k) {
+		for(forge.IBucketHandler handler : bucketHandlers) {
+			ItemStack stack = handler.fillCustomBucket(w, i, j, k);
 			if (stack != null) {
 				return stack;
 			}
@@ -58,76 +61,209 @@ public class MinecraftForge {
 		return null;
 	}
 
-	public static void setToolClass(Item tool, String toolClass, int harvestLevel) {
+	public static void setToolClass(Item tool, String tclass, int hlevel) {
 		ForgeHooks.initTools();
-		ForgeHooks.toolClasses.put(tool.id, new ForgeTool(toolClass, harvestLevel));
+		ForgeHooks.toolClasses.put(tool.id, Arrays.asList(tclass, hlevel));
 	}
 
-	public static void setBlockHarvestLevel(Block block, int meta, String toolClass, int harvestLevel) {
+	public static void setBlockHarvestLevel(Block bl, int md, String tclass, int hlevel) {
 		ForgeHooks.initTools();
-		ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolClass);
-		ForgeHooks.toolHarvestLevels.put(key, harvestLevel);
+		List key = Arrays.asList(bl.id, md, tclass);
+		ForgeHooks.toolHarvestLevels.put(key, hlevel);
 		ForgeHooks.toolEffectiveness.add(key);
 	}
 
-	public static void removeBlockEffectiveness(Block block, int meta, String toolClass) {
+	public static void removeBlockEffectiveness(Block bl, int md, String tclass) {
 		ForgeHooks.initTools();
-		ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolClass);
+		List key = Arrays.asList(bl.id, md, tclass);
 		ForgeHooks.toolEffectiveness.remove(key);
 	}
 
-	public static void setBlockHarvestLevel(Block block, String toolClass, int harvestLevel) {
+	public static void setBlockHarvestLevel(Block bl, String tclass, int hlevel) {
 		ForgeHooks.initTools();
 
-		for (int meta = 0; meta < 16; ++meta) {
-			ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolClass);
-			ForgeHooks.toolHarvestLevels.put(key, harvestLevel);
+		for(int md = 0; md < 16; ++md) {
+			List key = Arrays.asList(bl.id, md, tclass);
+			ForgeHooks.toolHarvestLevels.put(key, hlevel);
 			ForgeHooks.toolEffectiveness.add(key);
 		}
+
 	}
 
-	public static void removeBlockEffectiveness(Block block, String toolClass) {
+	public static void removeBlockEffectiveness(Block bl, String tclass) {
 		ForgeHooks.initTools();
 
-		for (int meta = 0; meta < 16; ++meta) {
-			ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolClass);
+		for(int md = 0; md < 16; ++md) {
+			List key = Arrays.asList(bl.id, md, tclass);
 			ForgeHooks.toolEffectiveness.remove(key);
 		}
+
 	}
 
 	public static void addPickaxeBlockEffectiveAgainst(Block block) {
 		setBlockHarvestLevel(block, "pickaxe", 0);
 	}
 
-	public static void killMinecraft(String modName, String msg) {
-		throw new RuntimeException(modName + ": " + msg);
+	public static void killMinecraft(String modname, String msg) {
+		throw new RuntimeException(modname + ": " + msg);
 	}
 
-	public static void versionDetect(String modName, int major, int minor, int revision) {
-		if (major != 1) {
-			killMinecraft(modName, "MinecraftForge Major Version Mismatch, expecting " + major + ".x.x");
-		} else if (minor != 0) {
-			if (minor > 0) {
-				killMinecraft(modName, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
-			} else {
-				LOGGER.warn(modName + ": MinecraftForge minor version mismatch, expecting " + major + "." + minor + ".x, may lead to unexpected behavior");
+	public static void versionDetect(String modname, int major, int minor, int revision) {
+		if (disableVersionCheckCrash) {
+			ReforgedHooks.touch();
+			System.out
+					.println(
+							modname + ": Forge version detect was called, but strict crashing is disabled. Expected version " + major + "." + minor + "." + revision
+					);
+		} else {
+			if (major != 1) {
+				killMinecraft(modname, "MinecraftForge Major Version Mismatch, expecting " + major + ".x.x");
+			} else if (minor != 0) {
+				if (minor > 0) {
+					killMinecraft(modname, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
+				} else {
+					System.out
+							.println(modname + ": MinecraftForge minor version mismatch, expecting " + major + "." + minor + ".x, may lead to unexpected behavior");
+				}
+			} else if (revision > 6) {
+				killMinecraft(modname, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
 			}
-		} else if (revision > 6) {
-			killMinecraft(modName, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
+
 		}
 	}
 
-	public static void versionDetectStrict(String modName, int major, int minor, int revision) {
-		if (major != 1) {
-			killMinecraft(modName, "MinecraftForge Major Version Mismatch, expecting " + major + ".x.x");
-		} else if (minor != 0) {
-			if (minor > 0) {
-				killMinecraft(modName, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
-			} else {
-				killMinecraft(modName, "MinecraftForge minor version mismatch, expecting " + major + "." + minor + ".x");
+	public static void versionDetectStrict(String modname, int major, int minor, int revision) {
+		if (disableVersionCheckCrash) {
+			ReforgedHooks.touch();
+			System.out
+					.println(
+							modname + ": Forge version detect was called, but strict crashing is disabled. Expected version " + major + "." + minor + "." + revision
+					);
+		} else {
+			if (major != 1) {
+				killMinecraft(modname, "MinecraftForge Major Version Mismatch, expecting " + major + ".x.x");
+			} else if (minor != 0) {
+				if (minor > 0) {
+					killMinecraft(modname, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
+				} else {
+					killMinecraft(modname, "MinecraftForge minor version mismatch, expecting " + major + "." + minor + ".x");
+				}
+			} else if (revision > 6) {
+				killMinecraft(modname, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
 			}
-		} else if (revision > 6) {
-			killMinecraft(modName, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
+
+		}
+	}
+
+	public static void registerOreHandler(forge.IOreHandler handler) {
+		oreHandlers.add(handler);
+
+		for(String key : oreDict.keySet()) {
+			for(ItemStack ist : oreDict.get(key)) {
+				handler.registerOre(key, ist);
+			}
+		}
+
+	}
+
+	public static void registerOre(String oreClass, ItemStack ore) {
+		List<ItemStack> orelist = oreDict.get(oreClass);
+		if (orelist == null) {
+			orelist = new ArrayList();
+			oreDict.put(oreClass, orelist);
+		}
+
+		orelist.add(ore);
+
+		for(forge.IOreHandler ioh : oreHandlers) {
+			ioh.registerOre(oreClass, ore);
+		}
+
+	}
+
+	public static List<ItemStack> getOreClass(String oreClass) {
+		return (List<ItemStack>)oreDict.get(oreClass);
+	}
+
+	public static MinecraftForge.OreQuery generateRecipes(Object... pattern) {
+		return new MinecraftForge.OreQuery(pattern);
+	}
+
+	public static class OreQuery implements Iterable<Object[]> {
+		Object[] proto;
+
+		private OreQuery(Object[] pattern) {
+			this.proto = pattern;
+		}
+
+		public Iterator<Object[]> iterator() {
+			return new MinecraftForge.OreQuery.OreQueryIterator();
+		}
+
+		public class OreQueryIterator implements Iterator<Object[]> {
+			LinkedList itering = new LinkedList();
+			LinkedList output = new LinkedList();
+
+			private OreQueryIterator() {
+				for(int i = 0; i < OreQuery.this.proto.length; ++i) {
+					if (OreQuery.this.proto[i] instanceof Collection) {
+						Iterator it = ((Collection)OreQuery.this.proto[i]).iterator();
+						if (!it.hasNext()) {
+							this.output = null;
+							break;
+						}
+
+						this.itering.addLast(it);
+						this.output.addLast(it.next());
+					} else {
+						this.itering.addLast(OreQuery.this.proto[i]);
+						this.output.addLast(OreQuery.this.proto[i]);
+					}
+				}
+
+			}
+
+			public boolean hasNext() {
+				return this.output != null;
+			}
+
+			public Object[] next() {
+				Object[] tr;
+				for(tr = this.output.toArray(); this.itering.size() != 0; this.itering.removeLast()) {
+					Object to = this.itering.getLast();
+					this.output.removeLast();
+					if (to instanceof Iterator) {
+						Iterator it = (Iterator)to;
+						if (it.hasNext()) {
+							this.output.addLast(it.next());
+
+							for(int var5 = this.itering.size(); var5 < OreQuery.this.proto.length; ++var5) {
+								if (OreQuery.this.proto[var5] instanceof Collection) {
+									Iterator itx = ((Collection)OreQuery.this.proto[var5]).iterator();
+									if (!itx.hasNext()) {
+										this.output = null;
+										break;
+									}
+
+									this.itering.addLast(itx);
+									this.output.addLast(itx.next());
+								} else {
+									this.itering.addLast(OreQuery.this.proto[var5]);
+									this.output.addLast(OreQuery.this.proto[var5]);
+								}
+							}
+
+							return tr;
+						}
+					}
+				}
+
+				this.output = null;
+				return tr;
+			}
+
+			public void remove() {
+			}
 		}
 	}
 }
