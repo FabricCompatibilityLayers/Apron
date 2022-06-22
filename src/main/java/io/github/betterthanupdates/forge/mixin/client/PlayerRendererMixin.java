@@ -4,67 +4,42 @@ import forge.IArmorTextureProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.PlayerRenderer;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 @Environment(EnvType.CLIENT)
 @Mixin(PlayerRenderer.class)
 public abstract class PlayerRendererMixin extends LivingEntityRenderer {
-	@Shadow
-	public static String[] armorTypes;
-
-	@Shadow
-	private BipedEntityModel field_295;
-
-	@Shadow
-	private BipedEntityModel field_296;
-
 	private PlayerRendererMixin(EntityModel entityModel, float f) {
 		super(entityModel, f);
 	}
 
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Overwrite
-	protected boolean render(PlayerEntity player, int i, float f) {
-		ItemStack stack = player.inventory.getArmorItem(3 - i);
+	Item cachedItem;
 
-		if (stack != null) {
-			Item item = stack.getItem();
+	@Inject(method = "render(Lnet/minecraft/entity/player/PlayerEntity;IF)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
+	private void reforged$render(PlayerEntity entityplayer, int i, float f, CallbackInfoReturnable<Boolean> cir) {
+		ItemStack itemstack = entityplayer.inventory.getArmorItem(3 - i);
 
-			if (item instanceof ArmorItem) {
-				ArmorItem armor = (ArmorItem) item;
-
-				if (item instanceof IArmorTextureProvider) {
-					this.bindTexture(((IArmorTextureProvider) item).getArmorTextureFile());
-				} else {
-					this.bindTexture("/armor/" + armorTypes[armor.textureFileAppend] + "_" + (i != 2 ? 1 : 2) + ".png");
-				}
-
-				BipedEntityModel bipedModel = i != 2 ? this.field_295 : this.field_296;
-				bipedModel.head.visible = i == 0;
-				bipedModel.hat.visible = i == 0;
-				bipedModel.torso.visible = i == 1 || i == 2;
-				bipedModel.rightArm.visible = i == 1;
-				bipedModel.leftArm.visible = i == 1;
-				bipedModel.rightLeg.visible = i == 2 || i == 3;
-				bipedModel.leftLeg.visible = i == 2 || i == 3;
-				this.setModel(bipedModel);
-				return true;
-			}
+		if (itemstack != null) {
+			this.cachedItem = itemstack.getItem();
 		}
+	}
 
-		return false;
+	@Redirect(method = "render(Lnet/minecraft/entity/player/PlayerEntity;IF)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/PlayerRenderer;bindTexture(Ljava/lang/String;)V"))
+	private void reforged$bindTexture(PlayerRenderer instance, String s) {
+		if (this.cachedItem != null && this.cachedItem instanceof IArmorTextureProvider) {
+			instance.bindTexture(((IArmorTextureProvider) this.cachedItem).getArmorTextureFile());
+		} else {
+			instance.bindTexture(s);
+		}
 	}
 }

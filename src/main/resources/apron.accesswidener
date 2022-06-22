@@ -191,3 +191,5 @@ accessible field net/minecraft/server/entity/player/ServerPlayerEntity field_260
 accessible field net/minecraft/server/network/ServerPlayPacketHandler player Lnet/minecraft/server/entity/player/ServerPlayerEntity;
 
 accessible class argo/jdom/JsonListenerToJdomAdapter$NodeContainer
+
+accessible method net/minecraft/client/render/entity/EntityRenderer bindTexture (Ljava/lang/String;)V

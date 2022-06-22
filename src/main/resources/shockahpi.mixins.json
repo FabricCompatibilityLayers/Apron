@@ -7,7 +7,6 @@
     "ClientPlayerEntityMixin",
     "PortalBlockMixin",
     "AchievementsScreenMixin",
-    "GameRendererMixin",
     "SinglePlayerInteractionManagerMixin",
     "ToolItemMixin",
     "DimensionMixin",

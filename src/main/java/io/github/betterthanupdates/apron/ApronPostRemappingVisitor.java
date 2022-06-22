@@ -21,6 +21,9 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 								if (fieldName.equals("renderingWorldRenderer")) {
 									fieldOwner = "io/github/betterthanupdates/forge/ForgeClientReflection";
 									fieldName = "Tessellator$renderingWorldRenderer";
+								} else if (fieldName.equals("firstInstance")) {
+									fieldOwner = "io/github/betterthanupdates/forge/ForgeClientReflection";
+									fieldName = "Tessellator$firstInstance";
 								}
 
 								break;
