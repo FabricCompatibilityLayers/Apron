@@ -111,7 +111,13 @@
       "Loc": "shockahpi/Loc",
       "PlayerBaseSAPI": "shockahpi/PlayerBaseSAPI",
       "SAPI": "shockahpi/SAPI",
-      "ToolBase": "shockahpi/ToolBase"
+      "Tool": "shockahpi/Tool",
+      "ToolBase": "shockahpi/ToolBase",
+
+      "dq": "io/github/betterthanupdates/shockahpi/item/SAPIToolItem",
+      "ta": "io/github/betterthanupdates/shockahpi/item/SAPIAxeItem",
+      "au": "io/github/betterthanupdates/shockahpi/item/SAPIPickaxeItem",
+      "wc": "io/github/betterthanupdates/shockahpi/item/SAPIShovelItem"
     },
     "apron:server": {
       "EntityTrackerEntry2": "modloadermp/EntityTrackerEntry",

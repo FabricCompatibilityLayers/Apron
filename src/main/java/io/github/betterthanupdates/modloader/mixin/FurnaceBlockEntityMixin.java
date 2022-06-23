@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.FurnaceBlock;
@@ -16,6 +17,8 @@ import net.minecraft.entity.block.FurnaceBlockEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.SmeltingRecipeRegistry;
+
+import io.github.betterthanupdates.forge.ReforgedSmeltingRecipeRegistry;
 
 @Mixin(FurnaceBlockEntity.class)
 public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inventory {
@@ -48,9 +51,8 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 	@Environment(EnvType.CLIENT)
 	@Overwrite
 	public void tick() {
-		int j = this.burnTime > 0 ? 1 : 0;
-		int k = 0;
-
+		boolean flag = this.burnTime > 0;
+		boolean flag1 = false;
 		if (this.burnTime > 0) {
 			--this.burnTime;
 		}
@@ -58,10 +60,8 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 		if (!this.world.isClient) {
 			if (this.burnTime == 0 && this.canAcceptRecipeOutput()) {
 				this.fuelTime = this.burnTime = this.getFuelTime(this.inventory[1]);
-
 				if (this.burnTime > 0) {
-					k = 1;
-
+					flag1 = true;
 					if (this.inventory[1] != null) {
 						if (this.inventory[1].getItem().hasContainerItemType()) {
 							this.inventory[1] = new ItemStack(this.inventory[1].getItem().getContainerItemType());
@@ -77,24 +77,31 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 			}
 
 			if (this.isBurning() && this.canAcceptRecipeOutput()) {
-				if (++this.cookTime == 200) {
+				++this.cookTime;
+				if (this.cookTime == 200) {
 					this.cookTime = 0;
 					this.craftRecipe();
-					k = 1;
+					flag1 = true;
 				}
 			} else {
 				this.cookTime = 0;
 			}
 
-			if (j != (this.burnTime > 0 ? 1 : 0)) {
-				k = 1;
+			if (flag != this.burnTime > 0) {
+				flag1 = true;
 				FurnaceBlock.updateFurnaceState(this.burnTime > 0, this.world, this.x, this.y, this.z);
 			}
 		}
 
-		if (k != 0) {
+		if (flag1) {
 			this.markDirty();
 		}
+
+	}
+
+	@Redirect(method = "canAcceptRecipeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/recipe/SmeltingRecipeRegistry;getResult(I)Lnet/minecraft/item/ItemStack;"))
+	private ItemStack reforged$canAcceptRecipeOutput(SmeltingRecipeRegistry instance, int i) {
+		return ((ReforgedSmeltingRecipeRegistry) instance).getSmeltingResult(this.inventory[0]);
 	}
 
 	/**
@@ -106,12 +113,11 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 	@Overwrite
 	public void craftRecipe() {
 		if (this.canAcceptRecipeOutput()) {
-			ItemStack result = SmeltingRecipeRegistry.getInstance().getResult(this.inventory[0].getItem().id);
-
+			ItemStack itemstack = ((ReforgedSmeltingRecipeRegistry) SmeltingRecipeRegistry.getInstance()).getSmeltingResult(this.inventory[0]);
 			if (this.inventory[2] == null) {
-				this.inventory[2] = result.copy();
-			} else if (this.inventory[2].itemId == result.itemId) {
-				this.inventory[2].count += result.count;
+				this.inventory[2] = itemstack.copy();
+			} else if (this.inventory[2].isDamageAndIDIdentical(itemstack)) {
+				this.inventory[2].count += itemstack.count;
 			}
 
 			if (this.inventory[0].getItem().hasContainerItemType()) {
@@ -123,6 +129,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 			if (this.inventory[0].count <= 0) {
 				this.inventory[0] = null;
 			}
+
 		}
 	}
 

@@ -4,10 +4,12 @@ import forge.ArmorProperties;
 import forge.ForgeHooks;
 import forge.ISpecialArmor;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.block.BedBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
@@ -15,7 +17,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SleepStatus;
-import net.minecraft.util.Vec3i;
 import net.minecraft.world.World;
 
 import io.github.betterthanupdates.forge.entity.player.ForgePlayerEntity;
@@ -26,21 +27,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 	@Shadow
 	public PlayerInventory inventory;
 
-	@Shadow
-	private int field_518;
-
-	@Shadow
-	protected abstract void method_517(int i);
-
-	@Shadow
-	private int sleepTimer;
-
-	@Shadow
-	public Vec3i bedPosition;
-
 	@Shadow public abstract boolean isLyingOnBed();
-
-	@Shadow protected boolean lyingOnBed;
 
 	private PlayerEntityMixin(World world) {
 		super(world);
@@ -56,36 +43,31 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 	 */
 	@Override
 	public float getCurrentPlayerStrVsBlock(Block block, int meta) {
-		float f = 1.0F;
-		ItemStack ist = this.inventory.getHeldItem();
-
-		if (ist != null) {
-			f = ((ForgeItem) ist.getItem()).getStrVsBlock(ist, block, meta);
+		float strength = 1.0F;
+		ItemStack heldItem = this.inventory.getHeldItem();
+		if (heldItem != null) {
+			strength = ((ForgeItem) heldItem.getItem()).getStrVsBlock(heldItem, block, meta);
 		}
 
 		if (this.isInFluid(Material.WATER)) {
-			f /= 5.0F;
+			strength /= 5.0F;
 		}
 
 		if (!this.onGround) {
-			f /= 5.0F;
+			strength /= 5.0F;
 		}
 
-		return f;
+		return strength;
 	}
 
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Overwrite
-	protected void applyDamage(int i) {
+	@Inject(method = "applyDamage", cancellable = true, at = @At("HEAD"))
+	private void reforged$applyDamage(int i, CallbackInfo ci) {
 		boolean doRegularComputation = true;
 		int initialDamage = i;
 
-		for (ItemStack stack : this.inventory.armor) {
+		for(ItemStack stack : this.inventory.armor) {
 			if (stack != null && stack.getItem() instanceof ISpecialArmor) {
-				ISpecialArmor armor = (ISpecialArmor) stack.getItem();
+				ISpecialArmor armor = (ISpecialArmor)stack.getItem();
 				ArmorProperties props = armor.getProperties((PlayerEntity) (Object) this, initialDamage, i);
 				i -= props.damageRemove;
 				doRegularComputation = doRegularComputation && props.allowRegularComputation;
@@ -94,94 +76,26 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 
 		if (!doRegularComputation) {
 			super.applyDamage(i);
-		} else {
-			int j = 25 - this.inventory.getArmorValue();
-			int k = i * j + this.field_518;
-			this.inventory.damageArmor(i);
-			i = k / 25;
-			this.field_518 = k % 25;
-			super.applyDamage(i);
+			ci.cancel();
 		}
 	}
 
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Overwrite
-	public void breakHeldItem() {
-		ItemStack orig = this.inventory.getHeldItem();
-		this.inventory.setInventoryItem(this.inventory.selectedHotBarSlot, null);
-		ForgeHooks.onDestroyCurrentItem((PlayerEntity) (Object) this, orig);
+	ItemStack orig;
+	@Inject(method = "breakHeldItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/PlayerInventory;setInventoryItem(ILnet/minecraft/item/ItemStack;)V"))
+	private void reforged$breakHeldItem$Head(CallbackInfo ci) {
+		this.orig = this.inventory.getHeldItem();
 	}
 
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Overwrite
-	public SleepStatus trySleep(int i, int j, int k) {
+	@Inject(method = "breakHeldItem", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/inventory/PlayerInventory;setInventoryItem(ILnet/minecraft/item/ItemStack;)V", shift = At.Shift.AFTER))
+	private void reforged$breakHeldItem$Return(CallbackInfo ci) {
+		ForgeHooks.onDestroyCurrentItem((PlayerEntity) (Object) this, this.orig);
+	}
+
+	@Inject(method = "trySleep", at = @At("HEAD"), cancellable = true)
+	private void reforged$trySleep(int i, int j, int k, CallbackInfoReturnable<SleepStatus> cir) {
 		SleepStatus customSleep = ForgeHooks.sleepInBedAt((PlayerEntity) (Object) this, i, j, k);
-
 		if (customSleep != null) {
-			return customSleep;
-		} else {
-			if (!this.world.isClient) {
-				if (this.isLyingOnBed() || !this.isAlive()) {
-					return SleepStatus.YOU_SLEEPING_OR_DEAD;
-				}
-
-				if (this.world.dimension.blocksCompassAndClock) {
-					return SleepStatus.CANT_SLEEP_HERE;
-				}
-
-				if (this.world.isDaylight()) {
-					return SleepStatus.DAY_TIME;
-				}
-
-				if (Math.abs(this.x - (double) i) > 3.0 || Math.abs(this.y - (double) j) > 2.0 || Math.abs(this.z - (double) k) > 3.0) {
-					return SleepStatus.field_2663;
-				}
-			}
-
-			this.setSize(0.2F, 0.2F);
-			this.standingEyeHeight = 0.2F;
-
-			if (this.world.isBlockLoaded(i, j, k)) {
-				int l = this.world.getBlockMeta(i, j, k);
-				int i1 = BedBlock.orientationOnly(l);
-				float f = 0.5F;
-				float f1 = 0.5F;
-				switch (i1) {
-					case 0:
-						f1 = 0.9F;
-						break;
-					case 1:
-						f = 0.1F;
-						break;
-					case 2:
-						f1 = 0.1F;
-						break;
-					case 3:
-						f = 0.9F;
-				}
-
-				this.method_517(i1);
-				this.setPosition((double) ((float) i + f), (double) ((float) j + 0.9375F), (double) ((float) k + f1));
-			} else {
-				this.setPosition((double) ((float) i + 0.5F), (double) ((float) j + 0.9375F), (double) ((float) k + 0.5F));
-			}
-
-			this.lyingOnBed = true;
-			this.sleepTimer = 0;
-			this.bedPosition = new Vec3i(i, j, k);
-			this.xVelocity = this.zVelocity = this.yVelocity = 0.0;
-
-			if (!this.world.isClient) {
-				this.world.onPlayerDisconnect();
-			}
-
-			return SleepStatus.field_2660;
+			cir.setReturnValue(customSleep);
 		}
 	}
 }

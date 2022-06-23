@@ -59,6 +59,11 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 								}
 
 								break;
+							case "net/minecraft/class_50":
+								if (methodName.equals("getByID")) {
+									methodOwner = "shockahpi/DimensionBase";
+								}
+								break;
 						}
 
 						super.visitMethodInsn(opcode, methodOwner, methodName, methodDescriptor, isInterface);

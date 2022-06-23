@@ -341,7 +341,7 @@ public class AchievementsScreenMixin extends Screen implements SAPIAchievementsS
 		if (this.checkHidden(achievement)) {
 			return false;
 		} else {
-			int tabID = SAPI.acGetPage(achievement).id;
+			int tabID = SAPI.acGetPage(achievement).getId();
 			if (tabID == SAPI.acCurrentPage) {
 				return true;
 			} else {

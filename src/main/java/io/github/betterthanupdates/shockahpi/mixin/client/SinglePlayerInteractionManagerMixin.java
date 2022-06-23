@@ -23,7 +23,7 @@ public abstract class SinglePlayerInteractionManagerMixin extends ClientInteract
 	 */
 	@Inject(method = "getBlockReachDistance", cancellable = true, at = @At("RETURN"))
 	public void shockahpi$getBlockReachDistance(CallbackInfoReturnable<Float> cir) {
-		cir.setReturnValue(SAPI.reachGetBlock(cir.getReturnValue()));
+		if (cir.getReturnValue() == 4.0F) cir.setReturnValue(SAPI.reachGet());
 	}
 
 	/**

@@ -3,132 +3,66 @@ package io.github.betterthanupdates.forge.mixin.client;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import shockahpi.SAPI;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.ClientInteractionManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MultiplayerClientInteractionManager;
-import net.minecraft.network.ClientPlayPacketHandler;
-import net.minecraft.packet.play.PlayerDiggingC2SPacket;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 
 import io.github.betterthanupdates.forge.block.ForgeBlock;
+import io.github.betterthanupdates.forge.item.ForgeItem;
 
 @Environment(EnvType.CLIENT)
 @Mixin(MultiplayerClientInteractionManager.class)
 public abstract class MultiplayerClientInteractionManagerMixin extends ClientInteractionManager {
-	@Shadow
-	private boolean field_2615;
-
-	@Shadow
-	private int field_2608;
-
-	@Shadow
-	private int field_2609;
-
-	@Shadow
-	private int field_2610;
-
-	@Shadow
-	private ClientPlayPacketHandler networkHandler;
-
-	@Shadow
-	private float field_2611;
-
-	@Shadow
-	private float field_2612;
-
-	@Shadow
-	private float field_2613;
-
-	@Shadow
-	protected abstract void method_1997();
-
-	@Shadow
-	private int field_2614;
-
 	public MultiplayerClientInteractionManagerMixin(Minecraft client) {
 		super(client);
 	}
 
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Overwrite
-	public void method_1707(int i, int j, int k, int l) {
-		if (!this.field_2615 || i != this.field_2608 || j != this.field_2609 || k != this.field_2610) {
-			this.networkHandler.sendPacket(new PlayerDiggingC2SPacket(0, i, j, k, l));
-			int i1 = this.client.world.getBlockId(i, j, k);
-
-			if (i1 > 0 && this.field_2611 == 0.0F) {
-				Block.BY_ID[i1].activate(this.client.world, i, j, k, this.client.player);
-			}
-
-			if (i1 > 0 && ((ForgeBlock) Block.BY_ID[i1]).blockStrength(this.client.world, this.client.player, i, j, k) >= 1.0F) {
-				this.method_1716(i, j, k, l);
-			} else {
-				this.field_2615 = true;
-				this.field_2608 = i;
-				this.field_2609 = j;
-				this.field_2610 = k;
-				this.field_2611 = 0.0F;
-				this.field_2612 = 0.0F;
-				this.field_2613 = 0.0F;
-			}
+	@Inject(method = "method_1716", at = @At("HEAD"), cancellable = true)
+	private void reforged$method_1716(int i, int j, int k, int l, CallbackInfoReturnable<Boolean> cir) {
+		ItemStack itemstack = this.client.player.getHeldItem();
+		if (itemstack != null && ((ForgeItem) itemstack.getItem()).onBlockStartBreak(itemstack, i, j, k, this.client.player)) {
+			cir.setReturnValue(false);
 		}
 	}
 
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Overwrite
-	public void method_1721(int i, int j, int k, int l) {
-		if (this.field_2615) {
-			this.method_1997();
+	int cachedI, cachedJ, cachedK;
+	@Inject(method = "method_1707", at = @At("HEAD"))
+	private void reforged$method_1707(int j, int k, int l, int par4, CallbackInfo ci) {
+		this.cachedI = j;
+		this.cachedJ = k;
+		this.cachedK = l;
+	}
 
-			if (this.field_2614 > 0) {
-				--this.field_2614;
-			} else {
-				if (i == this.field_2608 && j == this.field_2609 && k == this.field_2610) {
-					int i1 = this.client.world.getBlockId(i, j, k);
+	@Redirect(method = "method_1707", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F"))
+	private float reforged$method_1707(Block instance, PlayerEntity playerEntity) {
+		return ((ForgeBlock) instance).blockStrength(this.client.world, playerEntity, this.cachedI, this.cachedJ, this.cachedK);
+	}
 
-					if (i1 == 0) {
-						this.field_2615 = false;
-						return;
-					}
+	int cachedI2, cachedJ2, cachedK2;
+	@Inject(method = "method_1721", at = @At("HEAD"))
+	private void reforged$method_1721(int j, int k, int l, int par4, CallbackInfo ci) {
+		this.cachedI2 = j;
+		this.cachedJ2 = k;
+		this.cachedK2 = l;
+	}
 
-					Block block = Block.BY_ID[i1];
-					this.field_2611 += ((ForgeBlock) block).blockStrength(this.client.world, this.client.player, i, j, k);
+	@Redirect(method = "method_1721", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F"))
+	private float reforged$method_1721(Block instance, PlayerEntity playerEntity) {
+		return ((ForgeBlock) instance).blockStrength(this.client.world, playerEntity, this.cachedI2, this.cachedJ2, this.cachedK2);
+	}
 
-					if (this.field_2613 % 4.0F == 0.0F && block != null) {
-						this.client.soundHelper.playSound(
-								block.sounds.getWalkSound(),
-								(float) i + 0.5F,
-								(float) j + 0.5F,
-								(float) k + 0.5F,
-								(block.sounds.getVolume() + 1.0F) / 8.0F,
-								block.sounds.getPitch() * 0.5F
-						);
-					}
-
-					++this.field_2613;
-
-					if (this.field_2611 >= 1.0F) {
-						this.field_2615 = false;
-						this.networkHandler.sendPacket(new PlayerDiggingC2SPacket(2, i, j, k, l));
-						this.method_1716(i, j, k, l);
-						this.field_2611 = 0.0F;
-						this.field_2612 = 0.0F;
-						this.field_2613 = 0.0F;
-						this.field_2614 = 5;
-					}
-				} else {
-					this.method_1707(i, j, k, l);
-				}
-			}
-		}
+	@Inject(method = "getBlockReachDistance", at = @At("RETURN"), cancellable = true)
+	public void reforged$getBlockReachDistance(CallbackInfoReturnable<Float> cir) {
+		if (cir.getReturnValue() == 4.0F) cir.setReturnValue(SAPI.reachGet());
 	}
 }

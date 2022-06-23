@@ -1,8 +1,12 @@
 package shockahpi;
 
+import playerapi.PlayerBase;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.stat.achievement.Achievements;
+
+import io.github.betterthanupdates.shockahpi.client.entity.player.ShockAhPIClientPlayerEntity;
 
 public class PlayerBaseSAPI extends PlayerBase {
 	public int portal;
@@ -72,7 +76,7 @@ public class PlayerBaseSAPI extends PlayerBase {
 				.method_1372(this.player.x + (double)this.player.width * 0.35, this.player.boundingBox.minY + 0.5, this.player.z - (double)this.player.width * 0.35);
 		this.player
 				.method_1372(this.player.x + (double)this.player.width * 0.35, this.player.boundingBox.minY + 0.5, this.player.z + (double)this.player.width * 0.35);
-		this.player.superOnLivingUpdate();
+		((ShockAhPIClientPlayerEntity) this.player).superOnLivingUpdate();
 		return true;
 	}
 

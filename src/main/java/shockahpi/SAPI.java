@@ -3,36 +3,16 @@ package shockahpi;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import modloader.BaseMod;
-import modloader.ModLoader;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import playerapi.PlayerAPI;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.block.DispenserBlockEntity;
-import net.minecraft.entity.block.FurnaceBlockEntity;
-import net.minecraft.entity.block.SignBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stat.achievement.Achievement;
-import net.minecraft.util.SleepStatus;
-import net.minecraft.util.io.CompoundTag;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionData;
-
-import io.github.betterthanupdates.apron.api.ApronApi;
 
 /**
  * ShockAhPi - Adding new possibilities in 3... 2... 1...
@@ -42,17 +22,17 @@ import io.github.betterthanupdates.apron.api.ApronApi;
 public class SAPI {
 	private static Minecraft instance;
 	public static boolean usingText = false;
-	private static ArrayList harvestIntercepts = new ArrayList();
-	private static ArrayList setIntercepts = new ArrayList();
-	private static ArrayList reaches = new ArrayList();
-	private static ArrayList dngMobs = new ArrayList();
-	private static ArrayList dngItems = new ArrayList();
-	private static ArrayList dngGuaranteed = new ArrayList();
+	private static final ArrayList<IInterceptHarvest> harvestIntercepts = new ArrayList<>();
+	private static final ArrayList<IInterceptBlockSet> setIntercepts = new ArrayList<>();
+	private static final ArrayList<IReach> reaches = new ArrayList<>();
+	private static final ArrayList<String> dngMobs = new ArrayList<>();
+	private static final ArrayList<DungeonLoot> dngItems = new ArrayList<>();
+	private static final ArrayList<DungeonLoot> dngGuaranteed = new ArrayList<>();
 	private static boolean dngAddedMobs = false;
 	private static boolean dngAddedItems = false;
 	public static int acCurrentPage = 0;
-	private static ArrayList acHidden = new ArrayList();
-	private static ArrayList acPages = new ArrayList();
+	private static final ArrayList<Integer> acHidden = new ArrayList<>();
+	private static final ArrayList<ACPage> acPages = new ArrayList<>();
 	public static final ACPage acDefaultPage = new ACPage();
 
 	public SAPI() {
@@ -74,11 +54,11 @@ public class SAPI {
 				Thread[] athread = new Thread[i];
 				threadgroup.enumerate(athread);
 
-				for(int j = 0; j < athread.length; ++j) {
-					if (athread[j].getName().equals("Minecraft main thread")) {
+				for (Thread thread : athread) {
+					if (thread.getName().equals("Minecraft main thread")) {
 						Field field = Thread.class.getDeclaredField("target");
 						field.setAccessible(true);
-						instance = (Minecraft)field.get(athread[j]);
+						instance = (Minecraft) field.get(thread);
 						break;
 					}
 				}
@@ -165,7 +145,7 @@ public class SAPI {
 
 	public static void dungeonRemoveMob(String s) {
 		for(int i = 0; i < dngMobs.size(); ++i) {
-			if (((String)dngMobs.get(i)).equals(s)) {
+			if (dngMobs.get(i).equals(s)) {
 				dngMobs.remove(i);
 				--i;
 			}
@@ -199,7 +179,7 @@ public class SAPI {
 			dngAddedMobs = true;
 		}
 
-		return dngMobs.isEmpty() ? "Pig" : (String)dngMobs.get(new Random().nextInt(dngMobs.size()));
+		return dngMobs.isEmpty() ? "Pig" : dngMobs.get(new Random().nextInt(dngMobs.size()));
 	}
 
 	public static void dungeonAddItem(DungeonLoot dungeonloot) {
@@ -222,19 +202,19 @@ public class SAPI {
 	}
 
 	public static DungeonLoot dungeonGetGuaranteed(int i) {
-		return (DungeonLoot)dngGuaranteed.get(i);
+		return dngGuaranteed.get(i);
 	}
 
 	public static void dungeonRemoveItem(int i) {
 		for(int j = 0; j < dngItems.size(); ++j) {
-			if (((DungeonLoot)dngItems.get(j)).loot.itemId == i) {
+			if (dngItems.get(j).loot.itemId == i) {
 				dngItems.remove(j);
 				--j;
 			}
 		}
 
 		for(int k = 0; k < dngGuaranteed.size(); ++k) {
-			if (((DungeonLoot)dngGuaranteed.get(k)).loot.itemId == i) {
+			if (dngGuaranteed.get(k).loot.itemId == i) {
 				dngGuaranteed.remove(k);
 				--k;
 			}
@@ -299,7 +279,7 @@ public class SAPI {
 			dngAddedItems = true;
 		}
 
-		return dngItems.isEmpty() ? null : ((DungeonLoot)dngItems.get(new Random().nextInt(dngItems.size()))).getStack();
+		return dngItems.isEmpty() ? null : dngItems.get(new Random().nextInt(dngItems.size())).getStack();
 	}
 
 	public static void acPageAdd(ACPage acpage) {
@@ -332,7 +312,7 @@ public class SAPI {
 	}
 
 	public static ACPage acGetCurrentPage() {
-		return (ACPage)acPages.get(acCurrentPage);
+		return acPages.get(acCurrentPage);
 	}
 
 	public static String acGetCurrentPageTitle() {

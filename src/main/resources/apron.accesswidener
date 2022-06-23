@@ -193,3 +193,8 @@ accessible field net/minecraft/server/network/ServerPlayPacketHandler player Lne
 accessible class argo/jdom/JsonListenerToJdomAdapter$NodeContainer
 
 accessible method net/minecraft/client/render/entity/EntityRenderer bindTexture (Ljava/lang/String;)V
+extendable method net/minecraft/entity/player/PlayerEntity method_520 (Lnet/minecraft/entity/Entity;)V
+accessible field net/minecraft/entity/Entity rand Ljava/util/Random;
+accessible field net/minecraft/client/entity/player/AbstractClientPlayerEntity client Lnet/minecraft/client/Minecraft;
+accessible field net/minecraft/entity/player/PlayerEntity field_512 Z
+accessible method net/minecraft/client/entity/player/AbstractClientPlayerEntity method_1372 (DDD)Z

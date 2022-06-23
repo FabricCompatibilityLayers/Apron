@@ -17,17 +17,20 @@ import net.minecraft.item.ItemStack;
 @Environment(EnvType.CLIENT)
 @Mixin(HeldItemRenderer.class)
 public class HeldItemRendererMixin {
-	@Inject(method = "render", at = @At(value = "INVOKE_ASSIGN", target = "Lorg/lwjgl/opengl/GL11;glBindTexture(II)V", ordinal = 0, shift = At.Shift.AFTER))
+	@Inject(method = "render",
+			at = @At(value = "INVOKE_ASSIGN", target = "Lorg/lwjgl/opengl/GL11;glBindTexture(II)V", ordinal = 0, shift = At.Shift.AFTER, remap = false))
 	private void reforged$render$1(LivingEntity entityliving, ItemStack itemstack, CallbackInfo ci) {
 		ForgeHooksClient.overrideTexture(Block.BY_ID[itemstack.itemId]);
 	}
 
-	@Inject(method = "render", at = @At(value = "INVOKE_ASSIGN", target = "Lorg/lwjgl/opengl/GL11;glBindTexture(II)V", ordinal = 1, shift = At.Shift.AFTER))
+	@Inject(method = "render",
+			at = @At(value = "INVOKE_ASSIGN", target = "Lorg/lwjgl/opengl/GL11;glBindTexture(II)V", ordinal = 1, shift = At.Shift.AFTER, remap = false))
 	private void reforged$render$2(LivingEntity entityliving, ItemStack itemstack, CallbackInfo ci) {
 		ForgeHooksClient.overrideTexture(Block.BY_ID[itemstack.itemId]);
 	}
 
-	@Inject(method = "render", at = @At(value = "INVOKE_ASSIGN", target = "Lorg/lwjgl/opengl/GL11;glBindTexture(II)V", ordinal = 2, shift = At.Shift.AFTER))
+	@Inject(method = "render",
+			at = @At(value = "INVOKE_ASSIGN", target = "Lorg/lwjgl/opengl/GL11;glBindTexture(II)V", ordinal = 2, shift = At.Shift.AFTER, remap = false))
 	private void reforged$render$3(LivingEntity entityliving, ItemStack itemstack, CallbackInfo ci) {
 		ForgeHooksClient.overrideTexture(Item.byId[itemstack.itemId]);
 	}

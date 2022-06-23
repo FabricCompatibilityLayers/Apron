@@ -1,5 +1,6 @@
 package reforged;
 
+import forge.ForgeHooks;
 import forge.MinecraftForge;
 import modloadermp.BaseModMp;
 
@@ -11,9 +12,9 @@ import net.minecraft.item.Item;
 public class mod_Reforged extends BaseModMp {
 	public mod_Reforged() {
 		try {
-			Block.touch();
-			Item.touch();
-		} catch (NoSuchMethodError var3) {
+			Class.forName(Block.class.getName());
+			Class.forName(Item.class.getName());
+		} catch (NoSuchMethodError | ClassNotFoundException var3) {
 			if (Reforged.hasIDResolver()) {
 				MinecraftForge.killMinecraft("mod_Reforged", "Please install Reforged after IDResolver!");
 			} else {
@@ -22,9 +23,9 @@ public class mod_Reforged extends BaseModMp {
 		}
 
 		try {
-			MultiplayerClientInteractionManager.touch();
-			SingleplayerInteractionManager.touch();
-		} catch (NoSuchMethodError var2) {
+			Class.forName(MultiplayerClientInteractionManager.class.getName());
+			Class.forName(SingleplayerInteractionManager.class.getName());
+		} catch (NoSuchMethodError | ClassNotFoundException var2) {
 			if (Reforged.hasSAPI()) {
 				MinecraftForge.killMinecraft("mod_Reforged", "Please install Reforged after the ForgeSAPI patch and SAPI!");
 			} else {
@@ -35,6 +36,8 @@ public class mod_Reforged extends BaseModMp {
 	}
 
 	public String Version() {
-		return String.format("[Forge %d.%d.%d, Reforged %d.%d.%d]", 1, 0, 6, 1, 0, 0);
+		return String.format("[Forge %d.%d.%d, Reforged %d.%d.%d]",
+				ForgeHooks.majorVersion, ForgeHooks.minorVersion, ForgeHooks.revisionVersion,
+				ReforgedHooks.majorVersion, ReforgedHooks.minorVersion, ReforgedHooks.revisionVersion);
 	}
 }

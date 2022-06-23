@@ -17,11 +17,14 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkCache;
 import net.minecraft.world.decoration.DeadbushDecoration;
 import net.minecraft.world.dimension.Dimension;
+import net.minecraft.world.dimension.NetherDimension;
+import net.minecraft.world.dimension.OverworldDimension;
+import net.minecraft.world.dimension.SkyDimension;
 import net.minecraft.world.source.WorldSource;
 
 public class DimensionBase {
-	public static ArrayList<DimensionBase> list = new ArrayList();
-	public static LinkedList<Integer> order = new LinkedList();
+	public static ArrayList<DimensionBase> list = new ArrayList<>();
+	public static LinkedList<Integer> order = new LinkedList<>();
 	public final int number;
 	public final Class<? extends Dimension> worldProvider;
 	public final Class<? extends NetherTeleporter> teleporter;
@@ -215,5 +218,14 @@ public class DimensionBase {
 
 	public Loc getDistanceScale(Loc loc, boolean goingIn) {
 		return loc;
+	}
+
+	public static Dimension getByID(int i) {
+		DimensionBase dimensionbase = getDimByNumber(i);
+		if (dimensionbase != null) {
+			return dimensionbase.getWorldProvider();
+		} else {
+			return (Dimension)(i == -1 ? new NetherDimension() : (i == 0 ? new OverworldDimension() : (i == 1 ? new SkyDimension() : null)));
+		}
 	}
 }

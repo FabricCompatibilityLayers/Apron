@@ -13,6 +13,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
+import reforged.ReforgedHooks;
+
 import net.minecraft.block.Block;
 
 import net.minecraft.item.Item;

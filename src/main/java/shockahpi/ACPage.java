@@ -55,4 +55,8 @@ public class ACPage {
 
 		return sprite;
 	}
+
+	public int getId() {
+		return id;
+	}
 }

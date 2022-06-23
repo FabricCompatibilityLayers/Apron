@@ -5,8 +5,6 @@
 
 package forge;
 
-import static forge.MinecraftForge.LOGGER;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,21 +20,19 @@ import net.minecraft.util.SleepStatus;
 
 import io.github.betterthanupdates.forge.block.ForgeBlock;
 import io.github.betterthanupdates.forge.entity.player.ForgePlayerEntity;
-import io.github.betterthanupdates.forge.item.ForgeTool;
-import io.github.betterthanupdates.forge.item.ToolEffectiveness;
 
 @SuppressWarnings("unused")
 public class ForgeHooks {
-	static LinkedList<ICraftingHandler> craftingHandlers = new LinkedList();
-	static LinkedList<IDestroyToolHandler> destroyToolHandlers = new LinkedList();
-	static LinkedList<ISleepHandler> sleepHandlers = new LinkedList();
+	static LinkedList<ICraftingHandler> craftingHandlers = new LinkedList<>();
+	static LinkedList<IDestroyToolHandler> destroyToolHandlers = new LinkedList<>();
+	static LinkedList<ISleepHandler> sleepHandlers = new LinkedList<>();
 	public static final int majorVersion = 1;
 	public static final int minorVersion = 0;
 	public static final int revisionVersion = 6;
 	static boolean toolInit = false;
-	static HashMap toolClasses = new HashMap();
-	static HashMap toolHarvestLevels = new HashMap();
-	static HashSet toolEffectiveness = new HashSet();
+	static HashMap toolClasses = new HashMap<>();
+	static HashMap toolHarvestLevels = new HashMap<>();
+	static HashSet toolEffectiveness = new HashSet<>();
 
 	public ForgeHooks() {
 	}
@@ -97,11 +93,11 @@ public class ForgeHooks {
 	}
 
 	public static float blockStrength(Block bl, PlayerEntity player, int md) {
-		float bh = bl.getHardness(md);
+		float bh = ((ForgeBlock) bl).getHardness(md);
 		if (bh < 0.0F) {
 			return 0.0F;
 		} else {
-			return !canHarvestBlock(bl, player, md) ? 1.0F / bh / 100.0F : player.getCurrentPlayerStrVsBlock(bl, md) / bh / 30.0F;
+			return !canHarvestBlock(bl, player, md) ? 1.0F / bh / 100.0F : ((ForgePlayerEntity) player).getCurrentPlayerStrVsBlock(bl, md) / bh / 30.0F;
 		}
 	}
 
