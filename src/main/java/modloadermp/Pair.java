@@ -2,6 +2,7 @@ package modloadermp;
 
 import java.util.AbstractMap;
 
+import io.github.betterthanupdates.Legacy;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -13,9 +14,11 @@ import net.fabricmc.api.Environment;
  * @param <R> The type of data to store on the right.
  * @see java.util.AbstractMap.SimpleEntry
  */
+@Legacy
 @Deprecated
 @Environment(EnvType.SERVER)
 public class Pair<L, R> extends AbstractMap.SimpleEntry<L, R> {
+	@Legacy
 	public Pair(L left, R right) {
 		super(left, right);
 	}
@@ -24,6 +27,7 @@ public class Pair<L, R> extends AbstractMap.SimpleEntry<L, R> {
 	 * @return {@link #getKey()}
 	 * @see #getKey()
 	 */
+	@Legacy
 	public L getLeft() {
 		return this.getKey();
 	}
@@ -32,15 +36,18 @@ public class Pair<L, R> extends AbstractMap.SimpleEntry<L, R> {
 	 * @return {@link #getValue()} ()}
 	 * @see #getValue()
 	 */
+	@Legacy
 	public R getRight() {
 		return this.getValue();
 	}
 
+	@Legacy
 	@Override
 	public int hashCode() {
 		return this.getLeft().hashCode() ^ this.getRight().hashCode();
 	}
 
+	@Legacy
 	@Override
 	public boolean equals(Object other) {
 		if (!(other instanceof Pair)) {

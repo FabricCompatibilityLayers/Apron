@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.github.betterthanupdates.Legacy;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -16,21 +17,31 @@ import net.minecraft.server.network.ServerPlayPacketHandler;
 
 import io.github.betterthanupdates.apron.api.ApronApi;
 
+@Legacy
 public class ModLoaderPacket extends AbstractPacket {
 	private static final ApronApi APRON = ApronApi.getInstance();
+	@Legacy
 	private static final int MAX_DATA_LENGTH = 0xFFFF;
 
+	@Legacy
 	public int modId;
+	@Legacy
 	public int packetType;
+	@Legacy
 	public int[] dataInt = new int[0];
+	@Legacy
 	public float[] dataFloat = new float[0];
+	@Legacy
 	public String[] dataString = new String[0];
+	@Legacy
 	@Environment(EnvType.SERVER)
 	private static Map<PacketHandler, ServerPlayerEntity> playerMap = new HashMap<>();
 
+	@Legacy
 	public ModLoaderPacket() {
 	}
 
+	@Legacy
 	@Override
 	public void read(DataInputStream datainputstream) {
 		try {
@@ -84,6 +95,7 @@ public class ModLoaderPacket extends AbstractPacket {
 		}
 	}
 
+	@Legacy
 	@Override
 	public void write(DataOutputStream dataoutputstream) {
 		try {
@@ -137,6 +149,7 @@ public class ModLoaderPacket extends AbstractPacket {
 		}
 	}
 
+	@Legacy
 	@Override
 	public void apply(PacketHandler netHandler) {
 		if (APRON.isClient()) {
@@ -154,6 +167,7 @@ public class ModLoaderPacket extends AbstractPacket {
 		}
 	}
 
+	@Legacy
 	@Override
 	public int length() {
 		int i = 1;
