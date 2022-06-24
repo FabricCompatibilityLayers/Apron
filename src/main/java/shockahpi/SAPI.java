@@ -326,7 +326,7 @@ public class SAPI {
 	@Legacy
 	public static ACPage acGetPage(Achievement achievement) {
 		if (achievement == null) {
-			LOGGER.error("Expected Achievement, got null instead.");
+			LOGGER.debug("Expected Achievement, got null instead.");
 			return null;
 		} else {
 			for(ACPage acpage : acPages) {
