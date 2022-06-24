@@ -3,6 +3,7 @@ package modloader;
 import java.util.Map;
 import java.util.Random;
 
+import io.github.betterthanupdates.Legacy;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -20,6 +21,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 @SuppressWarnings({"unused", "SameReturnValue", "EmptyMethod"})
+@Legacy
 public abstract class BaseMod {
 	/**
 	 * Used for adding new sources of fuel to the furnace.
@@ -27,6 +29,7 @@ public abstract class BaseMod {
 	 * @param id ItemID for the item to use as fuel
 	 * @return Duration of fuel provided
 	 */
+	@Legacy
 	public int AddFuel(int id) {
 		return 0;
 	}
@@ -36,6 +39,7 @@ public abstract class BaseMod {
 	 *
 	 * @param renderers HashMap of the renderers. key is an entity class, value is the renderer.
 	 */
+	@Legacy
 	@Environment(EnvType.CLIENT)
 	public void AddRenderer(Map<Class<? extends Entity>, EntityRenderer> renderers) {
 	}
@@ -52,6 +56,7 @@ public abstract class BaseMod {
 	 * @param item  ID of item to chosen to dispense entity
 	 * @return true if item was handled
 	 */
+	@Legacy
 	public boolean DispenseEntity(World world, double x, double y, double z, int xVel, int zVel, ItemStack item) {
 		return false;
 	}
@@ -64,6 +69,7 @@ public abstract class BaseMod {
 	 * @param chunkX X coordinate of chunk
 	 * @param chunkZ Z coordinate of chunk
 	 */
+	@Legacy
 	public void GenerateNether(World world, Random random, int chunkX, int chunkZ) {
 	}
 
@@ -75,6 +81,7 @@ public abstract class BaseMod {
 	 * @param chunkX X coordinate of chunk.
 	 * @param chunkZ Z coordinate of chunk.
 	 */
+	@Legacy
 	public void GenerateSurface(World world, Random random, int chunkX, int chunkZ) {
 	}
 
@@ -83,6 +90,7 @@ public abstract class BaseMod {
 	 *
 	 * @param event Reference to the key pressed.
 	 */
+	@Legacy
 	@Environment(EnvType.CLIENT)
 	public void KeyboardEvent(KeyBinding event) {
 	}
@@ -90,6 +98,7 @@ public abstract class BaseMod {
 	/**
 	 * Called after all mods are loaded.
 	 */
+	@Legacy
 	public void ModsLoaded() {
 	}
 
@@ -99,11 +108,13 @@ public abstract class BaseMod {
 	 * @param client Instance of the {@link Minecraft} class
 	 * @return true to continue ticking, or false to stop ticking
 	 */
+	@Legacy
 	@Environment(EnvType.CLIENT)
 	public boolean OnTickInGame(Minecraft client) {
 		return false;
 	}
 
+	@Legacy
 	@Environment(EnvType.SERVER)
 	public void OnTickInGame(MinecraftServer minecraftServer) {
 	}
@@ -115,6 +126,7 @@ public abstract class BaseMod {
 	 * @param screen Current screen that is open
 	 * @return true to continue ticking, or false to stop ticking
 	 */
+	@Legacy
 	@Environment(EnvType.CLIENT)
 	public boolean OnTickInGUI(Minecraft client, Screen screen) {
 		return false;
@@ -125,6 +137,7 @@ public abstract class BaseMod {
 	 *
 	 * @param client Instance of the {@link Minecraft} class.
 	 */
+	@Legacy
 	@Environment(EnvType.CLIENT)
 	public void RegisterAnimation(Minecraft client) {
 	}
@@ -137,6 +150,7 @@ public abstract class BaseMod {
 	 * @param metadata of block. Damage on an item
 	 * @param modelID  ID of block model to render
 	 */
+	@Legacy
 	@Environment(EnvType.CLIENT)
 	public void RenderInvBlock(BlockRenderer renderer, Block block, int metadata, int modelID) {
 	}
@@ -153,6 +167,7 @@ public abstract class BaseMod {
 	 * @param modelID  ID of block model to render
 	 * @return true if model was rendered.
 	 */
+	@Legacy
 	@Environment(EnvType.CLIENT)
 	public boolean RenderWorldBlock(BlockRenderer renderer, BlockView world, int x, int y, int z, Block block, int modelID) {
 		return false;
@@ -164,6 +179,7 @@ public abstract class BaseMod {
 	 * @param player that crafted the item
 	 * @param item   that was crafted
 	 */
+	@Legacy
 	public void TakenFromCrafting(PlayerEntity player, ItemStack item) {
 	}
 
@@ -173,6 +189,7 @@ public abstract class BaseMod {
 	 * @param player that took the item
 	 * @param item   that was taken
 	 */
+	@Legacy
 	public void TakenFromFurnace(PlayerEntity player, ItemStack item) {
 	}
 
@@ -182,9 +199,11 @@ public abstract class BaseMod {
 	 * @param player that picked up the item
 	 * @param item   that was picked up
 	 */
+	@Legacy
 	public void OnItemPickup(PlayerEntity player, ItemStack item) {
 	}
 
+	@Legacy
 	@Override
 	public String toString() {
 		return this.getClass().getName() + " " + this.Version();
@@ -195,5 +214,6 @@ public abstract class BaseMod {
 	 *
 	 * @return Version string
 	 */
+	@Legacy
 	public abstract String Version();
 }

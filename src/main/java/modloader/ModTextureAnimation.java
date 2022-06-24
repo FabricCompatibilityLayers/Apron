@@ -3,6 +3,7 @@ package modloader;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import io.github.betterthanupdates.Legacy;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.lwjgl.opengl.GL11;
@@ -11,18 +12,25 @@ import net.minecraft.client.render.TextureBinder;
 
 import io.github.betterthanupdates.apron.impl.client.ApronClientImpl;
 
+@Legacy
 @Environment(EnvType.CLIENT)
 @SuppressWarnings("unused")
 public class ModTextureAnimation extends TextureBinder {
+	@Legacy
 	private final int tickRate;
+	@Legacy
 	private final byte[][] images;
+	@Legacy
 	private int index = 0;
+	@Legacy
 	private int ticks;
 
+	@Legacy
 	public ModTextureAnimation(int slot, int dst, BufferedImage source, int rate) {
 		this(slot, 1, dst, source, rate);
 	}
 
+	@Legacy
 	public ModTextureAnimation(int slot, int size, int dst, BufferedImage source, int rate) {
 		super(slot);
 		this.textureSize = size;
@@ -68,6 +76,7 @@ public class ModTextureAnimation extends TextureBinder {
 		}
 	}
 
+	@Legacy
 	@Override
 	public void updateTexture() {
 		if (this.ticks >= this.tickRate) {
