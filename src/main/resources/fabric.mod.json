@@ -128,7 +128,7 @@
         "AudioMod": "*",
         "ShockAhPI": "5.1",
         "PlayerAPI": "1.7",
-        "Reforged": "1.0.0"
+        "Reforged": "1.0.1"
       },
       "common": {
         "ModLoader": "*",

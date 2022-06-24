@@ -94,13 +94,11 @@ dependencies {
 //	modRuntimeOnly(group: "remapped.client", name: "guiapipatch", version: "v0.7")
 
 	// Concern
-	modRuntimeOnly(files("./concern/ModLoader B1.7.3.zip"))
-	modRuntimeOnly(files("./concern/ModLoaderMp 1.7.3 Unofficial v2.zip"))
-	modRuntimeOnly(files("./concern/shockahpi-r5.1.zip"))
-	modRuntimeOnly(files("./concern/reforged-client-1.0.1.zip"))
-	modRuntimeOnly(files("./concern/ReforgedSAPI Client.zip"))
-	modRuntimeOnly(files("./concern/playerapi-1.7.3-v1.7.zip"))
-	modRuntimeOnly(files("./concern/Aether1.7.3 V1.02.zip"))
+//	modRuntimeOnly(files("./concern/ModLoader B1.7.3.zip"))
+//	modRuntimeOnly(files("./concern/ModLoaderMp 1.7.3 Unofficial v2.zip"))
+//	modRuntimeOnly(files("./concern/shockahpi-r5.1.zip"))
+//	modRuntimeOnly(files("./concern/reforged-client-1.0.1.zip"))
+//	modRuntimeOnly(files("./concern/playerapi-1.7.3-v1.7.zip"))
 }
 
 checkstyle {
@@ -133,6 +131,9 @@ jar {
 	}
 	from("FORGE_LICENSE")
 	from("PAULSCODE_LICENSE")
+
+	from("./original/client") { into("libs") }
+	from("./original/server") { into("libs") }
 }
 
 // configure the maven publication
