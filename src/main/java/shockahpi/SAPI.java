@@ -3,8 +3,6 @@ package shockahpi;
 import java.util.ArrayList;
 import java.util.Random;
 
-import io.github.betterthanupdates.Legacy;
-import io.github.betterthanupdates.apron.api.ApronApi;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
 import playerapi.PlayerAPI;
 
@@ -16,8 +14,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stat.achievement.Achievement;
 import net.minecraft.world.World;
 
+import io.github.betterthanupdates.Legacy;
+import io.github.betterthanupdates.apron.api.ApronApi;
+
 /**
  * ShockAhPi - Adding new possibilities in 3... 2... 1...
+ *
  * @author ShockAh
  */
 @SuppressWarnings({"unused", "UnusedReturnValue", "BooleanMethodIsAlwaysInverted"})
@@ -63,7 +65,6 @@ public class SAPI {
 			LOGGER.info("Using ShockAhPI r5.1");
 			usingText = true;
 		}
-
 	}
 
 	@Legacy
@@ -78,7 +79,7 @@ public class SAPI {
 
 	@Legacy
 	public static boolean interceptHarvest(World world, PlayerEntity entityplayer, Loc loc, int i, int j) {
-		for(IInterceptHarvest iinterceptharvest : harvestIntercepts) {
+		for (IInterceptHarvest iinterceptharvest : harvestIntercepts) {
 			if (iinterceptharvest.canIntercept(world, entityplayer, loc, i, j)) {
 				iinterceptharvest.intercept(world, entityplayer, loc, i, j);
 				return true;
@@ -91,18 +92,17 @@ public class SAPI {
 	@Legacy
 	public static void drop(World world, Loc loc, ItemStack itemstack) {
 		if (!world.isClient) {
-			for(int i = 0; i < itemstack.count; ++i) {
+			for (int i = 0; i < itemstack.count; ++i) {
 				float f = 0.7F;
-				double d = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5;
-				double d1 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5;
-				double d2 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5;
+				double d = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5;
+				double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5;
+				double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5;
 				ItemEntity entityitem = new ItemEntity(
-						world, (double)loc.x() + d, (double)loc.y() + d1, (double)loc.z() + d2, new ItemStack(itemstack.itemId, 1, itemstack.getMeta())
+						world, (double) loc.x() + d, (double) loc.y() + d1, (double) loc.z() + d2, new ItemStack(itemstack.itemId, 1, itemstack.getMeta())
 				);
 				entityitem.pickupDelay = 10;
 				world.spawnEntity(entityitem);
 			}
-
 		}
 	}
 
@@ -113,7 +113,7 @@ public class SAPI {
 
 	@Legacy
 	public static int interceptBlockSet(World world, Loc loc, int i) {
-		for(IInterceptBlockSet iinterceptblockset : setIntercepts) {
+		for (IInterceptBlockSet iinterceptblockset : setIntercepts) {
 			if (iinterceptblockset.canIntercept(world, loc, i)) {
 				return iinterceptblockset.intercept(world, loc, i);
 			}
@@ -131,7 +131,7 @@ public class SAPI {
 	public static float reachGet() {
 		ItemStack itemstack = getMinecraftInstance().player.inventory.getHeldItem();
 
-		for(IReach ireach : reaches) {
+		for (IReach ireach : reaches) {
 			if (ireach.reachItemMatches(itemstack)) {
 				return ireach.getReach(itemstack);
 			}
@@ -147,21 +147,19 @@ public class SAPI {
 
 	@Legacy
 	public static void dungeonAddMob(String s, int i) {
-		for(int j = 0; j < i; ++j) {
+		for (int j = 0; j < i; ++j) {
 			dngMobs.add(s);
 		}
-
 	}
 
 	@Legacy
 	public static void dungeonRemoveMob(String s) {
-		for(int i = 0; i < dngMobs.size(); ++i) {
+		for (int i = 0; i < dngMobs.size(); ++i) {
 			if (dngMobs.get(i).equals(s)) {
 				dngMobs.remove(i);
 				--i;
 			}
 		}
-
 	}
 
 	@Legacy
@@ -172,18 +170,17 @@ public class SAPI {
 
 	@Legacy
 	static void dungeonAddDefaultMobs() {
-		for(int i = 0; i < 10; ++i) {
+		for (int i = 0; i < 10; ++i) {
 			dngMobs.add("Skeleton");
 		}
 
-		for(int j = 0; j < 20; ++j) {
+		for (int j = 0; j < 20; ++j) {
 			dngMobs.add("Zombie");
 		}
 
-		for(int k = 0; k < 10; ++k) {
+		for (int k = 0; k < 10; ++k) {
 			dngMobs.add("Spider");
 		}
-
 	}
 
 	@Legacy
@@ -203,10 +200,9 @@ public class SAPI {
 
 	@Legacy
 	public static void dungeonAddItem(DungeonLoot dungeonloot, int i) {
-		for(int j = 0; j < i; ++j) {
+		for (int j = 0; j < i; ++j) {
 			dngItems.add(dungeonloot);
 		}
-
 	}
 
 	@Legacy
@@ -226,20 +222,19 @@ public class SAPI {
 
 	@Legacy
 	public static void dungeonRemoveItem(int i) {
-		for(int j = 0; j < dngItems.size(); ++j) {
+		for (int j = 0; j < dngItems.size(); ++j) {
 			if (dngItems.get(j).loot.itemId == i) {
 				dngItems.remove(j);
 				--j;
 			}
 		}
 
-		for(int k = 0; k < dngGuaranteed.size(); ++k) {
+		for (int k = 0; k < dngGuaranteed.size(); ++k) {
 			if (dngGuaranteed.get(k).loot.itemId == i) {
 				dngGuaranteed.remove(k);
 				--k;
 			}
 		}
-
 	}
 
 	@Legacy
@@ -251,48 +246,47 @@ public class SAPI {
 
 	@Legacy
 	static void dungeonAddDefaultItems() {
-		for(int i = 0; i < 100; ++i) {
+		for (int i = 0; i < 100; ++i) {
 			dngItems.add(new DungeonLoot(new ItemStack(Item.SADDLE)));
 		}
 
-		for(int j = 0; j < 100; ++j) {
+		for (int j = 0; j < 100; ++j) {
 			dngItems.add(new DungeonLoot(new ItemStack(Item.IRON_INGOT), 1, 4));
 		}
 
-		for(int k = 0; k < 100; ++k) {
+		for (int k = 0; k < 100; ++k) {
 			dngItems.add(new DungeonLoot(new ItemStack(Item.BREAD)));
 		}
 
-		for(int l = 0; l < 100; ++l) {
+		for (int l = 0; l < 100; ++l) {
 			dngItems.add(new DungeonLoot(new ItemStack(Item.WHEAT), 1, 4));
 		}
 
-		for(int i1 = 0; i1 < 100; ++i1) {
+		for (int i1 = 0; i1 < 100; ++i1) {
 			dngItems.add(new DungeonLoot(new ItemStack(Item.GUNPOWDER), 1, 4));
 		}
 
-		for(int j1 = 0; j1 < 100; ++j1) {
+		for (int j1 = 0; j1 < 100; ++j1) {
 			dngItems.add(new DungeonLoot(new ItemStack(Item.STRING), 1, 4));
 		}
 
-		for(int k1 = 0; k1 < 100; ++k1) {
+		for (int k1 = 0; k1 < 100; ++k1) {
 			dngItems.add(new DungeonLoot(new ItemStack(Item.BUCKET)));
 		}
 
 		dngItems.add(new DungeonLoot(new ItemStack(Item.GOLDEN_APPLE)));
 
-		for(int l1 = 0; l1 < 50; ++l1) {
+		for (int l1 = 0; l1 < 50; ++l1) {
 			dngItems.add(new DungeonLoot(new ItemStack(Item.REDSTONE_DUST), 1, 4));
 		}
 
-		for(int i2 = 0; i2 < 5; ++i2) {
+		for (int i2 = 0; i2 < 5; ++i2) {
 			dngItems.add(new DungeonLoot(new ItemStack(Item.RECORD_13)));
 		}
 
-		for(int j2 = 0; j2 < 5; ++j2) {
+		for (int j2 = 0; j2 < 5; ++j2) {
 			dngItems.add(new DungeonLoot(new ItemStack(Item.RECORD_CAT)));
 		}
-
 	}
 
 	@Legacy
@@ -312,10 +306,9 @@ public class SAPI {
 
 	@Legacy
 	public static void acHide(Achievement[] aachievement) {
-		for(Achievement achievement : aachievement) {
+		for (Achievement achievement : aachievement) {
 			acHidden.add(achievement.id);
 		}
-
 	}
 
 	@Legacy
@@ -329,7 +322,7 @@ public class SAPI {
 			LOGGER.debug("Expected Achievement, got null instead.");
 			return null;
 		} else {
-			for(ACPage acpage : acPages) {
+			for (ACPage acpage : acPages) {
 				if (acpage.list.contains(achievement.id)) {
 					return acpage;
 				}
@@ -352,19 +345,19 @@ public class SAPI {
 	@Legacy
 	public static void acPageNext() {
 		++acCurrentPage;
+
 		if (acCurrentPage > acPages.size() - 1) {
 			acCurrentPage = 0;
 		}
-
 	}
 
 	@Legacy
 	public static void acPagePrev() {
 		--acCurrentPage;
+
 		if (acCurrentPage < 0) {
 			acCurrentPage = acPages.size() - 1;
 		}
-
 	}
 
 	static {

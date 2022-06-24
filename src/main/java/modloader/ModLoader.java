@@ -34,7 +34,6 @@ import java.util.zip.ZipInputStream;
 
 import javax.imageio.ImageIO;
 
-import io.github.betterthanupdates.Legacy;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
@@ -86,6 +85,7 @@ import net.minecraft.world.source.NetherWorldSource;
 import net.minecraft.world.source.OverworldWorldSource;
 import net.minecraft.world.source.WorldSource;
 
+import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.apron.Apron;
 import io.github.betterthanupdates.apron.api.ApronApi;
 
@@ -1376,7 +1376,8 @@ public class ModLoader {
 			if (Block.BY_ID[id] != null && Item.byId[id] == null) {
 				Item.byId[id] = item;
 			}
-		} catch (IllegalArgumentException | IllegalAccessException | SecurityException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
+		} catch (IllegalArgumentException | IllegalAccessException | SecurityException | InstantiationException
+				| InvocationTargetException | NoSuchMethodException e) {
 			MOD_LOGGER.throwing("ModLoader", "RegisterBlock", e);
 			ThrowException(e);
 		}

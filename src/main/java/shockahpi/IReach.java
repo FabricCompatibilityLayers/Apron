@@ -1,7 +1,8 @@
 package shockahpi;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.item.ItemStack;
+
+import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface IReach {

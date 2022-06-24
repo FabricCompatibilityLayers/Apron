@@ -13,14 +13,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
-import io.github.betterthanupdates.Legacy;
 import reforged.ReforgedHooks;
 
 import net.minecraft.block.Block;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import io.github.betterthanupdates.Legacy;
 
 @SuppressWarnings("unused")
 @Legacy
@@ -38,14 +38,16 @@ public class MinecraftForge {
 	public MinecraftForge() {
 	}
 
-	/** @deprecated */
+	/**
+	 * @deprecated
+	 */
 	@Legacy
-	public static void registerCustomBucketHander(forge.IBucketHandler handler) {
+	public static void registerCustomBucketHander(IBucketHandler handler) {
 		bucketHandlers.add(handler);
 	}
 
 	@Legacy
-	public static void registerCustomBucketHandler(forge.IBucketHandler handler) {
+	public static void registerCustomBucketHandler(IBucketHandler handler) {
 		bucketHandlers.add(handler);
 	}
 
@@ -66,8 +68,9 @@ public class MinecraftForge {
 
 	@Legacy
 	public static ItemStack fillCustomBucket(World w, int i, int j, int k) {
-		for(forge.IBucketHandler handler : bucketHandlers) {
+		for (IBucketHandler handler : bucketHandlers) {
 			ItemStack stack = handler.fillCustomBucket(w, i, j, k);
+
 			if (stack != null) {
 				return stack;
 			}
@@ -101,23 +104,21 @@ public class MinecraftForge {
 	public static void setBlockHarvestLevel(Block bl, String tclass, int hlevel) {
 		ForgeHooks.initTools();
 
-		for(int md = 0; md < 16; ++md) {
+		for (int md = 0; md < 16; ++md) {
 			List<?> key = Arrays.asList(bl.id, md, tclass);
 			ForgeHooks.toolHarvestLevels.put(key, hlevel);
 			ForgeHooks.toolEffectiveness.add(key);
 		}
-
 	}
 
 	@Legacy
 	public static void removeBlockEffectiveness(Block bl, String tclass) {
 		ForgeHooks.initTools();
 
-		for(int md = 0; md < 16; ++md) {
+		for (int md = 0; md < 16; ++md) {
 			List<?> key = Arrays.asList(bl.id, md, tclass);
 			ForgeHooks.toolEffectiveness.remove(key);
 		}
-
 	}
 
 	@Legacy
@@ -135,9 +136,7 @@ public class MinecraftForge {
 		if (disableVersionCheckCrash) {
 			ReforgedHooks.touch();
 			System.out
-					.println(
-							modname + ": Forge version detect was called, but strict crashing is disabled. Expected version " + major + "." + minor + "." + revision
-					);
+					.println(modname + ": Forge version detect was called, but strict crashing is disabled. Expected version " + major + "." + minor + "." + revision);
 		} else {
 			if (major != 1) {
 				killMinecraft(modname, "MinecraftForge Major Version Mismatch, expecting " + major + ".x.x");
@@ -151,7 +150,6 @@ public class MinecraftForge {
 			} else if (revision > 6) {
 				killMinecraft(modname, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
 			}
-
 		}
 	}
 
@@ -160,9 +158,7 @@ public class MinecraftForge {
 		if (disableVersionCheckCrash) {
 			ReforgedHooks.touch();
 			System.out
-					.println(
-							modname + ": Forge version detect was called, but strict crashing is disabled. Expected version " + major + "." + minor + "." + revision
-					);
+					.println(modname + ": Forge version detect was called, but strict crashing is disabled. Expected version " + major + "." + minor + "." + revision);
 		} else {
 			if (major != 1) {
 				killMinecraft(modname, "MinecraftForge Major Version Mismatch, expecting " + major + ".x.x");
@@ -175,7 +171,6 @@ public class MinecraftForge {
 			} else if (revision > 6) {
 				killMinecraft(modname, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
 			}
-
 		}
 	}
 
@@ -183,12 +178,11 @@ public class MinecraftForge {
 	public static void registerOreHandler(IOreHandler handler) {
 		oreHandlers.add(handler);
 
-		for(String key : oreDict.keySet()) {
-			for(ItemStack ist : oreDict.get(key)) {
+		for (String key : oreDict.keySet()) {
+			for (ItemStack ist : oreDict.get(key)) {
 				handler.registerOre(key, ist);
 			}
 		}
-
 	}
 
 	@Legacy
@@ -197,10 +191,9 @@ public class MinecraftForge {
 
 		oreList.add(ore);
 
-		for(IOreHandler ioh : oreHandlers) {
+		for (IOreHandler ioh : oreHandlers) {
 			ioh.registerOre(oreClass, ore);
 		}
-
 	}
 
 	@Legacy
@@ -238,6 +231,7 @@ public class MinecraftForge {
 				for (Object o : OreQuery.this.proto) {
 					if (o instanceof Collection) {
 						Iterator it = ((Collection) o).iterator();
+
 						if (!it.hasNext()) {
 							this.output = null;
 							break;
@@ -260,17 +254,21 @@ public class MinecraftForge {
 			@Legacy
 			public Object[] next() {
 				Object[] tr;
-				for(tr = this.output.toArray(); this.itering.size() != 0; this.itering.removeLast()) {
+
+				for (tr = this.output.toArray(); this.itering.size() != 0; this.itering.removeLast()) {
 					Object to = this.itering.getLast();
 					this.output.removeLast();
+
 					if (to instanceof Iterator) {
-						Iterator it = (Iterator)to;
+						Iterator it = (Iterator) to;
+
 						if (it.hasNext()) {
 							this.output.addLast(it.next());
 
-							for(int var5 = this.itering.size(); var5 < OreQuery.this.proto.length; ++var5) {
+							for (int var5 = this.itering.size(); var5 < OreQuery.this.proto.length; ++var5) {
 								if (OreQuery.this.proto[var5] instanceof Collection) {
-									Iterator itx = ((Collection)OreQuery.this.proto[var5]).iterator();
+									Iterator itx = ((Collection) OreQuery.this.proto[var5]).iterator();
+
 									if (!itx.hasNext()) {
 										this.output = null;
 										break;

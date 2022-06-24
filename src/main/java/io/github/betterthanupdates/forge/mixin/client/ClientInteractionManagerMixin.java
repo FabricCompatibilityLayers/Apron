@@ -38,8 +38,6 @@ public class ClientInteractionManagerMixin {
 	 */
 	@Overwrite
 	public boolean useItemOnBlock(PlayerEntity player, World world, ItemStack stack, int x, int y, int z, int side) {
-
-
 		int i1 = world.getBlockId(x, y, z);
 
 		if (i1 > 0 && Block.BY_ID[i1].canUse(world, x, y, z, player)) {

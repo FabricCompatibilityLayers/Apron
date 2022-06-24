@@ -1,10 +1,12 @@
 package shockahpi;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.world.World;
+
+import io.github.betterthanupdates.Legacy;
 
 /**
  * Part of ShockAhPI that allows interception of block placement.
+ *
  * @author ShockAh
  */
 @Legacy

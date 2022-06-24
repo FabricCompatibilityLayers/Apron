@@ -37,8 +37,6 @@ public abstract class ButtonBlockMixin extends Block {
 		return ((ForgeWorld) instance).isBlockSolidOnSide(i, j, k, 5);
 	}
 
-
-
 	@Redirect(method = {"canPlaceAt(Lnet/minecraft/world/World;III)Z", "method_1047", "onAdjacentBlockUpdate"},
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z", ordinal = 0))
 	private boolean reforged$canPlaceAt$5(World instance, int j, int k, int i) {

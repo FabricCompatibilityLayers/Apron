@@ -29,10 +29,10 @@ public class RedstoneDustBlockMixin extends Block {
 	@Inject(method = "method_1287", cancellable = true, at = @At("HEAD"))
 	private static void reforged$canConnectRedstone(BlockView iblockaccess, int i, int j, int k, int l, CallbackInfoReturnable<Boolean> cir) {
 		int id = iblockaccess.getBlockId(i, j, k);
-		if (id != Block.REDSTONE_DUST.id &&
-				id != 0 &&
-				Block.BY_ID[id] instanceof IConnectRedstone) {
-			IConnectRedstone icr = (IConnectRedstone)Block.BY_ID[id];
+		if (id != Block.REDSTONE_DUST.id
+				&& id != 0
+				&& Block.BY_ID[id] instanceof IConnectRedstone) {
+			IConnectRedstone icr = (IConnectRedstone) Block.BY_ID[id];
 			cir.setReturnValue(icr.canConnectRedstone(iblockaccess, i, j, k, l));
 		}
 	}

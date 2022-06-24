@@ -2,11 +2,12 @@ package shockahpi;
 
 import java.util.ArrayList;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.entity.BlockEntity;
 import net.minecraft.util.Vec3i;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+
+import io.github.betterthanupdates.Legacy;
 
 @SuppressWarnings("unused")
 @Legacy
@@ -30,7 +31,7 @@ public class Loc {
 
 	@Legacy
 	public Loc(int x, int y, int z) {
-		this((double)x, (double)y, (double)z);
+		this((double) x, (double) y, (double) z);
 	}
 
 	@Legacy
@@ -52,22 +53,22 @@ public class Loc {
 
 	@Legacy
 	public int x() {
-		return (int)this.x;
+		return (int) this.x;
 	}
 
 	@Legacy
 	public int y() {
-		return (int)this.y;
+		return (int) this.y;
 	}
 
 	@Legacy
 	public int z() {
-		return (int)this.z;
+		return (int) this.z;
 	}
 
 	@Legacy
 	public Loc add(int x, int y, int z) {
-		return new Loc(this.x + (double)x, this.y + (double)y, this.z + (double)z);
+		return new Loc(this.x + (double) x, this.y + (double) y, this.z + (double) z);
 	}
 
 	@Legacy
@@ -82,7 +83,7 @@ public class Loc {
 
 	@Legacy
 	public Loc subtract(int x, int y, int z) {
-		return new Loc(this.x - (double)x, this.y - (double)y, this.z - (double)z);
+		return new Loc(this.x - (double) x, this.y - (double) y, this.z - (double) z);
 	}
 
 	@Legacy
@@ -120,7 +121,7 @@ public class Loc {
 	@Legacy
 	public boolean equals(Object other) {
 		if (other instanceof Loc) {
-			Loc otherLoc = (Loc)other;
+			Loc otherLoc = (Loc) other;
 			return this.x == otherLoc.x && this.y == otherLoc.y && this.z == otherLoc.z;
 		} else {
 			return false;
@@ -134,7 +135,7 @@ public class Loc {
 
 	@Legacy
 	public int distSimple(Loc other) {
-		return (int)(Math.abs(this.x - other.x) + Math.abs(this.y - other.y) + Math.abs(this.z - other.z));
+		return (int) (Math.abs(this.x - other.x) + Math.abs(this.y - other.y) + Math.abs(this.z - other.z));
 	}
 
 	@Legacy
@@ -144,14 +145,14 @@ public class Loc {
 
 	@Legacy
 	public static Loc[] vecAdjacent() {
-		return new Loc[]{new Loc(0, 0, 1), new Loc(0, 0, -1), new Loc(0, 1, 0), new Loc(0, -1, 0), new Loc(1, 0, 0), new Loc(-1, 0, 0)};
+		return new Loc[] {new Loc(0, 0, 1), new Loc(0, 0, -1), new Loc(0, 1, 0), new Loc(0, -1, 0), new Loc(1, 0, 0), new Loc(-1, 0, 0)};
 	}
 
 	@Legacy
 	public Loc[] adjacent() {
 		Loc[] array = vecAdjacent();
 
-		for(int i = 0; i < array.length; ++i) {
+		for (int i = 0; i < array.length; ++i) {
 			array[i] = this.add(array[i]);
 		}
 
@@ -160,14 +161,14 @@ public class Loc {
 
 	@Legacy
 	public static Loc[] vecAdjacent2D() {
-		return new Loc[]{new Loc(0, 1), new Loc(0, -1), new Loc(1, 0), new Loc(-1, 0)};
+		return new Loc[] {new Loc(0, 1), new Loc(0, -1), new Loc(1, 0), new Loc(-1, 0)};
 	}
 
 	@Legacy
 	public Loc[] adjacent2D() {
 		Loc[] array = vecAdjacent();
 
-		for(int i = 0; i < array.length; ++i) {
+		for (int i = 0; i < array.length; ++i) {
 			array[i] = this.add(array[i]);
 		}
 
@@ -179,12 +180,13 @@ public class Loc {
 		ArrayList<Loc> toReturn = new ArrayList<>();
 		Loc start = new Loc();
 
-		for(int x = -maxR; x <= maxR; ++x) {
-			for(int z = -maxR; z <= maxR; ++z) {
-				for(int y = -maxR; y <= maxR; ++y) {
+		for (int x = -maxR; x <= maxR; ++x) {
+			for (int z = -maxR; z <= maxR; ++z) {
+				for (int y = -maxR; y <= maxR; ++y) {
 					Loc check = new Loc(x, y, z);
-					double dist = advanced ? start.distAdv(check) : (double)start.distSimple(check);
-					if (dist <= (double)maxR) {
+					double dist = advanced ? start.distAdv(check) : (double) start.distSimple(check);
+
+					if (dist <= (double) maxR) {
 						toReturn.add(check);
 					}
 				}
@@ -198,12 +200,13 @@ public class Loc {
 	public ArrayList<Loc> inRadius(int maxR, boolean advanced) {
 		ArrayList<Loc> toReturn = new ArrayList<>();
 
-		for(int x = -maxR; x <= maxR; ++x) {
-			for(int z = -maxR; z <= maxR; ++z) {
-				for(int y = -maxR; y <= maxR; ++y) {
+		for (int x = -maxR; x <= maxR; ++x) {
+			for (int z = -maxR; z <= maxR; ++z) {
+				for (int y = -maxR; y <= maxR; ++y) {
 					Loc check = new Loc(x, y, z).add(this);
-					double dist = advanced ? this.distAdv(check) : (double)this.distSimple(check);
-					if (dist <= (double)maxR) {
+					double dist = advanced ? this.distAdv(check) : (double) this.distSimple(check);
+
+					if (dist <= (double) maxR) {
 						toReturn.add(check);
 					}
 				}
@@ -218,11 +221,12 @@ public class Loc {
 		ArrayList<Loc> toReturn = new ArrayList<>();
 		Loc start = new Loc();
 
-		for(int x = -maxR; x <= maxR; ++x) {
-			for(int z = -maxR; z <= maxR; ++z) {
+		for (int x = -maxR; x <= maxR; ++x) {
+			for (int z = -maxR; z <= maxR; ++z) {
 				Loc check = new Loc(x, z);
-				double dist = advanced ? start.distAdv(check) : (double)start.distSimple(check);
-				if (dist <= (double)maxR) {
+				double dist = advanced ? start.distAdv(check) : (double) start.distSimple(check);
+
+				if (dist <= (double) maxR) {
 					toReturn.add(check);
 				}
 			}
@@ -235,11 +239,12 @@ public class Loc {
 	public ArrayList<Loc> inRadius2D(int maxR, boolean advanced) {
 		ArrayList<Loc> toReturn = new ArrayList<>();
 
-		for(int x = -maxR; x <= maxR; ++x) {
-			for(int z = -maxR; z <= maxR; ++z) {
+		for (int x = -maxR; x <= maxR; ++x) {
+			for (int z = -maxR; z <= maxR; ++z) {
 				Loc check = new Loc(x, z).add(this);
-				double dist = advanced ? this.distAdv(check) : (double)this.distSimple(check);
-				if (dist <= (double)maxR) {
+				double dist = advanced ? this.distAdv(check) : (double) this.distSimple(check);
+
+				if (dist <= (double) maxR) {
 					toReturn.add(check);
 				}
 			}

@@ -2,9 +2,10 @@ package modloadermp;
 
 import java.util.AbstractMap;
 
-import io.github.betterthanupdates.Legacy;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
+import io.github.betterthanupdates.Legacy;
 
 /**
  * A pair is a common type to use for storing two pieces of data together.<br>

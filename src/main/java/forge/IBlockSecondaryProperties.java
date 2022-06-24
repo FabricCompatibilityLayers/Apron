@@ -5,8 +5,9 @@
 
 package forge;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.world.World;
+
+import io.github.betterthanupdates.Legacy;
 
 @SuppressWarnings("unused")
 @Legacy

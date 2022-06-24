@@ -2,13 +2,14 @@ package reforged;
 
 import forge.ForgeHooks;
 import forge.MinecraftForge;
-import io.github.betterthanupdates.Legacy;
 import modloadermp.BaseModMp;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.MultiplayerClientInteractionManager;
 import net.minecraft.client.SingleplayerInteractionManager;
 import net.minecraft.item.Item;
+
+import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public class mod_Reforged extends BaseModMp {
@@ -35,7 +36,6 @@ public class mod_Reforged extends BaseModMp {
 				MinecraftForge.killMinecraft("mod_Reforged", "PlayerControllers were modified. Please fix your installation!");
 			}
 		}
-
 	}
 
 	@Legacy

@@ -221,7 +221,7 @@ public abstract class BlockRendererMixin {
 			case 15:
 			case 16:
 			case 17:
-					break;
+				break;
 			default:
 				cir.setReturnValue(ModLoader.RenderWorldBlock((BlockRenderer) (Object) this, this.blockView, i, j, k, block, l));
 		}
@@ -236,6 +236,7 @@ public abstract class BlockRendererMixin {
 		Tessellator tessellator = Tessellator.INSTANCE;
 		int l = this.blockView.getBlockMeta(i, j, k);
 		int i1 = block.getTextureForSide(1, l);
+
 		if (this.textureOverride >= 0) {
 			i1 = this.textureOverride;
 		}
@@ -248,10 +249,10 @@ public abstract class BlockRendererMixin {
 		tessellator.color(f * f1, f * f2, f * f3);
 		int j1 = (i1 & 15) << 4;
 		int k1 = i1 & 240;
-		double d = (double)((float)j1 / 256.0F);
-		double d1 = (double)(((float)j1 + 15.99F) / 256.0F);
-		double d2 = (double)((float)k1 / 256.0F);
-		double d3 = (double)(((float)k1 + 15.99F) / 256.0F);
+		double d = (double) ((float) j1 / 256.0F);
+		double d1 = (double) (((float) j1 + 15.99F) / 256.0F);
+		double d2 = (double) ((float) k1 / 256.0F);
+		double d3 = (double) (((float) k1 + 15.99F) / 256.0F);
 		boolean flag = RedstoneDustBlock.method_1287(this.blockView, i - 1, j, k, 1)
 				|| !this.blockView.canSuffocate(i - 1, j, k) && RedstoneDustBlock.method_1287(this.blockView, i - 1, j - 1, k, -1);
 		boolean flag1 = RedstoneDustBlock.method_1287(this.blockView, i + 1, j, k, 3)
@@ -260,6 +261,7 @@ public abstract class BlockRendererMixin {
 				|| !this.blockView.canSuffocate(i, j, k - 1) && RedstoneDustBlock.method_1287(this.blockView, i, j - 1, k - 1, -1);
 		boolean flag3 = RedstoneDustBlock.method_1287(this.blockView, i, j, k + 1, 0)
 				|| !this.blockView.canSuffocate(i, j, k + 1) && RedstoneDustBlock.method_1287(this.blockView, i, j - 1, k + 1, -1);
+
 		if (!this.blockView.canSuffocate(i, j + 1, k)) {
 			if (this.blockView.canSuffocate(i - 1, j, k) && RedstoneDustBlock.method_1287(this.blockView, i - 1, j + 1, k, -1)) {
 				flag = true;
@@ -278,11 +280,12 @@ public abstract class BlockRendererMixin {
 			}
 		}
 
-		float f4 = (float)(i + 0);
-		float f5 = (float)(i + 1);
-		float f6 = (float)(k + 0);
-		float f7 = (float)(k + 1);
+		float f4 = (float) (i + 0);
+		float f5 = (float) (i + 1);
+		float f6 = (float) (k + 0);
+		float f7 = (float) (k + 1);
 		byte byte0 = 0;
+
 		if ((flag || flag1) && !flag2 && !flag3) {
 			byte0 = 1;
 		}
@@ -292,10 +295,10 @@ public abstract class BlockRendererMixin {
 		}
 
 		if (byte0 != 0) {
-			d = (double)((float)(j1 + 16) / 256.0F);
-			d1 = (double)(((float)(j1 + 16) + 15.99F) / 256.0F);
-			d2 = (double)((float)k1 / 256.0F);
-			d3 = (double)(((float)k1 + 15.99F) / 256.0F);
+			d = (double) ((float) (j1 + 16) / 256.0F);
+			d1 = (double) (((float) (j1 + 16) + 15.99F) / 256.0F);
+			d2 = (double) ((float) k1 / 256.0F);
+			d3 = (double) (((float) k1 + 15.99F) / 256.0F);
 		}
 
 		if (byte0 == 0) {
@@ -333,92 +336,93 @@ public abstract class BlockRendererMixin {
 				}
 			}
 
-			tessellator.vertex((double)f5, (double)((float)j + 0.015625F), (double)f7, d1, d3);
-			tessellator.vertex((double)f5, (double)((float)j + 0.015625F), (double)f6, d1, d2);
-			tessellator.vertex((double)f4, (double)((float)j + 0.015625F), (double)f6, d, d2);
-			tessellator.vertex((double)f4, (double)((float)j + 0.015625F), (double)f7, d, d3);
+			tessellator.vertex((double) f5, (double) ((float) j + 0.015625F), (double) f7, d1, d3);
+			tessellator.vertex((double) f5, (double) ((float) j + 0.015625F), (double) f6, d1, d2);
+			tessellator.vertex((double) f4, (double) ((float) j + 0.015625F), (double) f6, d, d2);
+			tessellator.vertex((double) f4, (double) ((float) j + 0.015625F), (double) f7, d, d3);
 			tessellator.color(f, f, f);
-			tessellator.vertex((double)f5, (double)((float)j + 0.015625F), (double)f7, d1, d3 + 0.0625);
-			tessellator.vertex((double)f5, (double)((float)j + 0.015625F), (double)f6, d1, d2 + 0.0625);
-			tessellator.vertex((double)f4, (double)((float)j + 0.015625F), (double)f6, d, d2 + 0.0625);
-			tessellator.vertex((double)f4, (double)((float)j + 0.015625F), (double)f7, d, d3 + 0.0625);
+			tessellator.vertex((double) f5, (double) ((float) j + 0.015625F), (double) f7, d1, d3 + 0.0625);
+			tessellator.vertex((double) f5, (double) ((float) j + 0.015625F), (double) f6, d1, d2 + 0.0625);
+			tessellator.vertex((double) f4, (double) ((float) j + 0.015625F), (double) f6, d, d2 + 0.0625);
+			tessellator.vertex((double) f4, (double) ((float) j + 0.015625F), (double) f7, d, d3 + 0.0625);
 		} else if (byte0 == 1) {
-			tessellator.vertex((double)f5, (double)((float)j + 0.015625F), (double)f7, d1, d3);
-			tessellator.vertex((double)f5, (double)((float)j + 0.015625F), (double)f6, d1, d2);
-			tessellator.vertex((double)f4, (double)((float)j + 0.015625F), (double)f6, d, d2);
-			tessellator.vertex((double)f4, (double)((float)j + 0.015625F), (double)f7, d, d3);
+			tessellator.vertex((double) f5, (double) ((float) j + 0.015625F), (double) f7, d1, d3);
+			tessellator.vertex((double) f5, (double) ((float) j + 0.015625F), (double) f6, d1, d2);
+			tessellator.vertex((double) f4, (double) ((float) j + 0.015625F), (double) f6, d, d2);
+			tessellator.vertex((double) f4, (double) ((float) j + 0.015625F), (double) f7, d, d3);
 			tessellator.color(f, f, f);
-			tessellator.vertex((double)f5, (double)((float)j + 0.015625F), (double)f7, d1, d3 + 0.0625);
-			tessellator.vertex((double)f5, (double)((float)j + 0.015625F), (double)f6, d1, d2 + 0.0625);
-			tessellator.vertex((double)f4, (double)((float)j + 0.015625F), (double)f6, d, d2 + 0.0625);
-			tessellator.vertex((double)f4, (double)((float)j + 0.015625F), (double)f7, d, d3 + 0.0625);
+			tessellator.vertex((double) f5, (double) ((float) j + 0.015625F), (double) f7, d1, d3 + 0.0625);
+			tessellator.vertex((double) f5, (double) ((float) j + 0.015625F), (double) f6, d1, d2 + 0.0625);
+			tessellator.vertex((double) f4, (double) ((float) j + 0.015625F), (double) f6, d, d2 + 0.0625);
+			tessellator.vertex((double) f4, (double) ((float) j + 0.015625F), (double) f7, d, d3 + 0.0625);
 		} else if (byte0 == 2) {
-			tessellator.vertex((double)f5, (double)((float)j + 0.015625F), (double)f7, d1, d3);
-			tessellator.vertex((double)f5, (double)((float)j + 0.015625F), (double)f6, d, d3);
-			tessellator.vertex((double)f4, (double)((float)j + 0.015625F), (double)f6, d, d2);
-			tessellator.vertex((double)f4, (double)((float)j + 0.015625F), (double)f7, d1, d2);
+			tessellator.vertex((double) f5, (double) ((float) j + 0.015625F), (double) f7, d1, d3);
+			tessellator.vertex((double) f5, (double) ((float) j + 0.015625F), (double) f6, d, d3);
+			tessellator.vertex((double) f4, (double) ((float) j + 0.015625F), (double) f6, d, d2);
+			tessellator.vertex((double) f4, (double) ((float) j + 0.015625F), (double) f7, d1, d2);
 			tessellator.color(f, f, f);
-			tessellator.vertex((double)f5, (double)((float)j + 0.015625F), (double)f7, d1, d3 + 0.0625);
-			tessellator.vertex((double)f5, (double)((float)j + 0.015625F), (double)f6, d, d3 + 0.0625);
-			tessellator.vertex((double)f4, (double)((float)j + 0.015625F), (double)f6, d, d2 + 0.0625);
-			tessellator.vertex((double)f4, (double)((float)j + 0.015625F), (double)f7, d1, d2 + 0.0625);
+			tessellator.vertex((double) f5, (double) ((float) j + 0.015625F), (double) f7, d1, d3 + 0.0625);
+			tessellator.vertex((double) f5, (double) ((float) j + 0.015625F), (double) f6, d, d3 + 0.0625);
+			tessellator.vertex((double) f4, (double) ((float) j + 0.015625F), (double) f6, d, d2 + 0.0625);
+			tessellator.vertex((double) f4, (double) ((float) j + 0.015625F), (double) f7, d1, d2 + 0.0625);
 		}
 
 		if (!this.blockView.canSuffocate(i, j + 1, k)) {
-			double d4 = (double)((float)(j1 + 16) / 256.0F);
-			double d5 = (double)(((float)(j1 + 16) + 15.99F) / 256.0F);
-			double d6 = (double)((float)k1 / 256.0F);
-			double d7 = (double)(((float)k1 + 15.99F) / 256.0F);
+			double d4 = (double) ((float) (j1 + 16) / 256.0F);
+			double d5 = (double) (((float) (j1 + 16) + 15.99F) / 256.0F);
+			double d6 = (double) ((float) k1 / 256.0F);
+			double d7 = (double) (((float) k1 + 15.99F) / 256.0F);
+
 			if (this.blockView.canSuffocate(i - 1, j, k) && this.blockView.getBlockId(i - 1, j + 1, k) == Block.REDSTONE_DUST.id) {
 				tessellator.color(f * f1, f * f2, f * f3);
-				tessellator.vertex((double)((float)i + 0.015625F), (double)((float)(j + 1) + 0.021875F), (double)(k + 1), d5, d6);
-				tessellator.vertex((double)((float)i + 0.015625F), (double)(j + 0), (double)(k + 1), d4, d6);
-				tessellator.vertex((double)((float)i + 0.015625F), (double)(j + 0), (double)(k + 0), d4, d7);
-				tessellator.vertex((double)((float)i + 0.015625F), (double)((float)(j + 1) + 0.021875F), (double)(k + 0), d5, d7);
+				tessellator.vertex((double) ((float) i + 0.015625F), (double) ((float) (j + 1) + 0.021875F), (double) (k + 1), d5, d6);
+				tessellator.vertex((double) ((float) i + 0.015625F), (double) (j + 0), (double) (k + 1), d4, d6);
+				tessellator.vertex((double) ((float) i + 0.015625F), (double) (j + 0), (double) (k + 0), d4, d7);
+				tessellator.vertex((double) ((float) i + 0.015625F), (double) ((float) (j + 1) + 0.021875F), (double) (k + 0), d5, d7);
 				tessellator.color(f, f, f);
-				tessellator.vertex((double)((float)i + 0.015625F), (double)((float)(j + 1) + 0.021875F), (double)(k + 1), d5, d6 + 0.0625);
-				tessellator.vertex((double)((float)i + 0.015625F), (double)(j + 0), (double)(k + 1), d4, d6 + 0.0625);
-				tessellator.vertex((double)((float)i + 0.015625F), (double)(j + 0), (double)(k + 0), d4, d7 + 0.0625);
-				tessellator.vertex((double)((float)i + 0.015625F), (double)((float)(j + 1) + 0.021875F), (double)(k + 0), d5, d7 + 0.0625);
+				tessellator.vertex((double) ((float) i + 0.015625F), (double) ((float) (j + 1) + 0.021875F), (double) (k + 1), d5, d6 + 0.0625);
+				tessellator.vertex((double) ((float) i + 0.015625F), (double) (j + 0), (double) (k + 1), d4, d6 + 0.0625);
+				tessellator.vertex((double) ((float) i + 0.015625F), (double) (j + 0), (double) (k + 0), d4, d7 + 0.0625);
+				tessellator.vertex((double) ((float) i + 0.015625F), (double) ((float) (j + 1) + 0.021875F), (double) (k + 0), d5, d7 + 0.0625);
 			}
 
 			if (this.blockView.canSuffocate(i + 1, j, k) && this.blockView.getBlockId(i + 1, j + 1, k) == Block.REDSTONE_DUST.id) {
 				tessellator.color(f * f1, f * f2, f * f3);
-				tessellator.vertex((double)((float)(i + 1) - 0.015625F), (double)(j + 0), (double)(k + 1), d4, d7);
-				tessellator.vertex((double)((float)(i + 1) - 0.015625F), (double)((float)(j + 1) + 0.021875F), (double)(k + 1), d5, d7);
-				tessellator.vertex((double)((float)(i + 1) - 0.015625F), (double)((float)(j + 1) + 0.021875F), (double)(k + 0), d5, d6);
-				tessellator.vertex((double)((float)(i + 1) - 0.015625F), (double)(j + 0), (double)(k + 0), d4, d6);
+				tessellator.vertex((double) ((float) (i + 1) - 0.015625F), (double) (j + 0), (double) (k + 1), d4, d7);
+				tessellator.vertex((double) ((float) (i + 1) - 0.015625F), (double) ((float) (j + 1) + 0.021875F), (double) (k + 1), d5, d7);
+				tessellator.vertex((double) ((float) (i + 1) - 0.015625F), (double) ((float) (j + 1) + 0.021875F), (double) (k + 0), d5, d6);
+				tessellator.vertex((double) ((float) (i + 1) - 0.015625F), (double) (j + 0), (double) (k + 0), d4, d6);
 				tessellator.color(f, f, f);
-				tessellator.vertex((double)((float)(i + 1) - 0.015625F), (double)(j + 0), (double)(k + 1), d4, d7 + 0.0625);
-				tessellator.vertex((double)((float)(i + 1) - 0.015625F), (double)((float)(j + 1) + 0.021875F), (double)(k + 1), d5, d7 + 0.0625);
-				tessellator.vertex((double)((float)(i + 1) - 0.015625F), (double)((float)(j + 1) + 0.021875F), (double)(k + 0), d5, d6 + 0.0625);
-				tessellator.vertex((double)((float)(i + 1) - 0.015625F), (double)(j + 0), (double)(k + 0), d4, d6 + 0.0625);
+				tessellator.vertex((double) ((float) (i + 1) - 0.015625F), (double) (j + 0), (double) (k + 1), d4, d7 + 0.0625);
+				tessellator.vertex((double) ((float) (i + 1) - 0.015625F), (double) ((float) (j + 1) + 0.021875F), (double) (k + 1), d5, d7 + 0.0625);
+				tessellator.vertex((double) ((float) (i + 1) - 0.015625F), (double) ((float) (j + 1) + 0.021875F), (double) (k + 0), d5, d6 + 0.0625);
+				tessellator.vertex((double) ((float) (i + 1) - 0.015625F), (double) (j + 0), (double) (k + 0), d4, d6 + 0.0625);
 			}
 
 			if (this.blockView.canSuffocate(i, j, k - 1) && this.blockView.getBlockId(i, j + 1, k - 1) == Block.REDSTONE_DUST.id) {
 				tessellator.color(f * f1, f * f2, f * f3);
-				tessellator.vertex((double)(i + 1), (double)(j + 0), (double)((float)k + 0.015625F), d4, d7);
-				tessellator.vertex((double)(i + 1), (double)((float)(j + 1) + 0.021875F), (double)((float)k + 0.015625F), d5, d7);
-				tessellator.vertex((double)(i + 0), (double)((float)(j + 1) + 0.021875F), (double)((float)k + 0.015625F), d5, d6);
-				tessellator.vertex((double)(i + 0), (double)(j + 0), (double)((float)k + 0.015625F), d4, d6);
+				tessellator.vertex((double) (i + 1), (double) (j + 0), (double) ((float) k + 0.015625F), d4, d7);
+				tessellator.vertex((double) (i + 1), (double) ((float) (j + 1) + 0.021875F), (double) ((float) k + 0.015625F), d5, d7);
+				tessellator.vertex((double) (i + 0), (double) ((float) (j + 1) + 0.021875F), (double) ((float) k + 0.015625F), d5, d6);
+				tessellator.vertex((double) (i + 0), (double) (j + 0), (double) ((float) k + 0.015625F), d4, d6);
 				tessellator.color(f, f, f);
-				tessellator.vertex((double)(i + 1), (double)(j + 0), (double)((float)k + 0.015625F), d4, d7 + 0.0625);
-				tessellator.vertex((double)(i + 1), (double)((float)(j + 1) + 0.021875F), (double)((float)k + 0.015625F), d5, d7 + 0.0625);
-				tessellator.vertex((double)(i + 0), (double)((float)(j + 1) + 0.021875F), (double)((float)k + 0.015625F), d5, d6 + 0.0625);
-				tessellator.vertex((double)(i + 0), (double)(j + 0), (double)((float)k + 0.015625F), d4, d6 + 0.0625);
+				tessellator.vertex((double) (i + 1), (double) (j + 0), (double) ((float) k + 0.015625F), d4, d7 + 0.0625);
+				tessellator.vertex((double) (i + 1), (double) ((float) (j + 1) + 0.021875F), (double) ((float) k + 0.015625F), d5, d7 + 0.0625);
+				tessellator.vertex((double) (i + 0), (double) ((float) (j + 1) + 0.021875F), (double) ((float) k + 0.015625F), d5, d6 + 0.0625);
+				tessellator.vertex((double) (i + 0), (double) (j + 0), (double) ((float) k + 0.015625F), d4, d6 + 0.0625);
 			}
 
 			if (this.blockView.canSuffocate(i, j, k + 1) && this.blockView.getBlockId(i, j + 1, k + 1) == Block.REDSTONE_DUST.id) {
 				tessellator.color(f * f1, f * f2, f * f3);
-				tessellator.vertex((double)(i + 1), (double)((float)(j + 1) + 0.021875F), (double)((float)(k + 1) - 0.015625F), d5, d6);
-				tessellator.vertex((double)(i + 1), (double)(j + 0), (double)((float)(k + 1) - 0.015625F), d4, d6);
-				tessellator.vertex((double)(i + 0), (double)(j + 0), (double)((float)(k + 1) - 0.015625F), d4, d7);
-				tessellator.vertex((double)(i + 0), (double)((float)(j + 1) + 0.021875F), (double)((float)(k + 1) - 0.015625F), d5, d7);
+				tessellator.vertex((double) (i + 1), (double) ((float) (j + 1) + 0.021875F), (double) ((float) (k + 1) - 0.015625F), d5, d6);
+				tessellator.vertex((double) (i + 1), (double) (j + 0), (double) ((float) (k + 1) - 0.015625F), d4, d6);
+				tessellator.vertex((double) (i + 0), (double) (j + 0), (double) ((float) (k + 1) - 0.015625F), d4, d7);
+				tessellator.vertex((double) (i + 0), (double) ((float) (j + 1) + 0.021875F), (double) ((float) (k + 1) - 0.015625F), d5, d7);
 				tessellator.color(f, f, f);
-				tessellator.vertex((double)(i + 1), (double)((float)(j + 1) + 0.021875F), (double)((float)(k + 1) - 0.015625F), d5, d6 + 0.0625);
-				tessellator.vertex((double)(i + 1), (double)(j + 0), (double)((float)(k + 1) - 0.015625F), d4, d6 + 0.0625);
-				tessellator.vertex((double)(i + 0), (double)(j + 0), (double)((float)(k + 1) - 0.015625F), d4, d7 + 0.0625);
-				tessellator.vertex((double)(i + 0), (double)((float)(j + 1) + 0.021875F), (double)((float)(k + 1) - 0.015625F), d5, d7 + 0.0625);
+				tessellator.vertex((double) (i + 1), (double) ((float) (j + 1) + 0.021875F), (double) ((float) (k + 1) - 0.015625F), d5, d6 + 0.0625);
+				tessellator.vertex((double) (i + 1), (double) (j + 0), (double) ((float) (k + 1) - 0.015625F), d4, d6 + 0.0625);
+				tessellator.vertex((double) (i + 0), (double) (j + 0), (double) ((float) (k + 1) - 0.015625F), d4, d7 + 0.0625);
+				tessellator.vertex((double) (i + 0), (double) ((float) (j + 1) + 0.021875F), (double) ((float) (k + 1) - 0.015625F), d5, d7 + 0.0625);
 			}
 		}
 
@@ -462,6 +466,7 @@ public abstract class BlockRendererMixin {
 		this.field_69 = Block.ALLOWS_GRASS_UNDER[this.blockView.getBlockId(i, j + 1, k - 1)];
 		this.field_80 = Block.ALLOWS_GRASS_UNDER[this.blockView.getBlockId(i, j - 1, k + 1)];
 		this.field_77 = Block.ALLOWS_GRASS_UNDER[this.blockView.getBlockId(i, j - 1, k - 1)];
+
 		if (block.texture == 3) {
 			flag6 = false;
 			flag5 = false;
@@ -483,6 +488,7 @@ public abstract class BlockRendererMixin {
 			float f13;
 			float f19;
 			float f25;
+
 			if (this.field_55 <= 0) {
 				f25 = this.field_95;
 				f19 = this.field_95;
@@ -493,6 +499,7 @@ public abstract class BlockRendererMixin {
 				this.field_103 = block.getBrightness(this.blockView, i, j, k - 1);
 				this.field_104 = block.getBrightness(this.blockView, i, j, k + 1);
 				this.field_41 = block.getBrightness(this.blockView, i + 1, j, k);
+
 				if (!this.field_77 && !this.field_79) {
 					this.field_100 = this.field_101;
 				} else {
@@ -539,7 +546,7 @@ public abstract class BlockRendererMixin {
 			this.field_59 *= f25;
 			this.field_63 *= f25;
 			this.field_68 *= f25;
-			this.renderBottomFace(block, (double)i, (double)j, (double)k, block.getTextureForSide(this.blockView, i, j, k, 0));
+			this.renderBottomFace(block, (double) i, (double) j, (double) k, block.getTextureForSide(this.blockView, i, j, k, 0));
 			flag = true;
 		}
 
@@ -548,6 +555,7 @@ public abstract class BlockRendererMixin {
 			float f14;
 			float f20;
 			float f26;
+
 			if (this.field_55 <= 0) {
 				f26 = this.field_98;
 				f20 = this.field_98;
@@ -558,6 +566,7 @@ public abstract class BlockRendererMixin {
 				this.field_48 = block.getBrightness(this.blockView, i + 1, j, k);
 				this.field_46 = block.getBrightness(this.blockView, i, j, k - 1);
 				this.field_49 = block.getBrightness(this.blockView, i, j, k + 1);
+
 				if (!this.field_69 && !this.field_71) {
 					this.field_43 = this.field_44;
 				} else {
@@ -605,7 +614,7 @@ public abstract class BlockRendererMixin {
 			this.field_63 *= f26;
 			this.field_68 *= f26;
 			int l = block.getTextureForSide(this.blockView, i, j, k, 1);
-			this.renderTopFace(block, (double)i, (double)j, (double)k, l);
+			this.renderTopFace(block, (double) i, (double) j, (double) k, l);
 			flag = true;
 		}
 
@@ -614,6 +623,7 @@ public abstract class BlockRendererMixin {
 			float f15;
 			float f21;
 			float f27;
+
 			if (this.field_55 <= 0) {
 				f27 = this.field_96;
 				f21 = this.field_96;
@@ -624,6 +634,7 @@ public abstract class BlockRendererMixin {
 				this.field_103 = block.getBrightness(this.blockView, i, j - 1, k);
 				this.field_46 = block.getBrightness(this.blockView, i, j + 1, k);
 				this.field_52 = block.getBrightness(this.blockView, i + 1, j, k);
+
 				if (!this.field_73 && !this.field_77) {
 					this.field_100 = this.field_51;
 				} else {
@@ -671,7 +682,8 @@ public abstract class BlockRendererMixin {
 			this.field_63 *= f27;
 			this.field_68 *= f27;
 			int i1 = block.getTextureForSide(this.blockView, i, j, k, 2);
-			this.renderEastFace(block, (double)i, (double)j, (double)k, i1);
+			this.renderEastFace(block, (double) i, (double) j, (double) k, i1);
+
 			if (((ForgeTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && i1 == 3 && this.textureOverride < 0) {
 				this.field_56 *= f;
 				this.field_57 *= f;
@@ -685,7 +697,7 @@ public abstract class BlockRendererMixin {
 				this.field_65 *= f2;
 				this.field_66 *= f2;
 				this.field_68 *= f2;
-				this.renderEastFace(block, (double)i, (double)j, (double)k, 38);
+				this.renderEastFace(block, (double) i, (double) j, (double) k, 38);
 			}
 
 			flag = true;
@@ -696,6 +708,7 @@ public abstract class BlockRendererMixin {
 			float f16;
 			float f22;
 			float f28;
+
 			if (this.field_55 <= 0) {
 				f28 = this.field_99;
 				f22 = this.field_99;
@@ -706,6 +719,7 @@ public abstract class BlockRendererMixin {
 				this.field_54 = block.getBrightness(this.blockView, i + 1, j, k);
 				this.field_104 = block.getBrightness(this.blockView, i, j - 1, k);
 				this.field_49 = block.getBrightness(this.blockView, i, j + 1, k);
+
 				if (!this.field_75 && !this.field_80) {
 					this.field_102 = this.field_53;
 				} else {
@@ -753,7 +767,8 @@ public abstract class BlockRendererMixin {
 			this.field_63 *= f28;
 			this.field_68 *= f28;
 			int j1 = block.getTextureForSide(this.blockView, i, j, k, 3);
-			this.renderWestFace(block, (double)i, (double)j, (double)k, block.getTextureForSide(this.blockView, i, j, k, 3));
+			this.renderWestFace(block, (double) i, (double) j, (double) k, block.getTextureForSide(this.blockView, i, j, k, 3));
+
 			if (((ForgeTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && j1 == 3 && this.textureOverride < 0) {
 				this.field_56 *= f;
 				this.field_57 *= f;
@@ -767,7 +782,7 @@ public abstract class BlockRendererMixin {
 				this.field_65 *= f2;
 				this.field_66 *= f2;
 				this.field_68 *= f2;
-				this.renderWestFace(block, (double)i, (double)j, (double)k, 38);
+				this.renderWestFace(block, (double) i, (double) j, (double) k, 38);
 			}
 
 			flag = true;
@@ -778,6 +793,7 @@ public abstract class BlockRendererMixin {
 			float f17;
 			float f23;
 			float f29;
+
 			if (this.field_55 <= 0) {
 				f29 = this.field_94;
 				f23 = this.field_94;
@@ -788,6 +804,7 @@ public abstract class BlockRendererMixin {
 				this.field_51 = block.getBrightness(this.blockView, i, j, k - 1);
 				this.field_53 = block.getBrightness(this.blockView, i, j, k + 1);
 				this.field_44 = block.getBrightness(this.blockView, i, j + 1, k);
+
 				if (!this.field_73 && !this.field_79) {
 					this.field_100 = this.field_51;
 				} else {
@@ -835,7 +852,8 @@ public abstract class BlockRendererMixin {
 			this.field_63 *= f29;
 			this.field_68 *= f29;
 			int k1 = block.getTextureForSide(this.blockView, i, j, k, 4);
-			this.renderNorthFace(block, (double)i, (double)j, (double)k, k1);
+			this.renderNorthFace(block, (double) i, (double) j, (double) k, k1);
+
 			if (((ForgeTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && k1 == 3 && this.textureOverride < 0) {
 				this.field_56 *= f;
 				this.field_57 *= f;
@@ -849,7 +867,7 @@ public abstract class BlockRendererMixin {
 				this.field_65 *= f2;
 				this.field_66 *= f2;
 				this.field_68 *= f2;
-				this.renderNorthFace(block, (double)i, (double)j, (double)k, 38);
+				this.renderNorthFace(block, (double) i, (double) j, (double) k, 38);
 			}
 
 			flag = true;
@@ -860,6 +878,7 @@ public abstract class BlockRendererMixin {
 			float f18;
 			float f24;
 			float f30;
+
 			if (this.field_55 <= 0) {
 				f30 = this.field_97;
 				f24 = this.field_97;
@@ -870,6 +889,7 @@ public abstract class BlockRendererMixin {
 				this.field_52 = block.getBrightness(this.blockView, i, j, k - 1);
 				this.field_54 = block.getBrightness(this.blockView, i, j, k + 1);
 				this.field_48 = block.getBrightness(this.blockView, i, j + 1, k);
+
 				if (!this.field_78 && !this.field_76) {
 					this.field_105 = this.field_52;
 				} else {
@@ -917,7 +937,8 @@ public abstract class BlockRendererMixin {
 			this.field_63 *= f30;
 			this.field_68 *= f30;
 			int l1 = block.getTextureForSide(this.blockView, i, j, k, 5);
-			this.renderSouthFace(block, (double)i, (double)j, (double)k, l1);
+			this.renderSouthFace(block, (double) i, (double) j, (double) k, l1);
+
 			if (((ForgeTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && l1 == 3 && this.textureOverride < 0) {
 				this.field_56 *= f;
 				this.field_57 *= f;
@@ -931,7 +952,7 @@ public abstract class BlockRendererMixin {
 				this.field_65 *= f2;
 				this.field_66 *= f2;
 				this.field_68 *= f2;
-				this.renderSouthFace(block, (double)i, (double)j, (double)k, 38);
+				this.renderSouthFace(block, (double) i, (double) j, (double) k, 38);
 			}
 
 			flag = true;
@@ -966,6 +987,7 @@ public abstract class BlockRendererMixin {
 		float f16 = f3;
 		float f17 = f5;
 		float f18 = f6;
+
 		if (block != Block.GRASS) {
 			f10 = f3 * f;
 			f11 = f5 * f;
@@ -979,36 +1001,40 @@ public abstract class BlockRendererMixin {
 		}
 
 		float f19 = block.getBrightness(this.blockView, i, j, k);
+
 		if (this.renderAllSides || block.isSideRendered(this.blockView, i, j - 1, k, 0)) {
 			float f20 = block.getBrightness(this.blockView, i, j - 1, k);
 			tessellator.color(f10 * f20, f13 * f20, f16 * f20);
-			this.renderBottomFace(block, (double)i, (double)j, (double)k, block.getTextureForSide(this.blockView, i, j, k, 0));
+			this.renderBottomFace(block, (double) i, (double) j, (double) k, block.getTextureForSide(this.blockView, i, j, k, 0));
 			flag = true;
 		}
 
 		if (this.renderAllSides || block.isSideRendered(this.blockView, i, j + 1, k, 1)) {
 			float f21 = block.getBrightness(this.blockView, i, j + 1, k);
+
 			if (block.maxY != 1.0 && !block.material.isLiquid()) {
 				f21 = f19;
 			}
 
 			tessellator.color(f7 * f21, f8 * f21, f9 * f21);
-			this.renderTopFace(block, (double)i, (double)j, (double)k, block.getTextureForSide(this.blockView, i, j, k, 1));
+			this.renderTopFace(block, (double) i, (double) j, (double) k, block.getTextureForSide(this.blockView, i, j, k, 1));
 			flag = true;
 		}
 
 		if (this.renderAllSides || block.isSideRendered(this.blockView, i, j, k - 1, 2)) {
 			float f22 = block.getBrightness(this.blockView, i, j, k - 1);
+
 			if (block.minZ > 0.0) {
 				f22 = f19;
 			}
 
 			tessellator.color(f11 * f22, f14 * f22, f17 * f22);
 			int l = block.getTextureForSide(this.blockView, i, j, k, 2);
-			this.renderEastFace(block, (double)i, (double)j, (double)k, l);
+			this.renderEastFace(block, (double) i, (double) j, (double) k, l);
+
 			if (((ForgeTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && l == 3 && this.textureOverride < 0) {
 				tessellator.color(f11 * f22 * f, f14 * f22 * f1, f17 * f22 * f2);
-				this.renderEastFace(block, (double)i, (double)j, (double)k, 38);
+				this.renderEastFace(block, (double) i, (double) j, (double) k, 38);
 			}
 
 			flag = true;
@@ -1016,16 +1042,18 @@ public abstract class BlockRendererMixin {
 
 		if (this.renderAllSides || block.isSideRendered(this.blockView, i, j, k + 1, 3)) {
 			float f23 = block.getBrightness(this.blockView, i, j, k + 1);
+
 			if (block.maxZ < 1.0) {
 				f23 = f19;
 			}
 
 			tessellator.color(f11 * f23, f14 * f23, f17 * f23);
 			int i1 = block.getTextureForSide(this.blockView, i, j, k, 3);
-			this.renderWestFace(block, (double)i, (double)j, (double)k, i1);
+			this.renderWestFace(block, (double) i, (double) j, (double) k, i1);
+
 			if (((ForgeTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && i1 == 3 && this.textureOverride < 0) {
 				tessellator.color(f11 * f23 * f, f14 * f23 * f1, f17 * f23 * f2);
-				this.renderWestFace(block, (double)i, (double)j, (double)k, 38);
+				this.renderWestFace(block, (double) i, (double) j, (double) k, 38);
 			}
 
 			flag = true;
@@ -1033,16 +1061,18 @@ public abstract class BlockRendererMixin {
 
 		if (this.renderAllSides || block.isSideRendered(this.blockView, i - 1, j, k, 4)) {
 			float f24 = block.getBrightness(this.blockView, i - 1, j, k);
+
 			if (block.minX > 0.0) {
 				f24 = f19;
 			}
 
 			tessellator.color(f12 * f24, f15 * f24, f18 * f24);
 			int j1 = block.getTextureForSide(this.blockView, i, j, k, 4);
-			this.renderNorthFace(block, (double)i, (double)j, (double)k, j1);
+			this.renderNorthFace(block, (double) i, (double) j, (double) k, j1);
+
 			if (((ForgeTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && j1 == 3 && this.textureOverride < 0) {
 				tessellator.color(f12 * f24 * f, f15 * f24 * f1, f18 * f24 * f2);
-				this.renderNorthFace(block, (double)i, (double)j, (double)k, 38);
+				this.renderNorthFace(block, (double) i, (double) j, (double) k, 38);
 			}
 
 			flag = true;
@@ -1050,16 +1080,18 @@ public abstract class BlockRendererMixin {
 
 		if (this.renderAllSides || block.isSideRendered(this.blockView, i + 1, j, k, 5)) {
 			float f25 = block.getBrightness(this.blockView, i + 1, j, k);
+
 			if (block.maxX < 1.0) {
 				f25 = f19;
 			}
 
 			tessellator.color(f12 * f25, f15 * f25, f18 * f25);
 			int k1 = block.getTextureForSide(this.blockView, i, j, k, 5);
-			this.renderSouthFace(block, (double)i, (double)j, (double)k, k1);
+			this.renderSouthFace(block, (double) i, (double) j, (double) k, k1);
+
 			if (((ForgeTessellator) Tessellator.INSTANCE).defaultTexture() && ForgeClientReflection.BlockRenderer$cfgGrassFix && k1 == 3 && this.textureOverride < 0) {
 				tessellator.color(f12 * f25 * f, f15 * f25 * f1, f18 * f25 * f2);
-				this.renderSouthFace(block, (double)i, (double)j, (double)k, 38);
+				this.renderSouthFace(block, (double) i, (double) j, (double) k, 38);
 			}
 
 			flag = true;

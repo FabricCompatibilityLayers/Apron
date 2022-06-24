@@ -15,7 +15,6 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(World.class)
 public abstract class WorldMixin implements BlockView, ForgeWorld {
-
 	@Shadow
 	public abstract boolean canSpawnEntity(AxixAlignedBoundingBox box);
 
@@ -44,11 +43,13 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 		int l = MathHelper.floor(axisalignedbb.maxY + 1.0);
 		int i1 = MathHelper.floor(axisalignedbb.minZ);
 		int j1 = MathHelper.floor(axisalignedbb.maxZ + 1.0);
+
 		if (this.method_155(i, k, i1, j, l, j1)) {
-			for(int k1 = i; k1 < j; ++k1) {
-				for(int l1 = k; l1 < l; ++l1) {
-					for(int i2 = i1; i2 < j1; ++i2) {
+			for (int k1 = i; k1 < j; ++k1) {
+				for (int l1 = k; l1 < l; ++l1) {
+					for (int i2 = i1; i2 < j1; ++i2) {
 						int j2 = this.getBlockId(k1, l1, i2);
+
 						if (j2 == Block.FIRE.id || j2 == Block.FLOWING_LAVA.id || j2 == Block.STILL_LAVA.id) {
 							return true;
 						}
@@ -90,6 +91,7 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 		Block block = Block.BY_ID[j1];
 		Block block1 = Block.BY_ID[i];
 		AxixAlignedBoundingBox axisalignedbb = block1.getCollisionShape((World) (Object) this, j, k, l);
+
 		if (flag) {
 			axisalignedbb = null;
 		}

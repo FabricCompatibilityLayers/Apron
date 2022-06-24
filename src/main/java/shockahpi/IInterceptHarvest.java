@@ -1,11 +1,13 @@
 package shockahpi;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 
+import io.github.betterthanupdates.Legacy;
+
 /**
  * Part of ShockAhPI that allows interception of harvesting.
+ *
  * @author ShockAh
  */
 @Legacy

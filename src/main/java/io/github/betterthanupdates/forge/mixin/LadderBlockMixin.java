@@ -43,7 +43,6 @@ public abstract class LadderBlockMixin extends Block implements ForgeBlock {
 		return ((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, 2);
 	}
 
-
 	@Redirect(method = {"onBlockPlaced", "onAdjacentBlockUpdate"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z", ordinal = 0))
 	private boolean reforged$isBlockSolidOnSide$1(World instance, int j, int k, int i) {
 		return ((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, 2);

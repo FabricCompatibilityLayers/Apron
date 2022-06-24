@@ -2,9 +2,10 @@ package shockahpi;
 
 import java.util.Random;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+
+import io.github.betterthanupdates.Legacy;
 
 @SuppressWarnings("unused")
 @Legacy
@@ -32,6 +33,7 @@ public class DungeonLoot {
 	@Legacy
 	public ItemStack getStack() {
 		int damage = 0;
+
 		if (this.loot.itemId <= 255) {
 			if (Block.BY_ID[this.loot.itemId].getBaseColor(1) != 1) {
 				damage = this.loot.getMeta();

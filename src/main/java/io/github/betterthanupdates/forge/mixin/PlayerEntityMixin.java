@@ -27,7 +27,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 	@Shadow
 	public PlayerInventory inventory;
 
-	@Shadow public abstract boolean isLyingOnBed();
+	@Shadow
+	public abstract boolean isLyingOnBed();
 
 	private PlayerEntityMixin(World world) {
 		super(world);
@@ -45,6 +46,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 	public float getCurrentPlayerStrVsBlock(Block block, int meta) {
 		float strength = 1.0F;
 		ItemStack heldItem = this.inventory.getHeldItem();
+
 		if (heldItem != null) {
 			strength = ((ForgeItem) heldItem.getItem()).getStrVsBlock(heldItem, block, meta);
 		}
@@ -65,9 +67,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 		boolean doRegularComputation = true;
 		int initialDamage = i;
 
-		for(ItemStack stack : this.inventory.armor) {
+		for (ItemStack stack : this.inventory.armor) {
 			if (stack != null && stack.getItem() instanceof ISpecialArmor) {
-				ISpecialArmor armor = (ISpecialArmor)stack.getItem();
+				ISpecialArmor armor = (ISpecialArmor) stack.getItem();
 				ArmorProperties props = armor.getProperties((PlayerEntity) (Object) this, initialDamage, i);
 				i -= props.damageRemove;
 				doRegularComputation = doRegularComputation && props.allowRegularComputation;
@@ -81,6 +83,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 	}
 
 	ItemStack orig;
+
 	@Inject(method = "breakHeldItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/PlayerInventory;setInventoryItem(ILnet/minecraft/item/ItemStack;)V"))
 	private void reforged$breakHeldItem$Head(CallbackInfo ci) {
 		this.orig = this.inventory.getHeldItem();
@@ -94,6 +97,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 	@Inject(method = "trySleep", at = @At("HEAD"), cancellable = true)
 	private void reforged$trySleep(int i, int j, int k, CallbackInfoReturnable<SleepStatus> cir) {
 		SleepStatus customSleep = ForgeHooks.sleepInBedAt((PlayerEntity) (Object) this, i, j, k);
+
 		if (customSleep != null) {
 			cir.setReturnValue(customSleep);
 		}

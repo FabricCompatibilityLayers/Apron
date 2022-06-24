@@ -49,7 +49,6 @@ public final class ApronModRemapper implements ModRemapper {
 		return new HashMap<>();
 	}
 
-	// TODO: Rename classes on right side to fit Yarn standards
 	@Override
 	public void getMappingList(RemapUtil.MappingList list) {
 		addMappingsFromMetadata(list, null);
@@ -58,7 +57,8 @@ public final class ApronModRemapper implements ModRemapper {
 
 	/**
 	 * Adds mappings directly from Apron's fabric.mod.json file.
-	 * @param list the mappings list for Mod Remapping API
+	 *
+	 * @param list        the mappings list for Mod Remapping API
 	 * @param environment the current Minecraft environment, provided by Fabric Loader
 	 */
 	private void addMappingsFromMetadata(RemapUtil.MappingList list, @Nullable EnvType environment) {

@@ -36,7 +36,8 @@ public abstract class ChunkMixin {
 		int i2 = this.z * 16 + k;
 
 		if (Block.BY_ID[k1] instanceof IOverrideReplace) {
-			IOverrideReplace iovr = (IOverrideReplace)Block.BY_ID[k1];
+			IOverrideReplace iovr = (IOverrideReplace) Block.BY_ID[k1];
+
 			if (!iovr.canReplaceBlock(this.world, l1, j, i2, l)) {
 				cir.setReturnValue(iovr.getReplacedSuccess());
 			}
@@ -51,7 +52,8 @@ public abstract class ChunkMixin {
 		int l1 = this.z * 16 + k;
 
 		if (Block.BY_ID[j1] instanceof IOverrideReplace) {
-			IOverrideReplace iovr = (IOverrideReplace)Block.BY_ID[j1];
+			IOverrideReplace iovr = (IOverrideReplace) Block.BY_ID[j1];
+
 			if (!iovr.canReplaceBlock(this.world, k1, j, l1, l)) {
 				cir.setReturnValue(iovr.getReplacedSuccess());
 			}

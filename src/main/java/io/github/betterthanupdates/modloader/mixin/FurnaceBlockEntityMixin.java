@@ -53,6 +53,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 	public void tick() {
 		boolean flag = this.burnTime > 0;
 		boolean flag1 = false;
+
 		if (this.burnTime > 0) {
 			--this.burnTime;
 		}
@@ -60,8 +61,10 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 		if (!this.world.isClient) {
 			if (this.burnTime == 0 && this.canAcceptRecipeOutput()) {
 				this.fuelTime = this.burnTime = this.getFuelTime(this.inventory[1]);
+
 				if (this.burnTime > 0) {
 					flag1 = true;
+
 					if (this.inventory[1] != null) {
 						if (this.inventory[1].getItem().hasContainerItemType()) {
 							this.inventory[1] = new ItemStack(this.inventory[1].getItem().getContainerItemType());
@@ -78,6 +81,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 
 			if (this.isBurning() && this.canAcceptRecipeOutput()) {
 				++this.cookTime;
+
 				if (this.cookTime == 200) {
 					this.cookTime = 0;
 					this.craftRecipe();
@@ -96,7 +100,6 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 		if (flag1) {
 			this.markDirty();
 		}
-
 	}
 
 	@Redirect(method = "canAcceptRecipeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/recipe/SmeltingRecipeRegistry;getResult(I)Lnet/minecraft/item/ItemStack;"))
@@ -114,6 +117,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 	public void craftRecipe() {
 		if (this.canAcceptRecipeOutput()) {
 			ItemStack itemstack = ((ReforgedSmeltingRecipeRegistry) SmeltingRecipeRegistry.getInstance()).getSmeltingResult(this.inventory[0]);
+
 			if (this.inventory[2] == null) {
 				this.inventory[2] = itemstack.copy();
 			} else if (this.inventory[2].isDamageAndIDIdentical(itemstack)) {
@@ -129,7 +133,6 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 			if (this.inventory[0].count <= 0) {
 				this.inventory[0] = null;
 			}
-
 		}
 	}
 

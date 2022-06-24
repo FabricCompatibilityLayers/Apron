@@ -8,8 +8,9 @@ package forge;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.client.entity.particle.ParticleEntity;
+
+import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public class BlockTextureParticles {

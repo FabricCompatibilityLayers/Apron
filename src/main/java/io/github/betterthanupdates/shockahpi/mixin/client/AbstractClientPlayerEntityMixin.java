@@ -186,6 +186,7 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity imple
 	@Override
 	public float getStrengh(Block block) {
 		float f = this.inventory.getStrengthOnBlock(block);
+
 		if (this.isInFluid(Material.WATER)) {
 			f /= 5.0F;
 		}
@@ -252,6 +253,7 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity imple
 	@Override
 	public void tick() {
 		PlayerAPI.beforeUpdate((AbstractClientPlayerEntity) (Object) this);
+
 		if (!PlayerAPI.onUpdate((AbstractClientPlayerEntity) (Object) this)) {
 			super.tick();
 		}
@@ -271,6 +273,7 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity imple
 	@Overwrite
 	public void move(double d, double d1, double d2) {
 		PlayerAPI.beforeMoveEntity((AbstractClientPlayerEntity) (Object) this, d, d1, d2);
+
 		if (!PlayerAPI.moveEntity((AbstractClientPlayerEntity) (Object) this, d, d1, d2)) {
 			super.move(d, d1, d2);
 		}
@@ -438,7 +441,6 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity imple
 		if (!PlayerAPI.damageEntity((AbstractClientPlayerEntity) (Object) this, i)) {
 			super.applyDamage(i);
 		}
-
 	}
 
 	@Override
@@ -496,7 +498,6 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity imple
 		if (!PlayerAPI.dropPlayerItemWithRandomChoice((AbstractClientPlayerEntity) (Object) this, itemstack, flag)) {
 			super.dropItem(itemstack, flag);
 		}
-
 	}
 
 	@Override

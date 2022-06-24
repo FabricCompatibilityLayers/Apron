@@ -3,7 +3,6 @@ package shockahpi;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MovementManager;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
@@ -18,6 +17,8 @@ import net.minecraft.world.dimension.NetherDimension;
 import net.minecraft.world.dimension.OverworldDimension;
 import net.minecraft.world.dimension.SkyDimension;
 import net.minecraft.world.source.WorldSource;
+
+import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public class DimensionBase {
@@ -90,6 +91,7 @@ public class DimensionBase {
 	@Legacy
 	public static void respawn(boolean paramBoolean, int paramInt) {
 		Minecraft localMinecraft = SAPI.getMinecraftInstance();
+
 		if (!localMinecraft.world.isClient && !localMinecraft.world.dimension.canPlayerSleep()) {
 			usePortal(0, true);
 		}
@@ -97,10 +99,13 @@ public class DimensionBase {
 		Vec3i localbp1 = null;
 		Vec3i localbp2 = null;
 		int i = 1;
+
 		if (localMinecraft.player != null && !paramBoolean) {
 			localbp1 = localMinecraft.player.getSpawnPosition();
+
 			if (localbp1 != null) {
 				localbp2 = PlayerEntity.method_507(localMinecraft.world, localbp1);
+
 				if (localbp2 == null) {
 					localMinecraft.player.sendMessage("tile.bed.notValid");
 				}
@@ -113,28 +118,31 @@ public class DimensionBase {
 		}
 
 		WorldSource localcj = localMinecraft.world.getCache();
+
 		if (localcj instanceof ChunkCache) {
-			ChunkCache localkt = (ChunkCache)localcj;
+			ChunkCache localkt = (ChunkCache) localcj;
 			localkt.method_1242(localbp2.x >> 4, localbp2.z >> 4);
 		}
 
 		localMinecraft.world.initSpawnPoint();
 		localMinecraft.world.method_295();
 		int j = 0;
+
 		if (localMinecraft.player != null) {
 			j = localMinecraft.player.entityId;
 			localMinecraft.world.removeEntity(localMinecraft.player);
 		}
 
 		localMinecraft.viewEntity = null;
-		localMinecraft.player = (AbstractClientPlayerEntity)localMinecraft.interactionManager.method_1717(localMinecraft.world);
+		localMinecraft.player = (AbstractClientPlayerEntity) localMinecraft.interactionManager.method_1717(localMinecraft.world);
 		localMinecraft.player.dimensionId = paramInt;
 		localMinecraft.viewEntity = localMinecraft.player;
 		localMinecraft.player.afterSpawn();
+
 		if (i != 0) {
 			localMinecraft.player.setPlayerSpawn(localbp1);
 			localMinecraft.player
-					.setPositionAndAngles((double)((float)localbp2.x + 0.5F), (double)((float)localbp2.y + 0.1F), (double)((float)localbp2.z + 0.5F), 0.0F, 0.0F);
+					.setPositionAndAngles((double) ((float) localbp2.x + 0.5F), (double) ((float) localbp2.y + 0.1F), (double) ((float) localbp2.z + 0.5F), 0.0F, 0.0F);
 		}
 
 		localMinecraft.interactionManager.rotatePlayer(localMinecraft.player);
@@ -148,7 +156,6 @@ public class DimensionBase {
 		if (localMinecraft.currentScreen instanceof DeathScreen) {
 			localMinecraft.openScreen(null);
 		}
-
 	}
 
 	@Legacy
@@ -161,6 +168,7 @@ public class DimensionBase {
 		Minecraft game = SAPI.getMinecraftInstance();
 		int oldDimension = game.player.dimensionId;
 		int newDimension = dimNumber;
+
 		if (oldDimension == dimNumber) {
 			newDimension = 0;
 		}
@@ -168,6 +176,7 @@ public class DimensionBase {
 		game.world.removeEntity(game.player);
 		game.player.removed = false;
 		Loc loc = new Loc(game.player.x, game.player.z);
+
 		if (newDimension != 0) {
 			order.push(newDimension);
 		}
@@ -182,7 +191,7 @@ public class DimensionBase {
 
 		StringBuilder str = new StringBuilder();
 
-		for(Integer dim : order) {
+		for (Integer dim : order) {
 			if (str.length() > 0) {
 				str.append(",");
 			}
@@ -204,6 +213,7 @@ public class DimensionBase {
 		game.player.setPositionAndAngles(loc.x, game.player.y, loc.z, game.player.yaw, game.player.pitch);
 		game.world.method_193(game.player, false);
 		NetherTeleporter teleporter = dimNew.getTeleporter();
+
 		if (teleporter == null) {
 			teleporter = dimOld.getTeleporter();
 		}
@@ -225,11 +235,12 @@ public class DimensionBase {
 	}
 
 	/*
-	* Originally Dimension#getByID(I)Dimension;
-	*/
+	 * Originally Dimension#getByID(I)Dimension;
+	 */
 	@Legacy
 	public static Dimension getByID(int i) {
 		DimensionBase dimensionbase = getDimByNumber(i);
+
 		if (dimensionbase != null) {
 			return dimensionbase.getWorldProvider();
 		} else {

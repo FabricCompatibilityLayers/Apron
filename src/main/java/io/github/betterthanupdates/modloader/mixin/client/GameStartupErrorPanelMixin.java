@@ -1,6 +1,6 @@
 package io.github.betterthanupdates.modloader.mixin.client;
 
-import java.awt.Panel;
+import java.awt.*;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;

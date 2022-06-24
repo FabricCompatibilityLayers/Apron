@@ -3,7 +3,6 @@ package modloader;
 import java.util.Map;
 import java.util.Random;
 
-import io.github.betterthanupdates.Legacy;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -19,6 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+
+import io.github.betterthanupdates.Legacy;
 
 @SuppressWarnings({"unused", "SameReturnValue", "EmptyMethod"})
 @Legacy

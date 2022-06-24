@@ -5,7 +5,6 @@
 
 package forge;
 
-import io.github.betterthanupdates.Legacy;
 import modloader.ModLoader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -13,6 +12,8 @@ import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.block.BlockRenderer;
 import net.minecraft.item.Item;
+
+import io.github.betterthanupdates.Legacy;
 
 @SuppressWarnings("unused")
 @Environment(EnvType.CLIENT)

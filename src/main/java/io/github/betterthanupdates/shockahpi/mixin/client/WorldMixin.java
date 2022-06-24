@@ -40,6 +40,7 @@ public abstract class WorldMixin implements BlockView {
 	}
 
 	int cachedI, cachedJ, cachedK;
+
 	@Inject(method = "setBlockWithMetadata", at = @At("HEAD"))
 	private void sapi$setBlockWithMetadata(int i, int j, int k, int l, int i1, CallbackInfoReturnable<Boolean> cir) {
 		this.cachedI = i;
@@ -54,6 +55,7 @@ public abstract class WorldMixin implements BlockView {
 	}
 
 	int cachedI2, cachedJ2, cachedK2;
+
 	@Inject(method = "setBlockInChunk", at = @At("HEAD"))
 	private void sapi$setBlockInChunk(int i, int j, int k, int l, CallbackInfoReturnable<Boolean> cir) {
 		this.cachedI2 = i;

@@ -1,8 +1,9 @@
 package modloadermp;
 
-import io.github.betterthanupdates.Legacy;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
+import io.github.betterthanupdates.Legacy;
 
 @Legacy
 @Environment(EnvType.SERVER)

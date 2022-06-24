@@ -62,19 +62,19 @@ public abstract class BlockMixin implements ForgeBlock {
 	@Override
 	public int quantityDropped(int i, Random random, ItemStack stack) {
 		return stack != null && stack.getItem() instanceof ICustomDrop
-				? ((ICustomDrop)stack.getItem()).getQuantityDropped((Block) (Object) this, i, random, stack)
+				? ((ICustomDrop) stack.getItem()).getQuantityDropped((Block) (Object) this, i, random, stack)
 				: this.quantityDropped(i, random);
 	}
 
 	@Override
 	public int damageDropped(int i, ItemStack stack) {
-		return stack != null && stack.getItem() instanceof ICustomDrop ? ((ICustomDrop)stack.getItem()).getDamageDropped((Block) (Object) this, i, stack) : this.droppedMeta(i);
+		return stack != null && stack.getItem() instanceof ICustomDrop ? ((ICustomDrop) stack.getItem()).getDamageDropped((Block) (Object) this, i, stack) : this.droppedMeta(i);
 	}
 
 	@Override
 	public int idDropped(int i, Random random, ItemStack stack) {
 		return stack != null && stack.getItem() instanceof ICustomDrop
-				? ((ICustomDrop)stack.getItem()).getIdDropped((Block) (Object) this, i, random, stack)
+				? ((ICustomDrop) stack.getItem()).getIdDropped((Block) (Object) this, i, random, stack)
 				: this.getDropId(i, random);
 	}
 

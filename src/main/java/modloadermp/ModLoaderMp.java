@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.github.betterthanupdates.Legacy;
 import modloader.BaseMod;
 import modloader.ModLoader;
 import net.fabricmc.api.EnvType;
@@ -35,6 +34,7 @@ import net.minecraft.server.entity.player.ServerPlayerEntity;
 import net.minecraft.server.network.ServerEntityTracker;
 import net.minecraft.world.World;
 
+import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.apron.api.ApronApi;
 
 @SuppressWarnings("unused")
@@ -539,7 +539,7 @@ public class ModLoaderMp {
 		for (String bannedMod : bannedMods) {
 			for (int k = 0; k < modloaderPacket.dataString.length; ++k) {
 				if (modloaderPacket.dataString[k].lastIndexOf("mod_") != -1
-					&& modloaderPacket.dataString[k].substring(modloaderPacket.dataString[k].lastIndexOf("mod_")).startsWith(bannedMod)) {
+						&& modloaderPacket.dataString[k].substring(modloaderPacket.dataString[k].lastIndexOf("mod_")).startsWith(bannedMod)) {
 					arraylist.add(modloaderPacket.dataString[k]);
 				}
 			}

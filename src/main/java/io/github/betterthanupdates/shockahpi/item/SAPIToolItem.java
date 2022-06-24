@@ -17,17 +17,17 @@ public class SAPIToolItem extends Tool {
 	public ToolMaterial field_2711;
 
 	protected SAPIToolItem(int itemID, int damage, ToolMaterial material, Block[] blocks) {
-		super(false, null, itemID, material.getDurability(), (float)(damage + material.getAttackDamage()), getToolPower(material), material.getMiningSpeed());
+		super(false, null, itemID, material.getDurability(), (float) (damage + material.getAttackDamage()), getToolPower(material), material.getMiningSpeed());
 		this.field_2711 = material;
 		this.toolBase = this.getToolBase();
+
 		if (blocks != null) {
-			for(Block block : blocks) {
+			for (Block block : blocks) {
 				if (block != null) {
 					this.mineBlocks.add(new BlockHarvestPower(block.id, 0.0F));
 				}
 			}
 		}
-
 	}
 
 	public ToolBase getToolBase() {
@@ -97,14 +97,14 @@ public class SAPIToolItem extends Tool {
 	}
 
 	private boolean isBlockOnList(int blockID) {
-		for(BlockHarvestPower power : this.mineBlocks) {
+		for (BlockHarvestPower power : this.mineBlocks) {
 			if (power.blockID == blockID) {
 				return true;
 			}
 		}
 
 		if (this.toolBase != null) {
-			for(BlockHarvestPower power : this.toolBase.mineBlocks) {
+			for (BlockHarvestPower power : this.toolBase.mineBlocks) {
 				if (power.blockID == blockID) {
 					return true;
 				}
@@ -132,7 +132,7 @@ public class SAPIToolItem extends Tool {
 	@Override
 	public int getAttackDamage(Entity entity) {
 		int i = super.getAttackDamage(entity);
-		return this.field_2714 != Integer.MIN_VALUE && (double)i == Math.floor((double)this.baseDamage) ? this.field_2714 : i;
+		return this.field_2714 != Integer.MIN_VALUE && (double) i == Math.floor((double) this.baseDamage) ? this.field_2714 : i;
 	}
 
 	@Override

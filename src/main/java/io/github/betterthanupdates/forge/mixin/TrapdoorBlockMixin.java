@@ -34,6 +34,7 @@ public abstract class TrapdoorBlockMixin extends Block {
 	}
 
 	int cachedL;
+
 	@Inject(method = "canPlaceAt", at = @At("HEAD"))
 	private void reforged$canPlaceAt(World i, int j, int k, int l, int par5, CallbackInfoReturnable<Boolean> cir) {
 		this.cachedL = par5;

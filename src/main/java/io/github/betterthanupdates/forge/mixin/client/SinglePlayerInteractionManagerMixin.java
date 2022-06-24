@@ -30,10 +30,12 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 
 	@Unique
 	int cachedMeta = 0;
+
 	@Inject(method = "method_1716", at = @At("HEAD"), cancellable = true)
 	private void forge$method_1716(int i, int j, int k, int l, CallbackInfoReturnable<Boolean> cir) {
 		this.cachedMeta = this.client.world.getBlockMeta(i, j, k);
 		ItemStack itemstack = this.client.player.getHeldItem();
+
 		if (itemstack != null && ((ForgeItem) itemstack.getItem()).onBlockStartBreak(itemstack, i, j, k, this.client.player)) {
 			cir.setReturnValue(false);
 		}
@@ -46,6 +48,7 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 	}
 
 	int cachedI, cachedJ, cachedK;
+
 	@Inject(method = "method_1707", at = @At("HEAD"))
 	private void reforged$method_1707(int i, int j, int k, int l, CallbackInfo ci) {
 		this.cachedI = i;
@@ -59,6 +62,7 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 	}
 
 	int cachedI2, cachedJ2, cachedK2;
+
 	@Inject(method = "method_1721", at = @At("HEAD"))
 	private void reforged$method_1721(int i, int j, int k, int l, CallbackInfo ci) {
 		this.cachedI2 = i;

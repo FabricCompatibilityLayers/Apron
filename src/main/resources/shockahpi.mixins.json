@@ -4,15 +4,15 @@
   "package": "io.github.betterthanupdates.shockahpi.mixin.client",
   "compatibilityLevel": "JAVA_8",
   "client": [
-    "PortalBlockMixin",
+    "AbstractClientPlayerEntityMixin",
     "AchievementsScreenMixin",
-    "SinglePlayerInteractionManagerMixin",
     "DimensionFileMixin",
-    "McRegionDimensionFileMixin",
     "DungeonFeatureMixin",
-    "WorldMixin",
     "ItemMixin",
-    "AbstractClientPlayerEntityMixin"
+    "McRegionDimensionFileMixin",
+    "PortalBlockMixin",
+    "SinglePlayerInteractionManagerMixin",
+    "WorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1

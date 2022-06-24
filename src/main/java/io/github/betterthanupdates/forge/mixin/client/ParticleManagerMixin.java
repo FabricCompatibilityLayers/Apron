@@ -45,11 +45,12 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 
 	@Inject(method = "method_320", at = @At("RETURN"))
 	private void reforged$method_320(CallbackInfo ci) {
-		for(int x = 0; x < this.effectList.size(); ++x) {
+		for (int x = 0; x < this.effectList.size(); ++x) {
 			BlockTextureParticles entry = this.effectList.get(x);
 
-			for(int y = 0; y < entry.effects.size(); ++y) {
+			for (int y = 0; y < entry.effects.size(); ++y) {
 				ParticleEntity entityfx = entry.effects.get(y);
+
 				if (entityfx.removed) {
 					entry.effects.remove(y--);
 				}
@@ -62,7 +63,7 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 	}
 
 	@Redirect(method = "method_324", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/particle/ParticleEntity;method_2002(Lnet/minecraft/client/render/Tessellator;FFFFFF)V", ordinal = 0))
-	private  void reforged$method_2002(ParticleEntity entityfx, Tessellator tessellator, float f, float f1, float f5, float f2, float f3, float f4) {
+	private void reforged$method_2002(ParticleEntity entityfx, Tessellator tessellator, float f, float f1, float f5, float f2, float f3, float f4) {
 		if (!(entityfx instanceof DiggingParticleEntity)) {
 			entityfx.method_2002(tessellator, f, f1, f5, f2, f3, f4);
 		}
@@ -136,7 +137,7 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 		String comp;
 
 		if (block instanceof ITextureProvider) {
-			comp = ((ITextureProvider)block).getTextureFile();
+			comp = ((ITextureProvider) block).getTextureFile();
 		} else {
 			comp = "/terrain.png";
 		}

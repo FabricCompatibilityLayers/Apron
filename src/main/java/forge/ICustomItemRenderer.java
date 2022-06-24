@@ -5,8 +5,9 @@
 
 package forge;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.client.render.block.BlockRenderer;
+
+import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface ICustomItemRenderer {

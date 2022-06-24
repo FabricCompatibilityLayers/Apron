@@ -70,7 +70,8 @@ public abstract class WorldRendererMixin {
 	@Shadow
 	private boolean field_227;
 
-	@Shadow public static int chunkUpdates;
+	@Shadow
+	public static int chunkUpdates;
 
 	/**
 	 * @author Eloraam
@@ -87,7 +88,7 @@ public abstract class WorldRendererMixin {
 			int i1 = this.field_232 + this.field_235;
 			int j1 = this.field_233 + this.field_236;
 
-			for(int k1 = 0; k1 < 2; ++k1) {
+			for (int k1 = 0; k1 < 2; ++k1) {
 				this.field_244[k1] = true;
 			}
 
@@ -98,15 +99,16 @@ public abstract class WorldRendererMixin {
 			WorldPopulationRegion chunkcache = new WorldPopulationRegion(this.world, i - l1, j - l1, k - l1, l + l1, i1 + l1, j1 + l1);
 			BlockRenderer renderblocks = new BlockRenderer(chunkcache);
 
-			for(int i2 = 0; i2 < 2; ++i2) {
+			for (int i2 = 0; i2 < 2; ++i2) {
 				boolean flag = false;
 				boolean flag1 = false;
 				boolean flag2 = false;
 
-				for(int j2 = j; j2 < i1; ++j2) {
-					for(int k2 = k; k2 < j1; ++k2) {
-						for(int l2 = i; l2 < l; ++l2) {
+				for (int j2 = j; j2 < i1; ++j2) {
+					for (int k2 = k; k2 < j1; ++k2) {
+						for (int l2 = i; l2 < l; ++l2) {
 							int i3 = chunkcache.getBlockId(l2, j2, k2);
+
 							if (i3 > 0) {
 								if (!flag2) {
 									flag2 = true;
@@ -114,16 +116,17 @@ public abstract class WorldRendererMixin {
 									GL11.glPushMatrix();
 									this.method_306();
 									float f = 1.000001F;
-									GL11.glTranslatef((float)(-this.field_236) / 2.0F, (float)(-this.field_235) / 2.0F, (float)(-this.field_236) / 2.0F);
+									GL11.glTranslatef((float) (-this.field_236) / 2.0F, (float) (-this.field_235) / 2.0F, (float) (-this.field_236) / 2.0F);
 									GL11.glScalef(f, f, f);
-									GL11.glTranslatef((float)this.field_236 / 2.0F, (float)this.field_235 / 2.0F, (float)this.field_236 / 2.0F);
+									GL11.glTranslatef((float) this.field_236 / 2.0F, (float) this.field_235 / 2.0F, (float) this.field_236 / 2.0F);
 									ForgeHooksClient.beforeRenderPass(i2);
 									Tessellator.INSTANCE.start();
-									Tessellator.INSTANCE.setOffset((double)(-this.field_231), (double)(-this.field_232), (double)(-this.field_233));
+									Tessellator.INSTANCE.setOffset((double) (-this.field_231), (double) (-this.field_232), (double) (-this.field_233));
 								}
 
 								if (i2 == 0 && Block.HAS_BLOCK_ENTITY[i3]) {
 									BlockEntity tileentity = chunkcache.getBlockEntity(l2, j2, k2);
+
 									if (BlockEntityRenderDispatcher.INSTANCE.hasCustomRenderer(tileentity)) {
 										this.field_224.add(tileentity);
 									}
@@ -131,6 +134,7 @@ public abstract class WorldRendererMixin {
 
 								Block block = Block.BY_ID[i3];
 								int j3 = block.getRenderPass();
+
 								if (j3 > i2) {
 									flag = true;
 								}

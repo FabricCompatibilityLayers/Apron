@@ -1,8 +1,8 @@
 package shockahpi;
 
-import io.github.betterthanupdates.Legacy;
+import java.awt.*;
 
-import java.awt.Color;
+import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public class AnimPulse extends AnimBase {
@@ -28,10 +28,11 @@ public class AnimPulse extends AnimBase {
 	@Legacy
 	public void animFrame() {
 		this.animState += this.animAdd;
+
 		if (this.animState == this.animMax || this.animState == 0) {
 			this.animAdd *= -1;
 		}
 
-		this.drawRect(0, 0, this.size, this.size, merge(this.c1, this.c2, (float)this.animState / (float)this.animMax), this.mdBlend);
+		this.drawRect(0, 0, this.size, this.size, merge(this.c1, this.c2, (float) this.animState / (float) this.animMax), this.mdBlend);
 	}
 }

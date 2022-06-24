@@ -1,10 +1,11 @@
 package modloadermp;
 
-import io.github.betterthanupdates.Legacy;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import net.minecraft.entity.Entity;
+
+import io.github.betterthanupdates.Legacy;
 
 @Legacy
 @Environment(EnvType.CLIENT)

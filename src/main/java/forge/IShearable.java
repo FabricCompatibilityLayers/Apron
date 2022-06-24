@@ -2,9 +2,10 @@ package forge;
 
 import java.util.ArrayList;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface IShearable {

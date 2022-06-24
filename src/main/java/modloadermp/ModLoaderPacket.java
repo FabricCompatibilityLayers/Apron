@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.github.betterthanupdates.Legacy;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -15,6 +14,7 @@ import net.minecraft.packet.AbstractPacket;
 import net.minecraft.server.entity.player.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayPacketHandler;
 
+import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.apron.api.ApronApi;
 
 @Legacy

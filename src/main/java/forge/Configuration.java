@@ -19,8 +19,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.TreeMap;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.block.Block;
+
+import io.github.betterthanupdates.Legacy;
 
 @SuppressWarnings("unused")
 @Legacy
@@ -63,12 +64,13 @@ public class Configuration {
 			Property property = new Property();
 			this.blockProperties.put(key, property);
 			property.name = key;
+
 			if (Block.BY_ID[defaultId] == null && !this.configBlocks[defaultId]) {
 				property.value = Integer.toString(defaultId);
 				this.configBlocks[defaultId] = true;
 				return property;
 			} else {
-				for(int j = Block.BY_ID.length - 1; j >= 0; --j) {
+				for (int j = Block.BY_ID.length - 1; j >= 0; --j) {
 					if (Block.BY_ID[j] == null && !this.configBlocks[j]) {
 						property.value = Integer.toString(j);
 						this.configBlocks[j] = true;
@@ -97,24 +99,27 @@ public class Configuration {
 	@Legacy
 	public Property getOrCreateBooleanProperty(String key, int kind, boolean defaultValue) {
 		Property prop = this.getOrCreateProperty(key, kind, Boolean.toString(defaultValue));
+
 		if (!"true".equalsIgnoreCase(prop.value) && !"false".equalsIgnoreCase(prop.value)) {
 			prop.value = Boolean.toString(defaultValue);
 		}
+
 		return prop;
 	}
 
 	@Legacy
 	public Property getOrCreateProperty(String key, int kind, String defaultValue) {
 		TreeMap<String, Property> source = null;
-		switch(kind) {
-		case 0:
-			source = this.generalProperties;
-			break;
-		case 1:
-			source = this.blockProperties;
-			break;
-		case 2:
-			source = this.itemProperties;
+
+		switch (kind) {
+			case 0:
+				source = this.generalProperties;
+				break;
+			case 1:
+				source = this.blockProperties;
+				break;
+			case 2:
+				source = this.itemProperties;
 		}
 
 		if (source.containsKey(key)) {
@@ -146,8 +151,9 @@ public class Configuration {
 				BufferedReader buffer = new BufferedReader(new InputStreamReader(fileinputstream, "8859_1"));
 				TreeMap<String, Property> currentMap = null;
 
-				while(true) {
+				while (true) {
 					String line = buffer.readLine();
+
 					if (line == null) {
 						break;
 					}
@@ -156,44 +162,47 @@ public class Configuration {
 					int nameEnd = -1;
 					boolean skip = false;
 
-					for(int i = 0; i < line.length() && !skip; ++i) {
+					for (int i = 0; i < line.length() && !skip; ++i) {
 						if (!Character.isLetterOrDigit(line.charAt(i)) && line.charAt(i) != '.') {
 							if (!Character.isWhitespace(line.charAt(i))) {
-								switch(line.charAt(i)) {
-								case '#':
-									skip = true;
-									break;
-								case '=':
-									String propertyName = line.substring(nameStart, nameEnd + 1);
-									if (currentMap == null) {
-										throw new RuntimeException("property " + propertyName + " has no scope");
-									}
+								switch (line.charAt(i)) {
+									case '#':
+										skip = true;
+										break;
+									case '=':
+										String propertyName = line.substring(nameStart, nameEnd + 1);
 
-									Property prop = new Property();
-									prop.name = propertyName;
-									prop.value = line.substring(i + 1);
-									i = line.length();
-									currentMap.put(propertyName, prop);
-									break;
-								case '{':
-									String scopeName = line.substring(nameStart, nameEnd + 1);
-									if (scopeName.equals("general")) {
-										currentMap = this.generalProperties;
-									} else if (scopeName.equals("block")) {
-										currentMap = this.blockProperties;
-									} else {
-										if (!scopeName.equals("item")) {
-											throw new RuntimeException("unknown section " + scopeName);
+										if (currentMap == null) {
+											throw new RuntimeException("property " + propertyName + " has no scope");
 										}
 
-										currentMap = this.itemProperties;
-									}
-									break;
-								case '}':
-									currentMap = null;
-									break;
-								default:
-									throw new RuntimeException("unknown character " + line.charAt(i));
+										Property prop = new Property();
+										prop.name = propertyName;
+										prop.value = line.substring(i + 1);
+										i = line.length();
+										currentMap.put(propertyName, prop);
+										break;
+									case '{':
+										String scopeName = line.substring(nameStart, nameEnd + 1);
+
+										if (scopeName.equals("general")) {
+											currentMap = this.generalProperties;
+										} else if (scopeName.equals("block")) {
+											currentMap = this.blockProperties;
+										} else {
+											if (!scopeName.equals("item")) {
+												throw new RuntimeException("unknown section " + scopeName);
+											}
+
+											currentMap = this.itemProperties;
+										}
+
+										break;
+									case '}':
+										currentMap = null;
+										break;
+									default:
+										throw new RuntimeException("unknown character " + line.charAt(i));
 								}
 							}
 						} else {
@@ -209,7 +218,6 @@ public class Configuration {
 		} catch (IOException var12) {
 			var12.printStackTrace();
 		}
-
 	}
 
 	@Legacy
@@ -253,12 +261,11 @@ public class Configuration {
 		} catch (IOException var3) {
 			var3.printStackTrace();
 		}
-
 	}
 
 	@Legacy
 	private void writeProperties(BufferedWriter buffer, Collection<Property> props) throws IOException {
-		for(Property property : props) {
+		for (Property property : props) {
 			if (property.comment != null) {
 				buffer.write("   # " + property.comment + "\r\n");
 			}
@@ -266,6 +273,5 @@ public class Configuration {
 			buffer.write("   " + property.name + "=" + property.value);
 			buffer.write("\r\n");
 		}
-
 	}
 }

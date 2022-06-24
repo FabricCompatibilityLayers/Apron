@@ -15,7 +15,6 @@ import io.github.betterthanupdates.forge.ReforgedSmeltingRecipeRegistry;
 
 @Mixin(SmeltingRecipeRegistry.class)
 public class SmeltingRecipeRegistryMixin implements ReforgedSmeltingRecipeRegistry {
-
 	@Shadow
 	private Map<Integer, ItemStack> recipes;
 	private final Map<List<Integer>, ItemStack> metaSmeltingList = new HashMap<>();

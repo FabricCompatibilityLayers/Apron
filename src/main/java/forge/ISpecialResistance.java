@@ -5,9 +5,10 @@
 
 package forge;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+
+import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface ISpecialResistance {

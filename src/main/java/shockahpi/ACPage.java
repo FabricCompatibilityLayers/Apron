@@ -3,12 +3,14 @@ package shockahpi;
 import java.util.ArrayList;
 import java.util.Random;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.block.Block;
 import net.minecraft.stat.achievement.Achievement;
 
+import io.github.betterthanupdates.Legacy;
+
 /**
  * aka "ACPage" after remapping.
+ *
  * @author ShockAh
  */
 @SuppressWarnings("unused")
@@ -39,7 +41,7 @@ public class ACPage {
 
 	@Legacy
 	public void addAchievements(Achievement... achievements) {
-		for(Achievement achievement : achievements) {
+		for (Achievement achievement : achievements) {
 			this.list.add(achievement.id);
 		}
 	}

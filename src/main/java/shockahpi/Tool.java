@@ -4,13 +4,14 @@ import java.util.ArrayList;
 
 import forge.ForgeHooks;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public class Tool extends Item {
@@ -72,7 +73,7 @@ public class Tool extends Item {
 	@Legacy
 	@Override
 	public int getAttackDamage(Entity entity) {
-		return (int)Math.floor((double)this.baseDamage);
+		return (int) Math.floor((double) this.baseDamage);
 	}
 
 	@Legacy
@@ -90,13 +91,13 @@ public class Tool extends Item {
 		if (this.toolBase != null && this.toolBase.canHarvest(block, this.getPower())) {
 			return true;
 		} else {
-			for(Material material : this.mineMaterials) {
+			for (Material material : this.mineMaterials) {
 				if (material == block.material) {
 					return true;
 				}
 			}
 
-			for(BlockHarvestPower power : this.mineBlocks) {
+			for (BlockHarvestPower power : this.mineBlocks) {
 				if (block.id == power.blockID || this.getPower() >= power.percentage) {
 					return true;
 				}

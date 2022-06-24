@@ -1,6 +1,5 @@
 package playerapi;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
@@ -12,6 +11,8 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SleepStatus;
 import net.minecraft.util.io.CompoundTag;
+
+import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public abstract class PlayerBase {

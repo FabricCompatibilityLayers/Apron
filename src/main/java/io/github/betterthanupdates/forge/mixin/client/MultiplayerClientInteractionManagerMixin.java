@@ -30,12 +30,14 @@ public abstract class MultiplayerClientInteractionManagerMixin extends ClientInt
 	@Inject(method = "method_1716", at = @At("HEAD"), cancellable = true)
 	private void reforged$method_1716(int i, int j, int k, int l, CallbackInfoReturnable<Boolean> cir) {
 		ItemStack itemstack = this.client.player.getHeldItem();
+
 		if (itemstack != null && ((ForgeItem) itemstack.getItem()).onBlockStartBreak(itemstack, i, j, k, this.client.player)) {
 			cir.setReturnValue(false);
 		}
 	}
 
 	int cachedI, cachedJ, cachedK;
+
 	@Inject(method = "method_1707", at = @At("HEAD"))
 	private void reforged$method_1707(int j, int k, int l, int par4, CallbackInfo ci) {
 		this.cachedI = j;
@@ -49,6 +51,7 @@ public abstract class MultiplayerClientInteractionManagerMixin extends ClientInt
 	}
 
 	int cachedI2, cachedJ2, cachedK2;
+
 	@Inject(method = "method_1721", at = @At("HEAD"))
 	private void reforged$method_1721(int j, int k, int l, int par4, CallbackInfo ci) {
 		this.cachedI2 = j;

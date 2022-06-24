@@ -52,13 +52,21 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 
 	@Shadow
 	protected abstract void clear();
-	@Shadow public boolean tessellating;
-	@Shadow private int bufferIndex;
-	@Shadow private int vboIndex;
-	@Shadow private boolean canUseVbo;
-	@Shadow public int drawingMode;
-	@Shadow private int vboCount;
-	@Shadow private IntBuffer vertexBuffer;
+
+	@Shadow
+	public boolean tessellating;
+	@Shadow
+	private int bufferIndex;
+	@Shadow
+	private int vboIndex;
+	@Shadow
+	private boolean canUseVbo;
+	@Shadow
+	public int drawingMode;
+	@Shadow
+	private int vboCount;
+	@Shadow
+	private IntBuffer vertexBuffer;
 
 	// Forge Fields
 	@Unique
@@ -102,8 +110,9 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 			this.tessellating = false;
 			int offs = 0;
 
-			while(offs < this.vertexCount) {
+			while (offs < this.vertexCount) {
 				int vtc;
+
 				if (this.drawingMode == 7 && useTriangles) {
 					vtc = Math.min(this.vertexCount - offs, TRIVERTS_IN_BUFFER);
 				} else {
@@ -115,6 +124,7 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 				byteBuffer.position(0);
 				byteBuffer.limit(vtc * 32);
 				offs += vtc;
+
 				if (canUseVbo) {
 					this.vboIndex = (this.vboIndex + 1) % vboCount;
 					ARBVertexBufferObject.glBindBufferARB(34962, vertexBuffer.get(this.vboIndex));
@@ -162,6 +172,7 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 				}
 
 				GL11.glEnableClientState(32884);
+
 				if (this.drawingMode == 7 && useTriangles) {
 					GL11.glDrawArrays(4, 0, vtc);
 				} else {
@@ -169,6 +180,7 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 				}
 
 				GL11.glDisableClientState(32884);
+
 				if (this.hasTexture) {
 					GL11.glDisableClientState(32888);
 				}

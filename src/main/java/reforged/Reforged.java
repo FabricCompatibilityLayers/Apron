@@ -3,13 +3,14 @@ package reforged;
 import java.util.ArrayList;
 
 import forge.MinecraftForge;
-import io.github.betterthanupdates.Legacy;
-import io.github.betterthanupdates.apron.api.ApronApi;
 import modloader.ModLoader;
-
 import net.legacyfabric.fabric.api.logger.v1.Logger;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+
+import io.github.betterthanupdates.Legacy;
+import io.github.betterthanupdates.apron.api.ApronApi;
 
 @Legacy
 public class Reforged {
@@ -74,7 +75,7 @@ public class Reforged {
 	public static float reachGetEntityPlayer(PlayerEntity player) {
 		ItemStack itemstack = player.inventory.getHeldItem();
 
-		for(IReachEntity ireachentity : reachesEntity) {
+		for (IReachEntity ireachentity : reachesEntity) {
 			if (ireachentity.reachEntityItemMatches(itemstack)) {
 				return ireachentity.getReachEntity(itemstack);
 			}

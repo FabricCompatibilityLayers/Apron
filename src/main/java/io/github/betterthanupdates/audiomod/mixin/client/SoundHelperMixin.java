@@ -30,6 +30,7 @@ import io.github.betterthanupdates.apron.api.ApronApi;
 
 /**
  * Believe it or not, this is all of AudioMod!
+ *
  * @see paulscode.sound.codecs.CodecIBXM
  */
 @Mixin(SoundHelper.class)

@@ -5,8 +5,9 @@
 
 package forge;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.entity.player.PlayerEntity;
+
+import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface ISpecialArmor {

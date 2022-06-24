@@ -5,8 +5,9 @@
 
 package forge;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.world.BlockView;
+
+import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface IConnectRedstone {

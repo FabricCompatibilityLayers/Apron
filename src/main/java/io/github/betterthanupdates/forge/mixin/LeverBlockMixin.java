@@ -13,7 +13,6 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(LeverBlock.class)
 public abstract class LeverBlockMixin extends Block {
-
 	protected LeverBlockMixin(int blockId, Material material) {
 		super(blockId, material);
 	}
@@ -37,7 +36,6 @@ public abstract class LeverBlockMixin extends Block {
 	private boolean reforged$canPlaceAt$4(World instance, int j, int k, int i) {
 		return ((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, 2);
 	}
-
 
 	@Redirect(method = {"canPlaceAt(Lnet/minecraft/world/World;IIII)Z", "onBlockPlaced"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z", ordinal = 0))
 	private boolean reforged$isBlockSolidOnSide$1(World instance, int j, int k, int i) {

@@ -5,11 +5,12 @@
 
 package forge;
 
-import io.github.betterthanupdates.Legacy;
 import net.minecraft.client.render.WorldEventRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.HitResult;
+
+import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface IHighlightHandler {

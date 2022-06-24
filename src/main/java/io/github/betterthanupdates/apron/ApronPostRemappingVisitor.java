@@ -44,7 +44,7 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 								}
 
 								break;
-							}
+						}
 
 						super.visitFieldInsn(opcode, fieldOwner, fieldName, fieldDescriptor);
 					}
@@ -63,6 +63,7 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 								if (methodName.equals("getByID")) {
 									methodOwner = "shockahpi/DimensionBase";
 								}
+
 								break;
 						}
 
