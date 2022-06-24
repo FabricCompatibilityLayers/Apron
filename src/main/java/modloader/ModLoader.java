@@ -1431,8 +1431,10 @@ public class ModLoader {
 	 */
 	@Legacy
 	public static void RegisterTileEntity(Class<? extends BlockEntity> blockEntityClass, String id) {
-		BlockEntity.register(blockEntityClass, id);
 		if (APRON.isClient()) RegisterTileEntity(blockEntityClass, id, null);
+		else {
+			BlockEntity.register(blockEntityClass, id);
+		}
 	}
 
 	/**
@@ -1447,6 +1449,8 @@ public class ModLoader {
 	@SuppressWarnings("unchecked")
 	public static void RegisterTileEntity(Class<? extends BlockEntity> blockEntityClass, String id, BlockEntityRenderer renderer) {
 		try {
+			BlockEntity.register(blockEntityClass, id);
+
 			if (renderer != null) {
 				BlockEntityRenderDispatcher ref = BlockEntityRenderDispatcher.INSTANCE;
 				Map<Class<? extends BlockEntity>, BlockEntityRenderer> renderers = (Map<Class<? extends BlockEntity>, BlockEntityRenderer>) ref.customRenderers;
