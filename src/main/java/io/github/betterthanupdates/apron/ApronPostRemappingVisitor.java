@@ -66,7 +66,7 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 
 								break;
 							case "hmi/Utils":
-								if (methodName.equals("getField") || methodName.equals("getMethod")) {
+								if (methodName.equals("getField")) {
 									methodOwner = "io/github/betterthanupdates/apron/ReflectionUtils";
 								}
 
@@ -81,9 +81,34 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 						if (value instanceof String) {
 							String stringValue = (String) value;
 							switch (className) {
+								// Twilight Forest
 								case "mod_TwilightForest":
 									if (name.equals("<init>") && stringValue.equals("DimensionTwilightForest")) {
 										value = "net.minecraft." + stringValue;
+									}
+
+									break;
+
+								// How Many Items
+								case "hmi/Utils":
+									if (stringValue.equals("getSlotAtPosition")) {
+										value = "method_986";
+									} else if (stringValue.equals("drawGradientRect")) {
+										value = "method_1933";
+									}
+
+									break;
+								case "hmi/GuiOverlay":
+									switch (stringValue) {
+										case "mouseClicked":
+											value = "method_124";
+											break;
+										case "keyTyped":
+											value = "method_117";
+											break;
+										case "mouseMovedOrUp":
+											value = "method_128";
+											break;
 									}
 
 									break;
