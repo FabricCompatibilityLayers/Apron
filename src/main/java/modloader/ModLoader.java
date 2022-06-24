@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
@@ -323,7 +324,9 @@ public class ModLoader {
 
 			//noinspection unchecked
 			setupProperties((Class<? extends BaseMod>) modClass);
-			BaseMod mod = (BaseMod) modClass.getDeclaredConstructor().newInstance();
+			Constructor<?> modConstructor = modClass.getDeclaredConstructor();
+			modConstructor.setAccessible(true);
+			BaseMod mod = (BaseMod) modConstructor.newInstance();
 			MOD_LIST.add(mod);
 			LOGGER.debug("Mod Loaded: \"" + mod + "\" from " + filename);
 		} catch (Throwable e) {

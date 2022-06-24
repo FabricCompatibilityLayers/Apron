@@ -65,9 +65,32 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 								}
 
 								break;
+							case "hmi/Utils":
+								if (methodName.equals("getField") || methodName.equals("getMethod")) {
+									methodOwner = "io/github/betterthanupdates/apron/ReflectionUtils";
+								}
+
+								break;
 						}
 
 						super.visitMethodInsn(opcode, methodOwner, methodName, methodDescriptor, isInterface);
+					}
+
+					@Override
+					public void visitLdcInsn(Object value) {
+						if (value instanceof String) {
+							String stringValue = (String) value;
+							switch (className) {
+								case "mod_TwilightForest":
+									if (name.equals("<init>") && stringValue.equals("DimensionTwilightForest")) {
+										value = "net.minecraft." + stringValue;
+									}
+
+									break;
+							}
+						}
+
+						super.visitLdcInsn(value);
 					}
 				};
 			}
