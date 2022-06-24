@@ -95,6 +95,7 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 
 	@Inject(method = "<clinit>", at = @At("RETURN"))
 	private static void classCtr$overwrite(CallbackInfo ci) {
+		ForgeClientReflection.Tessellator$firstInstance = INSTANCE;
 		((ForgeTessellator) ForgeClientReflection.Tessellator$firstInstance).defaultTexture(true);
 	}
 

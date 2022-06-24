@@ -3,6 +3,7 @@ package io.github.betterthanupdates.forge.mixin.client;
 import forge.ForgeHooksClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,42 +21,34 @@ import net.minecraft.item.ItemStack;
 @Environment(EnvType.CLIENT)
 @Mixin(ItemRenderer.class)
 public abstract class ItemRendererMixin extends EntityRenderer {
-	@Inject(method = "render(Lnet/minecraft/entity/ItemEntity;DDDFF)V", at = @At(value = "INVOKE_ASSIGN",
-			target = "Lnet/minecraft/client/render/entity/ItemRenderer;bindTexture(Ljava/lang/String;)V", shift = At.Shift.AFTER, ordinal = 0))
+	@Inject(method = "render(Lnet/minecraft/entity/ItemEntity;DDDFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;isFullCube()Z", ordinal = 0))
 	private void reforged$render$1(ItemEntity entityitem, double d, double d1, double d2, float f, float f1, CallbackInfo ci) {
 		ItemStack itemstack = entityitem.stack;
 		ForgeHooksClient.overrideTexture(Block.BY_ID[itemstack.itemId]);
 	}
 
-	@Inject(method = "render(Lnet/minecraft/entity/ItemEntity;DDDFF)V", at = @At(value = "INVOKE_ASSIGN",
-			target = "Lnet/minecraft/client/render/entity/ItemRenderer;bindTexture(Ljava/lang/String;)V", shift = At.Shift.AFTER, ordinal = 1))
+	@Inject(method = "render(Lnet/minecraft/entity/ItemEntity;DDDFF)V", at = @At(value = "FIELD", opcode = Opcodes.GETSTATIC,
+			target = "Lnet/minecraft/client/render/Tessellator;INSTANCE:Lnet/minecraft/client/render/Tessellator;"))
 	private void reforged$render$2(ItemEntity entityitem, double d, double d1, double d2, float f, float f1, CallbackInfo ci) {
 		ItemStack itemstack = entityitem.stack;
-		ForgeHooksClient.overrideTexture(Block.BY_ID[itemstack.itemId]);
+		if (itemstack.itemId < 256) ForgeHooksClient.overrideTexture(Block.BY_ID[itemstack.itemId]);
+		else {
+			ForgeHooksClient.overrideTexture(Item.byId[itemstack.itemId]);
+		}
 	}
 
-	@Inject(method = "render(Lnet/minecraft/entity/ItemEntity;DDDFF)V", at = @At(value = "INVOKE_ASSIGN",
-			target = "Lnet/minecraft/client/render/entity/ItemRenderer;bindTexture(Ljava/lang/String;)V", shift = At.Shift.AFTER, ordinal = 2))
-	private void reforged$render$3(ItemEntity entityitem, double d, double d1, double d2, float f, float f1, CallbackInfo ci) {
-		ItemStack itemstack = entityitem.stack;
-		ForgeHooksClient.overrideTexture(Item.byId[itemstack.itemId]);
-	}
-
-	@Inject(method = "renderItemOnGui", at = @At(value = "INVOKE_ASSIGN",
-			target = "Lnet/minecraft/client/texture/TextureManager;bindTexture(I)V", shift = At.Shift.AFTER, ordinal = 0))
+	@Inject(method = "renderItemOnGui", at = @At(value = "INVOKE",
+			target = "Lorg/lwjgl/opengl/GL11;glPushMatrix()V", ordinal = 0, remap = false))
 	private void reforged$renderItemOnGui$1(TextRenderer fontrenderer, TextureManager renderengine, int i, int j, int k, int l, int i1, CallbackInfo ci) {
 		ForgeHooksClient.overrideTexture(Block.BY_ID[i]);
 	}
 
-	@Inject(method = "renderItemOnGui", at = @At(value = "INVOKE_ASSIGN",
-			target = "Lnet/minecraft/client/texture/TextureManager;bindTexture(I)V", shift = At.Shift.AFTER, ordinal = 1))
+	@Inject(method = "renderItemOnGui", at = @At(value = "INVOKE",
+			target = "Lnet/minecraft/item/Item;getNameColor(I)I", ordinal = 1))
 	private void reforged$renderItemOnGui$2(TextRenderer fontrenderer, TextureManager renderengine, int i, int j, int k, int l, int i1, CallbackInfo ci) {
-		ForgeHooksClient.overrideTexture(Block.BY_ID[i]);
-	}
-
-	@Inject(method = "renderItemOnGui", at = @At(value = "INVOKE_ASSIGN",
-			target = "Lnet/minecraft/client/texture/TextureManager;bindTexture(I)V", shift = At.Shift.AFTER, ordinal = 2))
-	private void reforged$renderItemOnGui$3(TextRenderer fontrenderer, TextureManager renderengine, int i, int j, int k, int l, int i1, CallbackInfo ci) {
-		ForgeHooksClient.overrideTexture(Item.byId[i]);
+		if (i < 256) ForgeHooksClient.overrideTexture(Block.BY_ID[i]);
+		else {
+			ForgeHooksClient.overrideTexture(Item.byId[i]);
+		}
 	}
 }

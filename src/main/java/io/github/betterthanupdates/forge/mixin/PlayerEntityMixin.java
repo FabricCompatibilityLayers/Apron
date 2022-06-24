@@ -89,7 +89,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 		this.orig = this.inventory.getHeldItem();
 	}
 
-	@Inject(method = "breakHeldItem", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/inventory/PlayerInventory;setInventoryItem(ILnet/minecraft/item/ItemStack;)V", shift = At.Shift.AFTER))
+	@Inject(method = "breakHeldItem", at = @At(value = "RETURN"))
 	private void reforged$breakHeldItem$Return(CallbackInfo ci) {
 		ForgeHooks.onDestroyCurrentItem((PlayerEntity) (Object) this, this.orig);
 	}

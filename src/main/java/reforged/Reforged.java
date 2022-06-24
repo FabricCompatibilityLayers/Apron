@@ -15,7 +15,7 @@ import io.github.betterthanupdates.apron.api.ApronApi;
 @Legacy
 public class Reforged {
 	private static final ApronApi APRON = ApronApi.getInstance();
-	protected static final Logger LOGGER = APRON.getLogger("Reforged");
+	protected static final Logger LOGGER = ApronApi.getLogger("Reforged");
 
 	@Legacy
 	private static boolean searchedForIDResolver;

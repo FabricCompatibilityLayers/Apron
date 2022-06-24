@@ -134,7 +134,7 @@ public class ModLoader {
 	private static final File LOG_FILE = new File(Minecraft.getGameDirectory(), "ModLoader.txt");
 	@Legacy
 	private static final java.util.logging.Logger MOD_LOGGER = java.util.logging.Logger.getLogger("ModLoader");
-	public static final Logger LOGGER = APRON.getLogger("ModLoader");
+	public static final Logger LOGGER = ApronApi.getLogger("ModLoader");
 	@Legacy
 	private static FileHandler logHandler = null;
 	@Legacy

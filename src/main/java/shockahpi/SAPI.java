@@ -25,8 +25,7 @@ import io.github.betterthanupdates.apron.api.ApronApi;
 @SuppressWarnings({"unused", "UnusedReturnValue", "BooleanMethodIsAlwaysInverted"})
 @Legacy
 public class SAPI {
-	private static final ApronApi APRON = ApronApi.getInstance();
-	public static final Logger LOGGER = APRON.getLogger("ShockAhPI");
+	public static final Logger LOGGER = ApronApi.getLogger("ShockAhPI");
 
 	@Legacy
 	public static boolean usingText = false;
@@ -69,7 +68,7 @@ public class SAPI {
 
 	@Legacy
 	public static Minecraft getMinecraftInstance() {
-		return (Minecraft) APRON.getGame();
+		return (Minecraft) ApronApi.getInstance().getGame();
 	}
 
 	@Legacy

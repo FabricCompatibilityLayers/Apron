@@ -87,7 +87,7 @@ public interface ApronApi extends ModInitializer {
 
 	String getUsedTerrainSpritesString();
 
-	default Logger getLogger(String name) {
+	static Logger getLogger(String name) {
 		return Logger.get(Apron.NAME, name);
 	}
 }

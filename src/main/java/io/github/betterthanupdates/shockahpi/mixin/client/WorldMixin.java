@@ -4,7 +4,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import shockahpi.DimensionBase;
@@ -48,10 +47,10 @@ public abstract class WorldMixin implements BlockView {
 		this.cachedK = k;
 	}
 
-	@ModifyVariable(method = "setBlockWithMetadata", name = "l",
+	@Inject(method = "setBlockWithMetadata",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;setBlockWithMetadata(IIIII)Z"))
-	private int sapi$setBlockWithMetadata(int l) {
-		return SAPI.interceptBlockSet((World) (Object) this, new Loc(this.cachedI, this.cachedJ, this.cachedK), l);
+	private void sapi$setBlockWithMetadata$1(int j, int k, int l, int m, int par5, CallbackInfoReturnable<Boolean> cir) {
+		par5 = SAPI.interceptBlockSet((World) (Object) this, new Loc(this.cachedI, this.cachedJ, this.cachedK), par5);
 	}
 
 	int cachedI2, cachedJ2, cachedK2;
@@ -63,9 +62,9 @@ public abstract class WorldMixin implements BlockView {
 		this.cachedK2 = k;
 	}
 
-	@ModifyVariable(method = "setBlockInChunk", name = "l",
+	@Inject(method = "setBlockInChunk",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;method_860(IIII)Z"))
-	private int sapi$setBlockInChunk(int l) {
-		return SAPI.interceptBlockSet((World) (Object) this, new Loc(this.cachedI2, this.cachedJ2, this.cachedK2), l);
+	private void sapi$setBlockInChunk$1(int j, int k, int l, int par4, CallbackInfoReturnable<Boolean> cir) {
+		par4 = SAPI.interceptBlockSet((World) (Object) this, new Loc(this.cachedI2, this.cachedJ2, this.cachedK2), par4);
 	}
 }

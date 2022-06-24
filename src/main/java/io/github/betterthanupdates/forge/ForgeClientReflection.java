@@ -4,7 +4,7 @@ import net.minecraft.client.render.Tessellator;
 
 public class ForgeClientReflection {
 	public static boolean Tessellator$renderingWorldRenderer = false;
-	public static Tessellator Tessellator$firstInstance = Tessellator.INSTANCE;
+	public static Tessellator Tessellator$firstInstance;
 
 	public static boolean BlockRenderer$cfgGrassFix = true;
 	public static float[][] BlockRenderer$redstoneColors = new float[16][];
