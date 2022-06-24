@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import io.github.betterthanupdates.Legacy;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -22,21 +23,34 @@ import io.github.betterthanupdates.forge.block.ForgeBlock;
 import io.github.betterthanupdates.forge.entity.player.ForgePlayerEntity;
 
 @SuppressWarnings("unused")
+@Legacy
 public class ForgeHooks {
+	@Legacy
 	static LinkedList<ICraftingHandler> craftingHandlers = new LinkedList<>();
+	@Legacy
 	static LinkedList<IDestroyToolHandler> destroyToolHandlers = new LinkedList<>();
+	@Legacy
 	static LinkedList<ISleepHandler> sleepHandlers = new LinkedList<>();
+	@Legacy
 	public static final int majorVersion = 1;
+	@Legacy
 	public static final int minorVersion = 0;
+	@Legacy
 	public static final int revisionVersion = 6;
+	@Legacy
 	static boolean toolInit = false;
-	static HashMap toolClasses = new HashMap<>();
-	static HashMap toolHarvestLevels = new HashMap<>();
-	static HashSet toolEffectiveness = new HashSet<>();
+	@Legacy
+	static HashMap<Integer, List<?>> toolClasses = new HashMap<>();
+	@Legacy
+	static HashMap<List<?>, Integer> toolHarvestLevels = new HashMap<>();
+	@Legacy
+	static HashSet<List<?>> toolEffectiveness = new HashSet<>();
 
+	@Legacy
 	public ForgeHooks() {
 	}
 
+	@Legacy
 	public static void onTakenFromCrafting(PlayerEntity player, ItemStack ist, Inventory craftMatrix) {
 		for(forge.ICraftingHandler handler : craftingHandlers) {
 			handler.onTakenFromCrafting(player, ist, craftMatrix);
@@ -44,6 +58,7 @@ public class ForgeHooks {
 
 	}
 
+	@Legacy
 	public static void onDestroyCurrentItem(PlayerEntity player, ItemStack orig) {
 		for(forge.IDestroyToolHandler handler : destroyToolHandlers) {
 			handler.onDestroyCurrentItem(player, orig);
@@ -51,6 +66,7 @@ public class ForgeHooks {
 
 	}
 
+	@Legacy
 	public static SleepStatus sleepInBedAt(PlayerEntity player, int i, int j, int k) {
 		for(forge.ISleepHandler handler : sleepHandlers) {
 			SleepStatus status = handler.sleepInBedAt(player, i, j, k);
@@ -62,17 +78,19 @@ public class ForgeHooks {
 		return null;
 	}
 
+	@Legacy
 	public static boolean canHarvestBlock(Block bl, PlayerEntity player, int md) {
 		if (bl.material.doesRequireTool()) {
 			return true;
 		} else {
 			ItemStack itemstack = player.inventory.getHeldItem();
-			return itemstack == null ? false : canToolHarvestBlock(bl, md, itemstack);
+			return itemstack != null && canToolHarvestBlock(bl, md, itemstack);
 		}
 	}
 
+	@Legacy
 	public static boolean canToolHarvestBlock(Block bl, int md, ItemStack itemstack) {
-		List tc = (List)toolClasses.get(itemstack.itemId);
+		List<?> tc = toolClasses.get(itemstack.itemId);
 		if (tc == null) {
 			return itemstack.isEffectiveOn(bl);
 		} else {
@@ -86,12 +104,13 @@ public class ForgeHooks {
 				if (bhl == null) {
 					return itemstack.isEffectiveOn(bl);
 				} else {
-					return bhl > hvl ? false : itemstack.isEffectiveOn(bl);
+					return bhl <= hvl && itemstack.isEffectiveOn(bl);
 				}
 			}
 		}
 	}
 
+	@Legacy
 	public static float blockStrength(Block bl, PlayerEntity player, int md) {
 		float bh = ((ForgeBlock) bl).getHardness(md);
 		if (bh < 0.0F) {
@@ -101,17 +120,19 @@ public class ForgeHooks {
 		}
 	}
 
+	@Legacy
 	public static boolean isToolEffective(ItemStack ist, Block bl, int md) {
-		List tc = (List)toolClasses.get(ist.itemId);
+		List<?> tc = toolClasses.get(ist.itemId);
 		if (tc == null) {
 			return false;
 		} else {
 			Object[] ta = tc.toArray();
 			String cls = (String)ta[0];
-			return cls.equalsIgnoreCase("paxel") ? true : toolEffectiveness.contains(Arrays.asList(bl.id, md, cls));
+			return cls.equalsIgnoreCase("paxel") || toolEffectiveness.contains(Arrays.asList(bl.id, md, cls));
 		}
 	}
 
+	@Legacy
 	static void initTools() {
 		if (!toolInit) {
 			toolInit = true;
@@ -170,6 +191,7 @@ public class ForgeHooks {
 		}
 	}
 
+	@Legacy
 	public static void touch() {
 	}
 

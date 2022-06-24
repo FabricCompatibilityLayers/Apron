@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import io.github.betterthanupdates.Legacy;
 import modloader.ModLoader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -35,20 +36,30 @@ import io.github.betterthanupdates.forge.client.render.ForgeTessellator;
 
 @SuppressWarnings({"unused", "BooleanMethodIsAlwaysInverted"})
 @Environment(EnvType.CLIENT)
+@Legacy
 public class ForgeHooksClient {
+	@Legacy
 	static LinkedList<IHighlightHandler> highlightHandlers = new LinkedList<>();
+	@Legacy
 	static HashMap<List<?>, Tessellator> tessellators = new HashMap<>();
+	@Legacy
 	static HashMap<String, Integer> textures = new HashMap<>();
+	@Legacy
 	static boolean inWorld = false;
+	@Legacy
 	static HashSet<List<?>> renderTextureTest = new HashSet<>();
+	@Legacy
 	static ArrayList<List<Integer>> renderTextureList = new ArrayList<>();
+	@Legacy
 	static int renderPass = -1;
 
+	@Legacy
 	public ForgeHooksClient() {
 	}
 
+	@Legacy
 	public static boolean onBlockHighlight(WorldEventRenderer renderglobal, PlayerEntity player, HitResult mop, int i, ItemStack itemstack, float f) {
-		for(forge.IHighlightHandler handler : highlightHandlers) {
+		for(IHighlightHandler handler : highlightHandlers) {
 			if (handler.onBlockHighlight(renderglobal, player, mop, i, itemstack, f)) {
 				return true;
 			}
@@ -57,6 +68,7 @@ public class ForgeHooksClient {
 		return false;
 	}
 
+	@Legacy
 	public static boolean canRenderInPass(Block block, int pass) {
 		if (block instanceof IMultipassRender) {
 			IMultipassRender impr = (IMultipassRender)block;
@@ -66,6 +78,7 @@ public class ForgeHooksClient {
 		}
 	}
 
+	@Legacy
 	protected static void bindTessellator(int tex, int sub) {
 		List<Integer> key = Arrays.asList(tex, sub);
 		Tessellator t;
@@ -89,6 +102,7 @@ public class ForgeHooksClient {
 		Tessellator.INSTANCE = t;
 	}
 
+	@Legacy
 	protected static void bindTexture(String name, int sub) {
 		int n;
 		if (!textures.containsKey(name)) {
@@ -106,6 +120,7 @@ public class ForgeHooksClient {
 		}
 	}
 
+	@Legacy
 	protected static void unbindTexture() {
 		Tessellator.INSTANCE = ForgeClientReflection.Tessellator$firstInstance;
 		if (!inWorld) {
@@ -113,6 +128,7 @@ public class ForgeHooksClient {
 		}
 	}
 
+	@Legacy
 	public static void beforeRenderPass(int pass) {
 		renderPass = pass;
 		Tessellator.INSTANCE = ForgeClientReflection.Tessellator$firstInstance;
@@ -123,6 +139,7 @@ public class ForgeHooksClient {
 		inWorld = true;
 	}
 
+	@Legacy
 	public static void afterRenderPass(int pass) {
 		renderPass = -1;
 		inWorld = false;
@@ -139,6 +156,7 @@ public class ForgeHooksClient {
 		ForgeClientReflection.Tessellator$renderingWorldRenderer = false;
 	}
 
+	@Legacy
 	public static void beforeBlockRender(Block block, BlockRenderer renderblocks) {
 		if (block instanceof ITextureProvider && renderblocks.textureOverride == -1) {
 			ITextureProvider itp = (ITextureProvider)block;
@@ -147,6 +165,7 @@ public class ForgeHooksClient {
 
 	}
 
+	@Legacy
 	public static void afterBlockRender(Block block, BlockRenderer renderblocks) {
 		if (block instanceof ITextureProvider && renderblocks.textureOverride == -1) {
 			unbindTexture();
@@ -154,6 +173,7 @@ public class ForgeHooksClient {
 
 	}
 
+	@Legacy
 	public static void overrideTexture(Object o) {
 		if (o instanceof ITextureProvider) {
 			GL11.glBindTexture(3553, ModLoader.getMinecraftInstance().textureManager.getTextureId(((ITextureProvider)o).getTextureFile()));

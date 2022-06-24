@@ -5,8 +5,11 @@
 
 package forge;
 
+import io.github.betterthanupdates.Legacy;
 import net.minecraft.world.BlockView;
 
+@Legacy
 public interface IConnectRedstone {
+	@Legacy
 	boolean canConnectRedstone(BlockView arg, int i, int j, int k, int l);
 }

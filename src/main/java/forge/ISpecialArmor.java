@@ -5,8 +5,11 @@
 
 package forge;
 
+import io.github.betterthanupdates.Legacy;
 import net.minecraft.entity.player.PlayerEntity;
 
+@Legacy
 public interface ISpecialArmor {
+	@Legacy
 	ArmorProperties getProperties(PlayerEntity arg, int i, int j);
 }

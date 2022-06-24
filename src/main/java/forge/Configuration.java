@@ -19,38 +19,48 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.TreeMap;
 
+import io.github.betterthanupdates.Legacy;
 import net.minecraft.block.Block;
 
 @SuppressWarnings("unused")
+@Legacy
 public class Configuration {
+	@Legacy
 	private boolean[] configBlocks = null;
+	@Legacy
 	public static final int GENERAL_PROPERTY = 0;
+	@Legacy
 	public static final int BLOCK_PROPERTY = 1;
+	@Legacy
 	public static final int ITEM_PROPERTY = 2;
+	@Legacy
 	File file;
-	public TreeMap<String, Property> blockProperties = new TreeMap();
-	public TreeMap<String, Property> itemProperties = new TreeMap();
-	public TreeMap<String, Property> generalProperties = new TreeMap();
+	@Legacy
+	public TreeMap<String, Property> blockProperties = new TreeMap<>();
+	@Legacy
+	public TreeMap<String, Property> itemProperties = new TreeMap<>();
+	@Legacy
+	public TreeMap<String, Property> generalProperties = new TreeMap<>();
 
+	@Legacy
 	public Configuration(File file) {
 		this.file = file;
 	}
 
-	public forge.Property getOrCreateBlockIdProperty(String key, int defaultId) {
+	@Legacy
+	public Property getOrCreateBlockIdProperty(String key, int defaultId) {
 		if (this.configBlocks == null) {
 			this.configBlocks = new boolean[Block.BY_ID.length];
 
-			for(int i = 0; i < this.configBlocks.length; ++i) {
-				this.configBlocks[i] = false;
-			}
+			Arrays.fill(this.configBlocks, false);
 		}
 
 		if (this.blockProperties.containsKey(key)) {
-			forge.Property property = this.getOrCreateIntProperty(key, 1, defaultId);
+			Property property = this.getOrCreateIntProperty(key, 1, defaultId);
 			this.configBlocks[Integer.parseInt(property.value)] = true;
 			return property;
 		} else {
-			forge.Property property = new forge.Property();
+			Property property = new Property();
 			this.blockProperties.put(key, property);
 			property.name = key;
 			if (Block.BY_ID[defaultId] == null && !this.configBlocks[defaultId]) {
@@ -71,8 +81,9 @@ public class Configuration {
 		}
 	}
 
-	public forge.Property getOrCreateIntProperty(String key, int kind, int defaultValue) {
-		forge.Property prop = this.getOrCreateProperty(key, kind, Integer.toString(defaultValue));
+	@Legacy
+	public Property getOrCreateIntProperty(String key, int kind, int defaultValue) {
+		Property prop = this.getOrCreateProperty(key, kind, Integer.toString(defaultValue));
 
 		try {
 			Integer.parseInt(prop.value);
@@ -83,17 +94,17 @@ public class Configuration {
 		}
 	}
 
-	public forge.Property getOrCreateBooleanProperty(String key, int kind, boolean defaultValue) {
-		forge.Property prop = this.getOrCreateProperty(key, kind, Boolean.toString(defaultValue));
-		if (!"true".equals(prop.value.toLowerCase()) && !"false".equals(prop.value.toLowerCase())) {
+	@Legacy
+	public Property getOrCreateBooleanProperty(String key, int kind, boolean defaultValue) {
+		Property prop = this.getOrCreateProperty(key, kind, Boolean.toString(defaultValue));
+		if (!"true".equalsIgnoreCase(prop.value) && !"false".equalsIgnoreCase(prop.value)) {
 			prop.value = Boolean.toString(defaultValue);
-			return prop;
-		} else {
-			return prop;
 		}
+		return prop;
 	}
 
-	public forge.Property getOrCreateProperty(String key, int kind, String defaultValue) {
+	@Legacy
+	public Property getOrCreateProperty(String key, int kind, String defaultValue) {
 		TreeMap<String, Property> source = null;
 		switch(kind) {
 		case 0:
@@ -107,9 +118,9 @@ public class Configuration {
 		}
 
 		if (source.containsKey(key)) {
-			return (forge.Property)source.get(key);
+			return source.get(key);
 		} else if (defaultValue != null) {
-			forge.Property property = new forge.Property();
+			Property property = new Property();
 			source.put(key, property);
 			property.name = key;
 			property.value = defaultValue;
@@ -119,6 +130,7 @@ public class Configuration {
 		}
 	}
 
+	@Legacy
 	public void load() {
 		try {
 			if (this.file.getParentFile() != null) {
@@ -157,7 +169,7 @@ public class Configuration {
 										throw new RuntimeException("property " + propertyName + " has no scope");
 									}
 
-									forge.Property prop = new forge.Property();
+									Property prop = new Property();
 									prop.name = propertyName;
 									prop.value = line.substring(i + 1);
 									i = line.length();
@@ -200,6 +212,7 @@ public class Configuration {
 
 	}
 
+	@Legacy
 	public void save() {
 		try {
 			if (this.file.getParentFile() != null) {
@@ -243,8 +256,9 @@ public class Configuration {
 
 	}
 
+	@Legacy
 	private void writeProperties(BufferedWriter buffer, Collection<Property> props) throws IOException {
-		for(forge.Property property : props) {
+		for(Property property : props) {
 			if (property.comment != null) {
 				buffer.write("   # " + property.comment + "\r\n");
 			}

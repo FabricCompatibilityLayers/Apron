@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
+import io.github.betterthanupdates.Legacy;
 import reforged.ReforgedHooks;
 
 import net.minecraft.block.Block;
@@ -22,36 +23,48 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 @SuppressWarnings("unused")
+@Legacy
 public class MinecraftForge {
-	private static LinkedList<IBucketHandler> bucketHandlers = new LinkedList();
+	@Legacy
+	private static LinkedList<IBucketHandler> bucketHandlers = new LinkedList<>();
+	@Legacy
 	public static boolean disableVersionCheckCrash = false;
-	private static LinkedList<IOreHandler> oreHandlers = new LinkedList();
-	private static TreeMap<String, List<ItemStack>> oreDict = new TreeMap();
+	@Legacy
+	private static LinkedList<IOreHandler> oreHandlers = new LinkedList<>();
+	@Legacy
+	private static TreeMap<String, List<ItemStack>> oreDict = new TreeMap<>();
 
+	@Legacy
 	public MinecraftForge() {
 	}
 
 	/** @deprecated */
+	@Legacy
 	public static void registerCustomBucketHander(forge.IBucketHandler handler) {
 		bucketHandlers.add(handler);
 	}
 
+	@Legacy
 	public static void registerCustomBucketHandler(forge.IBucketHandler handler) {
 		bucketHandlers.add(handler);
 	}
 
+	@Legacy
 	public static void registerSleepHandler(ISleepHandler handler) {
 		ForgeHooks.sleepHandlers.add(handler);
 	}
 
+	@Legacy
 	public static void registerDestroyToolHandler(IDestroyToolHandler handler) {
 		ForgeHooks.destroyToolHandlers.add(handler);
 	}
 
+	@Legacy
 	public static void registerCraftingHandler(ICraftingHandler handler) {
 		ForgeHooks.craftingHandlers.add(handler);
 	}
 
+	@Legacy
 	public static ItemStack fillCustomBucket(World w, int i, int j, int k) {
 		for(forge.IBucketHandler handler : bucketHandlers) {
 			ItemStack stack = handler.fillCustomBucket(w, i, j, k);
@@ -63,53 +76,61 @@ public class MinecraftForge {
 		return null;
 	}
 
+	@Legacy
 	public static void setToolClass(Item tool, String tclass, int hlevel) {
 		ForgeHooks.initTools();
 		ForgeHooks.toolClasses.put(tool.id, Arrays.asList(tclass, hlevel));
 	}
 
+	@Legacy
 	public static void setBlockHarvestLevel(Block bl, int md, String tclass, int hlevel) {
 		ForgeHooks.initTools();
-		List key = Arrays.asList(bl.id, md, tclass);
+		List<?> key = Arrays.asList(bl.id, md, tclass);
 		ForgeHooks.toolHarvestLevels.put(key, hlevel);
 		ForgeHooks.toolEffectiveness.add(key);
 	}
 
+	@Legacy
 	public static void removeBlockEffectiveness(Block bl, int md, String tclass) {
 		ForgeHooks.initTools();
-		List key = Arrays.asList(bl.id, md, tclass);
+		List<?> key = Arrays.asList(bl.id, md, tclass);
 		ForgeHooks.toolEffectiveness.remove(key);
 	}
 
+	@Legacy
 	public static void setBlockHarvestLevel(Block bl, String tclass, int hlevel) {
 		ForgeHooks.initTools();
 
 		for(int md = 0; md < 16; ++md) {
-			List key = Arrays.asList(bl.id, md, tclass);
+			List<?> key = Arrays.asList(bl.id, md, tclass);
 			ForgeHooks.toolHarvestLevels.put(key, hlevel);
 			ForgeHooks.toolEffectiveness.add(key);
 		}
 
 	}
 
+	@Legacy
 	public static void removeBlockEffectiveness(Block bl, String tclass) {
 		ForgeHooks.initTools();
 
 		for(int md = 0; md < 16; ++md) {
-			List key = Arrays.asList(bl.id, md, tclass);
+			List<?> key = Arrays.asList(bl.id, md, tclass);
 			ForgeHooks.toolEffectiveness.remove(key);
 		}
 
 	}
 
+	@Legacy
 	public static void addPickaxeBlockEffectiveAgainst(Block block) {
 		setBlockHarvestLevel(block, "pickaxe", 0);
 	}
 
+	@Legacy
 	public static void killMinecraft(String modname, String msg) {
 		throw new RuntimeException(modname + ": " + msg);
 	}
 
+	@Legacy
 	public static void versionDetect(String modname, int major, int minor, int revision) {
 		if (disableVersionCheckCrash) {
 			ReforgedHooks.touch();
@@ -134,6 +155,7 @@ public class MinecraftForge {
 		}
 	}
 
+	@Legacy
 	public static void versionDetectStrict(String modname, int major, int minor, int revision) {
 		if (disableVersionCheckCrash) {
 			ReforgedHooks.touch();
@@ -157,7 +179,8 @@ public class MinecraftForge {
 		}
 	}
 
-	public static void registerOreHandler(forge.IOreHandler handler) {
+	@Legacy
+	public static void registerOreHandler(IOreHandler handler) {
 		oreHandlers.add(handler);
 
 		for(String key : oreDict.keySet()) {
@@ -168,48 +191,53 @@ public class MinecraftForge {
 
 	}
 
+	@Legacy
 	public static void registerOre(String oreClass, ItemStack ore) {
-		List<ItemStack> orelist = oreDict.get(oreClass);
-		if (orelist == null) {
-			orelist = new ArrayList();
-			oreDict.put(oreClass, orelist);
-		}
+		List<ItemStack> oreList = oreDict.computeIfAbsent(oreClass, k -> new ArrayList<>());
 
-		orelist.add(ore);
+		oreList.add(ore);
 
-		for(forge.IOreHandler ioh : oreHandlers) {
+		for(IOreHandler ioh : oreHandlers) {
 			ioh.registerOre(oreClass, ore);
 		}
 
 	}
 
+	@Legacy
 	public static List<ItemStack> getOreClass(String oreClass) {
-		return (List<ItemStack>)oreDict.get(oreClass);
+		return oreDict.get(oreClass);
 	}
 
+	@Legacy
 	public static MinecraftForge.OreQuery generateRecipes(Object... pattern) {
 		return new MinecraftForge.OreQuery(pattern);
 	}
 
+	@Legacy
 	public static class OreQuery implements Iterable<Object[]> {
+		@Legacy
 		Object[] proto;
 
+		@Legacy
 		private OreQuery(Object[] pattern) {
 			this.proto = pattern;
 		}
 
+		@Legacy
 		public Iterator<Object[]> iterator() {
 			return new MinecraftForge.OreQuery.OreQueryIterator();
 		}
 
+		@Legacy
 		public class OreQueryIterator implements Iterator<Object[]> {
-			LinkedList itering = new LinkedList();
-			LinkedList output = new LinkedList();
+			LinkedList itering = new LinkedList<>();
+			LinkedList output = new LinkedList<>();
 
+			@Legacy
 			private OreQueryIterator() {
-				for(int i = 0; i < OreQuery.this.proto.length; ++i) {
-					if (OreQuery.this.proto[i] instanceof Collection) {
-						Iterator it = ((Collection)OreQuery.this.proto[i]).iterator();
+				for (Object o : OreQuery.this.proto) {
+					if (o instanceof Collection) {
+						Iterator it = ((Collection) o).iterator();
 						if (!it.hasNext()) {
 							this.output = null;
 							break;
@@ -218,17 +246,18 @@ public class MinecraftForge {
 						this.itering.addLast(it);
 						this.output.addLast(it.next());
 					} else {
-						this.itering.addLast(OreQuery.this.proto[i]);
-						this.output.addLast(OreQuery.this.proto[i]);
+						this.itering.addLast(o);
+						this.output.addLast(o);
 					}
 				}
-
 			}
 
+			@Legacy
 			public boolean hasNext() {
 				return this.output != null;
 			}
 
+			@Legacy
 			public Object[] next() {
 				Object[] tr;
 				for(tr = this.output.toArray(); this.itering.size() != 0; this.itering.removeLast()) {
@@ -264,6 +293,7 @@ public class MinecraftForge {
 				return tr;
 			}
 
+			@Legacy
 			public void remove() {
 			}
 		}
