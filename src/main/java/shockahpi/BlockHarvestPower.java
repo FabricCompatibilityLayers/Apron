@@ -1,14 +1,21 @@
 package shockahpi;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 public class BlockHarvestPower {
+	@Legacy
 	public final int blockID;
+	@Legacy
 	public final float percentage;
 
+	@Legacy
 	public BlockHarvestPower(int blockID, float percentage) {
 		this.blockID = blockID;
 		this.percentage = percentage;
 	}
 
+	@Legacy
 	public boolean equals(Object other) {
 		if (other == null) {
 			return false;

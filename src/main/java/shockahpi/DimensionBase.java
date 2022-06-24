@@ -1,11 +1,9 @@
 package shockahpi;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import modloader.ModLoader;
-
+import io.github.betterthanupdates.Legacy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MovementManager;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
@@ -15,21 +13,29 @@ import net.minecraft.util.NetherTeleporter;
 import net.minecraft.util.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkCache;
-import net.minecraft.world.decoration.DeadbushDecoration;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.NetherDimension;
 import net.minecraft.world.dimension.OverworldDimension;
 import net.minecraft.world.dimension.SkyDimension;
 import net.minecraft.world.source.WorldSource;
 
+@Legacy
 public class DimensionBase {
+	@Legacy
 	public static ArrayList<DimensionBase> list = new ArrayList<>();
+	@Legacy
 	public static LinkedList<Integer> order = new LinkedList<>();
+	@Legacy
 	public final int number;
+	@Legacy
 	public final Class<? extends Dimension> worldProvider;
+	@Legacy
 	public final Class<? extends NetherTeleporter> teleporter;
+	@Legacy
 	public String name = "Dimension";
+	@Legacy
 	public String soundTrigger = "portal.trigger";
+	@Legacy
 	public String soundTravel = "portal.travel";
 
 	static {
@@ -37,9 +43,9 @@ public class DimensionBase {
 		new DimensionNether();
 	}
 
+	@Legacy
 	public static DimensionBase getDimByNumber(int number) {
-		for(int i = 0; i < list.size(); ++i) {
-			DimensionBase dim = (DimensionBase)list.get(i);
+		for (DimensionBase dim : list) {
 			if (dim.number == number) {
 				return dim;
 			}
@@ -48,9 +54,9 @@ public class DimensionBase {
 		return null;
 	}
 
+	@Legacy
 	public static DimensionBase getDimByProvider(Class<? extends Dimension> worldProvider) {
-		for(int i = 0; i < list.size(); ++i) {
-			DimensionBase dim = (DimensionBase)list.get(i);
+		for (DimensionBase dim : list) {
 			if (dim.worldProvider.getName().equals(worldProvider.getName())) {
 				return dim;
 			}
@@ -59,28 +65,29 @@ public class DimensionBase {
 		return null;
 	}
 
+	@Legacy
 	public Dimension getWorldProvider() {
 		try {
-			return (Dimension)this.worldProvider.newInstance();
-		} catch (InstantiationException var2) {
-		} catch (IllegalAccessException var3) {
+			return this.worldProvider.newInstance();
+		} catch (InstantiationException | IllegalAccessException ignored) {
 		}
 
 		return null;
 	}
 
+	@Legacy
 	public NetherTeleporter getTeleporter() {
 		try {
 			if (this.teleporter != null) {
-				return (NetherTeleporter)this.teleporter.newInstance();
+				return this.teleporter.newInstance();
 			}
-		} catch (InstantiationException var2) {
-		} catch (IllegalAccessException var3) {
+		} catch (InstantiationException | IllegalAccessException ignored) {
 		}
 
 		return null;
 	}
 
+	@Legacy
 	public static void respawn(boolean paramBoolean, int paramInt) {
 		Minecraft localMinecraft = SAPI.getMinecraftInstance();
 		if (!localMinecraft.world.isClient && !localMinecraft.world.dimension.canPlayerSleep()) {
@@ -106,7 +113,7 @@ public class DimensionBase {
 		}
 
 		WorldSource localcj = localMinecraft.world.getCache();
-		if (localcj instanceof DeadbushDecoration) {
+		if (localcj instanceof ChunkCache) {
 			ChunkCache localkt = (ChunkCache)localcj;
 			localkt.method_1242(localbp2.x >> 4, localbp2.z >> 4);
 		}
@@ -136,14 +143,7 @@ public class DimensionBase {
 		localMinecraft.player.entityId = j;
 		localMinecraft.player.method_494();
 		localMinecraft.interactionManager.method_1718(localMinecraft.player);
-
-		try {
-			Method localMethod = Minecraft.class.getDeclaredMethod("d", String.class);
-			localMethod.setAccessible(true);
-			localMethod.invoke(localMinecraft, "Respawning");
-		} catch (Exception var9) {
-			var9.printStackTrace();
-		}
+		localMinecraft.loadIntoWorld("Respawning");
 
 		if (localMinecraft.currentScreen instanceof DeathScreen) {
 			localMinecraft.openScreen(null);
@@ -151,10 +151,12 @@ public class DimensionBase {
 
 	}
 
+	@Legacy
 	public static void usePortal(int dimNumber) {
 		usePortal(dimNumber, false);
 	}
 
+	@Legacy
 	private static void usePortal(int dimNumber, boolean resetOrder) {
 		Minecraft game = SAPI.getMinecraftInstance();
 		int oldDimension = game.player.dimensionId;
@@ -178,17 +180,17 @@ public class DimensionBase {
 			newDimension = 0;
 		}
 
-		String str = "";
+		StringBuilder str = new StringBuilder();
 
 		for(Integer dim : order) {
-			if (!str.isEmpty()) {
-				str = str + ",";
+			if (str.length() > 0) {
+				str.append(",");
 			}
 
-			str = str + dim;
+			str.append(dim);
 		}
 
-		World world = null;
+		World world;
 		DimensionBase dimOld = getDimByNumber(oldDimension);
 		DimensionBase dimNew = getDimByNumber(newDimension);
 		loc = dimOld.getDistanceScale(loc, true);
@@ -209,6 +211,7 @@ public class DimensionBase {
 		teleporter.teleport(game.world, game.player);
 	}
 
+	@Legacy
 	public DimensionBase(int number, Class<? extends Dimension> worldProvider, Class<? extends NetherTeleporter> teleporter) {
 		this.number = number;
 		this.worldProvider = worldProvider;
@@ -216,16 +219,21 @@ public class DimensionBase {
 		list.add(this);
 	}
 
+	@Legacy
 	public Loc getDistanceScale(Loc loc, boolean goingIn) {
 		return loc;
 	}
 
+	/*
+	* Originally Dimension#getByID(I)Dimension;
+	*/
+	@Legacy
 	public static Dimension getByID(int i) {
 		DimensionBase dimensionbase = getDimByNumber(i);
 		if (dimensionbase != null) {
 			return dimensionbase.getWorldProvider();
 		} else {
-			return (Dimension)(i == -1 ? new NetherDimension() : (i == 0 ? new OverworldDimension() : (i == 1 ? new SkyDimension() : null)));
+			return i == -1 ? new NetherDimension() : (i == 0 ? new OverworldDimension() : (i == 1 ? new SkyDimension() : null));
 		}
 	}
 }

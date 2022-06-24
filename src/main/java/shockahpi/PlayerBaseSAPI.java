@@ -1,5 +1,6 @@
 package shockahpi;
 
+import io.github.betterthanupdates.Legacy;
 import playerapi.PlayerBase;
 
 import net.minecraft.client.Minecraft;
@@ -8,13 +9,17 @@ import net.minecraft.stat.achievement.Achievements;
 
 import io.github.betterthanupdates.shockahpi.client.entity.player.ShockAhPIClientPlayerEntity;
 
+@Legacy
 public class PlayerBaseSAPI extends PlayerBase {
+	@Legacy
 	public int portal;
 
+	@Legacy
 	public PlayerBaseSAPI(AbstractClientPlayerEntity p) {
 		super(p);
 	}
 
+	@Legacy
 	public boolean onLivingUpdate() {
 		Minecraft mc = this.player.client;
 		if (!mc.statFileWriter.isAchievementUnlocked(Achievements.OPEN_INVENTORY)) {
@@ -80,6 +85,7 @@ public class PlayerBaseSAPI extends PlayerBase {
 		return true;
 	}
 
+	@Legacy
 	public boolean respawn() {
 		DimensionBase.respawn(false, 0);
 		return true;

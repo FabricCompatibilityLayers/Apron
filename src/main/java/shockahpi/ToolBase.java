@@ -4,15 +4,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+import io.github.betterthanupdates.Legacy;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 
+@Legacy
 public class ToolBase {
+	@Legacy
 	public static final ToolBase Pickaxe = new ToolBase();
+	@Legacy
 	public static final ToolBase Shovel = new ToolBase();
+	@Legacy
 	public static final ToolBase Axe = new ToolBase();
-	public ArrayList<BlockHarvestPower> mineBlocks = new ArrayList();
-	public ArrayList<Material> mineMaterials = new ArrayList();
+	@Legacy
+	public ArrayList<BlockHarvestPower> mineBlocks = new ArrayList<>();
+	@Legacy
+	public ArrayList<Material> mineMaterials = new ArrayList<>();
 
 	static {
 		SAPI.showText();
@@ -43,9 +50,11 @@ public class ToolBase {
 
 	}
 
+	@Legacy
 	public ToolBase() {
 	}
 
+	@Legacy
 	public boolean canHarvest(Block block, float currentPower) {
 		for(Material material : this.mineMaterials) {
 			if (material == block.material) {

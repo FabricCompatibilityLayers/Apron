@@ -5,19 +5,31 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import io.github.betterthanupdates.Legacy;
 import net.minecraft.world.World;
 
+@Legacy
 public class GenDeposit {
+	@Legacy
 	private final int blockID;
+	@Legacy
 	private final List<Integer> set1stOn;
+	@Legacy
 	private final List<Integer> setOn;
+	@Legacy
 	private final List<Loc> sides = Arrays.asList(Loc.vecAdjacent());
-	private ArrayList<Loc> check = new ArrayList();
-	private ArrayList<Loc> cantSet = new ArrayList();
-	private ArrayList<Loc> sidesTmp = new ArrayList();
+	@Legacy
+	private ArrayList<Loc> check = new ArrayList<>();
+	@Legacy
+	private ArrayList<Loc> cantSet = new ArrayList<>();
+	@Legacy
+	private ArrayList<Loc> sidesTmp = new ArrayList<>();
+	@Legacy
 	private final World world;
+	@Legacy
 	private final Random rand;
 
+	@Legacy
 	public GenDeposit(World world, int blockID, Integer[] set1stOn, Integer[] setOn) {
 		this.world = world;
 		this.blockID = blockID;
@@ -26,10 +38,12 @@ public class GenDeposit {
 		this.rand = world.rand;
 	}
 
+	@Legacy
 	public void gen(int pX, int pY, int pZ, int maxAmount, int maxTries) {
 		this.gen(new Loc(pX, pY, pZ), maxAmount, maxTries);
 	}
 
+	@Legacy
 	public void gen(Loc startLoc, int maxAmount, int maxTries) {
 		if (this.set1stOn.contains(startLoc.getBlock(this.world))) {
 			this.check.add(startLoc);
@@ -37,7 +51,7 @@ public class GenDeposit {
 			while(maxAmount > 0 && maxTries > 0 && !this.check.isEmpty()) {
 				--maxTries;
 				int i = this.rand.nextInt(this.check.size());
-				Loc curLoc = (Loc)this.check.get(i);
+				Loc curLoc = this.check.get(i);
 				this.check.remove(i);
 				this.sidesTmp = new ArrayList(this.sides);
 				if (this.setOn.contains(curLoc.getBlock(this.world))) {
@@ -49,7 +63,7 @@ public class GenDeposit {
 
 				while(!this.sidesTmp.isEmpty()) {
 					i = this.rand.nextInt(this.sidesTmp.size());
-					Loc side = (Loc)this.sidesTmp.get(i);
+					Loc side = this.sidesTmp.get(i);
 					this.sidesTmp.remove(i);
 					if (this.cantSet.contains(side)) {
 					}
@@ -59,6 +73,7 @@ public class GenDeposit {
 		}
 	}
 
+	@Legacy
 	public int getGoodY(int pX, int pY, int pZ) {
 		int off = 0;
 		if (this.set1stOn.contains(this.world.getBlockId(pX, pY, pZ))) {

@@ -22,6 +22,7 @@ import reforged.mod_Reforged;
 @ApiStatus.Internal
 public final class Apron {
 	public static final String MOD_ID = "apron";
+	public static final String NAME = "Apron";
 	public static long fabricModCount = 0, rmlModCount = 0;
 
 	// Logging
@@ -36,7 +37,7 @@ public final class Apron {
 	);
 
 	static {
-		LOGGER = Logger.get("Apron");
+		LOGGER = Logger.get(NAME);
 
 		MOD_CACHE_FOLDER = new File(Constants.VERSIONED_FOLDER, "mods");
 
