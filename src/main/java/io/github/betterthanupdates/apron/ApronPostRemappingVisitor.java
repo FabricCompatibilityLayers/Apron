@@ -65,6 +65,7 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 								}
 
 								break;
+							case "betatweaks/Utils":
 							case "hmi/Utils":
 								if (methodName.equals("getField")) {
 									methodOwner = "io/github/betterthanupdates/apron/ReflectionUtils";
@@ -109,6 +110,71 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 										case "mouseMovedOrUp":
 											value = "method_128";
 											break;
+									}
+
+									break;
+
+								// BetaTweaks
+								case "mod_BetaTweaks":
+									switch (stringValue) {
+										case "getSlotAtPosition":
+											value = "method_986";
+											break;
+										case "ModLoaderMp":
+											value = "modloadermp." + stringValue;
+											break;
+										case "tallGrass":
+											value = "field_1845";
+											break;
+										case "deadBush":
+											value = "field_1846";
+											break;
+										case "blockSteel":
+											value = "field_1883";
+											break;
+										case "blockGold":
+											value = "field_1882";
+											break;
+										case "blockDiamond":
+											value = "field_1898";
+											break;
+										case "blocksEffectiveAgainst":
+											value = "field_2712";
+											break;
+									}
+
+									break;
+								case "betatweaks/Utils":
+									if (stringValue.equals("net.minecraft.src.")) {
+										value = "net.minecraft.";
+									} else if (stringValue.equals("modList")) {
+										value = "MOD_LIST";
+									}
+
+									break;
+								case "betatweaks/EntityRendererProxyFOV":
+									switch (stringValue) {
+										case "func_4135_b":
+											value = "method_1845";
+											break;
+										case "hurtCameraEffect":
+											value = "method_1849";
+											break;
+										case "setupViewBobbing":
+											value = "method_1850";
+											break;
+										case "orientCamera":
+											value = "method_1851";
+											break;
+										case "updateFogColor":
+											value = "method_1852";
+											break;
+									}
+
+									break;
+								case "betatweaks/block/BlockTNTPunchable":
+									if (stringValue.equals("tnt")) {
+										value = "field_995";
 									}
 
 									break;
