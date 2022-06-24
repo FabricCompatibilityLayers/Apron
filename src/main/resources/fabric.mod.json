@@ -122,6 +122,22 @@
     "apron:server": {
       "EntityTrackerEntry2": "modloadermp/EntityTrackerEntry",
       "Pair": "modloadermp/Pair"
+    },
+    "apron:mods": {
+      "client": {
+        "AudioMod": "*",
+        "ShockAhPI": "5.1",
+        "PlayerAPI": "1.7",
+        "Reforged": "1.0.0"
+      },
+      "common": {
+        "ModLoader": "*",
+        "ModLoaderMP": "*",
+        "MinecraftForge": "1.0.6"
+      },
+      "server": {
+
+      }
     }
   }
 }
