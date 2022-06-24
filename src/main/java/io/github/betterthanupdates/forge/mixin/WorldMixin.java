@@ -1,60 +1,26 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import java.util.List;
-
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.BlockEntity;
 import net.minecraft.util.math.AxixAlignedBoundingBox;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.LightType;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.dimension.Dimension;
 
 import io.github.betterthanupdates.forge.block.ForgeBlock;
 import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(World.class)
 public abstract class WorldMixin implements BlockView, ForgeWorld {
-	@Shadow
-	@Final
-	public Dimension dimension;
-
-	@Shadow
-	public abstract boolean isBlockLoaded(int x, int y, int z);
-
-	@Shadow
-	public abstract boolean isAboveGround(int x, int y, int z);
-
-	@Shadow
-	public abstract int method_164(LightType lightType, int x, int y, int z);
-
-	@Shadow
-	public abstract void method_166(LightType lightType, int x1, int y1, int z1, int x2, int y2, int z2);
-
-	@Shadow
-	public abstract boolean method_155(int i, int j, int k, int l, int m, int n);
-
-	@Shadow
-	private boolean field_190;
-
-	@Shadow
-	private List field_185;
-
-	@Shadow
-	public List blockEntities;
-
-	@Shadow
-	public abstract Chunk getChunkFromCache(int chunkX, int chunkZ);
 
 	@Shadow
 	public abstract boolean canSpawnEntity(AxixAlignedBoundingBox box);
+
+	@Shadow
+	public abstract boolean method_155(int i, int j, int k, int l, int m, int n);
 
 	/**
 	 * @author Eloraam

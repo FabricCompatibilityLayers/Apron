@@ -29,7 +29,6 @@ public abstract class GameStartupErrorPanelMixin extends Panel {
 		return stringWriter;
 	}
 
-	// TODO(halotroop2288): Rewrite this with only the necessary information... ?
 	@ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/awt/TextArea;<init>(Ljava/lang/String;III)V"))
 	private String modloader$overwriteString(String text) {
 		String str1 = stringWriter.toString();

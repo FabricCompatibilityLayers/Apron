@@ -50,7 +50,7 @@ public abstract class WorldRendererMixin {
 	public boolean[] field_244;
 
 	@Shadow
-	public List field_224;
+	public List<BlockEntity> field_224;
 
 	@Shadow
 	public World world;
@@ -62,7 +62,7 @@ public abstract class WorldRendererMixin {
 	protected abstract void method_306();
 
 	@Shadow
-	private List field_228;
+	private List<BlockEntity> field_228;
 
 	@Shadow
 	public boolean field_223;
@@ -92,8 +92,7 @@ public abstract class WorldRendererMixin {
 			}
 
 			Chunk.field_953 = false;
-			HashSet hashset = new HashSet();
-			hashset.addAll(this.field_224);
+			HashSet<BlockEntity> hashset = new HashSet<>(this.field_224);
 			this.field_224.clear();
 			int l1 = 1;
 			WorldPopulationRegion chunkcache = new WorldPopulationRegion(this.world, i - l1, j - l1, k - l1, l + l1, i1 + l1, j1 + l1);
@@ -165,11 +164,10 @@ public abstract class WorldRendererMixin {
 				}
 			}
 
-			HashSet hashset1 = new HashSet();
-			hashset1.addAll(this.field_224);
+			HashSet<BlockEntity> hashset1 = new HashSet<>(this.field_224);
 			hashset1.removeAll(hashset);
 			this.field_228.addAll(hashset1);
-			hashset.removeAll(this.field_224);
+			this.field_224.forEach(hashset::remove);
 			this.field_228.removeAll(hashset);
 			this.field_223 = Chunk.field_953;
 			this.field_227 = true;

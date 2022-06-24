@@ -40,7 +40,7 @@ public class ExplosionMixin {
 	public Entity cause;
 
 	@Shadow
-	public Set damagedBlocks;
+	public Set<BlockPos> damagedBlocks;
 
 	@Shadow
 	public boolean causeFires;
@@ -107,24 +107,23 @@ public class ExplosionMixin {
 		int l1 = MathHelper.floor(this.y + (double)this.power + 1.0);
 		int i2 = MathHelper.floor(this.z - (double)this.power - 1.0);
 		int j2 = MathHelper.floor(this.z + (double)this.power + 1.0);
-		List list = this.world
+		List<Entity> list = this.world
 				.getEntities(this.cause, AxixAlignedBoundingBox.createAndAddToList((double)k, (double)k1, (double)i2, (double)i1, (double)l1, (double)j2));
 		Vec3d vec3d = Vec3d.from(this.x, this.y, this.z);
 
-		for(int k2 = 0; k2 < list.size(); ++k2) {
-			Entity entity = (Entity)list.get(k2);
-			double d4 = entity.distanceTo(this.x, this.y, this.z) / (double)this.power;
+		for (Entity entity : list) {
+			double d4 = entity.distanceTo(this.x, this.y, this.z) / (double) this.power;
 			if (d4 <= 1.0) {
 				double d6 = entity.x - this.x;
 				double d8 = entity.y - this.y;
 				double d10 = entity.z - this.z;
-				double d11 = (double)MathHelper.sqrt(d6 * d6 + d8 * d8 + d10 * d10);
+				double d11 = (double) MathHelper.sqrt(d6 * d6 + d8 * d8 + d10 * d10);
 				d6 /= d11;
 				d8 /= d11;
 				d10 /= d11;
-				double d12 = (double)this.world.method_163(vec3d, entity.boundingBox);
+				double d12 = (double) this.world.method_163(vec3d, entity.boundingBox);
 				double d13 = (1.0 - d4) * d12;
-				entity.damage(this.cause, (int)((d13 * d13 + d13) / 2.0 * 8.0 * (double)this.power + 1.0));
+				entity.damage(this.cause, (int) ((d13 * d13 + d13) / 2.0 * 8.0 * (double) this.power + 1.0));
 				entity.xVelocity += d6 * d13;
 				entity.yVelocity += d8 * d13;
 				entity.zVelocity += d10 * d13;
@@ -132,11 +131,10 @@ public class ExplosionMixin {
 		}
 
 		this.power = f;
-		ArrayList arraylist = new ArrayList();
-		arraylist.addAll(this.damagedBlocks);
+		ArrayList<BlockPos> arraylist = new ArrayList<>(this.damagedBlocks);
 		if (this.causeFires) {
 			for(int l2 = arraylist.size() - 1; l2 >= 0; --l2) {
-				BlockPos chunkposition = (BlockPos)arraylist.get(l2);
+				BlockPos chunkposition = arraylist.get(l2);
 				int i3 = chunkposition.x;
 				int j3 = chunkposition.y;
 				int k3 = chunkposition.z;

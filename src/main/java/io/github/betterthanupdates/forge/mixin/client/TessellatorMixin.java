@@ -22,7 +22,6 @@ import net.minecraft.client.render.Tessellator;
 import io.github.betterthanupdates.forge.ForgeClientReflection;
 import io.github.betterthanupdates.forge.client.render.ForgeTessellator;
 
-// FIXME
 @Environment(EnvType.CLIENT)
 @Mixin(Tessellator.class)
 public abstract class TessellatorMixin implements ForgeTessellator {
@@ -53,25 +52,9 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 
 	@Shadow
 	protected abstract void clear();
-
-	@Shadow
-	private double textureX;
-	@Shadow
-	private double textureY;
-	@Shadow
-	private int color;
-	@Shadow
-	private int normal;
-	@Shadow
-	public double xOffset;
-	@Shadow
-	public double yOffset;
-	@Shadow
-	public double zOffset;
 	@Shadow public boolean tessellating;
 	@Shadow private int bufferIndex;
 	@Shadow private int vboIndex;
-	@Shadow private static boolean useVbo;
 	@Shadow private boolean canUseVbo;
 	@Shadow public int drawingMode;
 	@Shadow private int vboCount;

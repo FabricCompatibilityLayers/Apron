@@ -1,9 +1,6 @@
 package io.github.betterthanupdates.shockahpi.mixin.client;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
@@ -15,7 +12,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import shockahpi.ACPage;
 import shockahpi.SAPI;
 
 import net.minecraft.client.gui.screen.Screen;
@@ -65,18 +61,6 @@ public class AchievementsScreenMixin extends Screen implements SAPIAchievementsS
 	// SAPI Fields
 	@Unique
 	private boolean draw = true;
-	private static Method met1;
-	private static Method met2;
-
-	@Inject(method = "<clinit>", at = @At("HEAD"))
-	private static void sapi$cinit(CallbackInfo ci) {
-		try {
-			met1 = Class.forName("do").getMethod("a", String.class);
-			met2 = Class.forName("do").getMethod("a", String.class, getArrayClass(Object.class));
-		} catch (Exception var1) {
-			var1.printStackTrace();
-		}
-	}
 
 	@Inject(method = "init", at = @At("RETURN"))
 	private void sapi$init(CallbackInfo ci) {
@@ -256,7 +240,6 @@ public class AchievementsScreenMixin extends Screen implements SAPIAchievementsS
 		GL11.glEnable(3553);
 		super.render(i1, j1, f);
 		if (ny1 != null) {
-			Achievement ny3 = ny1;
 			String s1 = ny1.name;
 			String s2 = ny1.getDescription();
 			int k6 = i1 + 12;
@@ -272,7 +255,7 @@ public class AchievementsScreenMixin extends Screen implements SAPIAchievementsS
 				this.textRenderer.method_1904(s2, k6, j7 + 12, l7, -6250336);
 				if (this.statsFileWriter.isAchievementUnlocked(ny1)) {
 					try {
-						this.textRenderer.drawTextWithShadow((String)met1.invoke(null, "achievement.taken"), k6, j7 + j8 + 4, -7302913);
+						this.textRenderer.drawTextWithShadow(Internationalization.translate("achievement.taken"), k6, j7 + j8 + 4, -7302913);
 					} catch (Exception var28) {
 						var28.printStackTrace();
 					}
@@ -280,7 +263,7 @@ public class AchievementsScreenMixin extends Screen implements SAPIAchievementsS
 			} else {
 				try {
 					int i8 = Math.max(this.textRenderer.getTextWidth(s1), 120);
-					String s3 = (String)met2.invoke(null, "achievement.requires", new Object[]{ny3.parent.name});
+					String s3 = Internationalization.translate("achievement.requires", ny1.parent.name);
 					int k8 = this.textRenderer.method_1902(s3, i8);
 					this.fillGradient(k6 - 3, j7 - 3, k6 + i8 + 3, j7 + k8 + 12 + 3, -1073741824, -1073741824);
 					this.textRenderer.method_1904(s3, k6, j7 + 12, i8, -9416624);
@@ -346,10 +329,10 @@ public class AchievementsScreenMixin extends Screen implements SAPIAchievementsS
 				return true;
 			} else {
 				if (deep >= 1) {
-					ArrayList<Object> list = new ArrayList(Achievements.achievements);
+					ArrayList<Achievement> list = new ArrayList(Achievements.achievements);
 
 					for(int i = 0; i < list.size(); ++i) {
-						Achievement tmpAc = (Achievement)list.get(i);
+						Achievement tmpAc = list.get(i);
 						if (tmpAc.id == achievement.id) {
 							list.remove(i--);
 						} else if (tmpAc.parent == null) {
@@ -359,8 +342,7 @@ public class AchievementsScreenMixin extends Screen implements SAPIAchievementsS
 						}
 					}
 
-					for(int i = 0; i < list.size(); ++i) {
-						Achievement tmpAc = (Achievement)list.get(i);
+					for (Achievement tmpAc : list) {
 						if (this.isVisibleAchievement(tmpAc, deep - 1)) {
 							return true;
 						}
@@ -379,21 +361,14 @@ public class AchievementsScreenMixin extends Screen implements SAPIAchievementsS
 
 	@Override
 	public boolean checkHidden(Achievement achievement) {
-		if (this.client.statFileWriter.isAchievementUnlocked(achievement)) {
+		if (achievement == null) {
+			return true;
+		} else if (this.client.statFileWriter.isAchievementUnlocked(achievement)) {
 			return false;
 		} else if (SAPI.acIsHidden(achievement)) {
 			return true;
 		} else {
-			return achievement.parent == null ? false : this.checkHidden(achievement.parent);
-		}
-	}
-
-	private static Class getArrayClass(Class c) {
-		try {
-			Object e = Array.newInstance(c, 0);
-			return e.getClass();
-		} catch (Exception var21) {
-			throw new IllegalArgumentException(var21);
+			return achievement.parent != null && this.checkHidden(achievement.parent);
 		}
 	}
 }
