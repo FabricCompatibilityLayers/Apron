@@ -2,6 +2,7 @@ package reforged;
 
 import forge.ForgeHooks;
 import forge.MinecraftForge;
+import io.github.betterthanupdates.Legacy;
 import modloadermp.BaseModMp;
 
 import net.minecraft.block.Block;
@@ -9,7 +10,9 @@ import net.minecraft.client.MultiplayerClientInteractionManager;
 import net.minecraft.client.SingleplayerInteractionManager;
 import net.minecraft.item.Item;
 
+@Legacy
 public class mod_Reforged extends BaseModMp {
+	@Legacy
 	public mod_Reforged() {
 		try {
 			Class.forName(Block.class.getName());
@@ -35,6 +38,7 @@ public class mod_Reforged extends BaseModMp {
 
 	}
 
+	@Legacy
 	public String Version() {
 		return String.format("[Forge %d.%d.%d, Reforged %d.%d.%d]",
 				ForgeHooks.majorVersion, ForgeHooks.minorVersion, ForgeHooks.revisionVersion,
