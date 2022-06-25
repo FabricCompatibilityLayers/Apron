@@ -125,14 +125,14 @@
     },
     "apron:mods": {
       "client": {
-        "AudioMod": "*",
+        "AudioMod": "1.7.3+beta.1",
         "ShockAhPI": "5.1",
         "PlayerAPI": "1.7",
         "Reforged": "1.0.1"
       },
       "common": {
-        "ModLoader": "*",
-        "ModLoaderMP": "*",
+        "ModLoader": "1.7.3+beta.1",
+        "ModLoaderMP": "1.7.3+beta.1",
         "MinecraftForge": "1.0.6"
       },
       "server": {
