@@ -72,6 +72,12 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 								}
 
 								break;
+							case "reifnsk/minimap/ReiMinimap":
+								if (methodName.equals("getField") && methodDescriptor.equals("(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;")) {
+									methodOwner = "io/github/betterthanupdates/apron/ReflectionUtils";
+								}
+
+								break;
 						}
 
 						super.visitMethodInsn(opcode, methodOwner, methodName, methodDescriptor, isInterface);

@@ -19,6 +19,20 @@ public class ReflectionUtils {
 		return null;
 	}
 
+	public static Object getField(Class<?> clazz, Object obj, String name) {
+		while (clazz != null) {
+			try {
+				Field field = getField(clazz, new String[]{name});
+				field.setAccessible(true);
+				return field.get(obj);
+			} catch (Exception var4) {
+				clazz = clazz.getSuperclass();
+			}
+		}
+
+		return null;
+	}
+
 	public static Method getMethod(Class<?> target, String[] names, Class<?>[] types) {
 		for (String name : names) {
 			name = Apron.getRemappedMethodName(target, name, types);
