@@ -15,16 +15,16 @@ import io.github.betterthanupdates.apron.Apron;
 @SuppressWarnings("unused")
 @Legacy
 public abstract class BaseModMp extends BaseMod {
-	
+
 	public BaseModMp() {
 	}
 
-	
+
 	public final int getId() {
 		return this.toString().hashCode();
 	}
 
-	
+
 	public void ModsLoaded() {
 		if (Apron.getEnvironment().equals(EnvType.CLIENT)) {
 			ModLoaderMp.Init();
@@ -33,49 +33,49 @@ public abstract class BaseModMp extends BaseMod {
 		}
 	}
 
-	
+
 	@Environment(EnvType.CLIENT)
 	public void HandlePacket(final ModLoaderPacket packet) {
 	}
 
-	
+
 	@Environment(EnvType.CLIENT)
 	public void HandleTileEntityPacket(final int i, final int j, final int k, final int l, final int[] ai, final float[] af, final String[] as) {
 	}
 
-	
+
 	@Environment(EnvType.CLIENT)
 	public Screen HandleGUI(final int invType) {
 		return null;
 	}
 
-	
+
 	@Environment(EnvType.SERVER)
 	public void HandlePacket(ModLoaderPacket modloaderPacket, ServerPlayerEntity entityplayermp) {
 	}
 
-	
+
 	@Environment(EnvType.SERVER)
 	public void HandleLogin(ServerPlayerEntity entityplayermp) {
 	}
 
-	
+
 	@Environment(EnvType.SERVER)
 	public void HandleSendKey(ServerPlayerEntity entityplayermp, int i) {
 	}
 
-	
+
 	@Environment(EnvType.SERVER)
 	public void GetCommandInfo(CommandSource icommandlistener) {
 	}
 
-	
+
 	@Environment(EnvType.SERVER)
 	public boolean HandleCommand(String s, String s1, CommandSource icommandlistener, CommandManager consolecommandhandler) {
 		return false;
 	}
 
-	
+
 	@Environment(EnvType.SERVER)
 	public boolean hasClientSide() {
 		return true;

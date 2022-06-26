@@ -6,18 +6,18 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public class AnimPulse extends AnimBase {
-	
+
 	private int animState = 0;
-	
+
 	private int animAdd = 1;
-	
+
 	private final int animMax;
-	
+
 	private final Color c1;
-	
+
 	private final Color c2;
 
-	
+
 	public AnimPulse(int spriteID, String spritePath, int animMax, Color c1, Color c2) {
 		super(spriteID, spritePath);
 		this.animMax = animMax;
@@ -25,7 +25,7 @@ public class AnimPulse extends AnimBase {
 		this.c2 = c2;
 	}
 
-	
+
 	public void animFrame() {
 		this.animState += this.animAdd;
 

@@ -80,21 +80,17 @@
       "BaseMod": "modloader/BaseMod",
       "MLProp": "modloader/MLProp",
       "ModLoader": "modloader/ModLoader",
-
       "BaseModMp": "modloadermp/BaseModMp",
       "ISpawnable": "modloadermp/ISpawnable",
       "ModLoaderMp": "modloadermp/ModLoaderMp",
       "Packet230ModLoader": "modloadermp/ModLoaderPacket",
-
       "mod_Reforged": "reforged/mod_Reforged"
     },
     "apron:client": {
       "EntityRendererProxy": "modloader/EntityRendererProxy",
       "ModTextureAnimation": "modloader/ModTextureAnimation",
       "ModTextureStatic": "modloader/ModTextureStatic",
-
       "NetClientHandlerEntity": "modloadermp/NetClientHandlerEntity",
-
       "ACPage": "shockahpi/ACPage",
       "AnimBase": "shockahpi/AnimBase",
       "AnimPulse": "shockahpi/AnimPulse",
@@ -113,7 +109,6 @@
       "SAPI": "shockahpi/SAPI",
       "Tool": "shockahpi/Tool",
       "ToolBase": "shockahpi/ToolBase",
-
       "dq": "io/github/betterthanupdates/shockahpi/item/SAPIToolItem",
       "ta": "io/github/betterthanupdates/shockahpi/item/SAPIAxeItem",
       "au": "io/github/betterthanupdates/shockahpi/item/SAPIPickaxeItem",
@@ -136,7 +131,6 @@
         "MinecraftForge": "1.0.6"
       },
       "server": {
-
       }
     }
   }

@@ -31,8 +31,9 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 			target = "Lnet/minecraft/client/render/Tessellator;INSTANCE:Lnet/minecraft/client/render/Tessellator;"))
 	private void reforged$render$2(ItemEntity entityitem, double d, double d1, double d2, float f, float f1, CallbackInfo ci) {
 		ItemStack itemstack = entityitem.stack;
-		if (itemstack.itemId < 256) ForgeHooksClient.overrideTexture(Block.BY_ID[itemstack.itemId]);
-		else {
+		if (itemstack.itemId < 256) {
+			ForgeHooksClient.overrideTexture(Block.BY_ID[itemstack.itemId]);
+		} else {
 			ForgeHooksClient.overrideTexture(Item.byId[itemstack.itemId]);
 		}
 	}
@@ -46,8 +47,9 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 	@Inject(method = "renderItemOnGui", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/item/Item;getNameColor(I)I", ordinal = 1))
 	private void reforged$renderItemOnGui$2(TextRenderer fontrenderer, TextureManager renderengine, int i, int j, int k, int l, int i1, CallbackInfo ci) {
-		if (i < 256) ForgeHooksClient.overrideTexture(Block.BY_ID[i]);
-		else {
+		if (i < 256) {
+			ForgeHooksClient.overrideTexture(Block.BY_ID[i]);
+		} else {
 			ForgeHooksClient.overrideTexture(Item.byId[i]);
 		}
 	}

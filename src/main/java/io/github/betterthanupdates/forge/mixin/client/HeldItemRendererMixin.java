@@ -27,8 +27,9 @@ public class HeldItemRendererMixin {
 	@Inject(method = "render", at = @At(value = "FIELD", opcode = Opcodes.GETSTATIC,
 			target = "Lnet/minecraft/client/render/Tessellator;INSTANCE:Lnet/minecraft/client/render/Tessellator;"))
 	private void reforged$render$2(LivingEntity arg2, ItemStack itemStack, CallbackInfo ci) {
-		if (itemStack.itemId < 256) ForgeHooksClient.overrideTexture(Block.BY_ID[itemStack.itemId]);
-		else {
+		if (itemStack.itemId < 256) {
+			ForgeHooksClient.overrideTexture(Block.BY_ID[itemStack.itemId]);
+		} else {
 			ForgeHooksClient.overrideTexture(Item.byId[itemStack.itemId]);
 		}
 	}

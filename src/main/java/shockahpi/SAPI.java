@@ -27,38 +27,38 @@ import io.github.betterthanupdates.apron.api.ApronApi;
 public class SAPI {
 	public static final Logger LOGGER = ApronApi.getLogger("ShockAhPI");
 
-	
+
 	public static boolean usingText = false;
-	
+
 	private static final ArrayList<IInterceptHarvest> harvestIntercepts = new ArrayList<>();
-	
+
 	private static final ArrayList<IInterceptBlockSet> setIntercepts = new ArrayList<>();
-	
+
 	private static final ArrayList<IReach> reaches = new ArrayList<>();
-	
+
 	private static final ArrayList<String> dngMobs = new ArrayList<>();
-	
+
 	private static final ArrayList<DungeonLoot> dngItems = new ArrayList<>();
-	
+
 	private static final ArrayList<DungeonLoot> dngGuaranteed = new ArrayList<>();
-	
+
 	private static boolean dngAddedMobs = false;
-	
+
 	private static boolean dngAddedItems = false;
-	
+
 	public static int acCurrentPage = 0;
-	
+
 	private static final ArrayList<Integer> acHidden = new ArrayList<>();
-	
+
 	private static final ArrayList<ACPage> acPages = new ArrayList<>();
-	
+
 	public static final ACPage acDefaultPage = new ACPage();
 
-	
+
 	public SAPI() {
 	}
 
-	
+
 	public static void showText() {
 		if (!usingText) {
 			LOGGER.info("Using ShockAhPI r5.1");
@@ -66,17 +66,17 @@ public class SAPI {
 		}
 	}
 
-	
+
 	public static Minecraft getMinecraftInstance() {
 		return (Minecraft) ApronApi.getInstance().getGame();
 	}
 
-	
+
 	public static void interceptAdd(IInterceptHarvest iinterceptharvest) {
 		harvestIntercepts.add(iinterceptharvest);
 	}
 
-	
+
 	public static boolean interceptHarvest(World world, PlayerEntity entityplayer, Loc loc, int i, int j) {
 		for (IInterceptHarvest iinterceptharvest : harvestIntercepts) {
 			if (iinterceptharvest.canIntercept(world, entityplayer, loc, i, j)) {
@@ -88,7 +88,7 @@ public class SAPI {
 		return false;
 	}
 
-	
+
 	public static void drop(World world, Loc loc, ItemStack itemstack) {
 		if (!world.isClient) {
 			for (int i = 0; i < itemstack.count; ++i) {
@@ -105,12 +105,12 @@ public class SAPI {
 		}
 	}
 
-	
+
 	public static void interceptAdd(IInterceptBlockSet iinterceptblockset) {
 		setIntercepts.add(iinterceptblockset);
 	}
 
-	
+
 	public static int interceptBlockSet(World world, Loc loc, int i) {
 		for (IInterceptBlockSet iinterceptblockset : setIntercepts) {
 			if (iinterceptblockset.canIntercept(world, loc, i)) {
@@ -121,12 +121,12 @@ public class SAPI {
 		return i;
 	}
 
-	
+
 	public static void reachAdd(IReach ireach) {
 		reaches.add(ireach);
 	}
 
-	
+
 	public static float reachGet() {
 		ItemStack itemstack = getMinecraftInstance().player.inventory.getHeldItem();
 
@@ -139,19 +139,19 @@ public class SAPI {
 		return 4.0F;
 	}
 
-	
+
 	public static void dungeonAddMob(String s) {
 		dungeonAddMob(s, 10);
 	}
 
-	
+
 	public static void dungeonAddMob(String s, int i) {
 		for (int j = 0; j < i; ++j) {
 			dngMobs.add(s);
 		}
 	}
 
-	
+
 	public static void dungeonRemoveMob(String s) {
 		for (int i = 0; i < dngMobs.size(); ++i) {
 			if (dngMobs.get(i).equals(s)) {
@@ -161,13 +161,13 @@ public class SAPI {
 		}
 	}
 
-	
+
 	public static void dungeonRemoveAllMobs() {
 		dngAddedMobs = true;
 		dngMobs.clear();
 	}
 
-	
+
 	static void dungeonAddDefaultMobs() {
 		for (int i = 0; i < 10; ++i) {
 			dngMobs.add("Skeleton");
@@ -182,7 +182,7 @@ public class SAPI {
 		}
 	}
 
-	
+
 	public static String dungeonGetRandomMob() {
 		if (!dngAddedMobs) {
 			dungeonAddDefaultMobs();
@@ -192,34 +192,34 @@ public class SAPI {
 		return dngMobs.isEmpty() ? "Pig" : dngMobs.get(new Random().nextInt(dngMobs.size()));
 	}
 
-	
+
 	public static void dungeonAddItem(DungeonLoot dungeonloot) {
 		dungeonAddItem(dungeonloot, 100);
 	}
 
-	
+
 	public static void dungeonAddItem(DungeonLoot dungeonloot, int i) {
 		for (int j = 0; j < i; ++j) {
 			dngItems.add(dungeonloot);
 		}
 	}
 
-	
+
 	public static void dungeonAddGuaranteedItem(DungeonLoot dungeonloot) {
 		dngGuaranteed.add(dungeonloot);
 	}
 
-	
+
 	public static int dungeonGetAmountOfGuaranteed() {
 		return dngGuaranteed.size();
 	}
 
-	
+
 	public static DungeonLoot dungeonGetGuaranteed(int i) {
 		return dngGuaranteed.get(i);
 	}
 
-	
+
 	public static void dungeonRemoveItem(int i) {
 		for (int j = 0; j < dngItems.size(); ++j) {
 			if (dngItems.get(j).loot.itemId == i) {
@@ -236,14 +236,14 @@ public class SAPI {
 		}
 	}
 
-	
+
 	public static void dungeonRemoveAllItems() {
 		dngAddedItems = true;
 		dngItems.clear();
 		dngGuaranteed.clear();
 	}
 
-	
+
 	static void dungeonAddDefaultItems() {
 		for (int i = 0; i < 100; ++i) {
 			dngItems.add(new DungeonLoot(new ItemStack(Item.SADDLE)));
@@ -288,7 +288,7 @@ public class SAPI {
 		}
 	}
 
-	
+
 	public static ItemStack dungeonGetRandomItem() {
 		if (!dngAddedItems) {
 			dungeonAddDefaultItems();
@@ -298,24 +298,24 @@ public class SAPI {
 		return dngItems.isEmpty() ? null : dngItems.get(new Random().nextInt(dngItems.size())).getStack();
 	}
 
-	
+
 	public static void acPageAdd(ACPage acpage) {
 		acPages.add(acpage);
 	}
 
-	
+
 	public static void acHide(Achievement[] aachievement) {
 		for (Achievement achievement : aachievement) {
 			acHidden.add(achievement.id);
 		}
 	}
 
-	
+
 	public static boolean acIsHidden(Achievement achievement) {
 		return acHidden.contains(achievement.id);
 	}
 
-	
+
 	public static ACPage acGetPage(Achievement achievement) {
 		if (achievement == null) {
 			LOGGER.debug("Expected Achievement, got null instead.");
@@ -331,17 +331,17 @@ public class SAPI {
 		}
 	}
 
-	
+
 	public static ACPage acGetCurrentPage() {
 		return acPages.get(acCurrentPage);
 	}
 
-	
+
 	public static String acGetCurrentPageTitle() {
 		return acGetCurrentPage().title;
 	}
 
-	
+
 	public static void acPageNext() {
 		++acCurrentPage;
 
@@ -350,7 +350,7 @@ public class SAPI {
 		}
 	}
 
-	
+
 	public static void acPagePrev() {
 		--acCurrentPage;
 

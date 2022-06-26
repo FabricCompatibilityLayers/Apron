@@ -19,7 +19,7 @@ import io.github.betterthanupdates.Legacy;
 @Deprecated
 @Environment(EnvType.SERVER)
 public class Pair<L, R> extends AbstractMap.SimpleEntry<L, R> {
-	
+
 	public Pair(L left, R right) {
 		super(left, right);
 	}
@@ -28,7 +28,7 @@ public class Pair<L, R> extends AbstractMap.SimpleEntry<L, R> {
 	 * @return {@link #getKey()}
 	 * @see #getKey()
 	 */
-	
+
 	public L getLeft() {
 		return this.getKey();
 	}
@@ -37,18 +37,18 @@ public class Pair<L, R> extends AbstractMap.SimpleEntry<L, R> {
 	 * @return {@link #getValue()} ()}
 	 * @see #getValue()
 	 */
-	
+
 	public R getRight() {
 		return this.getValue();
 	}
 
-	
+
 	@Override
 	public int hashCode() {
 		return this.getLeft().hashCode() ^ this.getRight().hashCode();
 	}
 
-	
+
 	@Override
 	public boolean equals(Object other) {
 		if (!(other instanceof Pair)) {

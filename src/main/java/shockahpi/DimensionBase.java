@@ -22,21 +22,21 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public class DimensionBase {
-	
+
 	public static ArrayList<DimensionBase> list = new ArrayList<>();
-	
+
 	public static LinkedList<Integer> order = new LinkedList<>();
-	
+
 	public final int number;
-	
+
 	public final Class<? extends Dimension> worldProvider;
-	
+
 	public final Class<? extends NetherTeleporter> teleporter;
-	
+
 	public String name = "Dimension";
-	
+
 	public String soundTrigger = "portal.trigger";
-	
+
 	public String soundTravel = "portal.travel";
 
 	static {
@@ -44,7 +44,7 @@ public class DimensionBase {
 		new DimensionNether();
 	}
 
-	
+
 	public static DimensionBase getDimByNumber(int number) {
 		for (DimensionBase dim : list) {
 			if (dim.number == number) {
@@ -55,7 +55,7 @@ public class DimensionBase {
 		return null;
 	}
 
-	
+
 	public static DimensionBase getDimByProvider(Class<? extends Dimension> worldProvider) {
 		for (DimensionBase dim : list) {
 			if (dim.worldProvider.getName().equals(worldProvider.getName())) {
@@ -66,7 +66,7 @@ public class DimensionBase {
 		return null;
 	}
 
-	
+
 	public Dimension getWorldProvider() {
 		try {
 			return this.worldProvider.newInstance();
@@ -76,7 +76,7 @@ public class DimensionBase {
 		return null;
 	}
 
-	
+
 	public NetherTeleporter getTeleporter() {
 		try {
 			if (this.teleporter != null) {
@@ -88,7 +88,7 @@ public class DimensionBase {
 		return null;
 	}
 
-	
+
 	public static void respawn(boolean paramBoolean, int paramInt) {
 		Minecraft localMinecraft = SAPI.getMinecraftInstance();
 
@@ -158,12 +158,12 @@ public class DimensionBase {
 		}
 	}
 
-	
+
 	public static void usePortal(int dimNumber) {
 		usePortal(dimNumber, false);
 	}
 
-	
+
 	private static void usePortal(int dimNumber, boolean resetOrder) {
 		Minecraft game = SAPI.getMinecraftInstance();
 		int oldDimension = game.player.dimensionId;
@@ -221,7 +221,7 @@ public class DimensionBase {
 		teleporter.teleport(game.world, game.player);
 	}
 
-	
+
 	public DimensionBase(int number, Class<? extends Dimension> worldProvider, Class<? extends NetherTeleporter> teleporter) {
 		this.number = number;
 		this.worldProvider = worldProvider;
@@ -229,7 +229,7 @@ public class DimensionBase {
 		list.add(this);
 	}
 
-	
+
 	public Loc getDistanceScale(Loc loc, boolean goingIn) {
 		return loc;
 	}
@@ -237,7 +237,7 @@ public class DimensionBase {
 	/*
 	 * Originally Dimension#getByID(I)Dimension;
 	 */
-	
+
 	public static Dimension getByID(int i) {
 		DimensionBase dimensionbase = getDimByNumber(i);
 

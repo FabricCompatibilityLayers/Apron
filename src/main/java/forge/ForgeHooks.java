@@ -150,23 +150,23 @@ public class ForgeHooks {
 			MinecraftForge.removeBlockEffectiveness(Block.REDSTONE_ORE_LIT, "pickaxe");
 
 			Block[] pickaxeEffectiveOn = new Block[] {
-				Block.COBBLESTONE,
-				Block.DOUBLE_STONE_SLAB,
-				Block.STONE_SLAB,
-				Block.STONE,
-				Block.SANDSTONE,
-				Block.MOSSY_COBBLESTONE,
-				Block.IRON_ORE,
-				Block.IRON_BLOCK,
-				Block.COAL_ORE,
-				Block.GOLD_BLOCK,
-				Block.GOLD_ORE,
-				Block.DIAMOND_ORE,
-				Block.DIAMOND_BLOCK,
-				Block.ICE,
-				Block.NETHERRACK,
-				Block.LAPIS_LAZULI_ORE,
-				Block.LAPIS_LAZULI_BLOCK
+					Block.COBBLESTONE,
+					Block.DOUBLE_STONE_SLAB,
+					Block.STONE_SLAB,
+					Block.STONE,
+					Block.SANDSTONE,
+					Block.MOSSY_COBBLESTONE,
+					Block.IRON_ORE,
+					Block.IRON_BLOCK,
+					Block.COAL_ORE,
+					Block.GOLD_BLOCK,
+					Block.GOLD_ORE,
+					Block.DIAMOND_ORE,
+					Block.DIAMOND_BLOCK,
+					Block.ICE,
+					Block.NETHERRACK,
+					Block.LAPIS_LAZULI_ORE,
+					Block.LAPIS_LAZULI_BLOCK
 			};
 
 			for (Block block : pickaxeEffectiveOn) {
