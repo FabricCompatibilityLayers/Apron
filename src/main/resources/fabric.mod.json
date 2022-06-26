@@ -84,7 +84,7 @@
       "ISpawnable": "modloadermp/ISpawnable",
       "ModLoaderMp": "modloadermp/ModLoaderMp",
       "Packet230ModLoader": "modloadermp/ModLoaderPacket",
-      "mod_Reforged": "reforged/mod_Reforged"
+      "mod_Reforged": "reforged/ReforgedMod"
     },
     "apron:client": {
       "EntityRendererProxy": "modloader/EntityRendererProxy",
