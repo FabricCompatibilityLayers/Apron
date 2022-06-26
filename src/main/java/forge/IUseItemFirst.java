@@ -13,5 +13,5 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface IUseItemFirst {
-	boolean onItemUseFirst(ItemStack itemStack, PlayerEntity player, World world, int i, int j, int k, int l);
+	boolean onItemUseFirst(ItemStack itemStack, PlayerEntity player, World world, int x, int y, int z, int l);
 }

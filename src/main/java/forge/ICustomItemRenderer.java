@@ -11,5 +11,5 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface ICustomItemRenderer {
-	void renderInventory(BlockRenderer blockRenderer, int i, int j);
+	void renderInventory(BlockRenderer blockRenderer, int itemId, int meta);
 }

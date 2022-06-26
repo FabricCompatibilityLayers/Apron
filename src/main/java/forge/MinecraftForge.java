@@ -6,7 +6,6 @@
 package forge;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -23,6 +22,8 @@ import net.minecraft.world.World;
 
 import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.apron.api.ApronApi;
+import io.github.betterthanupdates.forge.item.ForgeTool;
+import io.github.betterthanupdates.forge.item.ToolEffectiveness;
 
 @SuppressWarnings("unused")
 @Legacy
@@ -74,19 +75,19 @@ public class MinecraftForge {
 
 	public static void setToolClass(Item tool, String toolType, int harvestLevel) {
 		ForgeHooks.initTools();
-		ForgeHooks.toolClasses.put(tool.id, Arrays.asList(toolType, harvestLevel));
+		ForgeHooks.toolClasses.put(tool.id, new ForgeTool(toolType, harvestLevel));
 	}
 
 	public static void setBlockHarvestLevel(Block block, int meta, String toolType, int harvestLevel) {
 		ForgeHooks.initTools();
-		List<?> key = Arrays.asList(block.id, meta, toolType);
+		ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolType);
 		ForgeHooks.toolHarvestLevels.put(key, harvestLevel);
 		ForgeHooks.toolEffectiveness.add(key);
 	}
 
 	public static void removeBlockEffectiveness(Block block, int meta, String toolType) {
 		ForgeHooks.initTools();
-		List<?> key = Arrays.asList(block.id, meta, toolType);
+		ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolType);
 		ForgeHooks.toolEffectiveness.remove(key);
 	}
 
@@ -94,7 +95,7 @@ public class MinecraftForge {
 		ForgeHooks.initTools();
 
 		for (int meta = 0; meta < 16; ++meta) {
-			List<?> key = Arrays.asList(block.id, meta, toolType);
+			ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolType);
 			ForgeHooks.toolHarvestLevels.put(key, harvestLevel);
 			ForgeHooks.toolEffectiveness.add(key);
 		}
@@ -104,7 +105,7 @@ public class MinecraftForge {
 		ForgeHooks.initTools();
 
 		for (int meta = 0; meta < 16; ++meta) {
-			List<?> key = Arrays.asList(block.id, meta, toolType);
+			ToolEffectiveness key = new ToolEffectiveness(block.id, meta, toolType);
 			ForgeHooks.toolEffectiveness.remove(key);
 		}
 	}

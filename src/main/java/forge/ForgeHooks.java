@@ -5,11 +5,9 @@
 
 package forge;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,6 +19,8 @@ import net.minecraft.util.SleepStatus;
 import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.forge.block.ForgeBlock;
 import io.github.betterthanupdates.forge.entity.player.ForgePlayerEntity;
+import io.github.betterthanupdates.forge.item.ForgeTool;
+import io.github.betterthanupdates.forge.item.ToolEffectiveness;
 
 @SuppressWarnings("unused")
 @Legacy
@@ -32,9 +32,9 @@ public class ForgeHooks {
 	public static final int minorVersion = 0;
 	public static final int revisionVersion = 6;
 	static boolean toolInit = false;
-	static HashMap<Integer, List<?>> toolClasses = new HashMap<>();
-	static HashMap<List<?>, Integer> toolHarvestLevels = new HashMap<>();
-	static HashSet<List<?>> toolEffectiveness = new HashSet<>();
+	static HashMap<Integer, ForgeTool> toolClasses = new HashMap<>();
+	static HashMap<ToolEffectiveness, Integer> toolHarvestLevels = new HashMap<>();
+	static HashSet<ToolEffectiveness> toolEffectiveness = new HashSet<>();
 
 	public ForgeHooks() {
 	}
@@ -73,19 +73,18 @@ public class ForgeHooks {
 	}
 
 	public static boolean canToolHarvestBlock(Block block, int meta, ItemStack itemStack) {
-		List<?> tc = toolClasses.get(itemStack.itemId);
+		ForgeTool forgeTool = toolClasses.get(itemStack.itemId);
 
-		if (tc == null) {
+		if (forgeTool == null) {
 			return itemStack.isEffectiveOn(block);
 		} else {
-			Object[] ta = tc.toArray();
-			String toolType = (String) ta[0];
-			int harvestLevel = (int) ta[1];
+			String toolType = forgeTool.toolType;
+			int harvestLevel = forgeTool.harvestLevel;
 
 			if (toolType.equalsIgnoreCase("paxel")) {
 				return true;
 			} else {
-				Integer blockHarvestLevel = toolHarvestLevels.get(Arrays.asList(block.id, meta, toolType));
+				Integer blockHarvestLevel = toolHarvestLevels.get(new ToolEffectiveness(block.id, meta, toolType));
 
 				if (blockHarvestLevel == null) {
 					return itemStack.isEffectiveOn(block);
@@ -108,14 +107,13 @@ public class ForgeHooks {
 	}
 
 	public static boolean isToolEffective(ItemStack itemStack, Block block, int meta) {
-		List<?> tc = toolClasses.get(itemStack.itemId);
+		ForgeTool forgeTool = toolClasses.get(itemStack.itemId);
 
-		if (tc == null) {
+		if (forgeTool == null) {
 			return false;
 		} else {
-			Object[] ta = tc.toArray();
-			String toolType = (String) ta[0];
-			return toolType.equalsIgnoreCase("paxel") || toolEffectiveness.contains(Arrays.asList(block.id, meta, toolType));
+			String toolType = forgeTool.toolType;
+			return toolType.equalsIgnoreCase("paxel") || toolEffectiveness.contains(new ToolEffectiveness(block.id, meta, toolType));
 		}
 	}
 

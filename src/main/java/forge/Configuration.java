@@ -79,7 +79,7 @@ public class Configuration {
 		try {
 			Integer.parseInt(prop.value);
 			return prop;
-		} catch (NumberFormatException var6) {
+		} catch (NumberFormatException ignored) {
 			prop.value = Integer.toString(defaultValue);
 			return prop;
 		}
@@ -140,9 +140,7 @@ public class Configuration {
 				while (true) {
 					String line = buffer.readLine();
 
-					if (line == null) {
-						break;
-					}
+					if (line == null) break;
 
 					int nameStart = -1;
 					int nameEnd = -1;
@@ -201,8 +199,8 @@ public class Configuration {
 					}
 				}
 			}
-		} catch (IOException var12) {
-			var12.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -243,8 +241,8 @@ public class Configuration {
 				buffer.close();
 				fileoutputstream.close();
 			}
-		} catch (IOException var3) {
-			var3.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

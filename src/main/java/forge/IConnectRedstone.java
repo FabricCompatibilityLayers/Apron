@@ -11,5 +11,5 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface IConnectRedstone {
-	boolean canConnectRedstone(BlockView blockView, int i, int j, int k, int l);
+	boolean canConnectRedstone(BlockView blockView, int x, int y, int z, int side);
 }

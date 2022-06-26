@@ -6,15 +6,13 @@
 package forge;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 
-import modloader.ModLoader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.tinyremapper.extension.mixin.common.data.Pair;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
@@ -34,11 +32,17 @@ import io.github.betterthanupdates.forge.ForgeClientReflection;
 @Legacy
 public class ForgeHooksClient {
 	static LinkedList<IHighlightHandler> highlightHandlers = new LinkedList<>();
-	static HashMap<List<?>, Tessellator> tessellators = new HashMap<>();
+	static HashMap<Pair<Integer, Integer>, Tessellator> tessellators = new HashMap<>();
 	static HashMap<String, Integer> textures = new HashMap<>();
 	static boolean inWorld = false;
-	static HashSet<List<?>> renderTextureTest = new HashSet<>();
-	static ArrayList<List<Integer>> renderTextureList = new ArrayList<>();
+	/**
+	 * Set of tex/sub pairs.
+	 */
+	static HashSet<Pair<Integer, Integer>> renderTextureTest = new HashSet<>();
+	/**
+	 * List of tex/sub pairs.
+	 */
+	static ArrayList<Pair<Integer, Integer>> renderTextureList = new ArrayList<>();
 	static int renderPass = -1;
 
 	public ForgeHooksClient() {
@@ -64,7 +68,7 @@ public class ForgeHooksClient {
 	}
 
 	protected static void bindTessellator(int textureId, int sub) {
-		List<Integer> key = Arrays.asList(textureId, sub);
+		Pair<Integer, Integer> key = Pair.of(textureId, sub);
 		Tessellator tessellator;
 
 		if (!tessellators.containsKey(key)) {
@@ -127,14 +131,13 @@ public class ForgeHooksClient {
 		renderPass = -1;
 		inWorld = false;
 
-		for (List<Integer> l : renderTextureList) {
-			Integer[] tn = l.toArray(new Integer[0]);
-			GL11.glBindTexture(3553, tn[0]);
+		for (Pair<Integer, Integer> l : renderTextureList) {
+			GL11.glBindTexture(3553, l.first());
 			Tessellator tessellator = tessellators.get(l);
 			tessellator.tessellate();
 		}
 
-		GL11.glBindTexture(3553, ModLoader.getMinecraftInstance().textureManager.getTextureId("/terrain.png"));
+		GL11.glBindTexture(3553, ApronClientImpl.instance.getTextureManager().getTextureId("/terrain.png"));
 		Tessellator.INSTANCE = ForgeClientReflection.Tessellator$firstInstance;
 		ForgeClientReflection.Tessellator$renderingWorldRenderer = false;
 	}
@@ -156,5 +159,18 @@ public class ForgeHooksClient {
 		if (o instanceof ITextureProvider) {
 			GL11.glBindTexture(3553, ApronClientImpl.instance.getTextureManager().getTextureId(((ITextureProvider) o).getTextureFile()));
 		}
+	}
+
+	// Not included in Reforged for unknown reasons
+	public static void renderCustomItem(ICustomItemRenderer customRenderer, BlockRenderer blockRenderer, int itemID, int meta, float f) {
+		if (blockRenderer.field_81) {
+			int j = 16777215;
+			float f1 = (float) (j >> 16 & 0xFF) / 255.0F;
+			float f3 = (float) (j >> 8 & 0xFF) / 255.0F;
+			float f5 = (float) (j & 0xFF) / 255.0F;
+			GL11.glColor4f(f1 * f, f3 * f, f5 * f, 1.0F);
+		}
+
+		customRenderer.renderInventory(blockRenderer, itemID, meta);
 	}
 }
