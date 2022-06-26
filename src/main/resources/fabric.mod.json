@@ -91,6 +91,8 @@
       "ModTextureAnimation": "modloader/ModTextureAnimation",
       "ModTextureStatic": "modloader/ModTextureStatic",
       "NetClientHandlerEntity": "modloadermp/NetClientHandlerEntity",
+      "PlayerBase": "playerapi/PlayerBase",
+      "PlayerAPI": "playerapi/PlayerAPI",
       "ACPage": "shockahpi/ACPage",
       "AnimBase": "shockahpi/AnimBase",
       "AnimPulse": "shockahpi/AnimPulse",
