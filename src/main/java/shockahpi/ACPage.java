@@ -16,15 +16,10 @@ import io.github.betterthanupdates.Legacy;
 @SuppressWarnings("unused")
 @Legacy
 public class ACPage {
-
 	private static int nextID = 1;
-
 	final int id;
-
 	public final String title;
-
 	ArrayList<Integer> list = new ArrayList<>();
-
 
 	public ACPage() {
 		this.id = 0;
@@ -32,20 +27,17 @@ public class ACPage {
 		SAPI.acPageAdd(this);
 	}
 
-
 	public ACPage(String title) {
 		this.id = nextID++;
 		this.title = title;
 		SAPI.acPageAdd(this);
 	}
 
-
 	public void addAchievements(Achievement... achievements) {
 		for (Achievement achievement : achievements) {
 			this.list.add(achievement.id);
 		}
 	}
-
 
 	public int bgGetSprite(Random random, int x, int y) {
 		int sprite = Block.SAND.texture;

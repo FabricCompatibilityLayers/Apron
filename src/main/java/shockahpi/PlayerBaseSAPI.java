@@ -11,14 +11,11 @@ import io.github.betterthanupdates.shockahpi.client.entity.player.ShockAhPIClien
 
 @Legacy
 public class PlayerBaseSAPI extends PlayerBase {
-
 	public int portal;
-
 
 	public PlayerBaseSAPI(AbstractClientPlayerEntity p) {
 		super(p);
 	}
-
 
 	public boolean onLivingUpdate() {
 		Minecraft mc = this.player.client;
@@ -90,7 +87,6 @@ public class PlayerBaseSAPI extends PlayerBase {
 		((ShockAhPIClientPlayerEntity) this.player).superOnLivingUpdate();
 		return true;
 	}
-
 
 	public boolean respawn() {
 		DimensionBase.respawn(false, 0);

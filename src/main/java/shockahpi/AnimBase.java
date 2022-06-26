@@ -14,41 +14,33 @@ import io.github.betterthanupdates.Legacy;
 @Legacy
 @SuppressWarnings("unused")
 public abstract class AnimBase extends TextureBinder {
-
 	protected int[][] fileBuf;
-
 	protected int[][] frame;
-
 	protected int size;
-
 	public AnimBase.Mode mdSet = new AnimBase.Mode() {
 		@Override
 		public void draw(int x, int y, Color color) {
 			AnimBase.this.setPixel(x, y, color);
 		}
 	};
-
 	public AnimBase.Mode mdAdd = new AnimBase.Mode() {
 		@Override
 		public void draw(int x, int y, Color color) {
 			AnimBase.this.setPixel(x, y, AnimBase.add(new Color(AnimBase.this.frame[x][y]), color));
 		}
 	};
-
 	public AnimBase.Mode mdSubtract = new AnimBase.Mode() {
 		@Override
 		public void draw(int x, int y, Color color) {
 			AnimBase.this.setPixel(x, y, AnimBase.subtract(new Color(AnimBase.this.frame[x][y]), color));
 		}
 	};
-
 	public AnimBase.Mode mdBlend = new AnimBase.Mode() {
 		@Override
 		public void draw(int x, int y, Color color) {
 			AnimBase.this.setPixel(x, y, AnimBase.blend(new Color(AnimBase.this.frame[x][y]), color));
 		}
 	};
-
 
 	public AnimBase(int spriteID, String spritePath) {
 		super(spriteID);
@@ -81,16 +73,13 @@ public abstract class AnimBase extends TextureBinder {
 		}
 	}
 
-
 	public void updateTexture() {
 		this.getCleanFrame();
 		this.animFrame();
 		this.copyFrameToArray();
 	}
 
-
 	public abstract void animFrame();
-
 
 	protected void getCleanFrame() {
 		for (int y = 0; y < this.size; ++y) {
@@ -99,7 +88,6 @@ public abstract class AnimBase extends TextureBinder {
 			}
 		}
 	}
-
 
 	protected void copyFrameToArray() {
 		for (int y = 0; y < this.size; ++y) {
@@ -113,38 +101,31 @@ public abstract class AnimBase extends TextureBinder {
 		}
 	}
 
-
 	private void setPixel(int x, int y, Color color) {
 		if (this.inImage(x, y)) {
 			this.frame[x][y] = color.getRGB();
 		}
 	}
 
-
 	protected int getXYIndex(int x, int y) {
 		return y * this.size + x;
 	}
-
 
 	protected boolean inImage(int x, int y) {
 		return x >= 0 && y >= 0 && x < this.size && y < this.size;
 	}
 
-
 	protected void drawPoint(int x, int y, Color color) {
 		this.drawPoint(x, y, color, this.mdSet);
 	}
-
 
 	protected void drawPoint(int x, int y, Color color, AnimBase.Mode mode) {
 		mode.draw(x, y, color);
 	}
 
-
 	protected void drawRect(int x1, int y1, int x2, int y2, Color color) {
 		this.drawRect(x1, y1, x2, y2, color, this.mdSet);
 	}
-
 
 	protected void drawRect(int x1, int y1, int x2, int y2, Color color, AnimBase.Mode mode) {
 		int xS = Math.min(x1, x2);
@@ -158,7 +139,6 @@ public abstract class AnimBase extends TextureBinder {
 			}
 		}
 	}
-
 
 	protected void shiftFrame(int h, int v, boolean wrapH, boolean wrapV) {
 		int[] line = new int[this.size];
@@ -232,7 +212,6 @@ public abstract class AnimBase extends TextureBinder {
 		}
 	}
 
-
 	protected void flipFrame(boolean h, boolean v) {
 		if (h) {
 			for (int x = 0; x < this.size / 2; ++x) {
@@ -255,7 +234,6 @@ public abstract class AnimBase extends TextureBinder {
 		}
 	}
 
-
 	public static Color add(Color c1, Color c2) {
 		float value = (float) c2.getAlpha() / 255.0F;
 		int R = c1.getRed();
@@ -270,7 +248,6 @@ public abstract class AnimBase extends TextureBinder {
 		int A = c1.getAlpha();
 		return new Color(R, G, B, A);
 	}
-
 
 	public static Color subtract(Color c1, Color c2) {
 		float value = (float) c2.getAlpha() / 255.0F;
@@ -287,7 +264,6 @@ public abstract class AnimBase extends TextureBinder {
 		return new Color(R, G, B, A);
 	}
 
-
 	public static Color merge(Color c1, Color c2, float value) {
 		value = Math.min(Math.max(value, 0.0F), 1.0F);
 		float R = (float) c1.getRed() - ((float) c1.getRed() - (float) c2.getRed()) * value;
@@ -297,7 +273,6 @@ public abstract class AnimBase extends TextureBinder {
 		return new Color(R / 255.0F, G / 255.0F, B / 255.0F, A / 255.0F);
 	}
 
-
 	public static Color blend(Color c1, Color c2) {
 		float R = (float) c1.getRed() / 255.0F * ((float) c2.getRed() / 255.0F);
 		float G = (float) c1.getGreen() / 255.0F * ((float) c2.getGreen() / 255.0F);
@@ -306,12 +281,9 @@ public abstract class AnimBase extends TextureBinder {
 		return new Color(R, G, B, A);
 	}
 
-
 	public abstract class Mode {
-
 		public Mode() {
 		}
-
 
 		public abstract void draw(int i, int j, Color color);
 	}

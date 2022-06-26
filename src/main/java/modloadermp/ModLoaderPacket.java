@@ -20,27 +20,18 @@ import io.github.betterthanupdates.apron.api.ApronApi;
 @Legacy
 public class ModLoaderPacket extends AbstractPacket {
 	private static final ApronApi APRON = ApronApi.getInstance();
-
 	private static final int MAX_DATA_LENGTH = 0xFFFF;
 
-
 	public int modId;
-
 	public int packetType;
-
 	public int[] dataInt = new int[0];
-
 	public float[] dataFloat = new float[0];
-
 	public String[] dataString = new String[0];
-
 	@Environment(EnvType.SERVER)
-	private static Map<PacketHandler, ServerPlayerEntity> playerMap = new HashMap<>();
-
+	private static final Map<PacketHandler, ServerPlayerEntity> playerMap = new HashMap<>();
 
 	public ModLoaderPacket() {
 	}
-
 
 	@Override
 	public void read(DataInputStream datainputstream) {
@@ -95,7 +86,6 @@ public class ModLoaderPacket extends AbstractPacket {
 		}
 	}
 
-
 	@Override
 	public void write(DataOutputStream dataoutputstream) {
 		try {
@@ -149,7 +139,6 @@ public class ModLoaderPacket extends AbstractPacket {
 		}
 	}
 
-
 	@Override
 	public void apply(PacketHandler netHandler) {
 		if (APRON.isClient()) {
@@ -166,7 +155,6 @@ public class ModLoaderPacket extends AbstractPacket {
 			ModLoaderMp.HandleAllPackets(this, player);
 		}
 	}
-
 
 	@Override
 	public int length() {

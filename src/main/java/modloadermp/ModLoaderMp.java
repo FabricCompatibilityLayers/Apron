@@ -42,43 +42,31 @@ import io.github.betterthanupdates.apron.api.ApronApi;
 public class ModLoaderMp {
 	// Apron
 	private static final ApronApi APRON = ApronApi.getInstance();
-
 	public static final String NAME = "ModLoaderMP";
-
 	public static final String VERSION = APRON.getModLoaderMPVersion();
-
 	private static boolean hasInit = false;
-
 	@Environment(EnvType.CLIENT)
 	private static boolean packet230Received = false;
-
 	@Environment(EnvType.CLIENT)
 	private static final Map<Integer, NetClientHandlerEntity> NET_CLIENT_HANDLER_MAP = new HashMap<>();
-
 	@Environment(EnvType.CLIENT)
 	private static final Map<Integer, BaseModMp> GUI_MOD_MAP = new HashMap<>();
-
 	@Environment(EnvType.SERVER)
 	private static final Map<Class<? extends Entity>, AbstractMap.SimpleEntry<Integer, Integer>> entityTrackerMap = new HashMap<>();
-
 	@Environment(EnvType.SERVER)
 	private static final Map<Class<? extends Entity>, EntityTrackerEntry> entityTrackerEntryMap = new HashMap<>();
-
 	@Environment(EnvType.SERVER)
 	private static final List<String> bannedMods = new ArrayList<>();
-
 
 	@Environment(EnvType.CLIENT)
 	public static void Init() {
 		init();
 	}
 
-
 	@Environment(EnvType.SERVER)
 	public static void InitModLoaderMp() {
 		init();
 	}
-
 
 	@Environment(EnvType.CLIENT)
 	public static void HandleAllPackets(final ModLoaderPacket packet) {
@@ -130,7 +118,6 @@ public class ModLoaderMp {
 		}
 	}
 
-
 	@Environment(EnvType.CLIENT)
 	public static NetClientHandlerEntity HandleNetClientHandlerEntities(final int aInteger1) {
 		init();
@@ -141,7 +128,6 @@ public class ModLoaderMp {
 
 		return null;
 	}
-
 
 	@Environment(EnvType.CLIENT)
 	public static void SendPacket(BaseModMp basemodmp, ModLoaderPacket packet) {
@@ -157,7 +143,6 @@ public class ModLoaderMp {
 		}
 	}
 
-
 	@Environment(EnvType.CLIENT)
 	public static void RegisterGUI(final BaseModMp basemodmp, final int i) {
 		init();
@@ -168,7 +153,6 @@ public class ModLoaderMp {
 			GUI_MOD_MAP.put(i, basemodmp);
 		}
 	}
-
 
 	@Environment(EnvType.CLIENT)
 	public static void HandleGUI(final OpenContainerS2CPacket packet) {
@@ -189,12 +173,10 @@ public class ModLoaderMp {
 		}
 	}
 
-
 	@Environment(EnvType.CLIENT)
 	public static void RegisterNetClientHandlerEntity(Class<? extends Entity> class1, int i) {
 		RegisterNetClientHandlerEntity(class1, false, i);
 	}
-
 
 	@Environment(EnvType.CLIENT)
 	public static void RegisterNetClientHandlerEntity(Class<? extends Entity> class1, boolean flag, int i) {
@@ -213,7 +195,6 @@ public class ModLoaderMp {
 		}
 	}
 
-
 	@Environment(EnvType.CLIENT)
 	public static void SendKey(final BaseModMp basemodmp, final int i) {
 		init();
@@ -231,11 +212,9 @@ public class ModLoaderMp {
 		}
 	}
 
-
 	public static void Log(final String message) {
 		ModLoader.LOGGER.debug(message);
 	}
-
 
 	private static void init() {
 		if (hasInit) return;
@@ -272,7 +251,6 @@ public class ModLoaderMp {
 		Log(NAME + " " + VERSION + " Initialized");
 	}
 
-
 	@Environment(EnvType.CLIENT)
 	private static void handleModCheck(ModLoaderPacket originalPacket) {
 		ModLoaderPacket newPacket = new ModLoaderPacket();
@@ -286,7 +264,6 @@ public class ModLoaderMp {
 
 		sendPacket(newPacket);
 	}
-
 
 	@Environment(EnvType.CLIENT)
 	private static void handleTileEntityPacket(ModLoaderPacket packet) {
@@ -318,7 +295,6 @@ public class ModLoaderMp {
 		}
 	}
 
-
 	@Environment(EnvType.CLIENT)
 	private static void sendPacket(ModLoaderPacket packet) {
 		Minecraft client = (Minecraft) APRON.getGame();
@@ -329,7 +305,6 @@ public class ModLoaderMp {
 			client.getPacketHandler().sendPacket(packet);
 		}
 	}
-
 
 	public static BaseModMp GetModInstance(final Class<? extends BaseModMp> v1) {
 		for (BaseMod basemod : ModLoader.getLoadedMods()) {
@@ -345,10 +320,8 @@ public class ModLoaderMp {
 		return null;
 	}
 
-
 	public ModLoaderMp() {
 	}
-
 
 	@Environment(EnvType.SERVER)
 	public static void RegisterEntityTracker(Class<? extends Entity> class1, int i, int j) {
@@ -361,12 +334,10 @@ public class ModLoaderMp {
 		}
 	}
 
-
 	@Environment(EnvType.SERVER)
 	public static void RegisterEntityTrackerEntry(Class<? extends Entity> class1, int i) {
 		RegisterEntityTrackerEntry(class1, false, i);
 	}
-
 
 	@Environment(EnvType.SERVER)
 	public static void RegisterEntityTrackerEntry(Class<? extends Entity> class1, boolean flag, int i) {
@@ -383,7 +354,6 @@ public class ModLoaderMp {
 		}
 	}
 
-
 	@Environment(EnvType.SERVER)
 	public static void HandleAllLogins(ServerPlayerEntity entityplayermp) {
 		init();
@@ -398,7 +368,6 @@ public class ModLoaderMp {
 			}
 		}
 	}
-
 
 	@Environment(EnvType.SERVER)
 	public static void HandleAllPackets(ModLoaderPacket modloaderPacket, ServerPlayerEntity entityplayermp) {
@@ -428,7 +397,6 @@ public class ModLoaderMp {
 		}
 	}
 
-
 	@Environment(EnvType.SERVER)
 	public static void HandleEntityTrackers(ServerEntityTracker entitytracker, Entity entity) {
 		init();
@@ -441,14 +409,12 @@ public class ModLoaderMp {
 		}
 	}
 
-
 	@Environment(EnvType.SERVER)
 	public static EntityTrackerEntry HandleEntityTrackerEntries(Entity entity) {
 		init();
 
 		return entityTrackerEntryMap.getOrDefault(entity.getClass(), null);
 	}
-
 
 	@Environment(EnvType.SERVER)
 	public static void SendPacketToAll(BaseModMp basemodmp, ModLoaderPacket modloaderPacket) {
@@ -464,7 +430,6 @@ public class ModLoaderMp {
 		}
 	}
 
-
 	@Environment(EnvType.SERVER)
 	private static void sendPacketToAll(AbstractPacket packet) {
 		MinecraftServer server = (MinecraftServer) APRON.getGame();
@@ -473,7 +438,6 @@ public class ModLoaderMp {
 			server.serverPlayerConnectionManager.sendToAll(packet);
 		}
 	}
-
 
 	@Environment(EnvType.SERVER)
 	public static void SendPacketTo(BaseModMp mod, ServerPlayerEntity player, ModLoaderPacket packet) {
@@ -493,18 +457,15 @@ public class ModLoaderMp {
 	 * @param player The player to find the world of
 	 * @return the world that the player is currently in.
 	 */
-
 	@Environment(EnvType.SERVER)
 	public static World GetPlayerWorld(@NotNull PlayerEntity player) {
 		return player.world; // used to iterate over all worlds, then iterate over all players in each world to check
 	}
 
-
 	@Environment(EnvType.SERVER)
 	private static void sendPacketTo(ServerPlayerEntity player, ModLoaderPacket packet) {
 		player.packetHandler.send(packet);
 	}
-
 
 	@Environment(EnvType.SERVER)
 	private static void sendModCheck(ServerPlayerEntity player) {
@@ -513,7 +474,6 @@ public class ModLoaderMp {
 		packet.packetType = 0;
 		sendPacketTo(player, packet);
 	}
-
 
 	@Environment(EnvType.SERVER)
 	private static void handleModCheckResponse(ModLoaderPacket modloaderPacket, ServerPlayerEntity entityplayermp) {
@@ -609,7 +569,6 @@ public class ModLoaderMp {
 		}
 	}
 
-
 	@Environment(EnvType.SERVER)
 	private static void handleSendKey(ModLoaderPacket modloaderPacket, ServerPlayerEntity entityplayermp) {
 		if (modloaderPacket.dataInt.length != 2) {
@@ -633,7 +592,6 @@ public class ModLoaderMp {
 		}
 	}
 
-
 	@Environment(EnvType.SERVER)
 	public static void getCommandInfo(CommandSource icommandlistener) {
 		for (int i = 0; i < ModLoader.getLoadedMods().size(); ++i) {
@@ -645,7 +603,6 @@ public class ModLoaderMp {
 			}
 		}
 	}
-
 
 	@Environment(EnvType.SERVER)
 	public static boolean handleCommand(String s, String s1, CommandSource icommandlistener, CommandManager consolecommandhandler) {
@@ -666,13 +623,11 @@ public class ModLoaderMp {
 		return flag;
 	}
 
-
 	@Environment(EnvType.SERVER)
 	public static void sendChatToAll(String s, String s1) {
 		String s2 = s + ": " + s1;
 		sendChatToAll(s2);
 	}
-
 
 	@Environment(EnvType.SERVER)
 	public static void sendChatToAll(String encodedMessage) {
@@ -684,13 +639,11 @@ public class ModLoaderMp {
 		}
 	}
 
-
 	@Environment(EnvType.SERVER)
 	public static void sendChatToOps(String s, String s1) {
 		String s2 = "§7(" + s + ": " + s1 + ")";
 		sendChatToOps(s2);
 	}
-
 
 	@Environment(EnvType.SERVER)
 	public static void sendChatToOps(String encodedMessage) {
@@ -709,7 +662,6 @@ public class ModLoaderMp {
 			}
 		}
 	}
-
 
 	@Environment(EnvType.SERVER)
 	public static AbstractPacket GetTileEntityPacket(BaseModMp basemodmp, int i, int j, int k, int l, int[] ai, float[] af, String[] as) {
@@ -734,7 +686,6 @@ public class ModLoaderMp {
 		modloaderPacket.dataString = as;
 		return modloaderPacket;
 	}
-
 
 	@Environment(EnvType.SERVER)
 	public static void SendTileEntityPacket(BlockEntity blockEntity) {

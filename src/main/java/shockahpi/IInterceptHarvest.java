@@ -12,9 +12,7 @@ import io.github.betterthanupdates.Legacy;
  */
 @Legacy
 public interface IInterceptHarvest {
-
 	boolean canIntercept(World arg, PlayerEntity arg2, Loc loc, int i, int j);
-
 
 	void intercept(World arg, PlayerEntity arg2, Loc loc, int i, int j);
 }

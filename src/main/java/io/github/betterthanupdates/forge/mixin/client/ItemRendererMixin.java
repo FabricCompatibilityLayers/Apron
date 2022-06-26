@@ -31,6 +31,7 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 			target = "Lnet/minecraft/client/render/Tessellator;INSTANCE:Lnet/minecraft/client/render/Tessellator;"))
 	private void reforged$render$2(ItemEntity entityitem, double d, double d1, double d2, float f, float f1, CallbackInfo ci) {
 		ItemStack itemstack = entityitem.stack;
+
 		if (itemstack.itemId < 256) {
 			ForgeHooksClient.overrideTexture(Block.BY_ID[itemstack.itemId]);
 		} else {

@@ -11,25 +11,15 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public class GenDeposit {
-
 	private final int blockID;
-
 	private final List<Integer> set1stOn;
-
 	private final List<Integer> setOn;
-
 	private final List<Loc> sides = Arrays.asList(Loc.vecAdjacent());
-
-	private ArrayList<Loc> check = new ArrayList<>();
-
-	private ArrayList<Loc> cantSet = new ArrayList<>();
-
+	private final ArrayList<Loc> check = new ArrayList<>();
+	private final ArrayList<Loc> cantSet = new ArrayList<>();
 	private ArrayList<Loc> sidesTmp = new ArrayList<>();
-
 	private final World world;
-
 	private final Random rand;
-
 
 	public GenDeposit(World world, int blockID, Integer[] set1stOn, Integer[] setOn) {
 		this.world = world;
@@ -39,11 +29,9 @@ public class GenDeposit {
 		this.rand = world.rand;
 	}
 
-
 	public void gen(int pX, int pY, int pZ, int maxAmount, int maxTries) {
 		this.gen(new Loc(pX, pY, pZ), maxAmount, maxTries);
 	}
-
 
 	public void gen(Loc startLoc, int maxAmount, int maxTries) {
 		if (this.set1stOn.contains(startLoc.getBlock(this.world))) {
@@ -74,7 +62,6 @@ public class GenDeposit {
 			}
 		}
 	}
-
 
 	public int getGoodY(int pX, int pY, int pZ) {
 		int off = 0;

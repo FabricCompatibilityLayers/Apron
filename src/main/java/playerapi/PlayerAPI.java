@@ -20,13 +20,10 @@ import io.github.betterthanupdates.shockahpi.client.entity.player.ShockAhPIClien
 
 @Legacy
 public class PlayerAPI {
-
 	public static List<Class<? extends PlayerBase>> playerBaseClasses = new ArrayList<>();
-
 
 	public PlayerAPI() {
 	}
-
 
 	public static void RegisterPlayerBase(Class<? extends PlayerBase> pb) {
 		playerBaseClasses.add(pb);
@@ -35,7 +32,6 @@ public class PlayerAPI {
 	private static List<PlayerBase> bases(AbstractClientPlayerEntity player) {
 		return ((ShockAhPIClientPlayerEntity) player).getPlayerBases();
 	}
-
 
 	public static <P extends PlayerBase> P getPlayerBase(AbstractClientPlayerEntity player, Class<P> pb) {
 		for (int i = 0; i < bases(player).size(); ++i) {
@@ -46,7 +42,6 @@ public class PlayerAPI {
 
 		return null;
 	}
-
 
 	public static List<PlayerBase> playerInit(AbstractClientPlayerEntity player) {
 		List<PlayerBase> playerBases = new ArrayList<>();
@@ -62,7 +57,6 @@ public class PlayerAPI {
 		return playerBases;
 	}
 
-
 	public static boolean onLivingUpdate(AbstractClientPlayerEntity player) {
 		boolean override = false;
 
@@ -74,7 +68,6 @@ public class PlayerAPI {
 
 		return override;
 	}
-
 
 	public static boolean respawn(AbstractClientPlayerEntity player) {
 		boolean override = false;
@@ -88,7 +81,6 @@ public class PlayerAPI {
 		return override;
 	}
 
-
 	public static boolean moveFlying(AbstractClientPlayerEntity player, float x, float y, float z) {
 		boolean override = false;
 
@@ -100,7 +92,6 @@ public class PlayerAPI {
 
 		return override;
 	}
-
 
 	public static boolean updatePlayerActionState(AbstractClientPlayerEntity player) {
 		boolean override = false;
@@ -114,7 +105,6 @@ public class PlayerAPI {
 		return override;
 	}
 
-
 	public static boolean handleKeyPress(AbstractClientPlayerEntity player, int j, boolean flag) {
 		boolean override = false;
 
@@ -126,7 +116,6 @@ public class PlayerAPI {
 
 		return override;
 	}
-
 
 	public static boolean writeEntityToNBT(AbstractClientPlayerEntity player, CompoundTag tag) {
 		boolean override = false;
@@ -140,7 +129,6 @@ public class PlayerAPI {
 		return override;
 	}
 
-
 	public static boolean readEntityFromNBT(AbstractClientPlayerEntity player, CompoundTag tag) {
 		boolean override = false;
 
@@ -152,7 +140,6 @@ public class PlayerAPI {
 
 		return override;
 	}
-
 
 	public static boolean onExitGUI(AbstractClientPlayerEntity player) {
 		boolean override = false;
@@ -166,7 +153,6 @@ public class PlayerAPI {
 		return override;
 	}
 
-
 	public static boolean setEntityDead(AbstractClientPlayerEntity player) {
 		boolean override = false;
 
@@ -178,7 +164,6 @@ public class PlayerAPI {
 
 		return override;
 	}
-
 
 	public static boolean onDeath(AbstractClientPlayerEntity player, Entity killer) {
 		boolean override = false;
@@ -192,7 +177,6 @@ public class PlayerAPI {
 		return override;
 	}
 
-
 	public static boolean attackEntityFrom(AbstractClientPlayerEntity player, Entity attacker, int damage) {
 		boolean override = false;
 
@@ -205,7 +189,6 @@ public class PlayerAPI {
 		return override;
 	}
 
-
 	public static double getDistanceSq(AbstractClientPlayerEntity player, double d, double d1, double d2, double answer) {
 		for (int i = 0; i < bases(player).size(); ++i) {
 			answer = bases(player).get(i).getDistanceSq(d, d1, d2, answer);
@@ -213,7 +196,6 @@ public class PlayerAPI {
 
 		return answer;
 	}
-
 
 	public static boolean isInWater(AbstractClientPlayerEntity player, boolean inWater) {
 		for (int i = 0; i < bases(player).size(); ++i) {
@@ -223,7 +205,6 @@ public class PlayerAPI {
 		return inWater;
 	}
 
-
 	public static boolean canTriggerWalking(AbstractClientPlayerEntity player, boolean canTrigger) {
 		for (int i = 0; i < bases(player).size(); ++i) {
 			canTrigger = bases(player).get(i).canTriggerWalking(canTrigger);
@@ -231,7 +212,6 @@ public class PlayerAPI {
 
 		return canTrigger;
 	}
-
 
 	public static boolean heal(AbstractClientPlayerEntity player, int j) {
 		boolean override = false;
@@ -245,7 +225,6 @@ public class PlayerAPI {
 		return override;
 	}
 
-
 	public static int getPlayerArmorValue(AbstractClientPlayerEntity player, int armor) {
 		for (int i = 0; i < bases(player).size(); ++i) {
 			armor = bases(player).get(i).getPlayerArmorValue(armor);
@@ -254,7 +233,6 @@ public class PlayerAPI {
 		return armor;
 	}
 
-
 	public static float getCurrentPlayerStrVsBlock(AbstractClientPlayerEntity player, Block block, float f) {
 		for (int i = 0; i < bases(player).size(); ++i) {
 			f = bases(player).get(i).getCurrentPlayerStrVsBlock(block, f);
@@ -262,7 +240,6 @@ public class PlayerAPI {
 
 		return f;
 	}
-
 
 	public static boolean moveEntity(AbstractClientPlayerEntity player, double d, double d1, double d2) {
 		boolean override = false;
@@ -276,7 +253,6 @@ public class PlayerAPI {
 		return override;
 	}
 
-
 	public static SleepStatus sleepInBedAt(AbstractClientPlayerEntity player, int x, int y, int z) {
 		SleepStatus status = null;
 
@@ -287,7 +263,6 @@ public class PlayerAPI {
 		return status;
 	}
 
-
 	public static float getEntityBrightness(AbstractClientPlayerEntity player, float f, float brightness) {
 		for (int i = 0; i < bases(player).size(); ++i) {
 			f = bases(player).get(i).getEntityBrightness(f, brightness);
@@ -295,7 +270,6 @@ public class PlayerAPI {
 
 		return f;
 	}
-
 
 	public static boolean pushOutOfBlocks(AbstractClientPlayerEntity player, double d, double d1, double d2) {
 		boolean override = false;
@@ -309,7 +283,6 @@ public class PlayerAPI {
 		return override;
 	}
 
-
 	public static boolean onUpdate(AbstractClientPlayerEntity player) {
 		boolean override = false;
 
@@ -322,13 +295,11 @@ public class PlayerAPI {
 		return override;
 	}
 
-
 	public static void afterUpdate(AbstractClientPlayerEntity player) {
 		for (int i = 0; i < bases(player).size(); ++i) {
 			bases(player).get(i).afterUpdate();
 		}
 	}
-
 
 	public static boolean moveEntityWithHeading(AbstractClientPlayerEntity player, float f, float f1) {
 		boolean override = false;
@@ -342,7 +313,6 @@ public class PlayerAPI {
 		return override;
 	}
 
-
 	public static boolean isOnLadder(AbstractClientPlayerEntity player, boolean onLadder) {
 		for (int i = 0; i < bases(player).size(); ++i) {
 			onLadder = bases(player).get(i).isOnLadder(onLadder);
@@ -350,7 +320,6 @@ public class PlayerAPI {
 
 		return onLadder;
 	}
-
 
 	public static boolean isInsideOfMaterial(AbstractClientPlayerEntity player, Material material, boolean inMaterial) {
 		for (int i = 0; i < bases(player).size(); ++i) {
@@ -360,7 +329,6 @@ public class PlayerAPI {
 		return inMaterial;
 	}
 
-
 	public static boolean isSneaking(AbstractClientPlayerEntity player, boolean sneaking) {
 		for (int i = 0; i < bases(player).size(); ++i) {
 			sneaking = bases(player).get(i).isSneaking(sneaking);
@@ -368,7 +336,6 @@ public class PlayerAPI {
 
 		return sneaking;
 	}
-
 
 	public static boolean dropCurrentItem(AbstractClientPlayerEntity player) {
 		boolean override = false;
@@ -382,7 +349,6 @@ public class PlayerAPI {
 		return override;
 	}
 
-
 	public static boolean dropPlayerItem(AbstractClientPlayerEntity player, ItemStack itemstack) {
 		boolean override = false;
 
@@ -394,7 +360,6 @@ public class PlayerAPI {
 
 		return override;
 	}
-
 
 	public static boolean displayGUIEditSign(AbstractClientPlayerEntity player, SignBlockEntity sign) {
 		boolean override = false;
@@ -408,7 +373,6 @@ public class PlayerAPI {
 		return override;
 	}
 
-
 	public static boolean displayGUIChest(AbstractClientPlayerEntity player, Inventory inventory) {
 		boolean override = false;
 
@@ -420,7 +384,6 @@ public class PlayerAPI {
 
 		return override;
 	}
-
 
 	public static boolean displayWorkbenchGUI(AbstractClientPlayerEntity player, int i, int j, int k) {
 		boolean override = false;
@@ -434,7 +397,6 @@ public class PlayerAPI {
 		return override;
 	}
 
-
 	public static boolean displayGUIFurnace(AbstractClientPlayerEntity player, FurnaceBlockEntity furnace) {
 		boolean override = false;
 
@@ -446,7 +408,6 @@ public class PlayerAPI {
 
 		return override;
 	}
-
 
 	public static boolean displayGUIDispenser(AbstractClientPlayerEntity player, DispenserBlockEntity dispenser) {
 		boolean override = false;
@@ -460,7 +421,6 @@ public class PlayerAPI {
 		return override;
 	}
 
-
 	public static boolean sendChatMessage(AbstractClientPlayerEntity entityplayersp, String s) {
 		boolean flag = false;
 
@@ -472,7 +432,6 @@ public class PlayerAPI {
 
 		return flag;
 	}
-
 
 	public static String getHurtSound(AbstractClientPlayerEntity entityplayersp) {
 		String result = null;
@@ -488,7 +447,6 @@ public class PlayerAPI {
 		return result;
 	}
 
-
 	public static Boolean canHarvestBlock(AbstractClientPlayerEntity entityplayersp, Block block) {
 		Boolean result = null;
 
@@ -503,7 +461,6 @@ public class PlayerAPI {
 		return result;
 	}
 
-
 	public static boolean fall(AbstractClientPlayerEntity entityplayersp, float f) {
 		boolean flag = false;
 
@@ -515,7 +472,6 @@ public class PlayerAPI {
 
 		return flag;
 	}
-
 
 	public static boolean jump(AbstractClientPlayerEntity entityplayersp) {
 		boolean flag = false;
@@ -529,7 +485,6 @@ public class PlayerAPI {
 		return flag;
 	}
 
-
 	public static boolean damageEntity(AbstractClientPlayerEntity entityplayersp, int i1) {
 		boolean flag = false;
 
@@ -541,7 +496,6 @@ public class PlayerAPI {
 
 		return flag;
 	}
-
 
 	public static Double getDistanceSqToEntity(AbstractClientPlayerEntity entityplayersp, Entity entity) {
 		Double result = null;
@@ -557,7 +511,6 @@ public class PlayerAPI {
 		return result;
 	}
 
-
 	public static boolean attackTargetEntityWithCurrentItem(AbstractClientPlayerEntity entityplayersp, Entity entity) {
 		boolean flag = false;
 
@@ -569,7 +522,6 @@ public class PlayerAPI {
 
 		return flag;
 	}
-
 
 	public static Boolean handleWaterMovement(AbstractClientPlayerEntity entityplayersp) {
 		Boolean result = null;
@@ -585,7 +537,6 @@ public class PlayerAPI {
 		return result;
 	}
 
-
 	public static Boolean handleLavaMovement(AbstractClientPlayerEntity entityplayersp) {
 		Boolean result = null;
 
@@ -600,7 +551,6 @@ public class PlayerAPI {
 		return result;
 	}
 
-
 	public static boolean dropPlayerItemWithRandomChoice(AbstractClientPlayerEntity entityplayersp, ItemStack itemstack, boolean flag1) {
 		boolean flag = false;
 
@@ -613,13 +563,11 @@ public class PlayerAPI {
 		return flag;
 	}
 
-
 	public static void beforeUpdate(AbstractClientPlayerEntity entityplayersp) {
 		for (int i = 0; i < bases(entityplayersp).size(); ++i) {
 			bases(entityplayersp).get(i).beforeUpdate();
 		}
 	}
-
 
 	public static void beforeMoveEntity(AbstractClientPlayerEntity entityplayersp, double d, double d1, double d2) {
 		for (int i = 0; i < bases(entityplayersp).size(); ++i) {
@@ -627,13 +575,11 @@ public class PlayerAPI {
 		}
 	}
 
-
 	public static void afterMoveEntity(AbstractClientPlayerEntity entityplayersp, double d, double d1, double d2) {
 		for (int i = 0; i < bases(entityplayersp).size(); ++i) {
 			bases(entityplayersp).get(i).afterMoveEntity(d, d1, d2);
 		}
 	}
-
 
 	public static void beforeSleepInBedAt(AbstractClientPlayerEntity entityplayersp, int i1, int j, int k) {
 		for (int i = 0; i < bases(entityplayersp).size(); ++i) {
