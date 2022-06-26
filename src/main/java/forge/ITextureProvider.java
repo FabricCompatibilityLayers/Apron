@@ -9,6 +9,5 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface ITextureProvider {
-	@Legacy
 	String getTextureFile();
 }

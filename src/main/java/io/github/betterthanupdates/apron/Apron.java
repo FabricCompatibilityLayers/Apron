@@ -20,7 +20,7 @@ import net.fabricmc.mapping.tree.ParameterDef;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
 import org.jetbrains.annotations.ApiStatus;
 import org.spongepowered.include.com.google.common.collect.ImmutableList;
-import reforged.mod_Reforged;
+import reforged.ReforgedMod;
 
 @ApiStatus.Internal
 public final class Apron {
@@ -36,7 +36,7 @@ public final class Apron {
 	public static final ModContainer MOD_CONTAINER;
 
 	public static final List<Supplier<? extends BaseMod>> BUILTIN_RML_MODS = ImmutableList.of(
-			mod_Reforged::new
+			ReforgedMod::new
 	);
 
 	static {

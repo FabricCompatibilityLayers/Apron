@@ -6,9 +6,7 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface IReachEntity {
-	@Legacy
-	boolean reachEntityItemMatches(ItemStack arg);
+	boolean reachEntityItemMatches(ItemStack itemStack);
 
-	@Legacy
-	float getReachEntity(ItemStack arg);
+	float getReachEntity(ItemStack itemStack);
 }

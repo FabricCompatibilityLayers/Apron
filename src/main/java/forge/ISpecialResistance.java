@@ -12,6 +12,5 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface ISpecialResistance {
-	@Legacy
-	float getSpecialExplosionResistance(World arg, int i, int j, int k, double d, double e, double f, Entity arg2);
+	float getSpecialExplosionResistance(World world, int i, int j, int k, double d, double e, double f, Entity arg2);
 }

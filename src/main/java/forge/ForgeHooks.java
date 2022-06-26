@@ -25,49 +25,35 @@ import io.github.betterthanupdates.forge.entity.player.ForgePlayerEntity;
 @SuppressWarnings("unused")
 @Legacy
 public class ForgeHooks {
-	@Legacy
 	static LinkedList<ICraftingHandler> craftingHandlers = new LinkedList<>();
-	@Legacy
 	static LinkedList<IDestroyToolHandler> destroyToolHandlers = new LinkedList<>();
-	@Legacy
 	static LinkedList<ISleepHandler> sleepHandlers = new LinkedList<>();
-	@Legacy
 	public static final int majorVersion = 1;
-	@Legacy
 	public static final int minorVersion = 0;
-	@Legacy
 	public static final int revisionVersion = 6;
-	@Legacy
 	static boolean toolInit = false;
-	@Legacy
 	static HashMap<Integer, List<?>> toolClasses = new HashMap<>();
-	@Legacy
 	static HashMap<List<?>, Integer> toolHarvestLevels = new HashMap<>();
-	@Legacy
 	static HashSet<List<?>> toolEffectiveness = new HashSet<>();
 
-	@Legacy
 	public ForgeHooks() {
 	}
 
-	@Legacy
-	public static void onTakenFromCrafting(PlayerEntity player, ItemStack ist, Inventory craftMatrix) {
-		for (forge.ICraftingHandler handler : craftingHandlers) {
-			handler.onTakenFromCrafting(player, ist, craftMatrix);
+	public static void onTakenFromCrafting(PlayerEntity player, ItemStack itemStack, Inventory inventory) {
+		for (ICraftingHandler handler : craftingHandlers) {
+			handler.onTakenFromCrafting(player, itemStack, inventory);
 		}
 	}
 
-	@Legacy
-	public static void onDestroyCurrentItem(PlayerEntity player, ItemStack orig) {
-		for (forge.IDestroyToolHandler handler : destroyToolHandlers) {
-			handler.onDestroyCurrentItem(player, orig);
+	public static void onDestroyCurrentItem(PlayerEntity player, ItemStack itemStack) {
+		for (IDestroyToolHandler handler : destroyToolHandlers) {
+			handler.onDestroyCurrentItem(player, itemStack);
 		}
 	}
 
-	@Legacy
-	public static SleepStatus sleepInBedAt(PlayerEntity player, int i, int j, int k) {
-		for (forge.ISleepHandler handler : sleepHandlers) {
-			SleepStatus status = handler.sleepInBedAt(player, i, j, k);
+	public static SleepStatus sleepInBedAt(PlayerEntity player, int x, int y, int z) {
+		for (ISleepHandler handler : sleepHandlers) {
+			SleepStatus status = handler.sleepInBedAt(player, x, y, z);
 
 			if (status != null) {
 				return status;
@@ -77,66 +63,62 @@ public class ForgeHooks {
 		return null;
 	}
 
-	@Legacy
-	public static boolean canHarvestBlock(Block bl, PlayerEntity player, int md) {
-		if (bl.material.doesRequireTool()) {
+	public static boolean canHarvestBlock(Block block, PlayerEntity player, int meta) {
+		if (block.material.doesRequireTool()) {
 			return true;
 		} else {
 			ItemStack itemstack = player.inventory.getHeldItem();
-			return itemstack != null && canToolHarvestBlock(bl, md, itemstack);
+			return itemstack != null && canToolHarvestBlock(block, meta, itemstack);
 		}
 	}
 
-	@Legacy
-	public static boolean canToolHarvestBlock(Block bl, int md, ItemStack itemstack) {
-		List<?> tc = toolClasses.get(itemstack.itemId);
+	public static boolean canToolHarvestBlock(Block block, int meta, ItemStack itemStack) {
+		List<?> tc = toolClasses.get(itemStack.itemId);
 
 		if (tc == null) {
-			return itemstack.isEffectiveOn(bl);
+			return itemStack.isEffectiveOn(block);
 		} else {
 			Object[] ta = tc.toArray();
-			String cls = (String) ta[0];
-			int hvl = (int) ta[1];
+			String toolType = (String) ta[0];
+			int harvestLevel = (int) ta[1];
 
-			if (cls.equalsIgnoreCase("paxel")) {
+			if (toolType.equalsIgnoreCase("paxel")) {
 				return true;
 			} else {
-				Integer bhl = (Integer) toolHarvestLevels.get(Arrays.asList(bl.id, md, cls));
+				Integer blockHarvestLevel = toolHarvestLevels.get(Arrays.asList(block.id, meta, toolType));
 
-				if (bhl == null) {
-					return itemstack.isEffectiveOn(bl);
+				if (blockHarvestLevel == null) {
+					return itemStack.isEffectiveOn(block);
 				} else {
-					return bhl <= hvl && itemstack.isEffectiveOn(bl);
+					return blockHarvestLevel <= harvestLevel && itemStack.isEffectiveOn(block);
 				}
 			}
 		}
 	}
 
-	@Legacy
-	public static float blockStrength(Block bl, PlayerEntity player, int md) {
-		float bh = ((ForgeBlock) bl).getHardness(md);
+	public static float blockStrength(Block block, PlayerEntity player, int meta) {
+		float blockHardness = ((ForgeBlock) block).getHardness(meta);
 
-		if (bh < 0.0F) {
+		if (blockHardness < 0.0F) {
 			return 0.0F;
 		} else {
-			return !canHarvestBlock(bl, player, md) ? 1.0F / bh / 100.0F : ((ForgePlayerEntity) player).getCurrentPlayerStrVsBlock(bl, md) / bh / 30.0F;
+			return !canHarvestBlock(block, player, meta) ? 1.0F / blockHardness / 100.0F
+					: ((ForgePlayerEntity) player).getCurrentPlayerStrVsBlock(block, meta) / blockHardness / 30.0F;
 		}
 	}
 
-	@Legacy
-	public static boolean isToolEffective(ItemStack ist, Block bl, int md) {
-		List<?> tc = toolClasses.get(ist.itemId);
+	public static boolean isToolEffective(ItemStack itemStack, Block block, int meta) {
+		List<?> tc = toolClasses.get(itemStack.itemId);
 
 		if (tc == null) {
 			return false;
 		} else {
 			Object[] ta = tc.toArray();
-			String cls = (String) ta[0];
-			return cls.equalsIgnoreCase("paxel") || toolEffectiveness.contains(Arrays.asList(bl.id, md, cls));
+			String toolType = (String) ta[0];
+			return toolType.equalsIgnoreCase("paxel") || toolEffectiveness.contains(Arrays.asList(block.id, meta, toolType));
 		}
 	}
 
-	@Legacy
 	static void initTools() {
 		if (!toolInit) {
 			toolInit = true;
@@ -168,7 +150,8 @@ public class ForgeHooks {
 			MinecraftForge.setBlockHarvestLevel(Block.REDSTONE_ORE_LIT, "pickaxe", 2);
 			MinecraftForge.removeBlockEffectiveness(Block.REDSTONE_ORE, "pickaxe");
 			MinecraftForge.removeBlockEffectiveness(Block.REDSTONE_ORE_LIT, "pickaxe");
-			Block[] pickeff = new Block[] {
+
+			Block[] pickaxeEffectiveOn = new Block[] {
 				Block.COBBLESTONE,
 				Block.DOUBLE_STONE_SLAB,
 				Block.STONE_SLAB,
@@ -188,17 +171,16 @@ public class ForgeHooks {
 				Block.LAPIS_LAZULI_BLOCK
 			};
 
-			for (Block bl : pickeff) {
-				MinecraftForge.setBlockHarvestLevel(bl, "pickaxe", 0);
+			for (Block block : pickaxeEffectiveOn) {
+				MinecraftForge.setBlockHarvestLevel(block, "pickaxe", 0);
 			}
 		}
 	}
 
-	@Legacy
 	public static void touch() {
 	}
 
 	static {
-		System.out.printf("MinecraftForge V%d.%d.%d Initialized\n", 1, 0, 6);
+		MinecraftForge.LOGGER.info("MinecraftForge V%d.%d.%d Initialized", majorVersion, minorVersion, revisionVersion);
 	}
 }

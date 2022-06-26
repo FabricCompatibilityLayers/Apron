@@ -12,9 +12,7 @@ import io.github.betterthanupdates.Legacy;
 @SuppressWarnings("unused")
 @Legacy
 public interface IOverrideReplace {
-	@Legacy
-	boolean canReplaceBlock(World arg, int i, int j, int k, int l);
+	boolean canReplaceBlock(World world, int i, int j, int k, int l);
 
-	@Legacy
 	boolean getReplacedSuccess();
 }

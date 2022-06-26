@@ -9,6 +9,5 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface IMultipassRender {
-	@Legacy
-	boolean canRenderInPass(int i);
+	boolean canRenderInPass(int pass);
 }

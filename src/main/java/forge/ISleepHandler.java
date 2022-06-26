@@ -12,6 +12,5 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface ISleepHandler {
-	@Legacy
-	SleepStatus sleepInBedAt(PlayerEntity arg, int i, int j, int k);
+	SleepStatus sleepInBedAt(PlayerEntity player, int x, int y, int z);
 }

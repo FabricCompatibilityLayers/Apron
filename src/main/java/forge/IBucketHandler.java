@@ -12,6 +12,5 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface IBucketHandler {
-	@Legacy
-	ItemStack fillCustomBucket(World arg, int i, int j, int k);
+	ItemStack fillCustomBucket(World world, int x, int y, int z);
 }

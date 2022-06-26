@@ -9,12 +9,9 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface ICustomDrop {
-	@Legacy
-	int getIdDropped(Block arg, int i, Random random, ItemStack arg2);
+	int getIdDropped(Block block, int i, Random random, ItemStack itemStack);
 
-	@Legacy
-	int getDamageDropped(Block arg, int i, ItemStack arg2);
+	int getDamageDropped(Block block, int i, ItemStack itemStack);
 
-	@Legacy
-	int getQuantityDropped(Block arg, int i, Random random, ItemStack arg2);
+	int getQuantityDropped(Block block, int i, Random random, ItemStack itemStack);
 }

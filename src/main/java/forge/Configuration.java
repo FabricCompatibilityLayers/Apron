@@ -26,29 +26,19 @@ import io.github.betterthanupdates.Legacy;
 @SuppressWarnings("unused")
 @Legacy
 public class Configuration {
-	@Legacy
 	private boolean[] configBlocks = null;
-	@Legacy
 	public static final int GENERAL_PROPERTY = 0;
-	@Legacy
 	public static final int BLOCK_PROPERTY = 1;
-	@Legacy
 	public static final int ITEM_PROPERTY = 2;
-	@Legacy
 	File file;
-	@Legacy
 	public TreeMap<String, Property> blockProperties = new TreeMap<>();
-	@Legacy
 	public TreeMap<String, Property> itemProperties = new TreeMap<>();
-	@Legacy
 	public TreeMap<String, Property> generalProperties = new TreeMap<>();
 
-	@Legacy
 	public Configuration(File file) {
 		this.file = file;
 	}
 
-	@Legacy
 	public Property getOrCreateBlockIdProperty(String key, int defaultId) {
 		if (this.configBlocks == null) {
 			this.configBlocks = new boolean[Block.BY_ID.length];
@@ -57,7 +47,7 @@ public class Configuration {
 		}
 
 		if (this.blockProperties.containsKey(key)) {
-			Property property = this.getOrCreateIntProperty(key, 1, defaultId);
+			Property property = this.getOrCreateIntProperty(key, BLOCK_PROPERTY, defaultId);
 			this.configBlocks[Integer.parseInt(property.value)] = true;
 			return property;
 		} else {
@@ -83,7 +73,6 @@ public class Configuration {
 		}
 	}
 
-	@Legacy
 	public Property getOrCreateIntProperty(String key, int kind, int defaultValue) {
 		Property prop = this.getOrCreateProperty(key, kind, Integer.toString(defaultValue));
 
@@ -96,7 +85,6 @@ public class Configuration {
 		}
 	}
 
-	@Legacy
 	public Property getOrCreateBooleanProperty(String key, int kind, boolean defaultValue) {
 		Property prop = this.getOrCreateProperty(key, kind, Boolean.toString(defaultValue));
 
@@ -107,18 +95,17 @@ public class Configuration {
 		return prop;
 	}
 
-	@Legacy
 	public Property getOrCreateProperty(String key, int kind, String defaultValue) {
 		TreeMap<String, Property> source = null;
 
 		switch (kind) {
-			case 0:
+			case GENERAL_PROPERTY:
 				source = this.generalProperties;
 				break;
-			case 1:
+			case BLOCK_PROPERTY:
 				source = this.blockProperties;
 				break;
-			case 2:
+			case ITEM_PROPERTY:
 				source = this.itemProperties;
 		}
 
@@ -135,7 +122,6 @@ public class Configuration {
 		}
 	}
 
-	@Legacy
 	public void load() {
 		try {
 			if (this.file.getParentFile() != null) {
@@ -220,7 +206,6 @@ public class Configuration {
 		}
 	}
 
-	@Legacy
 	public void save() {
 		try {
 			if (this.file.getParentFile() != null) {
@@ -263,7 +248,6 @@ public class Configuration {
 		}
 	}
 
-	@Legacy
 	private void writeProperties(BufferedWriter buffer, Collection<Property> props) throws IOException {
 		for (Property property : props) {
 			if (property.comment != null) {

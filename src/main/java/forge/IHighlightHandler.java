@@ -14,6 +14,5 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface IHighlightHandler {
-	@Legacy
-	boolean onBlockHighlight(WorldEventRenderer arg, PlayerEntity arg2, HitResult arg3, int i, ItemStack arg4, float f);
+	boolean onBlockHighlight(WorldEventRenderer worldEventRenderer, PlayerEntity player, HitResult hitResult, int i, ItemStack itemStack, float f);
 }

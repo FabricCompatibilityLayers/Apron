@@ -9,9 +9,7 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface IShearable {
-	@Legacy
-	boolean isShearable(ItemStack arg, World arg2, int i, int j, int k);
+	boolean isShearable(ItemStack itemStack, World world, int x, int y, int z);
 
-	@Legacy
-	ArrayList<ItemStack> onSheared(ItemStack arg, World arg2, int i, int j, int k);
+	ArrayList<ItemStack> onSheared(ItemStack itemStack, World world, int x, int y, int z);
 }

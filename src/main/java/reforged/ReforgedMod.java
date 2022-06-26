@@ -12,9 +12,8 @@ import net.minecraft.item.Item;
 import io.github.betterthanupdates.Legacy;
 
 @Legacy
-public class mod_Reforged extends BaseModMp {
-	@Legacy
-	public mod_Reforged() {
+public class ReforgedMod extends BaseModMp {
+	public ReforgedMod() {
 		try {
 			Class.forName(Block.class.getName());
 			Class.forName(Item.class.getName());
@@ -38,7 +37,6 @@ public class mod_Reforged extends BaseModMp {
 		}
 	}
 
-	@Legacy
 	public String Version() {
 		return String.format("[Forge %d.%d.%d, Reforged %d.%d.%d]",
 				ForgeHooks.majorVersion, ForgeHooks.minorVersion, ForgeHooks.revisionVersion,

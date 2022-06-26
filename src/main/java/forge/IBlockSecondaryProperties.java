@@ -12,15 +12,11 @@ import io.github.betterthanupdates.Legacy;
 @SuppressWarnings("unused")
 @Legacy
 public interface IBlockSecondaryProperties {
-	@Legacy
-	boolean isBlockNormalCube(World arg, int i, int j, int k);
+	boolean isBlockNormalCube(World world, int x, int y, int z);
 
-	@Legacy
-	boolean isBlockReplaceable(World arg, int i, int j, int k);
+	boolean isBlockReplaceable(World world, int x, int y, int z);
 
-	@Legacy
-	boolean isBlockBurning(World arg, int i, int j, int k);
+	boolean isBlockBurning(World world, int x, int y, int z);
 
-	@Legacy
-	boolean isAirBlock(World arg, int i, int j, int k);
+	boolean isAirBlock(World world, int x, int y, int z);
 }

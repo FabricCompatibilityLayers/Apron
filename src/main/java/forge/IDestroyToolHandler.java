@@ -12,6 +12,5 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface IDestroyToolHandler {
-	@Legacy
-	void onDestroyCurrentItem(PlayerEntity arg, ItemStack arg2);
+	void onDestroyCurrentItem(PlayerEntity player, ItemStack itemStack);
 }

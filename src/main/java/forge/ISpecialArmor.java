@@ -11,6 +11,5 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface ISpecialArmor {
-	@Legacy
-	ArmorProperties getProperties(PlayerEntity arg, int i, int j);
+	ArmorProperties getProperties(PlayerEntity player, int i, int j);
 }

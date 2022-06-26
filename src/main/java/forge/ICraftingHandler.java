@@ -13,6 +13,5 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public interface ICraftingHandler {
-	@Legacy
-	void onTakenFromCrafting(PlayerEntity arg, ItemStack arg2, Inventory arg3);
+	void onTakenFromCrafting(PlayerEntity player, ItemStack itemStack, Inventory inventory);
 }

@@ -14,12 +14,9 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public class BlockTextureParticles {
-	@Legacy
 	public String texture;
-	@Legacy
 	public List<ParticleEntity> effects = new ArrayList<>();
 
-	@Legacy
 	public BlockTextureParticles() {
 	}
 }
