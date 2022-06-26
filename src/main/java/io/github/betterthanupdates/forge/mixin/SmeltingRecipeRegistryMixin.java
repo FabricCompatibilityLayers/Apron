@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.SmeltingRecipeRegistry;
 
-import io.github.betterthanupdates.forge.ReforgedSmeltingRecipeRegistry;
+import io.github.betterthanupdates.forge.recipe.ReforgedSmeltingRecipeRegistry;
 
 @Mixin(SmeltingRecipeRegistry.class)
 public class SmeltingRecipeRegistryMixin implements ReforgedSmeltingRecipeRegistry {

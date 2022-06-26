@@ -96,71 +96,42 @@ public class ModLoader {
 	// Apron
 	static final ApronApi APRON = ApronApi.getInstance();
 
-	@Legacy
 	@Environment(EnvType.CLIENT)
 	private static final List<TextureBinder> ANIM_LIST = new LinkedList<>();
-	@Legacy
 	@Environment(EnvType.CLIENT)
 	private static final Map<Integer, BaseMod> BLOCK_MODELS = new HashMap<>();
-	@Legacy
 	@Environment(EnvType.CLIENT)
 	private static final Map<Integer, Boolean> BLOCK_SPECIAL_INV = new HashMap<>();
-	@Legacy
 	private static final File CONFIG_DIR = new File(Minecraft.getGameDirectory(), "/config/");
-	@Legacy
 	private static final File CONFIG_FILE = new File(CONFIG_DIR, "ModLoader.cfg");
-	@Legacy
 	public static Level cfgLoggingLevel = Level.FINER;
-	@Legacy
 	private static long clock = 0L;
-	@Legacy
 	private static Field field_modifiers = null;
-	@Legacy
 	private static boolean hasInit = false;
-	@Legacy
 	private static int highestEntityId = 3000;
-	@Legacy
 	private static final Map<BaseMod, Boolean> inGameHooks = new HashMap<>();
-	@Legacy
 	@Environment(EnvType.CLIENT)
 	private static final Map<BaseMod, Boolean> inGUIHooks = new HashMap<>();
-	@Legacy
 	private static int itemSpriteIndex = 0;
-	@Legacy
 	private static int itemSpritesLeft = 0;
-	@Legacy
 	@Environment(EnvType.CLIENT)
 	private static final Map<BaseMod, Map<KeyBinding, boolean[]>> keyList = new HashMap<>();
-	@Legacy
 	private static final File LOG_FILE = new File(Minecraft.getGameDirectory(), "ModLoader.txt");
-	@Legacy
 	private static final java.util.logging.Logger MOD_LOGGER = java.util.logging.Logger.getLogger("ModLoader");
 	public static final Logger LOGGER = ApronApi.getLogger("ModLoader");
-	@Legacy
 	private static FileHandler logHandler = null;
-	@Legacy
 	private static final LinkedList<BaseMod> MOD_LIST = new LinkedList<>();
-	@Legacy
 	private static int nextBlockModelID = 1000;
-	@Legacy
 	private static final Map<Integer, Map<String, Integer>> overrides = new HashMap<>();
-	@Legacy
 	public static final Properties props = new Properties();
-	@Legacy
 	private static int terrainSpriteIndex = 0;
-	@Legacy
 	private static int terrainSpritesLeft = 0;
-	@Legacy
 	@Environment(EnvType.CLIENT)
 	private static String texPack = null;
-	@Legacy
 	@Environment(EnvType.CLIENT)
 	private static boolean texturesAdded = false;
-	@Legacy
 	private static final boolean[] USED_ITEM_SPRITES = new boolean[256];
-	@Legacy
 	private static final boolean[] USED_TERRAIN_SPRITES = new boolean[256];
-	@Legacy
 	public static final String VERSION = APRON.getModLoaderVersion();
 
 	/**
@@ -171,7 +142,6 @@ public class ModLoader {
 	 * @param description the description of the entry
 	 */
 	@SuppressWarnings("unused")
-	@Legacy
 	public static void AddAchievementDesc(Achievement achievement, String name, String description) {
 		try {
 			if (achievement.name.contains(".")) {
@@ -207,7 +177,7 @@ public class ModLoader {
 	 * @param id the item to be used as fuel.
 	 * @return the fuel ID assigned to the item.
 	 */
-	@Legacy
+	
 	public static int AddAllFuel(int id) {
 		LOGGER.debug("Finding fuel for " + id);
 		int result = 0;
@@ -229,7 +199,7 @@ public class ModLoader {
 	 *
 	 * @param rendererMap renderers to add
 	 */
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	public static void AddAllRenderers(Map<Class<? extends Entity>, EntityRenderer> rendererMap) {
 		init();
@@ -244,7 +214,7 @@ public class ModLoader {
 	 *
 	 * @param textureBinder animation instance to register
 	 */
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	public static void addAnimation(TextureBinder textureBinder) {
 		LOGGER.debug("Adding animation " + textureBinder.toString());
@@ -265,7 +235,7 @@ public class ModLoader {
 	 * @param armor Name of the armor skin
 	 * @return index assign for the armor skin
 	 */
-	@Legacy
+	
 	@SuppressWarnings("unused")
 	public static int AddArmor(String armor) {
 		if (APRON.isClient()) {
@@ -296,7 +266,7 @@ public class ModLoader {
 	 * @param key   tag for string
 	 * @param value string to add
 	 */
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	public static void AddLocalization(String key, String value) {
 		Properties props = TranslationStorage.getInstance().translations;
@@ -348,7 +318,7 @@ public class ModLoader {
 	 * @param name     The name to give
 	 */
 	@SuppressWarnings("unused")
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	public static void AddName(Object instance, String name) {
 		String tag = null;
@@ -394,7 +364,7 @@ public class ModLoader {
 	 * @return unique sprite index
 	 */
 	@SuppressWarnings("unused")
-	@Legacy
+	
 	public static int addOverride(String fileToOverride, String fileToAdd) {
 		try {
 			int i = getUniqueSpriteIndex(fileToOverride);
@@ -414,7 +384,7 @@ public class ModLoader {
 	 * @param overlayPath Path to the texture file which is to be overlaid
 	 * @param index       Sprite index into the texture to be modified
 	 */
-	@Legacy
+	
 	public static void addOverride(String path, String overlayPath, int index) {
 		int dst;
 		int left;
@@ -444,7 +414,7 @@ public class ModLoader {
 	 * @param ingredients the ingredients for the crafting recipe from top left to bottom right.
 	 */
 	@SuppressWarnings("unused")
-	@Legacy
+	
 	public static void AddRecipe(ItemStack output, Object... ingredients) {
 		RecipeRegistry.getInstance().addShapedRecipe(output, ingredients);
 	}
@@ -455,7 +425,7 @@ public class ModLoader {
 	 * @param output      the result of the crafting recipe
 	 * @param ingredients ingredients for the recipe in any order
 	 */
-	@Legacy
+	
 	public static void AddShapelessRecipe(ItemStack output, Object... ingredients) {
 		RecipeRegistry.getInstance().addShapelessRecipe(output, ingredients);
 	}
@@ -466,7 +436,7 @@ public class ModLoader {
 	 * @param input  ingredient for the recipe
 	 * @param output the result of the furnace recipe
 	 */
-	@Legacy
+	
 	public static void AddSmelting(int input, ItemStack output) {
 		SmeltingRecipeRegistry.getInstance().addSmeltingRecipe(input, output);
 	}
@@ -478,7 +448,7 @@ public class ModLoader {
 	 * @param weightedProb chance of spawning for every try
 	 * @param spawnGroup   group to spawn the entity in
 	 */
-	@Legacy
+	
 	public static void AddSpawn(Class<? extends LivingEntity> entityClass, int weightedProb, SpawnGroup spawnGroup) {
 		AddSpawn(entityClass, weightedProb, spawnGroup, (Biome[]) null);
 	}
@@ -492,7 +462,7 @@ public class ModLoader {
 	 * @param biomes       biomes to spawn the entity in
 	 */
 	@SuppressWarnings("unchecked")
-	@Legacy
+	
 	public static void AddSpawn(Class<? extends LivingEntity> entityClass, int weightedProb, SpawnGroup spawnGroup, Biome... biomes) {
 		if (entityClass == null) {
 			throw new IllegalArgumentException("entityClass cannot be null");
@@ -537,7 +507,7 @@ public class ModLoader {
 	 * @param chance     Higher number means more likely to spawn
 	 * @param spawnGroup The spawn group to add entity to (Monster, Creature, or Water)
 	 */
-	@Legacy
+	
 	public static void AddSpawn(String entityName, int chance, SpawnGroup spawnGroup) {
 		AddSpawn(entityName, chance, spawnGroup, (Biome[]) null);
 	}
@@ -551,7 +521,7 @@ public class ModLoader {
 	 * @param biomes       Array of biomes to add entity spawning to
 	 */
 	@SuppressWarnings("unchecked")
-	@Legacy
+	
 	public static void AddSpawn(String entityName, int weightedProb, SpawnGroup spawnGroup, Biome... biomes) {
 		Class<? extends Entity> entityClass = (Class<? extends Entity>) EntityRegistry.STRING_ID_TO_CLASS.get(entityName);
 
@@ -572,7 +542,7 @@ public class ModLoader {
 	 * @param stack item inside the dispenser to dispense
 	 * @return whether dispensing was successful
 	 */
-	@Legacy
+	
 	public static boolean DispenseEntity(World world, double x, double y, double z, int xVel, int zVel, ItemStack stack) {
 		boolean result = false;
 		Iterator<BaseMod> iter = MOD_LIST.iterator();
@@ -589,7 +559,7 @@ public class ModLoader {
 	 *
 	 * @return the list of loaded {@link BaseMod ModLoader mods}
 	 */
-	@Legacy
+	
 	public static List<BaseMod> getLoadedMods() {
 		return Collections.unmodifiableList(MOD_LIST);
 	}
@@ -599,7 +569,7 @@ public class ModLoader {
 	 *
 	 * @return the logger instance
 	 */
-	@Legacy
+	
 	public static java.util.logging.Logger getLogger() {
 		return MOD_LOGGER;
 	}
@@ -610,14 +580,14 @@ public class ModLoader {
 	 * @return Minecraft client instance
 	 */
 	@Nullable
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	public static Minecraft getMinecraftInstance() {
 		return (Minecraft) ApronApi.getInstance().getGame();
 	}
 
 	@Nullable
-	@Legacy
+	
 	@Environment(EnvType.SERVER)
 	public static MinecraftServer getMinecraftServerInstance() {
 		return (MinecraftServer) APRON.getGame();
@@ -636,7 +606,7 @@ public class ModLoader {
 	 * @throws SecurityException        if the thread is not allowed to access field
 	 */
 	@SuppressWarnings("unchecked")
-	@Legacy
+	
 	public static <T, E> T getPrivateValue(Class<? super E> instanceClass, E instance, int fieldIndex) throws IllegalArgumentException, SecurityException {
 		try {
 			Field f = instanceClass.getDeclaredFields()[fieldIndex];
@@ -663,7 +633,7 @@ public class ModLoader {
 	 * @throws NoSuchFieldException     if field does not exist
 	 */
 	@SuppressWarnings("unchecked")
-	@Legacy
+	
 	public static <T, E> T getPrivateValue(Class<? super E> instanceClass, E instance, String fieldName) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
 		try {
 			fieldName = Apron.getRemappedFieldName(instanceClass, fieldName);
@@ -684,7 +654,7 @@ public class ModLoader {
 	 * @param full3DItem if true the item will have 3D model created from {@link #RenderInvBlock(BlockRenderer, Block, int, int)}, if false will be a flat image
 	 * @return assigned block model id
 	 */
-	@Legacy
+	
 	public static int getUniqueBlockModelID(BaseMod mod, boolean full3DItem) {
 		int id = nextBlockModelID++;
 
@@ -701,12 +671,12 @@ public class ModLoader {
 	 *
 	 * @return Assigned ID
 	 */
-	@Legacy
+	
 	public static int getUniqueEntityId() {
 		return highestEntityId++;
 	}
 
-	@Legacy
+	
 	private static int getUniqueItemSpriteIndex() {
 		while (itemSpriteIndex < USED_ITEM_SPRITES.length) {
 			if (!USED_ITEM_SPRITES[itemSpriteIndex]) {
@@ -730,7 +700,7 @@ public class ModLoader {
 	 * @param path path to sprite sheet to get available index from
 	 * @return Assigned sprite index to use
 	 */
-	@Legacy
+	
 	public static int getUniqueSpriteIndex(String path) {
 		if (path.equals("/gui/items.png")) {
 			return getUniqueItemSpriteIndex();
@@ -744,7 +714,7 @@ public class ModLoader {
 		}
 	}
 
-	@Legacy
+	
 	private static int getUniqueTerrainSpriteIndex() {
 		while (terrainSpriteIndex < USED_TERRAIN_SPRITES.length) {
 			if (!USED_TERRAIN_SPRITES[terrainSpriteIndex]) {
@@ -762,7 +732,7 @@ public class ModLoader {
 		return 0;
 	}
 
-	@Legacy
+	
 	private static void init() {
 		if (hasInit) return;
 
@@ -868,7 +838,7 @@ public class ModLoader {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Legacy
+	
 	private static void initStats() {
 		for (int id = 0; id < Block.BY_ID.length; ++id) {
 			if (!Stats.idMap.containsKey(16777216 + id) && Block.BY_ID[id] != null && Block.BY_ID[id].isStatEnabled()) {
@@ -918,7 +888,7 @@ public class ModLoader {
 	 * @param gui The type of GUI to check for. If null, will check for any GUI
 	 * @return true if GUI is open
 	 */
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	public static boolean isGUIOpen(@Nullable Class<? extends Screen> gui) {
 		Minecraft client = getMinecraftInstance();
@@ -937,7 +907,7 @@ public class ModLoader {
 	 * @param modName name of the mod to check for
 	 * @return true if a mod with supplied name exists in the mod list
 	 */
-	@Legacy
+	
 	public static boolean isModLoaded(String modName) {
 		Class<?> chk;
 
@@ -959,7 +929,7 @@ public class ModLoader {
 	/**
 	 * Reads the config file and stores the contents in props.
 	 */
-	@Legacy
+	
 	public static void loadConfig() {
 		try {
 			if (CONFIG_DIR.mkdir() && (CONFIG_FILE.exists() || CONFIG_FILE.createNewFile())) {
@@ -983,7 +953,7 @@ public class ModLoader {
 	 * @throws FileNotFoundException if the image is not found
 	 * @throws Exception             if the image is corrupted
 	 */
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	public static BufferedImage loadImage(TextureManager textureManager, String path)
 			throws FileNotFoundException, Exception {
@@ -1009,7 +979,7 @@ public class ModLoader {
 	 * @param player that picked up item
 	 * @param item   that was picked up
 	 */
-	@Legacy
+	
 	public static void OnItemPickup(PlayerEntity player, ItemStack item) {
 		for (BaseMod mod : MOD_LIST) {
 			mod.OnItemPickup(player, item);
@@ -1021,7 +991,7 @@ public class ModLoader {
 	 *
 	 * @param client instance of the game class
 	 */
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	public static void OnTick(Minecraft client) {
 		init();
@@ -1081,7 +1051,7 @@ public class ModLoader {
 		clock = newClock;
 	}
 
-	@Legacy
+	
 	@Environment(EnvType.SERVER)
 	public static void OnTick(MinecraftServer server) {
 		init();
@@ -1107,7 +1077,7 @@ public class ModLoader {
 	 * @param player instance to open GUI for
 	 * @param screen instance of GUI to open for player
 	 */
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	public static void OpenGUI(PlayerEntity player, Screen screen) {
 		init();
@@ -1129,7 +1099,7 @@ public class ModLoader {
 	 * @param chunkZ Z coordinate of chunk
 	 * @param world  World to generate blocks in
 	 */
-	@Legacy
+	
 	public static void PopulateChunk(WorldSource source, int chunkX, int chunkZ, World world) {
 		init();
 
@@ -1157,7 +1127,7 @@ public class ModLoader {
 		}
 	}
 
-	@Legacy
+	
 	private static void readFromClassPath(File source) throws IOException {
 		LOGGER.debug("Adding mods from " + source.getCanonicalPath());
 		ClassLoader loader = ModLoader.class.getClassLoader();
@@ -1208,7 +1178,7 @@ public class ModLoader {
 	}
 
 	@SuppressWarnings({"SameParameterValue", "BulkFileAttributesRead"})
-	@Legacy
+	
 	private static void readFromModFolder(File folder) throws IOException, IllegalArgumentException, SecurityException {
 		ClassLoader loader = ModLoader.class.getClassLoader();
 
@@ -1291,7 +1261,7 @@ public class ModLoader {
 	 * @param keyBindings Array of the original keys
 	 * @return the appended array
 	 */
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	public static KeyBinding[] RegisterAllKeys(KeyBinding[] keyBindings) {
 		List<KeyBinding> combinedList = new LinkedList<>(Arrays.asList(keyBindings));
@@ -1308,7 +1278,7 @@ public class ModLoader {
 	 *
 	 * @param manager Reference to texture cache
 	 */
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	public static void RegisterAllTextureOverrides(TextureManager manager) {
 		ANIM_LIST.clear();
@@ -1346,7 +1316,7 @@ public class ModLoader {
 	 *
 	 * @param block to add
 	 */
-	@Legacy
+	
 	public static void RegisterBlock(Block block) {
 		RegisterBlock(block, null);
 	}
@@ -1358,7 +1328,7 @@ public class ModLoader {
 	 * @param itemClass class to use for block item
 	 */
 	@SuppressWarnings("unchecked")
-	@Legacy
+	
 	public static void RegisterBlock(@NotNull Block block, Class<? extends BlockItem> itemClass) {
 		try {
 			if (APRON.isClient()) {
@@ -1393,7 +1363,7 @@ public class ModLoader {
 	 * @param entityName  name of entity
 	 * @param entityId    an arbitrary number that <b>cannot</b> be reused for other entities
 	 */
-	@Legacy
+	
 	public static void RegisterEntityID(Class<? extends Entity> entityClass, String entityName, int entityId) {
 		try {
 			EntityRegistry.register(entityClass, entityName, entityId);
@@ -1410,7 +1380,7 @@ public class ModLoader {
 	 * @param keyBinding  reference to the key to register. Define this in your mod file
 	 * @param allowRepeat when true the command will repeat. When false, only called once per press
 	 */
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	public static void RegisterKey(BaseMod mod, KeyBinding keyBinding, boolean allowRepeat) {
 		Map<KeyBinding, boolean[]> keyMap = keyList.get(mod);
@@ -1429,7 +1399,7 @@ public class ModLoader {
 	 * @param blockEntityClass Class of block entity to register
 	 * @param id               The given name of entity. Used for saving
 	 */
-	@Legacy
+	
 	public static void RegisterTileEntity(Class<? extends BlockEntity> blockEntityClass, String id) {
 		if (APRON.isClient()) RegisterTileEntity(blockEntityClass, id, null);
 		else {
@@ -1444,7 +1414,7 @@ public class ModLoader {
 	 * @param id               The given name of entity. Used for saving
 	 * @param renderer         Block entity renderer to assign this block entity
 	 */
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	@SuppressWarnings("unchecked")
 	public static void RegisterTileEntity(Class<? extends BlockEntity> blockEntityClass, String id, BlockEntityRenderer renderer) {
@@ -1469,7 +1439,7 @@ public class ModLoader {
 	 * @param entityClass Class of entity to spawn
 	 * @param spawnGroup  The spawn group to remove entity from. (Monster, Creature, or Water)
 	 */
-	@Legacy
+	
 	public static void RemoveSpawn(Class<? extends LivingEntity> entityClass, SpawnGroup spawnGroup) {
 		RemoveSpawn(entityClass, spawnGroup, (Biome[]) null);
 	}
@@ -1482,7 +1452,7 @@ public class ModLoader {
 	 * @param biomes      Array of biomes to remove entity spawning from
 	 */
 	@SuppressWarnings("unchecked")
-	@Legacy
+	
 	public static void RemoveSpawn(Class<? extends LivingEntity> entityClass, SpawnGroup spawnGroup, Biome... biomes) {
 		if (entityClass == null) {
 			throw new IllegalArgumentException("entityClass cannot be null");
@@ -1509,7 +1479,7 @@ public class ModLoader {
 	 * @param entityName Name of entity to remove
 	 * @param spawnGroup The spawn group to remove the entity from (Monster, Creature, or Water)
 	 */
-	@Legacy
+	
 	public static void RemoveSpawn(String entityName, SpawnGroup spawnGroup) {
 		RemoveSpawn(entityName, spawnGroup, (Biome[]) null);
 	}
@@ -1522,7 +1492,7 @@ public class ModLoader {
 	 * @param biomes     Array of biomes to remove entity spawning from
 	 */
 	@SuppressWarnings("unchecked")
-	@Legacy
+	
 	public static void RemoveSpawn(String entityName, SpawnGroup spawnGroup, Biome... biomes) {
 		Class<? extends Entity> entityClass = (Class<? extends Entity>) EntityRegistry.STRING_ID_TO_CLASS.get(entityName);
 
@@ -1537,7 +1507,7 @@ public class ModLoader {
 	 * @param modelID ID of block model
 	 * @return true if block should be rendered using {@link #RenderInvBlock(BlockRenderer, Block, int, int)}
 	 */
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	public static boolean RenderBlockIsItemFull3D(int modelID) {
 		if (!BLOCK_SPECIAL_INV.containsKey(modelID)) {
@@ -1555,7 +1525,7 @@ public class ModLoader {
 	 * @param metadata of block; Damage on an item
 	 * @param modelID  ID of block model to render
 	 */
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	public static void RenderInvBlock(BlockRenderer renderer, Block block, int metadata, int modelID) {
 		BaseMod mod = BLOCK_MODELS.get(modelID);
@@ -1577,7 +1547,7 @@ public class ModLoader {
 	 * @param modelID  ID of block model to render
 	 * @return true if model was rendered
 	 */
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	public static boolean RenderWorldBlock(BlockRenderer renderer, BlockView world, int x, int y, int z, Block block, int modelID) {
 		BaseMod mod = BLOCK_MODELS.get(modelID);
@@ -1587,7 +1557,7 @@ public class ModLoader {
 	/**
 	 * Saves properties to the config file.
 	 */
-	@Legacy
+	
 	public static void saveConfig() throws IOException {
 		if ((CONFIG_DIR.exists() || CONFIG_DIR.mkdir()) && (CONFIG_FILE.exists() || CONFIG_FILE.createNewFile())) {
 			if (CONFIG_FILE.canWrite()) {
@@ -1605,7 +1575,7 @@ public class ModLoader {
 	 * @param enable   whether to add or remove from list
 	 * @param useClock if true will only run once each tick on game clock, if false once every render frame
 	 */
-	@Legacy
+	
 	public static void SetInGameHook(BaseMod mod, boolean enable, boolean useClock) {
 		if (enable) {
 			inGameHooks.put(mod, useClock);
@@ -1621,7 +1591,7 @@ public class ModLoader {
 	 * @param enable   whether to add or remove from list
 	 * @param useClock if true will only run once each tick on game clock, if false once every render frame
 	 */
-	@Legacy
+	
 	@Environment(EnvType.CLIENT)
 	public static void SetInGUIHook(BaseMod mod, boolean enable, boolean useClock) {
 		if (enable) {
@@ -1644,7 +1614,7 @@ public class ModLoader {
 	 * @throws SecurityException        if the thread is not allowed to access field
 	 */
 	@SuppressWarnings("unused")
-	@Legacy
+	
 	public static <T, E> void setPrivateValue(Class<? super T> instanceClass, T instance, int fieldIndex, E value) throws IllegalArgumentException, SecurityException {
 		try {
 			Field f = instanceClass.getDeclaredFields()[fieldIndex];
@@ -1681,7 +1651,7 @@ public class ModLoader {
 	 * @throws SecurityException        if the thread is not allowed to access field
 	 * @throws NoSuchFieldException     if field does not exist
 	 */
-	@Legacy
+	
 	public static <T, E> void setPrivateValue(Class<? super T> instanceClass, T instance, String fieldName, E value) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
 		try {
 			fieldName = Apron.getRemappedFieldName(instanceClass, fieldName);
@@ -1706,7 +1676,7 @@ public class ModLoader {
 		}
 	}
 
-	@Legacy
+	
 	private static void setupProperties(Class<? extends BaseMod> mod) throws IllegalArgumentException, IllegalAccessException, IOException, SecurityException {
 		Properties modprops = new Properties();
 		File modcfgfile = new File(CONFIG_DIR, mod.getName() + ".cfg");
@@ -1795,7 +1765,7 @@ public class ModLoader {
 	 * @param player that took the item
 	 * @param item   that was taken
 	 */
-	@Legacy
+	
 	public static void TakenFromCrafting(PlayerEntity player, ItemStack item) {
 		for (BaseMod mod : MOD_LIST) {
 			mod.TakenFromCrafting(player, item);
@@ -1808,7 +1778,7 @@ public class ModLoader {
 	 * @param player that took the item
 	 * @param item   that was taken
 	 */
-	@Legacy
+	
 	public static void TakenFromFurnace(PlayerEntity player, ItemStack item) {
 		for (BaseMod mod : MOD_LIST) {
 			mod.TakenFromFurnace(player, item);
@@ -1821,7 +1791,7 @@ public class ModLoader {
 	 * @param message the title of the error
 	 * @param e       the error to show
 	 */
-	@Legacy
+	
 	public static void ThrowException(String message, Throwable e) {
 		LOGGER.error(message, e);
 
@@ -1838,22 +1808,22 @@ public class ModLoader {
 		}
 	}
 
-	@Legacy
+	
 	private static void ThrowException(Throwable e) {
 		ThrowException("Exception occured in ModLoader", e);
 	}
 
-	@Legacy
+	
 	public ModLoader() {
 	}
 
-	@Legacy
+	
 	@Environment(EnvType.SERVER)
 	public static void Init(MinecraftServer server) {
 		init();
 	}
 
-	@Legacy
+	
 	@Environment(EnvType.SERVER)
 	public static void OpenGUI(PlayerEntity player, int i, Inventory inventory, Container container) {
 		if (!hasInit) {

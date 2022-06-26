@@ -22,21 +22,21 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public class DimensionBase {
-	@Legacy
+	
 	public static ArrayList<DimensionBase> list = new ArrayList<>();
-	@Legacy
+	
 	public static LinkedList<Integer> order = new LinkedList<>();
-	@Legacy
+	
 	public final int number;
-	@Legacy
+	
 	public final Class<? extends Dimension> worldProvider;
-	@Legacy
+	
 	public final Class<? extends NetherTeleporter> teleporter;
-	@Legacy
+	
 	public String name = "Dimension";
-	@Legacy
+	
 	public String soundTrigger = "portal.trigger";
-	@Legacy
+	
 	public String soundTravel = "portal.travel";
 
 	static {
@@ -44,7 +44,7 @@ public class DimensionBase {
 		new DimensionNether();
 	}
 
-	@Legacy
+	
 	public static DimensionBase getDimByNumber(int number) {
 		for (DimensionBase dim : list) {
 			if (dim.number == number) {
@@ -55,7 +55,7 @@ public class DimensionBase {
 		return null;
 	}
 
-	@Legacy
+	
 	public static DimensionBase getDimByProvider(Class<? extends Dimension> worldProvider) {
 		for (DimensionBase dim : list) {
 			if (dim.worldProvider.getName().equals(worldProvider.getName())) {
@@ -66,7 +66,7 @@ public class DimensionBase {
 		return null;
 	}
 
-	@Legacy
+	
 	public Dimension getWorldProvider() {
 		try {
 			return this.worldProvider.newInstance();
@@ -76,7 +76,7 @@ public class DimensionBase {
 		return null;
 	}
 
-	@Legacy
+	
 	public NetherTeleporter getTeleporter() {
 		try {
 			if (this.teleporter != null) {
@@ -88,7 +88,7 @@ public class DimensionBase {
 		return null;
 	}
 
-	@Legacy
+	
 	public static void respawn(boolean paramBoolean, int paramInt) {
 		Minecraft localMinecraft = SAPI.getMinecraftInstance();
 
@@ -158,12 +158,12 @@ public class DimensionBase {
 		}
 	}
 
-	@Legacy
+	
 	public static void usePortal(int dimNumber) {
 		usePortal(dimNumber, false);
 	}
 
-	@Legacy
+	
 	private static void usePortal(int dimNumber, boolean resetOrder) {
 		Minecraft game = SAPI.getMinecraftInstance();
 		int oldDimension = game.player.dimensionId;
@@ -221,7 +221,7 @@ public class DimensionBase {
 		teleporter.teleport(game.world, game.player);
 	}
 
-	@Legacy
+	
 	public DimensionBase(int number, Class<? extends Dimension> worldProvider, Class<? extends NetherTeleporter> teleporter) {
 		this.number = number;
 		this.worldProvider = worldProvider;
@@ -229,7 +229,7 @@ public class DimensionBase {
 		list.add(this);
 	}
 
-	@Legacy
+	
 	public Loc getDistanceScale(Loc loc, boolean goingIn) {
 		return loc;
 	}
@@ -237,7 +237,7 @@ public class DimensionBase {
 	/*
 	 * Originally Dimension#getByID(I)Dimension;
 	 */
-	@Legacy
+	
 	public static Dimension getByID(int i) {
 		DimensionBase dimensionbase = getDimByNumber(i);
 

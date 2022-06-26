@@ -106,8 +106,8 @@ public class ForgeHooks {
 		}
 	}
 
-	public static boolean isToolEffective(ItemStack itemStack, Block block, int meta) {
-		ForgeTool forgeTool = toolClasses.get(itemStack.itemId);
+	public static boolean isToolEffective(ItemStack tool, Block block, int meta) {
+		ForgeTool forgeTool = toolClasses.get(tool.itemId);
 
 		if (forgeTool == null) {
 			return false;

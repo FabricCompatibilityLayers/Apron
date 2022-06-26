@@ -10,27 +10,27 @@ import io.github.betterthanupdates.Legacy;
 @SuppressWarnings("unused")
 @Legacy
 public class DungeonLoot {
-	@Legacy
+	
 	public final ItemStack loot;
-	@Legacy
+	
 	public final int min;
-	@Legacy
+	
 	public final int max;
 
-	@Legacy
+	
 	public DungeonLoot(ItemStack stack) {
 		this.loot = new ItemStack(stack.itemId, 1, stack.getMeta());
 		this.min = this.max = stack.count;
 	}
 
-	@Legacy
+	
 	public DungeonLoot(ItemStack stack, int min, int max) {
 		this.loot = new ItemStack(stack.itemId, 1, stack.getMeta());
 		this.min = min;
 		this.max = max;
 	}
 
-	@Legacy
+	
 	public ItemStack getStack() {
 		int damage = 0;
 

@@ -57,7 +57,7 @@ public class Reforged {
 	public static void versionDetect(String modName, int major, int minor, int revision) {
 		if (disableVersionCheckCrash) {
 			ReforgedHooks.touch();
-			LOGGER.info("%s: Reforged version detect was called, but strict crashing is disabled. Expected version %d.%d.%d",
+			LOGGER.warn("%s: Reforged version detect was called, but strict crashing is disabled. Expected version %d.%d.%d",
 					modName, major, minor, revision);
 		} else {
 			if (major != ReforgedHooks.majorVersion) {
@@ -66,7 +66,7 @@ public class Reforged {
 				if (minor > ReforgedHooks.minorVersion) {
 					MinecraftForge.killMinecraft(modName, "Reforged Too Old, need at least " + major + "." + minor + "." + revision);
 				} else {
-					LOGGER.info("%s: Reforged minor version mismatch, expecting %d.%d.x, may lead to unexpected behavior",
+					LOGGER.warn("%s: Reforged minor version mismatch, expecting %d.%d.x, may lead to unexpected behavior",
 							modName, major, minor);
 				}
 			} else if (revision > ReforgedHooks.revisionVersion) {
@@ -78,7 +78,7 @@ public class Reforged {
 	public static void versionDetectStrict(String modName, int major, int minor, int revision) {
 		if (disableVersionCheckCrash) {
 			ReforgedHooks.touch();
-			LOGGER.info("%s: Reforged version detect was called, but strict crashing is disabled. Expected version %d.%d.%d",
+			LOGGER.warn("%s: Reforged version detect was called, but strict crashing is disabled. Expected version %d.%d.%d",
 					modName, major, minor, revision);
 		} else {
 			if (major != ReforgedHooks.majorVersion) {

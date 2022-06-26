@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge;
+package io.github.betterthanupdates.forge.recipe;
 
 import net.minecraft.item.ItemStack;
 

@@ -14,34 +14,34 @@ import io.github.betterthanupdates.Legacy;
 @Legacy
 @SuppressWarnings("unused")
 public abstract class AnimBase extends TextureBinder {
-	@Legacy
+	
 	protected int[][] fileBuf;
-	@Legacy
+	
 	protected int[][] frame;
-	@Legacy
+	
 	protected int size;
-	@Legacy
+	
 	public AnimBase.Mode mdSet = new AnimBase.Mode() {
 		@Override
 		public void draw(int x, int y, Color color) {
 			AnimBase.this.setPixel(x, y, color);
 		}
 	};
-	@Legacy
+	
 	public AnimBase.Mode mdAdd = new AnimBase.Mode() {
 		@Override
 		public void draw(int x, int y, Color color) {
 			AnimBase.this.setPixel(x, y, AnimBase.add(new Color(AnimBase.this.frame[x][y]), color));
 		}
 	};
-	@Legacy
+	
 	public AnimBase.Mode mdSubtract = new AnimBase.Mode() {
 		@Override
 		public void draw(int x, int y, Color color) {
 			AnimBase.this.setPixel(x, y, AnimBase.subtract(new Color(AnimBase.this.frame[x][y]), color));
 		}
 	};
-	@Legacy
+	
 	public AnimBase.Mode mdBlend = new AnimBase.Mode() {
 		@Override
 		public void draw(int x, int y, Color color) {
@@ -49,7 +49,7 @@ public abstract class AnimBase extends TextureBinder {
 		}
 	};
 
-	@Legacy
+	
 	public AnimBase(int spriteID, String spritePath) {
 		super(spriteID);
 		this.size = (int) Math.sqrt((double) (this.grid.length / 4));
@@ -81,17 +81,17 @@ public abstract class AnimBase extends TextureBinder {
 		}
 	}
 
-	@Legacy
+	
 	public void updateTexture() {
 		this.getCleanFrame();
 		this.animFrame();
 		this.copyFrameToArray();
 	}
 
-	@Legacy
+	
 	public abstract void animFrame();
 
-	@Legacy
+	
 	protected void getCleanFrame() {
 		for (int y = 0; y < this.size; ++y) {
 			for (int x = 0; x < this.size; ++x) {
@@ -100,7 +100,7 @@ public abstract class AnimBase extends TextureBinder {
 		}
 	}
 
-	@Legacy
+	
 	protected void copyFrameToArray() {
 		for (int y = 0; y < this.size; ++y) {
 			for (int x = 0; x < this.size; ++x) {
@@ -113,39 +113,39 @@ public abstract class AnimBase extends TextureBinder {
 		}
 	}
 
-	@Legacy
+	
 	private void setPixel(int x, int y, Color color) {
 		if (this.inImage(x, y)) {
 			this.frame[x][y] = color.getRGB();
 		}
 	}
 
-	@Legacy
+	
 	protected int getXYIndex(int x, int y) {
 		return y * this.size + x;
 	}
 
-	@Legacy
+	
 	protected boolean inImage(int x, int y) {
 		return x >= 0 && y >= 0 && x < this.size && y < this.size;
 	}
 
-	@Legacy
+	
 	protected void drawPoint(int x, int y, Color color) {
 		this.drawPoint(x, y, color, this.mdSet);
 	}
 
-	@Legacy
+	
 	protected void drawPoint(int x, int y, Color color, AnimBase.Mode mode) {
 		mode.draw(x, y, color);
 	}
 
-	@Legacy
+	
 	protected void drawRect(int x1, int y1, int x2, int y2, Color color) {
 		this.drawRect(x1, y1, x2, y2, color, this.mdSet);
 	}
 
-	@Legacy
+	
 	protected void drawRect(int x1, int y1, int x2, int y2, Color color, AnimBase.Mode mode) {
 		int xS = Math.min(x1, x2);
 		int yS = Math.min(y1, y2);
@@ -159,7 +159,7 @@ public abstract class AnimBase extends TextureBinder {
 		}
 	}
 
-	@Legacy
+	
 	protected void shiftFrame(int h, int v, boolean wrapH, boolean wrapV) {
 		int[] line = new int[this.size];
 
@@ -232,7 +232,7 @@ public abstract class AnimBase extends TextureBinder {
 		}
 	}
 
-	@Legacy
+	
 	protected void flipFrame(boolean h, boolean v) {
 		if (h) {
 			for (int x = 0; x < this.size / 2; ++x) {
@@ -255,7 +255,7 @@ public abstract class AnimBase extends TextureBinder {
 		}
 	}
 
-	@Legacy
+	
 	public static Color add(Color c1, Color c2) {
 		float value = (float) c2.getAlpha() / 255.0F;
 		int R = c1.getRed();
@@ -271,7 +271,7 @@ public abstract class AnimBase extends TextureBinder {
 		return new Color(R, G, B, A);
 	}
 
-	@Legacy
+	
 	public static Color subtract(Color c1, Color c2) {
 		float value = (float) c2.getAlpha() / 255.0F;
 		int R = c1.getRed();
@@ -287,7 +287,7 @@ public abstract class AnimBase extends TextureBinder {
 		return new Color(R, G, B, A);
 	}
 
-	@Legacy
+	
 	public static Color merge(Color c1, Color c2, float value) {
 		value = Math.min(Math.max(value, 0.0F), 1.0F);
 		float R = (float) c1.getRed() - ((float) c1.getRed() - (float) c2.getRed()) * value;
@@ -297,7 +297,7 @@ public abstract class AnimBase extends TextureBinder {
 		return new Color(R / 255.0F, G / 255.0F, B / 255.0F, A / 255.0F);
 	}
 
-	@Legacy
+	
 	public static Color blend(Color c1, Color c2) {
 		float R = (float) c1.getRed() / 255.0F * ((float) c2.getRed() / 255.0F);
 		float G = (float) c1.getGreen() / 255.0F * ((float) c2.getGreen() / 255.0F);
@@ -306,13 +306,13 @@ public abstract class AnimBase extends TextureBinder {
 		return new Color(R, G, B, A);
 	}
 
-	@Legacy
+	
 	public abstract class Mode {
-		@Legacy
+		
 		public Mode() {
 		}
 
-		@Legacy
+		
 		public abstract void draw(int i, int j, Color color);
 	}
 }

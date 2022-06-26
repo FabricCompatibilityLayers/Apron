@@ -54,11 +54,11 @@ public class MinecraftForgeClient {
 		return ForgeHooksClient.renderPass;
 	}
 
-	public static void registerCustomItemRenderer(int id, ICustomItemRenderer renderer) {
-		CUSTOM_ITEM_RENDERERS[id] = renderer;
+	public static void registerCustomItemRenderer(int itemID, ICustomItemRenderer renderer) {
+		CUSTOM_ITEM_RENDERERS[itemID] = renderer;
 	}
 
-	public static ICustomItemRenderer getCustomItemRenderer(int id) {
-		return CUSTOM_ITEM_RENDERERS[id];
+	public static ICustomItemRenderer getCustomItemRenderer(int itemID) {
+		return CUSTOM_ITEM_RENDERERS[itemID];
 	}
 }

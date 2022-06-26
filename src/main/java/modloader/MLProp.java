@@ -16,7 +16,6 @@ public @interface MLProp {
 	 *
 	 * @return field name override
 	 */
-	@Legacy
 	String name() default "";
 
 	/**
@@ -24,18 +23,15 @@ public @interface MLProp {
 	 *
 	 * @return description to add to the top of the config file
 	 */
-	@Legacy
 	String info() default "";
 
 	/**
 	 * @return Minimum value allowed if field is a number
 	 */
-	@Legacy
 	double min() default Double.NEGATIVE_INFINITY;
 
 	/**
 	 * @return Maximum value allowed if field is a number.
 	 */
-	@Legacy
 	double max() default Double.POSITIVE_INFINITY;
 }

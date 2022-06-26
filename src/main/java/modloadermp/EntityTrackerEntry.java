@@ -8,12 +8,12 @@ import io.github.betterthanupdates.Legacy;
 @Legacy
 @Environment(EnvType.SERVER)
 public class EntityTrackerEntry {
-	@Legacy
+	
 	public int entityId;
-	@Legacy
+	
 	public boolean entityHasOwner;
 
-	@Legacy
+	
 	public EntityTrackerEntry(int i, boolean flag) {
 		this.entityId = i;
 		this.entityHasOwner = flag;

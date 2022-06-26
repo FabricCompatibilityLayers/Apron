@@ -121,7 +121,7 @@ public class MinecraftForge {
 	public static void versionDetect(String modName, int major, int minor, int revision) {
 		if (disableVersionCheckCrash) {
 			ReforgedHooks.touch();
-			LOGGER.info("%s: Forge version detect was called, but strict crashing is disabled. Expected version %d.%d.%d",
+			LOGGER.warn("%s: Forge version detect was called, but strict crashing is disabled. Expected version %d.%d.%d",
 					modName, major, minor, revision);
 		} else {
 			if (major != ForgeHooks.majorVersion) {
@@ -130,7 +130,7 @@ public class MinecraftForge {
 				if (minor > ForgeHooks.minorVersion) {
 					killMinecraft(modName, "MinecraftForge Too Old, need at least " + major + "." + minor + "." + revision);
 				} else {
-					LOGGER.info("%s: MinecraftForge minor version mismatch, expecting %d.%d.x, may lead to unexpected behavior",
+					LOGGER.warn("%s: MinecraftForge minor version mismatch, expecting %d.%d.x, may lead to unexpected behavior",
 							modName, major, minor);
 				}
 			} else if (revision > ForgeHooks.revisionVersion) {
@@ -142,7 +142,7 @@ public class MinecraftForge {
 	public static void versionDetectStrict(String modName, int major, int minor, int revision) {
 		if (disableVersionCheckCrash) {
 			ReforgedHooks.touch();
-			LOGGER.info("%s: Forge version detect was called, but strict crashing is disabled. Expected version %d.%d.%d",
+			LOGGER.warn("%s: Forge version detect was called, but strict crashing is disabled. Expected version %d.%d.%d",
 					modName, major, minor, revision);
 		} else {
 			if (major != ForgeHooks.majorVersion) {

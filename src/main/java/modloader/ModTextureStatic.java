@@ -16,17 +16,17 @@ import io.github.betterthanupdates.apron.impl.client.ApronClientImpl;
 @Legacy
 @Environment(EnvType.CLIENT)
 public class ModTextureStatic extends TextureBinder {
-	@Legacy
+	
 	private boolean oldAnaglyph;
-	@Legacy
+	
 	private final int[] pixels;
 
-	@Legacy
+	
 	public ModTextureStatic(int slot, int dst, BufferedImage source) {
 		this(slot, 1, dst, source);
 	}
 
-	@Legacy
+	
 	public ModTextureStatic(int slot, int size, int dst, BufferedImage source) {
 		super(slot);
 		this.textureSize = size;
@@ -53,7 +53,7 @@ public class ModTextureStatic extends TextureBinder {
 	}
 
 	@SuppressWarnings("PointlessBitwiseExpression")
-	@Legacy
+	
 	public void update() {
 		for (int i = 0; i < this.pixels.length; ++i) {
 			int a = this.pixels[i] >> 24 & 0xFF;
@@ -77,7 +77,7 @@ public class ModTextureStatic extends TextureBinder {
 		this.oldAnaglyph = this.render3d;
 	}
 
-	@Legacy
+	
 	@Override
 	public void updateTexture() {
 		if (this.oldAnaglyph != this.render3d) {
@@ -85,7 +85,7 @@ public class ModTextureStatic extends TextureBinder {
 		}
 	}
 
-	@Legacy
+	
 	public static BufferedImage scale2x(BufferedImage in) {
 		int width = in.getWidth();
 		int height = in.getHeight();

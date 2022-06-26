@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShearsItem;
 import net.minecraft.stat.Stats;
 
-import io.github.betterthanupdates.forge.ReforgedShearsItem;
+import io.github.betterthanupdates.forge.item.ReforgedShearsItem;
 
 @Mixin(ShearsItem.class)
 public class ShearsItemMixin extends Item implements ReforgedShearsItem {
@@ -55,20 +55,20 @@ public class ShearsItemMixin extends Item implements ReforgedShearsItem {
 	}
 
 	@Override
-	public boolean onBlockStartBreak(ItemStack itemstack, int X, int Y, int Z, PlayerEntity player) {
+	public boolean onBlockStartBreak(ItemStack itemstack, int x, int y, int z, PlayerEntity player) {
 		if (!player.world.isClient) {
-			int id = player.world.getBlockId(X, Y, Z);
+			int id = player.world.getBlockId(x, y, z);
 
 			if (Block.BY_ID[id] != null && Block.BY_ID[id] instanceof IShearable) {
 				IShearable target = (IShearable) Block.BY_ID[id];
 
-				if (target.isShearable(itemstack, player.world, X, Y, Z)) {
-					for (ItemStack stack : target.onSheared(itemstack, player.world, X, Y, Z)) {
+				if (target.isShearable(itemstack, player.world, x, y, z)) {
+					for (ItemStack stack : target.onSheared(itemstack, player.world, x, y, z)) {
 						float f = 0.7F;
 						double d = (double) (player.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5;
 						double d1 = (double) (player.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5;
 						double d2 = (double) (player.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5;
-						ItemEntity entityitem = new ItemEntity(player.world, (double) X + d, (double) Y + d1, (double) Z + d2, stack);
+						ItemEntity entityitem = new ItemEntity(player.world, (double) x + d, (double) y + d1, (double) z + d2, stack);
 						entityitem.pickupDelay = 10;
 						player.world.spawnEntity(entityitem);
 					}

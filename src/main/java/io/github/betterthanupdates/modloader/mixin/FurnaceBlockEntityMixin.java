@@ -18,7 +18,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.SmeltingRecipeRegistry;
 
-import io.github.betterthanupdates.forge.ReforgedSmeltingRecipeRegistry;
+import io.github.betterthanupdates.forge.recipe.ReforgedSmeltingRecipeRegistry;
 
 @Mixin(FurnaceBlockEntity.class)
 public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inventory {

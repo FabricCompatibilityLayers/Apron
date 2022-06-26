@@ -11,15 +11,15 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public class ToolBase {
-	@Legacy
+	
 	public static final ToolBase Pickaxe = new ToolBase();
-	@Legacy
+	
 	public static final ToolBase Shovel = new ToolBase();
-	@Legacy
+	
 	public static final ToolBase Axe = new ToolBase();
-	@Legacy
+	
 	public ArrayList<BlockHarvestPower> mineBlocks = new ArrayList<>();
-	@Legacy
+	
 	public ArrayList<Material> mineMaterials = new ArrayList<>();
 
 	static {
@@ -50,11 +50,11 @@ public class ToolBase {
 		}
 	}
 
-	@Legacy
+	
 	public ToolBase() {
 	}
 
-	@Legacy
+	
 	public boolean canHarvest(Block block, float currentPower) {
 		for (Material material : this.mineMaterials) {
 			if (material == block.material) {

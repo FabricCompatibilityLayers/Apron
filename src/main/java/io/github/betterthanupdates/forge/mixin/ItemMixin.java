@@ -21,7 +21,7 @@ public abstract class ItemMixin implements ForgeItem {
 	}
 
 	@Override
-	public boolean onBlockStartBreak(ItemStack itemstack, int X, int Y, int Z, PlayerEntity player) {
+	public boolean onBlockStartBreak(ItemStack itemstack, int x, int y, int z, PlayerEntity player) {
 		return false;
 	}
 }

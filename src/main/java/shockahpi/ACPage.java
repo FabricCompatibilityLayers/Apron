@@ -16,37 +16,37 @@ import io.github.betterthanupdates.Legacy;
 @SuppressWarnings("unused")
 @Legacy
 public class ACPage {
-	@Legacy
+	
 	private static int nextID = 1;
-	@Legacy
+	
 	final int id;
-	@Legacy
+	
 	public final String title;
-	@Legacy
+	
 	ArrayList<Integer> list = new ArrayList<>();
 
-	@Legacy
+	
 	public ACPage() {
 		this.id = 0;
 		this.title = "Minecraft";
 		SAPI.acPageAdd(this);
 	}
 
-	@Legacy
+	
 	public ACPage(String title) {
 		this.id = nextID++;
 		this.title = title;
 		SAPI.acPageAdd(this);
 	}
 
-	@Legacy
+	
 	public void addAchievements(Achievement... achievements) {
 		for (Achievement achievement : achievements) {
 			this.list.add(achievement.id);
 		}
 	}
 
-	@Legacy
+	
 	public int bgGetSprite(Random random, int x, int y) {
 		int sprite = Block.SAND.texture;
 		int rnd = random.nextInt(1 + y) + y / 2;

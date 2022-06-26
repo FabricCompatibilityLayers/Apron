@@ -16,21 +16,21 @@ import io.github.betterthanupdates.apron.impl.client.ApronClientImpl;
 @Environment(EnvType.CLIENT)
 @SuppressWarnings("unused")
 public class ModTextureAnimation extends TextureBinder {
-	@Legacy
+	
 	private final int tickRate;
-	@Legacy
+	
 	private final byte[][] images;
-	@Legacy
+	
 	private int index = 0;
-	@Legacy
+	
 	private int ticks;
 
-	@Legacy
+	
 	public ModTextureAnimation(int slot, int dst, BufferedImage source, int rate) {
 		this(slot, 1, dst, source, rate);
 	}
 
-	@Legacy
+	
 	public ModTextureAnimation(int slot, int size, int dst, BufferedImage source, int rate) {
 		super(slot);
 		this.textureSize = size;
@@ -76,7 +76,7 @@ public class ModTextureAnimation extends TextureBinder {
 		}
 	}
 
-	@Legacy
+	
 	@Override
 	public void updateTexture() {
 		if (this.ticks >= this.tickRate) {

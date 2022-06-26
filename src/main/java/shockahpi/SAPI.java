@@ -27,38 +27,38 @@ import io.github.betterthanupdates.apron.api.ApronApi;
 public class SAPI {
 	public static final Logger LOGGER = ApronApi.getLogger("ShockAhPI");
 
-	@Legacy
+	
 	public static boolean usingText = false;
-	@Legacy
+	
 	private static final ArrayList<IInterceptHarvest> harvestIntercepts = new ArrayList<>();
-	@Legacy
+	
 	private static final ArrayList<IInterceptBlockSet> setIntercepts = new ArrayList<>();
-	@Legacy
+	
 	private static final ArrayList<IReach> reaches = new ArrayList<>();
-	@Legacy
+	
 	private static final ArrayList<String> dngMobs = new ArrayList<>();
-	@Legacy
+	
 	private static final ArrayList<DungeonLoot> dngItems = new ArrayList<>();
-	@Legacy
+	
 	private static final ArrayList<DungeonLoot> dngGuaranteed = new ArrayList<>();
-	@Legacy
+	
 	private static boolean dngAddedMobs = false;
-	@Legacy
+	
 	private static boolean dngAddedItems = false;
-	@Legacy
+	
 	public static int acCurrentPage = 0;
-	@Legacy
+	
 	private static final ArrayList<Integer> acHidden = new ArrayList<>();
-	@Legacy
+	
 	private static final ArrayList<ACPage> acPages = new ArrayList<>();
-	@Legacy
+	
 	public static final ACPage acDefaultPage = new ACPage();
 
-	@Legacy
+	
 	public SAPI() {
 	}
 
-	@Legacy
+	
 	public static void showText() {
 		if (!usingText) {
 			LOGGER.info("Using ShockAhPI r5.1");
@@ -66,17 +66,17 @@ public class SAPI {
 		}
 	}
 
-	@Legacy
+	
 	public static Minecraft getMinecraftInstance() {
 		return (Minecraft) ApronApi.getInstance().getGame();
 	}
 
-	@Legacy
+	
 	public static void interceptAdd(IInterceptHarvest iinterceptharvest) {
 		harvestIntercepts.add(iinterceptharvest);
 	}
 
-	@Legacy
+	
 	public static boolean interceptHarvest(World world, PlayerEntity entityplayer, Loc loc, int i, int j) {
 		for (IInterceptHarvest iinterceptharvest : harvestIntercepts) {
 			if (iinterceptharvest.canIntercept(world, entityplayer, loc, i, j)) {
@@ -88,7 +88,7 @@ public class SAPI {
 		return false;
 	}
 
-	@Legacy
+	
 	public static void drop(World world, Loc loc, ItemStack itemstack) {
 		if (!world.isClient) {
 			for (int i = 0; i < itemstack.count; ++i) {
@@ -105,12 +105,12 @@ public class SAPI {
 		}
 	}
 
-	@Legacy
+	
 	public static void interceptAdd(IInterceptBlockSet iinterceptblockset) {
 		setIntercepts.add(iinterceptblockset);
 	}
 
-	@Legacy
+	
 	public static int interceptBlockSet(World world, Loc loc, int i) {
 		for (IInterceptBlockSet iinterceptblockset : setIntercepts) {
 			if (iinterceptblockset.canIntercept(world, loc, i)) {
@@ -121,12 +121,12 @@ public class SAPI {
 		return i;
 	}
 
-	@Legacy
+	
 	public static void reachAdd(IReach ireach) {
 		reaches.add(ireach);
 	}
 
-	@Legacy
+	
 	public static float reachGet() {
 		ItemStack itemstack = getMinecraftInstance().player.inventory.getHeldItem();
 
@@ -139,19 +139,19 @@ public class SAPI {
 		return 4.0F;
 	}
 
-	@Legacy
+	
 	public static void dungeonAddMob(String s) {
 		dungeonAddMob(s, 10);
 	}
 
-	@Legacy
+	
 	public static void dungeonAddMob(String s, int i) {
 		for (int j = 0; j < i; ++j) {
 			dngMobs.add(s);
 		}
 	}
 
-	@Legacy
+	
 	public static void dungeonRemoveMob(String s) {
 		for (int i = 0; i < dngMobs.size(); ++i) {
 			if (dngMobs.get(i).equals(s)) {
@@ -161,13 +161,13 @@ public class SAPI {
 		}
 	}
 
-	@Legacy
+	
 	public static void dungeonRemoveAllMobs() {
 		dngAddedMobs = true;
 		dngMobs.clear();
 	}
 
-	@Legacy
+	
 	static void dungeonAddDefaultMobs() {
 		for (int i = 0; i < 10; ++i) {
 			dngMobs.add("Skeleton");
@@ -182,7 +182,7 @@ public class SAPI {
 		}
 	}
 
-	@Legacy
+	
 	public static String dungeonGetRandomMob() {
 		if (!dngAddedMobs) {
 			dungeonAddDefaultMobs();
@@ -192,34 +192,34 @@ public class SAPI {
 		return dngMobs.isEmpty() ? "Pig" : dngMobs.get(new Random().nextInt(dngMobs.size()));
 	}
 
-	@Legacy
+	
 	public static void dungeonAddItem(DungeonLoot dungeonloot) {
 		dungeonAddItem(dungeonloot, 100);
 	}
 
-	@Legacy
+	
 	public static void dungeonAddItem(DungeonLoot dungeonloot, int i) {
 		for (int j = 0; j < i; ++j) {
 			dngItems.add(dungeonloot);
 		}
 	}
 
-	@Legacy
+	
 	public static void dungeonAddGuaranteedItem(DungeonLoot dungeonloot) {
 		dngGuaranteed.add(dungeonloot);
 	}
 
-	@Legacy
+	
 	public static int dungeonGetAmountOfGuaranteed() {
 		return dngGuaranteed.size();
 	}
 
-	@Legacy
+	
 	public static DungeonLoot dungeonGetGuaranteed(int i) {
 		return dngGuaranteed.get(i);
 	}
 
-	@Legacy
+	
 	public static void dungeonRemoveItem(int i) {
 		for (int j = 0; j < dngItems.size(); ++j) {
 			if (dngItems.get(j).loot.itemId == i) {
@@ -236,14 +236,14 @@ public class SAPI {
 		}
 	}
 
-	@Legacy
+	
 	public static void dungeonRemoveAllItems() {
 		dngAddedItems = true;
 		dngItems.clear();
 		dngGuaranteed.clear();
 	}
 
-	@Legacy
+	
 	static void dungeonAddDefaultItems() {
 		for (int i = 0; i < 100; ++i) {
 			dngItems.add(new DungeonLoot(new ItemStack(Item.SADDLE)));
@@ -288,7 +288,7 @@ public class SAPI {
 		}
 	}
 
-	@Legacy
+	
 	public static ItemStack dungeonGetRandomItem() {
 		if (!dngAddedItems) {
 			dungeonAddDefaultItems();
@@ -298,24 +298,24 @@ public class SAPI {
 		return dngItems.isEmpty() ? null : dngItems.get(new Random().nextInt(dngItems.size())).getStack();
 	}
 
-	@Legacy
+	
 	public static void acPageAdd(ACPage acpage) {
 		acPages.add(acpage);
 	}
 
-	@Legacy
+	
 	public static void acHide(Achievement[] aachievement) {
 		for (Achievement achievement : aachievement) {
 			acHidden.add(achievement.id);
 		}
 	}
 
-	@Legacy
+	
 	public static boolean acIsHidden(Achievement achievement) {
 		return acHidden.contains(achievement.id);
 	}
 
-	@Legacy
+	
 	public static ACPage acGetPage(Achievement achievement) {
 		if (achievement == null) {
 			LOGGER.debug("Expected Achievement, got null instead.");
@@ -331,17 +331,17 @@ public class SAPI {
 		}
 	}
 
-	@Legacy
+	
 	public static ACPage acGetCurrentPage() {
 		return acPages.get(acCurrentPage);
 	}
 
-	@Legacy
+	
 	public static String acGetCurrentPageTitle() {
 		return acGetCurrentPage().title;
 	}
 
-	@Legacy
+	
 	public static void acPageNext() {
 		++acCurrentPage;
 
@@ -350,7 +350,7 @@ public class SAPI {
 		}
 	}
 
-	@Legacy
+	
 	public static void acPagePrev() {
 		--acCurrentPage;
 
