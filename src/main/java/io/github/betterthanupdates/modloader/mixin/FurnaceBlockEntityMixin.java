@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.FurnaceBlock;
@@ -18,7 +17,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.SmeltingRecipeRegistry;
 
-import io.github.betterthanupdates.forge.recipe.ReforgedSmeltingRecipeRegistry;
+import io.github.betterthanupdates.reforged.recipe.ReforgedSmeltingRecipeRegistry;
 
 @Mixin(FurnaceBlockEntity.class)
 public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inventory {
@@ -80,9 +79,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 			}
 
 			if (this.isBurning() && this.canAcceptRecipeOutput()) {
-				++this.cookTime;
-
-				if (this.cookTime == 200) {
+				if (++this.cookTime == 200) {
 					this.cookTime = 0;
 					this.craftRecipe();
 					flag1 = true;
@@ -102,13 +99,8 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 		}
 	}
 
-	@Redirect(method = "canAcceptRecipeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/recipe/SmeltingRecipeRegistry;getResult(I)Lnet/minecraft/item/ItemStack;"))
-	private ItemStack reforged$canAcceptRecipeOutput(SmeltingRecipeRegistry instance, int i) {
-		return ((ReforgedSmeltingRecipeRegistry) instance).getSmeltingResult(this.inventory[0]);
-	}
-
 	/**
-	 * @author Risugami
+	 * @author Risugami and Reforged author
 	 * @reason idk
 	 * TODO(halotroop2288): rewrite as an {@link Inject} Mixin
 	 */

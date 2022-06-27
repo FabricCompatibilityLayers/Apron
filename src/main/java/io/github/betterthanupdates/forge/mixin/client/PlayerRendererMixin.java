@@ -25,8 +25,12 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer {
 
 	Item cachedItem;
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "render(Lnet/minecraft/entity/player/PlayerEntity;IF)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
-	private void reforged$render(PlayerEntity entityplayer, int i, float f, CallbackInfoReturnable<Boolean> cir) {
+	private void forge$render(PlayerEntity entityplayer, int i, float f, CallbackInfoReturnable<Boolean> cir) {
 		ItemStack itemstack = entityplayer.inventory.getArmorItem(3 - i);
 
 		if (itemstack != null) {
@@ -34,8 +38,12 @@ public abstract class PlayerRendererMixin extends LivingEntityRenderer {
 		}
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Redirect(method = "render(Lnet/minecraft/entity/player/PlayerEntity;IF)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/PlayerRenderer;bindTexture(Ljava/lang/String;)V"))
-	private void reforged$bindTexture(PlayerRenderer instance, String s) {
+	private void forge$bindTexture(PlayerRenderer instance, String s) {
 		if (this.cachedItem != null && this.cachedItem instanceof IArmorTextureProvider) {
 			instance.bindTexture(((IArmorTextureProvider) this.cachedItem).getArmorTextureFile());
 		} else {

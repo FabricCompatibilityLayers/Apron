@@ -30,10 +30,10 @@ public class CraftingResultSlotMixin extends Slot {
 
 	/**
 	 * @author Eloraam
-	 * @reason implement Forge hooks
+	 * @reason implement Forge + ModLoader hooks
 	 */
 	@Inject(method = "onCrafted", at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/Inventory;getInventorySize()I", ordinal = 0, shift = At.Shift.BEFORE))
-	private void reforged$onCrafted(ItemStack itemStack, CallbackInfo ci) {
+	private void forge$onCrafted(ItemStack itemStack, CallbackInfo ci) {
 		ModLoader.TakenFromCrafting(this.player, itemStack);
 		ForgeHooks.onTakenFromCrafting(this.player, itemStack, this.craftingInventory);
 	}

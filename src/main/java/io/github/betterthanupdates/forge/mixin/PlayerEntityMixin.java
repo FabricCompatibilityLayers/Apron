@@ -62,8 +62,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 		return strength;
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "applyDamage", cancellable = true, at = @At("HEAD"))
-	private void reforged$applyDamage(int i, CallbackInfo ci) {
+	private void forge$applyDamage(int i, CallbackInfo ci) {
 		boolean doRegularComputation = true;
 		int initialDamage = i;
 
@@ -84,18 +88,30 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 
 	ItemStack orig;
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "breakHeldItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/PlayerInventory;setInventoryItem(ILnet/minecraft/item/ItemStack;)V"))
-	private void reforged$breakHeldItem$Head(CallbackInfo ci) {
+	private void forge$breakHeldItem$Head(CallbackInfo ci) {
 		this.orig = this.inventory.getHeldItem();
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "breakHeldItem", at = @At(value = "RETURN"))
-	private void reforged$breakHeldItem$Return(CallbackInfo ci) {
+	private void forge$breakHeldItem$Return(CallbackInfo ci) {
 		ForgeHooks.onDestroyCurrentItem((PlayerEntity) (Object) this, this.orig);
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "trySleep", at = @At("HEAD"), cancellable = true)
-	private void reforged$trySleep(int i, int j, int k, CallbackInfoReturnable<SleepStatus> cir) {
+	private void forge$trySleep(int i, int j, int k, CallbackInfoReturnable<SleepStatus> cir) {
 		SleepStatus customSleep = ForgeHooks.sleepInBedAt((PlayerEntity) (Object) this, i, j, k);
 
 		if (customSleep != null) {

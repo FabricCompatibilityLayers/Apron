@@ -17,8 +17,12 @@ public abstract class ChestBlockMixin extends BlockWithEntity {
 		super(blockId, material);
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Redirect(method = "canUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z"))
-	private boolean reforged$canUse(World instance, int j, int k, int i) {
+	private boolean forge$canUse(World instance, int j, int k, int i) {
 		return ((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, 0);
 	}
 }

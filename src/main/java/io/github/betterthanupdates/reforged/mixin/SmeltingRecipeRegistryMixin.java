@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.reforged.mixin;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.SmeltingRecipeRegistry;
 
-import io.github.betterthanupdates.forge.recipe.ReforgedSmeltingRecipeRegistry;
+import io.github.betterthanupdates.reforged.recipe.ReforgedSmeltingRecipeRegistry;
 
 @Mixin(SmeltingRecipeRegistry.class)
 public class SmeltingRecipeRegistryMixin implements ReforgedSmeltingRecipeRegistry {

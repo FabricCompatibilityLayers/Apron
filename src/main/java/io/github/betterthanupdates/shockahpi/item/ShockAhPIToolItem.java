@@ -10,13 +10,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 
-public class SAPIToolItem extends Tool {
+public class ShockAhPIToolItem extends Tool {
 	private Block[] field_2712;
 	public float field_2713 = Float.NaN;
 	public int field_2714 = Integer.MIN_VALUE;
 	public ToolMaterial field_2711;
 
-	protected SAPIToolItem(int itemID, int damage, ToolMaterial material, Block[] blocks) {
+	protected ShockAhPIToolItem(int itemID, int damage, ToolMaterial material, Block[] blocks) {
 		super(false, null, itemID, material.getDurability(), (float) (damage + material.getAttackDamage()), getToolPower(material), material.getMiningSpeed());
 		this.field_2711 = material;
 		this.toolBase = this.getToolBase();
@@ -31,12 +31,12 @@ public class SAPIToolItem extends Tool {
 	}
 
 	public ToolBase getToolBase() {
-		if (this instanceof SAPIPickaxeItem) {
+		if (this instanceof ShockAhPIPickaxeItem) {
 			return ToolBase.Pickaxe;
-		} else if (this instanceof SAPIAxeItem) {
+		} else if (this instanceof ShockAhPIAxeItem) {
 			return ToolBase.Axe;
 		} else {
-			return this instanceof SAPIShovelItem ? ToolBase.Shovel : null;
+			return this instanceof ShockAhPIShovelItem ? ToolBase.Shovel : null;
 		}
 	}
 
@@ -53,7 +53,7 @@ public class SAPIToolItem extends Tool {
 	@Override
 	public boolean canHarvest(Block block) {
 		if (!this.usingSAPI && !this.isBlockOnList(block.id)) {
-			if (this instanceof SAPIPickaxeItem) {
+			if (this instanceof ShockAhPIPickaxeItem) {
 				if (this.id <= 369) {
 					return false;
 				}
@@ -65,7 +65,7 @@ public class SAPIToolItem extends Tool {
 				if (block.material == Material.METAL && this.basePower >= 40.0F) {
 					return true;
 				}
-			} else if (this instanceof SAPIAxeItem) {
+			} else if (this instanceof ShockAhPIAxeItem) {
 				if (this.id <= 369) {
 					return false;
 				}
@@ -77,7 +77,7 @@ public class SAPIToolItem extends Tool {
 						|| block.material == Material.PUMPKIN) {
 					return true;
 				}
-			} else if (this instanceof SAPIShovelItem) {
+			} else if (this instanceof ShockAhPIShovelItem) {
 				if (this.id <= 369) {
 					return false;
 				}

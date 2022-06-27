@@ -16,10 +16,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.SingleplayerInteractionManager;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 
-import io.github.betterthanupdates.apron.block.ApronBlock;
-import io.github.betterthanupdates.forge.item.ForgeItem;
+import io.github.betterthanupdates.forge.block.ForgeBlock;
 
 @Environment(EnvType.CLIENT)
 @Mixin(SingleplayerInteractionManager.class)
@@ -31,47 +29,66 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 	@Unique
 	int cachedMeta = 0;
 
-	@Inject(method = "method_1716", at = @At("HEAD"), cancellable = true)
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
+	@Inject(method = "method_1716", at = @At("HEAD"))
 	private void forge$method_1716(int i, int j, int k, int l, CallbackInfoReturnable<Boolean> cir) {
 		this.cachedMeta = this.client.world.getBlockMeta(i, j, k);
-		ItemStack itemstack = this.client.player.getHeldItem();
-
-		if (itemstack != null && ((ForgeItem) itemstack.getItem()).onBlockStartBreak(itemstack, i, j, k, this.client.player)) {
-			cir.setReturnValue(false);
-		}
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Redirect(method = "method_1716", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/client/entity/player/AbstractClientPlayerEntity;canRemoveBlock(Lnet/minecraft/block/Block;)Z"))
 	private boolean forge$method_1716(AbstractClientPlayerEntity instance, Block block) {
-		return ((ApronBlock) block).canHarvestBlock(instance, this.cachedMeta);
+		return ((ForgeBlock) block).canHarvestBlock(instance, this.cachedMeta);
 	}
 
 	int cachedI, cachedJ, cachedK;
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "method_1707", at = @At("HEAD"))
-	private void reforged$method_1707(int i, int j, int k, int l, CallbackInfo ci) {
+	private void forge$method_1707(int i, int j, int k, int l, CallbackInfo ci) {
 		this.cachedI = i;
 		this.cachedJ = j;
 		this.cachedK = k;
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Redirect(method = "method_1707", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F"))
-	private float reforged$method_1707(Block instance, PlayerEntity playerEntity) {
-		return ((ApronBlock) instance).blockStrength(this.client.world, playerEntity, this.cachedI, this.cachedJ, this.cachedK);
+	private float forge$method_1707(Block instance, PlayerEntity playerEntity) {
+		return ((ForgeBlock) instance).blockStrength(this.client.world, playerEntity, this.cachedI, this.cachedJ, this.cachedK);
 	}
 
 	int cachedI2, cachedJ2, cachedK2;
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "method_1721", at = @At("HEAD"))
-	private void reforged$method_1721(int i, int j, int k, int l, CallbackInfo ci) {
+	private void forge$method_1721(int i, int j, int k, int l, CallbackInfo ci) {
 		this.cachedI2 = i;
 		this.cachedJ2 = j;
 		this.cachedK2 = k;
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Redirect(method = "method_1721", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F"))
-	private float reforged$method_1721(Block instance, PlayerEntity playerEntity) {
-		return ((ApronBlock) instance).blockStrength(this.client.world, playerEntity, this.cachedI2, this.cachedJ2, this.cachedK2);
+	private float forge$method_1721(Block instance, PlayerEntity playerEntity) {
+		return ((ForgeBlock) instance).blockStrength(this.client.world, playerEntity, this.cachedI2, this.cachedJ2, this.cachedK2);
 	}
 }

@@ -28,34 +28,42 @@ public abstract class ChunkMixin {
 	@Shadow
 	public World world;
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "setBlockWithMetadata", cancellable = true, at = @At(value = "CONSTANT", args = "intValue=255", ordinal = 2))
-	private void reforged$setBlockWithMetadata(int i, int j, int k, int l, int i1, CallbackInfoReturnable<Boolean> cir) {
+	private void forge$setBlockWithMetadata(int i, int j, int k, int l, int i1, CallbackInfoReturnable<Boolean> cir) {
 		int k1 = this.blocks[i << 11 | k << 7 | j] & 255;
 
 		int l1 = this.x * 16 + i;
 		int i2 = this.z * 16 + k;
 
 		if (Block.BY_ID[k1] instanceof IOverrideReplace) {
-			IOverrideReplace iovr = (IOverrideReplace) Block.BY_ID[k1];
+			IOverrideReplace overrideReplace = (IOverrideReplace) Block.BY_ID[k1];
 
-			if (!iovr.canReplaceBlock(this.world, l1, j, i2, l)) {
-				cir.setReturnValue(iovr.getReplacedSuccess());
+			if (!overrideReplace.canReplaceBlock(this.world, l1, j, i2, l)) {
+				cir.setReturnValue(overrideReplace.getReplacedSuccess());
 			}
 		}
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "method_860", cancellable = true, at = @At(value = "CONSTANT", args = "intValue=255", ordinal = 2))
-	private void reforged$method_860(int i, int j, int k, int l, CallbackInfoReturnable<Boolean> cir) {
+	private void forge$method_860(int i, int j, int k, int l, CallbackInfoReturnable<Boolean> cir) {
 		int j1 = this.blocks[i << 11 | k << 7 | j] & 255;
 
 		int k1 = this.x * 16 + i;
 		int l1 = this.z * 16 + k;
 
 		if (Block.BY_ID[j1] instanceof IOverrideReplace) {
-			IOverrideReplace iovr = (IOverrideReplace) Block.BY_ID[j1];
+			IOverrideReplace overrideReplace = (IOverrideReplace) Block.BY_ID[j1];
 
-			if (!iovr.canReplaceBlock(this.world, k1, j, l1, l)) {
-				cir.setReturnValue(iovr.getReplacedSuccess());
+			if (!overrideReplace.canReplaceBlock(this.world, k1, j, l1, l)) {
+				cir.setReturnValue(overrideReplace.getReplacedSuccess());
 			}
 		}
 	}

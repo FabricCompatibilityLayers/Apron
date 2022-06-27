@@ -43,8 +43,12 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 	@Unique
 	private final List<BlockTextureParticles> effectList = new ArrayList<>();
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "method_320", at = @At("RETURN"))
-	private void reforged$method_320(CallbackInfo ci) {
+	private void forge$method_320(CallbackInfo ci) {
 		for (int x = 0; x < this.effectList.size(); ++x) {
 			BlockTextureParticles entry = this.effectList.get(x);
 
@@ -62,15 +66,23 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 		}
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Redirect(method = "method_324", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/particle/ParticleEntity;method_2002(Lnet/minecraft/client/render/Tessellator;FFFFFF)V", ordinal = 0))
-	private void reforged$method_2002(ParticleEntity entityfx, Tessellator tessellator, float f, float f1, float f5, float f2, float f3, float f4) {
+	private void forge$method_2002(ParticleEntity entityfx, Tessellator tessellator, float f, float f1, float f5, float f2, float f3, float f4) {
 		if (!(entityfx instanceof DiggingParticleEntity)) {
 			entityfx.method_2002(tessellator, f, f1, f5, f2, f3, f4);
 		}
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "method_324", at = @At("RETURN"))
-	private void reforged$method_324(Entity entity, float f, CallbackInfo ci) {
+	private void forge$method_324(Entity entity, float f, CallbackInfo ci) {
 		float f1 = MathHelper.cos(entity.yaw * 3.141593F / 180.0F);
 		float f2 = MathHelper.sin(entity.yaw * 3.141593F / 180.0F);
 		float f3 = -f2 * MathHelper.sin(entity.pitch * 3.141593F / 180.0F);
@@ -92,8 +104,12 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 		}
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "method_323", at = @At("RETURN"))
-	private void reforged$method_323(World par1, CallbackInfo ci) {
+	private void forge$method_323(World par1, CallbackInfo ci) {
 		for (BlockTextureParticles entry : this.effectList) {
 			entry.effects.clear();
 		}
@@ -103,22 +119,34 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 
 	Block cachedBlock;
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "addBlockBreakParticles", at = @At("HEAD"))
-	private void reforged$addBlockBreakParticles(int j, int k, int l, int m, int par5, CallbackInfo ci) {
+	private void forge$addBlockBreakParticles(int j, int k, int l, int m, int par5, CallbackInfo ci) {
 		if (m != 0) {
 			this.cachedBlock = Block.BY_ID[m];
 		}
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Redirect(method = "addBlockBreakParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/ParticleManager;addParticle(Lnet/minecraft/client/entity/particle/ParticleEntity;)V"))
-	private void reforged$addBlockBreakParticles(ParticleManager instance, ParticleEntity particleEntity) {
+	private void forge$addBlockBreakParticles(ParticleManager instance, ParticleEntity particleEntity) {
 		((ForgeParticleManager) instance).addDigParticleEffect((DiggingParticleEntity) particleEntity, this.cachedBlock);
 	}
 
 	Block cachedBlock2;
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "addBlockClickParticle", at = @At("HEAD"))
-	private void reforged$addBlockClickParticle(int j, int k, int l, int par4, CallbackInfo ci) {
+	private void forge$addBlockClickParticle(int j, int k, int l, int par4, CallbackInfo ci) {
 		int id = this.world.getBlockId(j, k, l);
 
 		if (id != 0) {
@@ -126,8 +154,12 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 		}
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Redirect(method = "addBlockClickParticle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/ParticleManager;addParticle(Lnet/minecraft/client/entity/particle/ParticleEntity;)V"))
-	private void reforged$addBlockClickParticle(ParticleManager instance, ParticleEntity particleEntity) {
+	private void forge$addBlockClickParticle(ParticleManager instance, ParticleEntity particleEntity) {
 		((ForgeParticleManager) instance).addDigParticleEffect((DiggingParticleEntity) particleEntity, this.cachedBlock2);
 	}
 

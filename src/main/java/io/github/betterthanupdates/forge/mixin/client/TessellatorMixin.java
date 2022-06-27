@@ -76,8 +76,12 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 	@Unique
 	private static final int NATIVE_BUFFER_SIZE = 2097152;
 	@Unique
-	private static final int TRIVERTS_IN_BUFFER = NATIVE_BUFFER_SIZE / 48 * 6;
+	private static final int TRI_VERTS_IN_BUFFER = NATIVE_BUFFER_SIZE / 48 * 6;
 
+	/**
+	 * @author Eloraam
+	 * @reason method instruction order is different from vanilla.
+	 */
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void ctr$overwrite(int par1, CallbackInfo ci) {
 		this.vertexCount = 0;
@@ -93,6 +97,10 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 		this.rawBufferSize = 0;
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason method instruction order is different from vanilla.
+	 */
 	@Inject(method = "<clinit>", at = @At("RETURN"))
 	private static void classCtr$overwrite(CallbackInfo ci) {
 		ForgeClientReflection.Tessellator$firstInstance = INSTANCE;
@@ -115,7 +123,7 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 				int vtc;
 
 				if (this.drawingMode == 7 && useTriangles) {
-					vtc = Math.min(this.vertexCount - offs, TRIVERTS_IN_BUFFER);
+					vtc = Math.min(this.vertexCount - offs, TRI_VERTS_IN_BUFFER);
 				} else {
 					vtc = Math.min(this.vertexCount - offs, NATIVE_BUFFER_SIZE >> 5);
 				}
@@ -204,8 +212,12 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 		}
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason method instruction order is different from vanilla.
+	 */
 	@Inject(method = "addVertex", at = @At("HEAD"))
-	private void reforged$addVertex$1(double d, double d1, double d2, CallbackInfo ci) {
+	private void forge$addVertex$1(double d, double d1, double d2, CallbackInfo ci) {
 		if (this.bufferIndex >= this.rawBufferSize - 32) {
 			if (this.rawBufferSize == 0) {
 				this.rawBufferSize = 65536;
@@ -217,8 +229,12 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 		}
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason method instruction order is different from vanilla.
+	 */
 	@Inject(method = "addVertex", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Tessellator;tessellate()V"), cancellable = true)
-	private void reforged$addVertex$2(double d, double d1, double d2, CallbackInfo ci) {
+	private void forge$addVertex$2(double d, double d1, double d2, CallbackInfo ci) {
 		ci.cancel();
 	}
 

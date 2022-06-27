@@ -22,9 +22,6 @@
     "RailBlockMixin",
     "RedstoneDustBlockMixin",
     "RedstoneRepeaterBlockMixin",
-    "ShearsItemMixin",
-    "SheepEntityMixin",
-    "SmeltingRecipeRegistryMixin",
     "TorchBlockMixin",
     "TrapdoorBlockMixin",
     "WorldMixin"

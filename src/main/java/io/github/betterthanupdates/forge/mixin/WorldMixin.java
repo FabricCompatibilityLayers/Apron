@@ -1,5 +1,6 @@
 package io.github.betterthanupdates.forge.mixin;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -8,9 +9,11 @@ import net.minecraft.block.Block;
 import net.minecraft.util.math.AxixAlignedBoundingBox;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.Dimension;
 
-import io.github.betterthanupdates.apron.block.ApronBlock;
+import io.github.betterthanupdates.forge.block.ForgeBlock;
 import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(World.class)
@@ -21,6 +24,22 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	@Shadow
 	public abstract boolean method_155(int i, int j, int k, int l, int m, int n);
 
+	@Shadow
+	@Final
+	public Dimension dimension;
+
+	@Shadow
+	public abstract boolean isBlockLoaded(int i, int j, int k);
+
+	@Shadow
+	public abstract boolean isAboveGround(int i, int j, int k);
+
+	@Shadow
+	public abstract int method_164(LightType arg, int i, int j, int k);
+
+	@Shadow
+	public abstract void method_166(LightType arg, int i, int j, int k, int l, int m, int n);
+
 	/**
 	 * @author Eloraam
 	 * @reason implement Forge hooks
@@ -28,7 +47,35 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	@Overwrite
 	public boolean isAir(int i, int j, int k) {
 		int l = this.getBlockId(i, j, k);
-		return l == 0 || ((ApronBlock) Block.BY_ID[l]).isAirBlock((World) (Object) this, i, j, k);
+		return l == 0 || ((ForgeBlock) Block.BY_ID[l]).isAirBlock((World) (Object) this, i, j, k);
+	}
+
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
+	@Overwrite
+	public void method_165(LightType lightType, int x, int y, int z, int l) {
+		if (!this.dimension.halvesMapping || lightType != LightType.field_2757) {
+			if (this.isBlockLoaded(x, y, z)) {
+				if (lightType == LightType.field_2757) {
+					if (this.isAboveGround(x, y, z)) {
+						l = 15;
+					}
+				} else if (lightType == LightType.field_2758) {
+					int i1 = this.getBlockId(x, y, z);
+					int bl = i1 == 0 ? 0 : ((ForgeBlock) Block.BY_ID[i1]).getLightValue(this, x, y, z);
+
+					if (bl > l) {
+						l = bl;
+					}
+				}
+
+				if (this.method_164(lightType, x, y, z) != l) {
+					this.method_166(lightType, x, y, z, x, y, z);
+				}
+			}
+		}
 	}
 
 	/**
@@ -54,7 +101,7 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 							return true;
 						}
 
-						if (j2 > 0 && ((ApronBlock) Block.BY_ID[j2]).isBlockBurning((World) (Object) this, k1, l1, i2)) {
+						if (j2 > 0 && ((ForgeBlock) Block.BY_ID[j2]).isBlockBurning((World) (Object) this, k1, l1, i2)) {
 							return true;
 						}
 					}
@@ -72,13 +119,13 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	@Overwrite
 	public boolean canSuffocate(int i, int j, int k) {
 		Block block = Block.BY_ID[this.getBlockId(i, j, k)];
-		return block != null && ((ApronBlock) block).isBlockNormalCube((World) (Object) this, i, j, k);
+		return block != null && ((ForgeBlock) block).isBlockNormalCube((World) (Object) this, i, j, k);
 	}
 
 	@Override
 	public boolean isBlockSolidOnSide(int i, int j, int k, int l) {
 		Block block = Block.BY_ID[this.getBlockId(i, j, k)];
-		return block != null && ((ApronBlock) block).isBlockSolidOnSide((World) (Object) this, i, j, k, l);
+		return block != null && ((ForgeBlock) block).isBlockSolidOnSide((World) (Object) this, i, j, k, l);
 	}
 
 	/**
@@ -108,7 +155,7 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 				block = null;
 			}
 
-			if (block != null && ((ApronBlock) block).isBlockReplaceable((World) (Object) this, j, k, l)) {
+			if (block != null && ((ForgeBlock) block).isBlockReplaceable((World) (Object) this, j, k, l)) {
 				block = null;
 			}
 

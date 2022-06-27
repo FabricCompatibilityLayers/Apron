@@ -21,19 +21,27 @@ public class RedstoneDustBlockMixin extends Block {
 		super(blockId, material);
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Redirect(method = {"canPlaceAt"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z"))
-	private boolean reforged$isBlockSolidOnSide(World instance, int j, int k, int i) {
+	private boolean forge$isBlockSolidOnSide(World instance, int j, int k, int i) {
 		return ((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, 1);
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "method_1287", cancellable = true, at = @At("HEAD"))
-	private static void reforged$canConnectRedstone(BlockView iblockaccess, int i, int j, int k, int l, CallbackInfoReturnable<Boolean> cir) {
-		int id = iblockaccess.getBlockId(i, j, k);
+	private static void forge$canConnectRedstone(BlockView blockView, int i, int j, int k, int l, CallbackInfoReturnable<Boolean> cir) {
+		int id = blockView.getBlockId(i, j, k);
 		if (id != Block.REDSTONE_DUST.id
 				&& id != 0
 				&& Block.BY_ID[id] instanceof IConnectRedstone) {
 			IConnectRedstone icr = (IConnectRedstone) Block.BY_ID[id];
-			cir.setReturnValue(icr.canConnectRedstone(iblockaccess, i, j, k, l));
+			cir.setReturnValue(icr.canConnectRedstone(blockView, i, j, k, l));
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.shockahpi.client.entity.player;
+package io.github.betterthanupdates.playerapi.client.entity.player;
 
 import java.util.List;
 import java.util.Random;
@@ -15,7 +15,7 @@ import net.minecraft.util.SleepStatus;
 /**
  * Implements getter for public field patch in ClientPlayerEntity.
  */
-public interface ShockAhPIClientPlayerEntity {
+public interface PlayerAPIClientPlayerEntity {
 	void superUpdatePlayerActionState();
 
 	void superOnLivingUpdate();

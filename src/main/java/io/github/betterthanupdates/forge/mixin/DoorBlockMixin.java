@@ -17,8 +17,12 @@ public abstract class DoorBlockMixin extends Block {
 		super(blockId, material);
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Redirect(method = {"onAdjacentBlockUpdate", "canPlaceAt"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z"))
-	private boolean reforged$isBlockSolidOnSide(World instance, int j, int k, int i) {
+	private boolean forge$isBlockSolidOnSide(World instance, int j, int k, int i) {
 		return ((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, 1);
 	}
 }

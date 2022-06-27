@@ -27,10 +27,10 @@ import net.minecraft.stat.achievement.Achievements;
 import net.minecraft.util.io.StatsFileWriter;
 import net.minecraft.util.math.MathHelper;
 
-import io.github.betterthanupdates.shockahpi.SAPIAchievementsScreen;
+import io.github.betterthanupdates.shockahpi.client.gui.screen.ShockAhPIAchievementsScreen;
 
 @Mixin(AchievementsScreen.class)
-public class AchievementsScreenMixin extends Screen implements SAPIAchievementsScreen {
+public class AchievementsScreenMixin extends Screen implements ShockAhPIAchievementsScreen {
 	@Shadow
 	private StatsFileWriter statsFileWriter;
 	@Shadow

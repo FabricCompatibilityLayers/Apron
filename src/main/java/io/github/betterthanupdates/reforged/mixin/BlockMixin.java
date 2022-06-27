@@ -16,7 +16,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import io.github.betterthanupdates.apron.block.ApronBlock;
 import io.github.betterthanupdates.reforged.block.ReforgedBlock;
 
 @Mixin(Block.class)
@@ -67,17 +66,17 @@ public abstract class BlockMixin implements ReforgedBlock {
 
 	@Redirect(method = "beforeDestroyedByExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getDropCount(Ljava/util/Random;)I"))
 	private int reforged$beforeDestroyedByExplosion(Block instance, Random random) {
-		return ((ApronBlock) instance).quantityDropped(this.cachedL, random, this.currentItemStack);
+		return ((ReforgedBlock) instance).quantityDropped(this.cachedL, random, this.currentItemStack);
 	}
 
 	@Redirect(method = "beforeDestroyedByExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getDropId(ILjava/util/Random;)I"))
 	private int reforged$beforeDestroyedByExplosion(Block instance, int l, Random random) {
-		return ((ApronBlock) instance).idDropped(l, random, this.currentItemStack);
+		return ((ReforgedBlock) instance).idDropped(l, random, this.currentItemStack);
 	}
 
 	@Redirect(method = "beforeDestroyedByExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;droppedMeta(I)I"))
 	private int reforged$beforeDestroyedByExplosion(Block instance, int i) {
-		return ((ApronBlock) instance).damageDropped(i, this.currentItemStack);
+		return ((ReforgedBlock) instance).damageDropped(i, this.currentItemStack);
 	}
 
 	@Inject(method = "afterBreak", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;drop(Lnet/minecraft/world/World;IIII)V"))

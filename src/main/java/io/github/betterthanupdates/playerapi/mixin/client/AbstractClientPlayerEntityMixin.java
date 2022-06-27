@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.shockahpi.mixin.client;
+package io.github.betterthanupdates.playerapi.mixin.client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +32,10 @@ import net.minecraft.util.SleepStatus;
 import net.minecraft.util.io.CompoundTag;
 import net.minecraft.world.World;
 
-import io.github.betterthanupdates.shockahpi.client.entity.player.ShockAhPIClientPlayerEntity;
+import io.github.betterthanupdates.playerapi.client.entity.player.PlayerAPIClientPlayerEntity;
 
 @Mixin(AbstractClientPlayerEntity.class)
-public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity implements ShockAhPIClientPlayerEntity {
+public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity implements PlayerAPIClientPlayerEntity {
 	@Shadow
 	public PlayerKeypressManager playerKeypressManager;
 

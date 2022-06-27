@@ -4,10 +4,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ToolMaterial;
 
-public class SAPIPickaxeItem extends SAPIToolItem {
+public class ShockAhPIPickaxeItem extends ShockAhPIToolItem {
 	private static Block[] field_352 = new Block[] {Block.COBBLESTONE, Block.DOUBLE_STONE_SLAB, Block.STONE_SLAB, Block.STONE, Block.SANDSTONE, Block.MOSSY_COBBLESTONE, Block.IRON_ORE, Block.IRON_BLOCK, Block.COAL_ORE, Block.GOLD_BLOCK, Block.GOLD_ORE, Block.DIAMOND_ORE, Block.DIAMOND_BLOCK, Block.ICE, Block.NETHERRACK, Block.LAPIS_LAZULI_ORE, Block.LAPIS_LAZULI_BLOCK};
 
-	public SAPIPickaxeItem(int i, ToolMaterial arg) {
+	public ShockAhPIPickaxeItem(int i, ToolMaterial arg) {
 		super(i, 2, arg, field_352);
 	}
 

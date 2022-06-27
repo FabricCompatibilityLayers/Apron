@@ -59,8 +59,16 @@
       "environment": "*"
     },
     {
+      "config": "reforged.mixins.json",
+      "environment": "*"
+    },
+    {
       "config": "modloader.mixins.json",
       "environment": "*"
+    },
+    {
+      "config": "playerapi.mixins.json",
+      "environment": "client"
     },
     {
       "config": "shockahpi.mixins.json",

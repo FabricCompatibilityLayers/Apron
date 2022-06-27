@@ -173,17 +173,29 @@ public abstract class BlockRendererMixin {
 	@Shadow
 	public float field_93;
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "<init>()V", at = @At("RETURN"))
 	private void forge$init(CallbackInfo ci) {
 		this.blockView = null;
 		this.forgeCtr();
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "<init>(Lnet/minecraft/world/BlockView;)V", at = @At("RETURN"))
 	private void ctrSetDefaultValues(BlockView blockView, CallbackInfo ci) {
 		this.forgeCtr();
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	private void forgeCtr() {
 		this.textureOverride = -1;
 		this.mirrorTexture = false;
@@ -198,8 +210,12 @@ public abstract class BlockRendererMixin {
 		this.field_55 = 1;
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "render", cancellable = true, at = @At("RETURN"))
-	private void reforged$render(Block block, int i, int j, int k, CallbackInfoReturnable<Boolean> cir) {
+	private void forge$render(Block block, int i, int j, int k, CallbackInfoReturnable<Boolean> cir) {
 		int l = block.getRenderType();
 
 		switch (l) {
@@ -249,10 +265,10 @@ public abstract class BlockRendererMixin {
 		tessellator.color(f * f1, f * f2, f * f3);
 		int j1 = (i1 & 15) << 4;
 		int k1 = i1 & 240;
-		double d = (double) ((float) j1 / 256.0F);
-		double d1 = (double) (((float) j1 + 15.99F) / 256.0F);
-		double d2 = (double) ((float) k1 / 256.0F);
-		double d3 = (double) (((float) k1 + 15.99F) / 256.0F);
+		double d = (float) j1 / 256.0F;
+		double d1 = ((float) j1 + 15.99F) / 256.0F;
+		double d2 = (float) k1 / 256.0F;
+		double d3 = ((float) k1 + 15.99F) / 256.0F;
 		boolean flag = RedstoneDustBlock.method_1287(this.blockView, i - 1, j, k, 1)
 				|| !this.blockView.canSuffocate(i - 1, j, k) && RedstoneDustBlock.method_1287(this.blockView, i - 1, j - 1, k, -1);
 		boolean flag1 = RedstoneDustBlock.method_1287(this.blockView, i + 1, j, k, 3)
@@ -295,10 +311,10 @@ public abstract class BlockRendererMixin {
 		}
 
 		if (byte0 != 0) {
-			d = (double) ((float) (j1 + 16) / 256.0F);
-			d1 = (double) (((float) (j1 + 16) + 15.99F) / 256.0F);
-			d2 = (double) ((float) k1 / 256.0F);
-			d3 = (double) (((float) k1 + 15.99F) / 256.0F);
+			d = (float) (j1 + 16) / 256.0F;
+			d1 = ((float) (j1 + 16) + 15.99F) / 256.0F;
+			d2 = (float) k1 / 256.0F;
+			d3 = ((float) k1 + 15.99F) / 256.0F;
 		}
 
 		if (byte0 == 0) {
@@ -1100,8 +1116,12 @@ public abstract class BlockRendererMixin {
 		return flag;
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "method_48", at = @At("RETURN"))
-	private void reforged$method_48(Block block, int i, float f, CallbackInfo ci) {
+	private void forge$method_48(Block block, int i, float f, CallbackInfo ci) {
 		int k = block.getRenderType();
 
 		if (k != 0 && k != 16) {
@@ -1119,8 +1139,12 @@ public abstract class BlockRendererMixin {
 		}
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "method_42", at = @At("RETURN"), cancellable = true)
-	private static void reforged$method_42(int i, CallbackInfoReturnable<Boolean> cir) {
+	private static void forge$method_42(int i, CallbackInfoReturnable<Boolean> cir) {
 		switch (i) {
 			case 0:
 			case 10:
@@ -1132,8 +1156,12 @@ public abstract class BlockRendererMixin {
 		}
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "<clinit>", at = @At("RETURN"))
-	private static void reforged$cinit(CallbackInfo ci) {
+	private static void forge$cinit(CallbackInfo ci) {
 		for (int i = 0; i < ForgeClientReflection.BlockRenderer$redstoneColors.length; ++i) {
 			float f = (float) i / 15.0F;
 			float f1 = f * 0.6F + 0.4F;

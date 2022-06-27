@@ -1,5 +1,6 @@
 package io.github.betterthanupdates.forge.mixin.client;
 
+import forge.MinecraftForge;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,10 +15,14 @@ import io.github.betterthanupdates.forge.ForgeClientReflection;
 @Environment(EnvType.CLIENT)
 @Mixin(TextureManager.class)
 public abstract class TextureManagerMixin {
+	/**
+	 * @author Eloraam
+	 * @reason Minecraft Forge client hooks
+	 */
 	@Inject(method = "getTextureId(Ljava/lang/String;)I", at = @At(value = "INVOKE", target = "Ljava/nio/IntBuffer;clear()Ljava/nio/Buffer;"))
-	private void reforged$getTextureId(String s, CallbackInfoReturnable<Integer> cir) {
+	private void forge$getTextureId(String s, CallbackInfoReturnable<Integer> cir) {
 		if (ForgeClientReflection.Tessellator$renderingWorldRenderer) {
-			System.out.printf("Warning: Texture %s not preloaded, will cause render glitches!\n", s);
+			MinecraftForge.LOGGER.warn("Texture %s not preloaded, will cause render glitches!", s);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.reforged.mixin;
 
 import forge.IShearable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,10 +13,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShearsItem;
 import net.minecraft.stat.Stats;
 
-import io.github.betterthanupdates.forge.item.ReforgedShearsItem;
+import io.github.betterthanupdates.reforged.item.ReforgedItem;
 
 @Mixin(ShearsItem.class)
-public class ShearsItemMixin extends Item implements ReforgedShearsItem {
+public class ShearsItemMixin extends Item implements ReforgedItem {
 	public ShearsItemMixin(int i) {
 		super(i);
 	}

@@ -16,7 +16,7 @@ import net.minecraft.util.SleepStatus;
 import net.minecraft.util.io.CompoundTag;
 
 import io.github.betterthanupdates.Legacy;
-import io.github.betterthanupdates.shockahpi.client.entity.player.ShockAhPIClientPlayerEntity;
+import io.github.betterthanupdates.playerapi.client.entity.player.PlayerAPIClientPlayerEntity;
 
 @Legacy
 public class PlayerAPI {
@@ -30,7 +30,7 @@ public class PlayerAPI {
 	}
 
 	private static List<PlayerBase> bases(AbstractClientPlayerEntity player) {
-		return ((ShockAhPIClientPlayerEntity) player).getPlayerBases();
+		return ((PlayerAPIClientPlayerEntity) player).getPlayerBases();
 	}
 
 	public static <P extends PlayerBase> P getPlayerBase(AbstractClientPlayerEntity player, Class<P> pb) {

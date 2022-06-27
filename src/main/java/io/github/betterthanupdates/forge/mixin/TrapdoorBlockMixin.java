@@ -23,25 +23,41 @@ public abstract class TrapdoorBlockMixin extends Block {
 
 	int cachedMeta = 0;
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "onAdjacentBlockUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getBlockMeta(III)I"))
-	private void reforged$onAdjacentBlockUpdate(World i, int j, int k, int l, int par5, CallbackInfo ci) {
+	private void forge$onAdjacentBlockUpdate(World i, int j, int k, int l, int par5, CallbackInfo ci) {
 		this.cachedMeta = i.getBlockMeta(j, k, l);
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Redirect(method = "onAdjacentBlockUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z"))
-	private boolean reforged$disableValidation(World instance, int j, int k, int i) {
+	private boolean forge$disableValidation(World instance, int j, int k, int i) {
 		return !(!ForgeReflection.TrapdoorBlock$disableValidation && !((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, (this.cachedMeta & 3) + 2));
 	}
 
 	int cachedL;
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "canPlaceAt", at = @At("HEAD"))
-	private void reforged$canPlaceAt(World i, int j, int k, int l, int par5, CallbackInfoReturnable<Boolean> cir) {
+	private void forge$canPlaceAt(World i, int j, int k, int l, int par5, CallbackInfoReturnable<Boolean> cir) {
 		this.cachedL = par5;
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Redirect(method = "canPlaceAt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z"))
-	private boolean reforged$isBlockSolidOnSide(World instance, int j, int k, int i) {
+	private boolean forge$isBlockSolidOnSide(World instance, int j, int k, int i) {
 		return ((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, this.cachedL);
 	}
 }

@@ -1,8 +1,8 @@
-package io.github.betterthanupdates.shockahpi;
+package io.github.betterthanupdates.shockahpi.client.gui.screen;
 
 import net.minecraft.stat.achievement.Achievement;
 
-public interface SAPIAchievementsScreen {
+public interface ShockAhPIAchievementsScreen {
 	boolean isVisibleAchievement(Achievement achievement, int deep);
 
 	boolean isVisibleLine(Achievement achievement);

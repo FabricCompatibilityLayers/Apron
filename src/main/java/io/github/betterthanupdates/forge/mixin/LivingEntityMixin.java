@@ -9,7 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.world.World;
 
-import io.github.betterthanupdates.apron.block.ApronBlock;
+import io.github.betterthanupdates.forge.block.ForgeBlock;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
@@ -17,10 +17,14 @@ public abstract class LivingEntityMixin extends Entity {
 		super(world);
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Redirect(method = "method_932", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getBlockId(III)I"))
-	private int reforged$method_932(World instance, int j, int k, int i) {
+	private int forge$method_932(World instance, int j, int k, int i) {
 		int blockId = instance.getBlockId(j, k, i);
 		Block block = Block.BY_ID[blockId];
-		return block != null && ((ApronBlock) block).isLadder() ? Block.LADDER.id : 0;
+		return block != null && ((ForgeBlock) block).isLadder() ? Block.LADDER.id : 0;
 	}
 }
