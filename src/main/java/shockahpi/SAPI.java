@@ -15,6 +15,7 @@ import net.minecraft.stat.achievement.Achievement;
 import net.minecraft.world.World;
 
 import io.github.betterthanupdates.Legacy;
+import io.github.betterthanupdates.apron.Apron;
 import io.github.betterthanupdates.apron.api.ApronApi;
 
 /**
@@ -25,7 +26,7 @@ import io.github.betterthanupdates.apron.api.ApronApi;
 @SuppressWarnings({"unused", "UnusedReturnValue", "BooleanMethodIsAlwaysInverted"})
 @Legacy
 public class SAPI {
-	public static final Logger LOGGER = ApronApi.getLogger("ShockAhPI");
+	public static final Logger LOGGER = Apron.getLogger("ShockAhPI");
 
 	public static boolean usingText = false;
 	private static final ArrayList<IInterceptHarvest> harvestIntercepts = new ArrayList<>();

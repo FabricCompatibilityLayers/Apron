@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.fabricmc.api.ModInitializer;
-import net.legacyfabric.fabric.api.logger.v1.Logger;
 import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -86,8 +85,4 @@ public interface ApronApi extends ModInitializer {
 	String getUsedItemSpritesString();
 
 	String getUsedTerrainSpritesString();
-
-	static Logger getLogger(String name) {
-		return Logger.get(Apron.NAME, name);
-	}
 }

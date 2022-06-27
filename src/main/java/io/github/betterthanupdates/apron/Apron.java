@@ -140,4 +140,8 @@ public final class Apron {
 	public static EnvType getEnvironment() {
 		return FabricLoader.getInstance().getEnvironmentType();
 	}
+
+	public static Logger getLogger(String name) {
+		return Logger.get(NAME, name);
+	}
 }

@@ -21,6 +21,10 @@ public class BucketItemMixin extends Item {
 		super(i);
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
 	@Inject(method = "use", cancellable = true,
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getMaterial(III)Lnet/minecraft/block/material/Material;", ordinal = 0, shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void reforged$use(ItemStack itemStack, World world, PlayerEntity playerEntity, CallbackInfoReturnable<ItemStack> cir,

@@ -21,14 +21,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import io.github.betterthanupdates.Legacy;
-import io.github.betterthanupdates.apron.api.ApronApi;
+import io.github.betterthanupdates.apron.Apron;
 import io.github.betterthanupdates.forge.item.ForgeTool;
 import io.github.betterthanupdates.forge.item.ToolEffectiveness;
 
 @SuppressWarnings("unused")
 @Legacy
 public class MinecraftForge {
-	public static final Logger LOGGER = ApronApi.getLogger("Minecraft Forge");
+	public static final Logger LOGGER = Apron.getLogger("Minecraft Forge");
 
 	private static final LinkedList<IBucketHandler> BUCKET_HANDLERS = new LinkedList<>();
 	public static boolean disableVersionCheckCrash = false;

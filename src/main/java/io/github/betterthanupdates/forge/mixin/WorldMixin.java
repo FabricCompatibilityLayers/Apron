@@ -10,7 +10,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-import io.github.betterthanupdates.forge.block.ForgeBlock;
+import io.github.betterthanupdates.apron.block.ApronBlock;
 import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(World.class)
@@ -28,7 +28,7 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	@Overwrite
 	public boolean isAir(int i, int j, int k) {
 		int l = this.getBlockId(i, j, k);
-		return l == 0 || ((ForgeBlock) Block.BY_ID[l]).isAirBlock((World) (Object) this, i, j, k);
+		return l == 0 || ((ApronBlock) Block.BY_ID[l]).isAirBlock((World) (Object) this, i, j, k);
 	}
 
 	/**
@@ -54,7 +54,7 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 							return true;
 						}
 
-						if (j2 > 0 && ((ForgeBlock) Block.BY_ID[j2]).isBlockBurning((World) (Object) this, k1, l1, i2)) {
+						if (j2 > 0 && ((ApronBlock) Block.BY_ID[j2]).isBlockBurning((World) (Object) this, k1, l1, i2)) {
 							return true;
 						}
 					}
@@ -72,13 +72,13 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	@Overwrite
 	public boolean canSuffocate(int i, int j, int k) {
 		Block block = Block.BY_ID[this.getBlockId(i, j, k)];
-		return block != null && ((ForgeBlock) block).isBlockNormalCube((World) (Object) this, i, j, k);
+		return block != null && ((ApronBlock) block).isBlockNormalCube((World) (Object) this, i, j, k);
 	}
 
 	@Override
 	public boolean isBlockSolidOnSide(int i, int j, int k, int l) {
 		Block block = Block.BY_ID[this.getBlockId(i, j, k)];
-		return block != null && ((ForgeBlock) block).isBlockSolidOnSide((World) (Object) this, i, j, k, l);
+		return block != null && ((ApronBlock) block).isBlockSolidOnSide((World) (Object) this, i, j, k, l);
 	}
 
 	/**
@@ -108,7 +108,7 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 				block = null;
 			}
 
-			if (block != null && ((ForgeBlock) block).isBlockReplaceable((World) (Object) this, j, k, l)) {
+			if (block != null && ((ApronBlock) block).isBlockReplaceable((World) (Object) this, j, k, l)) {
 				block = null;
 			}
 

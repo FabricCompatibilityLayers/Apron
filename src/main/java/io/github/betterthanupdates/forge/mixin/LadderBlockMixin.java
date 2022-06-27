@@ -9,11 +9,11 @@ import net.minecraft.block.LadderBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 
-import io.github.betterthanupdates.forge.block.ForgeBlock;
+import io.github.betterthanupdates.apron.block.ApronBlock;
 import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(LadderBlock.class)
-public abstract class LadderBlockMixin extends Block implements ForgeBlock {
+public abstract class LadderBlockMixin extends Block implements ApronBlock {
 	protected LadderBlockMixin(int blockId, Material material) {
 		super(blockId, material);
 	}

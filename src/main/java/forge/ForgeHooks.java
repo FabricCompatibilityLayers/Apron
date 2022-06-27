@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.SleepStatus;
 
 import io.github.betterthanupdates.Legacy;
-import io.github.betterthanupdates.forge.block.ForgeBlock;
+import io.github.betterthanupdates.apron.block.ApronBlock;
 import io.github.betterthanupdates.forge.entity.player.ForgePlayerEntity;
 import io.github.betterthanupdates.forge.item.ForgeTool;
 import io.github.betterthanupdates.forge.item.ToolEffectiveness;
@@ -96,7 +96,7 @@ public class ForgeHooks {
 	}
 
 	public static float blockStrength(Block block, PlayerEntity player, int meta) {
-		float blockHardness = ((ForgeBlock) block).getHardness(meta);
+		float blockHardness = ((ApronBlock) block).getHardness(meta);
 
 		if (blockHardness < 0.0F) {
 			return 0.0F;

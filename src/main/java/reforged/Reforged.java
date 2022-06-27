@@ -10,12 +10,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 import io.github.betterthanupdates.Legacy;
+import io.github.betterthanupdates.apron.Apron;
 import io.github.betterthanupdates.apron.api.ApronApi;
 
 @Legacy
 public class Reforged {
 	private static final ApronApi APRON = ApronApi.getInstance();
-	protected static final Logger LOGGER = ApronApi.getLogger("Reforged");
+	protected static final Logger LOGGER = Apron.getLogger("Reforged");
 
 	private static boolean searchedForIDResolver;
 	private static boolean foundIDResolver;

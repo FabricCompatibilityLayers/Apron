@@ -18,7 +18,7 @@ import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
-import io.github.betterthanupdates.forge.block.ForgeBlock;
+import io.github.betterthanupdates.apron.block.ApronBlock;
 import io.github.betterthanupdates.forge.item.ForgeItem;
 
 @Environment(EnvType.CLIENT)
@@ -44,7 +44,7 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 	@Redirect(method = "method_1716", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/client/entity/player/AbstractClientPlayerEntity;canRemoveBlock(Lnet/minecraft/block/Block;)Z"))
 	private boolean forge$method_1716(AbstractClientPlayerEntity instance, Block block) {
-		return ((ForgeBlock) block).canHarvestBlock(instance, this.cachedMeta);
+		return ((ApronBlock) block).canHarvestBlock(instance, this.cachedMeta);
 	}
 
 	int cachedI, cachedJ, cachedK;
@@ -58,7 +58,7 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 
 	@Redirect(method = "method_1707", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F"))
 	private float reforged$method_1707(Block instance, PlayerEntity playerEntity) {
-		return ((ForgeBlock) instance).blockStrength(this.client.world, playerEntity, this.cachedI, this.cachedJ, this.cachedK);
+		return ((ApronBlock) instance).blockStrength(this.client.world, playerEntity, this.cachedI, this.cachedJ, this.cachedK);
 	}
 
 	int cachedI2, cachedJ2, cachedK2;
@@ -72,6 +72,6 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 
 	@Redirect(method = "method_1721", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F"))
 	private float reforged$method_1721(Block instance, PlayerEntity playerEntity) {
-		return ((ForgeBlock) instance).blockStrength(this.client.world, playerEntity, this.cachedI2, this.cachedJ2, this.cachedK2);
+		return ((ApronBlock) instance).blockStrength(this.client.world, playerEntity, this.cachedI2, this.cachedJ2, this.cachedK2);
 	}
 }

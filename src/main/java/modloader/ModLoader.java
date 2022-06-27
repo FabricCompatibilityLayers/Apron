@@ -118,7 +118,7 @@ public class ModLoader {
 	private static final Map<BaseMod, Map<KeyBinding, boolean[]>> keyList = new HashMap<>();
 	private static final File LOG_FILE = new File(Minecraft.getGameDirectory(), "ModLoader.txt");
 	private static final java.util.logging.Logger MOD_LOGGER = java.util.logging.Logger.getLogger("ModLoader");
-	public static final Logger LOGGER = ApronApi.getLogger("ModLoader");
+	public static final Logger LOGGER = Apron.getLogger("ModLoader");
 	private static FileHandler logHandler = null;
 	private static final LinkedList<BaseMod> MOD_LIST = new LinkedList<>();
 	private static int nextBlockModelID = 1000;
