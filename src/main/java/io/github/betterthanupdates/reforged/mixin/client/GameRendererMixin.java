@@ -16,7 +16,7 @@ public class GameRendererMixin {
 
 	/**
 	 * @return Reforged-modified reach
-	 * @author
+	 * @author Meefy777
 	 * @reason implement Reforged function
 	 */
 	@ModifyConstant(method = "method_1838", constant = @Constant(doubleValue = 3.0d))

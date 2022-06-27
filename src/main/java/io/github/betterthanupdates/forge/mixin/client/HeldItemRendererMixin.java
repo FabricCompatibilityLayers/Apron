@@ -62,6 +62,7 @@ public class HeldItemRendererMixin {
 	private void forge$render$3(LivingEntity entityliving, ItemStack itemStack, CallbackInfo ci) {
 		GL11.glPushMatrix();
 		ICustomItemRenderer customRenderer = MinecraftForgeClient.getCustomItemRenderer(itemStack.itemId);
+
 		if (customRenderer != null) {
 			GL11.glBindTexture(3553, this.client.textureManager.getTextureId("/terrain.png"));
 			ForgeHooksClient.overrideTexture(itemStack.getItem());
