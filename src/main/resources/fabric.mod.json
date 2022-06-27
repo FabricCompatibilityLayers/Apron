@@ -3,7 +3,7 @@
   "id": "apron",
   "version": "${version}",
   "name": "Apron",
-  "description": "A compatibility layer for legacy API mods.\n- Risugami's ModLoader\n- Risugami's ModLoaderMP\n- Minecraft Forge\n- AudioMod\n- ShockAhPI",
+  "description": "A compatibility layer for legacy API mods.\n- Risugami's ModLoader\n- Risugami's ModLoaderMP\n- Minecraft Forge\n- Reforged\n- AudioMod\n- ShockAhPI\n- PlayerAPI",
   "authors": [
     {
       "name": "Better Than Updates",
