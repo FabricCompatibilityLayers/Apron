@@ -1,6 +1,8 @@
 package io.github.betterthanupdates.forge.mixin;
 
 import forge.ForgeHooks;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,9 +45,24 @@ public abstract class BlockMixin implements ForgeBlock {
 	 * @author Eloraam
 	 * @reason Minecraft Forge extension of this method
 	 */
+	@Environment(EnvType.CLIENT)
+	@Inject(method = "getBrightness", at = @At("RETURN"), cancellable = true)
+	private void getBrightness(BlockView blockView, int x, int y, int z, CallbackInfoReturnable<Float> cir) {
+		cir.setReturnValue(blockView.getNaturalBrightness(x, y, z, this.getLightValue(blockView, x, y, z)));
+	}
+
+	/**
+	 * @author Eloraam
+	 * @reason Minecraft Forge extension of this method
+	 */
 	@Inject(method = "getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F", at = @At("RETURN"), cancellable = true)
 	public void getHardness(PlayerEntity player, CallbackInfoReturnable<Float> cir) {
 		cir.setReturnValue(this.blockStrength(player, 0));
+	}
+
+	@Override
+	public int getLightValue(BlockView blockView, int x, int y, int z) {
+		return EMITTANCE[this.id];
 	}
 
 	@Override
@@ -104,10 +121,5 @@ public abstract class BlockMixin implements ForgeBlock {
 	@Override
 	public boolean canHarvestBlock(PlayerEntity player, int meta) {
 		return ForgeHooks.canHarvestBlock((Block) (Object) this, player, meta);
-	}
-
-	@Override
-	public int getLightValue(BlockView blockView, int x, int y, int z) {
-		return EMITTANCE[this.id];
 	}
 }
