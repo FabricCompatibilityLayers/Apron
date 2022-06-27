@@ -68,7 +68,7 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 	 * @reason implement Forge hooks
 	 */
 	@Inject(method = "render(Lnet/minecraft/entity/ItemEntity;DDDFF)V", cancellable = true,
-			at = @At(value = "INVOKE", ordinal = 0, target = "Lorg/lwjgl/opengl/GL11;glEnable(I)V", remap = false))
+			at = @At(value = "INVOKE", ordinal = 0, target = "Lorg/lwjgl/opengl/GL11;glEnable(I)V", remap = false, shift = At.Shift.AFTER))
 	private void forge$render$3(ItemEntity itemEntity, double d, double d1, double d2, float f, float f1, CallbackInfo ci) {
 		ItemStack stack = itemEntity.stack;
 
@@ -87,7 +87,6 @@ public abstract class ItemRendererMixin extends EntityRenderer {
 			byte0 = 4;
 		}
 
-		GL11.glEnable(32826);
 		ICustomItemRenderer customRenderer = MinecraftForgeClient.getCustomItemRenderer(stack.itemId);
 
 		if (customRenderer != null) {

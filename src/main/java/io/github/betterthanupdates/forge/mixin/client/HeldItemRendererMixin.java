@@ -58,9 +58,9 @@ public class HeldItemRendererMixin {
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Inject(method = "render", cancellable = true, at = @At(value = "INVOKE", ordinal = 0, target = "Lorg/lwjgl/opengl/GL11;glPushMatrix()V", remap = false))
+	@Inject(method = "render", cancellable = true,
+			at = @At(value = "INVOKE", ordinal = 0, target = "Lorg/lwjgl/opengl/GL11;glPushMatrix()V", remap = false, shift = At.Shift.AFTER))
 	private void forge$render$3(LivingEntity entityliving, ItemStack itemStack, CallbackInfo ci) {
-		GL11.glPushMatrix();
 		ICustomItemRenderer customRenderer = MinecraftForgeClient.getCustomItemRenderer(itemStack.itemId);
 
 		if (customRenderer != null) {
