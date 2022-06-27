@@ -927,6 +927,10 @@ public class ModLoader {
 		TexturePackManager packManager = textureManager.texturePackManager;
 		InputStream input = packManager.texturePack.getResourceAsStream(path);
 
+		if (input == null && !path.startsWith("/")) {
+			input = packManager.texturePack.getResourceAsStream("/" + path);
+		}
+
 		if (input == null) {
 			throw new FileNotFoundException("Image not found: " + path);
 		} else {

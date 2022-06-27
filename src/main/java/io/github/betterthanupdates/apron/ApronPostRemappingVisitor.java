@@ -184,6 +184,31 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 									}
 
 									break;
+
+								// TooManyItems
+								case "TMIUtils":
+									if (stringValue.equals("a")) {
+										value = "field_2791";
+									} else if (stringValue.equals("d")) {
+										value = "field_754";
+									}
+
+									break;
+								case "TMICompatibility":
+									if (stringValue.equals("mod_ZanMinimap") || stringValue.equals("ConvenientInventory")) {
+										value = "net.minecraft." + stringValue;
+									}
+
+									break;
+
+								// Seasons Mod
+								case "mod_seasons":
+								case "SeasonsNBT":
+									if (stringValue.equals("saveDirectory")) {
+										value = "field_279";
+									}
+
+									break;
 							}
 						}
 
