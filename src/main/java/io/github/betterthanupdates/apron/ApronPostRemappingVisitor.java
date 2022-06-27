@@ -209,6 +209,14 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 									}
 
 									break;
+
+								// Aether
+								case "AetherItems":
+									if (stringValue.equals("mod_TooManyItems")) {
+										value = "net.minecraft." + stringValue;
+									}
+
+									break;
 							}
 						}
 
