@@ -190,7 +190,12 @@ accessible method net/minecraft/server/entity/player/ServerPlayerEntity method_3
 accessible field net/minecraft/server/entity/player/ServerPlayerEntity field_260 I
 accessible field net/minecraft/server/network/ServerPlayPacketHandler player Lnet/minecraft/server/entity/player/ServerPlayerEntity;
 
+accessible class argo/jdom/JsonListenerToJdomAdapter
 accessible class argo/jdom/JsonListenerToJdomAdapter$NodeContainer
+accessible class argo/jdom/JsonListenerToJdomAdapter$1
+accessible class argo/jdom/JsonListenerToJdomAdapter$2
+accessible class argo/jdom/JsonListenerToJdomAdapter$3
+accessible class argo/jdom/JsonFieldBuilder
 
 accessible method net/minecraft/client/render/entity/EntityRenderer bindTexture (Ljava/lang/String;)V
 extendable method net/minecraft/entity/player/PlayerEntity method_520 (Lnet/minecraft/entity/Entity;)V
