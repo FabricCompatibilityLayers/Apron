@@ -119,10 +119,10 @@
       "SAPI": "shockahpi/SAPI",
       "Tool": "shockahpi/Tool",
       "ToolBase": "shockahpi/ToolBase",
-      "dq": "io/github/betterthanupdates/shockahpi/item/SAPIToolItem",
-      "ta": "io/github/betterthanupdates/shockahpi/item/SAPIAxeItem",
-      "au": "io/github/betterthanupdates/shockahpi/item/SAPIPickaxeItem",
-      "wc": "io/github/betterthanupdates/shockahpi/item/SAPIShovelItem"
+      "dq": "io/github/betterthanupdates/shockahpi/item/ShockAhPIToolItem",
+      "ta": "io/github/betterthanupdates/shockahpi/item/ShockAhPIAxeItem",
+      "au": "io/github/betterthanupdates/shockahpi/item/ShockAhPIPickaxeItem",
+      "wc": "io/github/betterthanupdates/shockahpi/item/ShockAhPIShovelItem"
     },
     "apron:server": {
       "EntityTrackerEntry2": "modloadermp/EntityTrackerEntry",
