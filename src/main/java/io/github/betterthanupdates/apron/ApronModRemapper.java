@@ -55,6 +55,7 @@ public final class ApronModRemapper implements ModRemapper {
 		addMappingsFromMetadata(list, null);
 		addMappingsFromMetadata(list, Apron.getEnvironment());
 
+		// TODO: Add this to custom mod metadata
 		if (Apron.getEnvironment() == EnvType.CLIENT) {
 			list.add("ToolBase", "shockahpi/ToolBase")
 					.field("Pickaxe", "PICKAXE", "LToolBase")

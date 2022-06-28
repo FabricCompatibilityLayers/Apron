@@ -25,7 +25,7 @@ public class ShearsItemMixin extends Item implements ReforgedItem {
 
 	/**
 	 * @author Kleadron
-	 * @reason
+	 * @reason implement Reforged function
 	 */
 	@Inject(method = "postMine", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;postMine(Lnet/minecraft/item/ItemStack;IIIILnet/minecraft/entity/LivingEntity;)Z"))
 	private void reforged$postMine(ItemStack itemstack, int i, int j, int k, int l, LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir) {

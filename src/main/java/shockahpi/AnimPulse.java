@@ -19,6 +19,7 @@ public class AnimPulse extends AnimBase {
 		this.color2 = color2;
 	}
 
+	@Override
 	public void animFrame() {
 		this.animState += this.animAdd;
 

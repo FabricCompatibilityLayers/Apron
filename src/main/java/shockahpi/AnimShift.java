@@ -14,11 +14,13 @@ public class AnimShift extends AnimBase {
 		this.getCleanFrame();
 	}
 
+	@Override
 	public void updateTexture() {
 		this.animFrame();
 		this.copyFrameToArray();
 	}
 
+	@Override
 	public void animFrame() {
 		this.shiftFrame(this.x, this.y, true, true);
 	}
