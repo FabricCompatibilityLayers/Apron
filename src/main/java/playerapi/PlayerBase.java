@@ -14,6 +14,9 @@ import net.minecraft.util.io.CompoundTag;
 
 import io.github.betterthanupdates.Legacy;
 
+/**
+ * Callbacks provided by PlayerAPI that may be implemented in other mods.
+ */
 @Legacy
 public abstract class PlayerBase {
 	public AbstractClientPlayerEntity player;

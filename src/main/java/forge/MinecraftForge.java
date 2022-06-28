@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 import net.legacyfabric.fabric.api.logger.v1.Logger;
+import org.jetbrains.annotations.ApiStatus;
 import reforged.ReforgedHooks;
 
 import net.minecraft.block.Block;
@@ -28,6 +29,7 @@ import io.github.betterthanupdates.forge.item.ToolEffectiveness;
 @SuppressWarnings("unused")
 @Legacy
 public class MinecraftForge {
+	@ApiStatus.Internal
 	public static final Logger LOGGER = Apron.getLogger("Minecraft Forge");
 
 	private static final LinkedList<IBucketHandler> BUCKET_HANDLERS = new LinkedList<>();

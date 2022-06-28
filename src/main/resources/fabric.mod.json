@@ -101,7 +101,7 @@
       "NetClientHandlerEntity": "modloadermp/NetClientHandlerEntity",
       "PlayerBase": "playerapi/PlayerBase",
       "PlayerAPI": "playerapi/PlayerAPI",
-      "ACPage": "shockahpi/ACPage",
+      "ACPage": "shockahpi/AchievementPage",
       "AnimBase": "shockahpi/AnimBase",
       "AnimPulse": "shockahpi/AnimPulse",
       "AnimShift": "shockahpi/AnimShift",

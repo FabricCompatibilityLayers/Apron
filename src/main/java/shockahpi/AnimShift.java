@@ -4,13 +4,13 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public class AnimShift extends AnimBase {
-	private final int h;
-	private final int v;
+	private final int x;
+	private final int y;
 
-	public AnimShift(int spriteID, String spritePath, int h, int v) {
+	public AnimShift(int spriteID, String spritePath, int x, int y) {
 		super(spriteID, spritePath);
-		this.h = h;
-		this.v = v;
+		this.x = x;
+		this.y = y;
 		this.getCleanFrame();
 	}
 
@@ -20,6 +20,6 @@ public class AnimShift extends AnimBase {
 	}
 
 	public void animFrame() {
-		this.shiftFrame(this.h, this.v, true, true);
+		this.shiftFrame(this.x, this.y, true, true);
 	}
 }

@@ -17,23 +17,11 @@ public class ReforgedMod extends BaseModMp {
 		try {
 			Class.forName(Block.class.getName());
 			Class.forName(Item.class.getName());
-		} catch (NoSuchMethodError | ClassNotFoundException var3) {
-			if (Reforged.hasIDResolver()) {
-				MinecraftForge.killMinecraft("mod_Reforged", "Please install Reforged after IDResolver!");
-			} else {
-				MinecraftForge.killMinecraft("mod_Reforged", "Block or Item was modified. Please fix your installation!");
-			}
-		}
-
-		try {
 			Class.forName(MultiplayerClientInteractionManager.class.getName());
 			Class.forName(SingleplayerInteractionManager.class.getName());
-		} catch (NoSuchMethodError | ClassNotFoundException var2) {
-			if (Reforged.hasSAPI()) {
-				MinecraftForge.killMinecraft("mod_Reforged", "Please install Reforged after the ForgeSAPI patch and SAPI!");
-			} else {
-				MinecraftForge.killMinecraft("mod_Reforged", "PlayerControllers were modified. Please fix your installation!");
-			}
+		} catch (NoSuchMethodError | ClassNotFoundException e) {
+			e.printStackTrace();
+			MinecraftForge.killMinecraft("mod_Reforged", "Something concerning happened.");
 		}
 	}
 

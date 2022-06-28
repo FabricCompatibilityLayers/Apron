@@ -16,7 +16,7 @@ public class ShockAhPIToolItem extends Tool {
 	public int field_2714 = Integer.MIN_VALUE;
 	public ToolMaterial field_2711;
 
-	protected ShockAhPIToolItem(int itemID, int damage, ToolMaterial material, Block[] blocks) {
+	public ShockAhPIToolItem(int itemID, int damage, ToolMaterial material, Block[] blocks) {
 		super(false, null, itemID, material.getDurability(), (float) (damage + material.getAttackDamage()), getToolPower(material), material.getMiningSpeed());
 		this.field_2711 = material;
 		this.toolBase = this.getToolBase();
@@ -32,11 +32,11 @@ public class ShockAhPIToolItem extends Tool {
 
 	public ToolBase getToolBase() {
 		if (this instanceof ShockAhPIPickaxeItem) {
-			return ToolBase.Pickaxe;
+			return ToolBase.PICKAXE;
 		} else if (this instanceof ShockAhPIAxeItem) {
-			return ToolBase.Axe;
+			return ToolBase.AXE;
 		} else {
-			return this instanceof ShockAhPIShovelItem ? ToolBase.Shovel : null;
+			return this instanceof ShockAhPIShovelItem ? ToolBase.SHOVEL : null;
 		}
 	}
 
@@ -132,7 +132,7 @@ public class ShockAhPIToolItem extends Tool {
 	@Override
 	public int getAttackDamage(Entity entity) {
 		int i = super.getAttackDamage(entity);
-		return this.field_2714 != Integer.MIN_VALUE && (double) i == Math.floor((double) this.baseDamage) ? this.field_2714 : i;
+		return this.field_2714 != Integer.MIN_VALUE && (double) i == Math.floor(this.baseDamage) ? this.field_2714 : i;
 	}
 
 	@Override

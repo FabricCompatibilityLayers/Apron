@@ -54,6 +54,13 @@ public final class ApronModRemapper implements ModRemapper {
 	public void getMappingList(RemapUtil.MappingList list) {
 		addMappingsFromMetadata(list, null);
 		addMappingsFromMetadata(list, Apron.getEnvironment());
+
+		if (Apron.getEnvironment() == EnvType.CLIENT) {
+			list.add("ToolBase", "shockahpi/ToolBase")
+					.field("Pickaxe", "PICKAXE", "LToolBase")
+					.field("Shovel", "SHOVEL", "LToolBase")
+					.field("Axe", "AXE", "LToolBase");
+		}
 	}
 
 	/**

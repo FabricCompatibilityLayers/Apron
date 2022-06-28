@@ -15,19 +15,19 @@ import io.github.betterthanupdates.Legacy;
  */
 @SuppressWarnings("unused")
 @Legacy
-public class ACPage {
+public class AchievementPage {
 	private static int nextID = 1;
 	final int id;
 	public final String title;
 	ArrayList<Integer> list = new ArrayList<>();
 
-	public ACPage() {
+	public AchievementPage() {
 		this.id = 0;
 		this.title = "Minecraft";
 		SAPI.acPageAdd(this);
 	}
 
-	public ACPage(String title) {
+	public AchievementPage(String title) {
 		this.id = nextID++;
 		this.title = title;
 		SAPI.acPageAdd(this);

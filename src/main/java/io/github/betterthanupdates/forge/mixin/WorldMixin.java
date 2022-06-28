@@ -45,9 +45,9 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public boolean isAir(int i, int j, int k) {
-		int l = this.getBlockId(i, j, k);
-		return l == 0 || ((ForgeBlock) Block.BY_ID[l]).isAirBlock((World) (Object) this, i, j, k);
+	public boolean isAir(int x, int y, int z) {
+		int l = this.getBlockId(x, y, z);
+		return l == 0 || ((ForgeBlock) Block.BY_ID[l]).isAirBlock((World) (Object) this, x, y, z);
 	}
 
 	/**
@@ -83,13 +83,13 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public boolean method_225(AxixAlignedBoundingBox axisalignedbb) {
-		int i = MathHelper.floor(axisalignedbb.minX);
-		int j = MathHelper.floor(axisalignedbb.maxX + 1.0);
-		int k = MathHelper.floor(axisalignedbb.minY);
-		int l = MathHelper.floor(axisalignedbb.maxY + 1.0);
-		int i1 = MathHelper.floor(axisalignedbb.minZ);
-		int j1 = MathHelper.floor(axisalignedbb.maxZ + 1.0);
+	public boolean method_225(AxixAlignedBoundingBox box) {
+		int i = MathHelper.floor(box.minX);
+		int j = MathHelper.floor(box.maxX + 1.0);
+		int k = MathHelper.floor(box.minY);
+		int l = MathHelper.floor(box.maxY + 1.0);
+		int i1 = MathHelper.floor(box.minZ);
+		int j1 = MathHelper.floor(box.maxZ + 1.0);
 
 		if (this.method_155(i, k, i1, j, l, j1)) {
 			for (int k1 = i; k1 < j; ++k1) {
@@ -117,15 +117,15 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public boolean canSuffocate(int i, int j, int k) {
-		Block block = Block.BY_ID[this.getBlockId(i, j, k)];
-		return block != null && ((ForgeBlock) block).isBlockNormalCube((World) (Object) this, i, j, k);
+	public boolean canSuffocate(int x, int y, int z) {
+		Block block = Block.BY_ID[this.getBlockId(x, y, z)];
+		return block != null && ((ForgeBlock) block).isBlockNormalCube((World) (Object) this, x, y, z);
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(int i, int j, int k, int l) {
-		Block block = Block.BY_ID[this.getBlockId(i, j, k)];
-		return block != null && ((ForgeBlock) block).isBlockSolidOnSide((World) (Object) this, i, j, k, l);
+	public boolean isBlockSolidOnSide(int x, int y, int z, int side) {
+		Block block = Block.BY_ID[this.getBlockId(x, y, z)];
+		return block != null && ((ForgeBlock) block).isBlockSolidOnSide((World) (Object) this, x, y, z, side);
 	}
 
 	/**
@@ -133,17 +133,17 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public boolean canPlaceBlock(int i, int j, int k, int l, boolean flag, int i1) {
-		int j1 = this.getBlockId(j, k, l);
+	public boolean canPlaceBlock(int id, int x, int y, int z, boolean flag, int i1) {
+		int j1 = this.getBlockId(x, y, z);
 		Block block = Block.BY_ID[j1];
-		Block block1 = Block.BY_ID[i];
-		AxixAlignedBoundingBox axisalignedbb = block1.getCollisionShape((World) (Object) this, j, k, l);
+		Block block1 = Block.BY_ID[id];
+		AxixAlignedBoundingBox box = block1.getCollisionShape((World) (Object) this, x, y, z);
 
 		if (flag) {
-			axisalignedbb = null;
+			box = null;
 		}
 
-		if (axisalignedbb != null && !this.canSpawnEntity(axisalignedbb)) {
+		if (box != null && !this.canSpawnEntity(box)) {
 			return false;
 		} else {
 			if (block == Block.FLOWING_WATER
@@ -155,11 +155,11 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 				block = null;
 			}
 
-			if (block != null && ((ForgeBlock) block).isBlockReplaceable((World) (Object) this, j, k, l)) {
+			if (block != null && ((ForgeBlock) block).isBlockReplaceable((World) (Object) this, x, y, z)) {
 				block = null;
 			}
 
-			return i > 0 && block == null && block1.canPlaceAt((World) (Object) this, j, k, l, i1);
+			return id > 0 && block == null && block1.canPlaceAt((World) (Object) this, x, y, z, i1);
 		}
 	}
 }

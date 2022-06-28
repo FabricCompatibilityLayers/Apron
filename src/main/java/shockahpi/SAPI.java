@@ -39,8 +39,8 @@ public class SAPI {
 	private static boolean dngAddedItems = false;
 	public static int acCurrentPage = 0;
 	private static final ArrayList<Integer> acHidden = new ArrayList<>();
-	private static final ArrayList<ACPage> acPages = new ArrayList<>();
-	public static final ACPage acDefaultPage = new ACPage();
+	private static final ArrayList<AchievementPage> ACHIEVEMENT_PAGES = new ArrayList<>();
+	public static final AchievementPage acDefaultPage = new AchievementPage();
 
 	public SAPI() {
 	}
@@ -261,8 +261,8 @@ public class SAPI {
 		return dngItems.isEmpty() ? null : dngItems.get(new Random().nextInt(dngItems.size())).getStack();
 	}
 
-	public static void acPageAdd(ACPage acpage) {
-		acPages.add(acpage);
+	public static void acPageAdd(AchievementPage acpage) {
+		ACHIEVEMENT_PAGES.add(acpage);
 	}
 
 	public static void acHide(Achievement[] aachievement) {
@@ -275,12 +275,12 @@ public class SAPI {
 		return acHidden.contains(achievement.id);
 	}
 
-	public static ACPage acGetPage(Achievement achievement) {
+	public static AchievementPage acGetPage(Achievement achievement) {
 		if (achievement == null) {
 			LOGGER.debug("Expected Achievement, got null instead.");
 			return null;
 		} else {
-			for (ACPage acpage : acPages) {
+			for (AchievementPage acpage : ACHIEVEMENT_PAGES) {
 				if (acpage.list.contains(achievement.id)) {
 					return acpage;
 				}
@@ -290,8 +290,8 @@ public class SAPI {
 		}
 	}
 
-	public static ACPage acGetCurrentPage() {
-		return acPages.get(acCurrentPage);
+	public static AchievementPage acGetCurrentPage() {
+		return ACHIEVEMENT_PAGES.get(acCurrentPage);
 	}
 
 	public static String acGetCurrentPageTitle() {
@@ -301,7 +301,7 @@ public class SAPI {
 	public static void acPageNext() {
 		++acCurrentPage;
 
-		if (acCurrentPage > acPages.size() - 1) {
+		if (acCurrentPage > ACHIEVEMENT_PAGES.size() - 1) {
 			acCurrentPage = 0;
 		}
 	}
@@ -310,7 +310,7 @@ public class SAPI {
 		--acCurrentPage;
 
 		if (acCurrentPage < 0) {
-			acCurrentPage = acPages.size() - 1;
+			acCurrentPage = ACHIEVEMENT_PAGES.size() - 1;
 		}
 	}
 

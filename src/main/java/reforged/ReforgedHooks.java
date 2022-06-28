@@ -6,7 +6,7 @@ import io.github.betterthanupdates.Legacy;
 public class ReforgedHooks {
 	public static final int majorVersion = 1;
 	public static final int minorVersion = 0;
-	public static final int revisionVersion = 0;
+	public static final int revisionVersion = 1;
 
 	public ReforgedHooks() {
 	}

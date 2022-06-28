@@ -100,8 +100,9 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 	}
 
 	/**
-	 * @author Risugami and Reforged author
-	 * @reason idk
+	 * @author Risugami
+	 * @author Kleadron
+	 * @reason
 	 * TODO(halotroop2288): rewrite as an {@link Inject} Mixin
 	 */
 	@Environment(EnvType.CLIENT)

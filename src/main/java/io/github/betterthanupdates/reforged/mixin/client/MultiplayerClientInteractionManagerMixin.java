@@ -14,7 +14,7 @@ import io.github.betterthanupdates.reforged.item.ReforgedItem;
 
 @Mixin(MultiplayerClientInteractionManager.class)
 public class MultiplayerClientInteractionManagerMixin extends ClientInteractionManager {
-	public MultiplayerClientInteractionManagerMixin(Minecraft minecraft) {
+	private MultiplayerClientInteractionManagerMixin(Minecraft minecraft) {
 		super(minecraft);
 	}
 

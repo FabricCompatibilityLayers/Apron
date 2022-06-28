@@ -2,7 +2,9 @@ package io.github.betterthanupdates.reforged.mixin;
 
 import forge.IShearable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.ItemEntity;
@@ -22,16 +24,15 @@ public class ShearsItemMixin extends Item implements ReforgedItem {
 	}
 
 	/**
-	 * @author Reforged author
+	 * @author Kleadron
 	 * @reason
 	 */
-	@Overwrite
-	public boolean postMine(ItemStack itemstack, int i, int j, int k, int l, LivingEntity livingEntity) {
-		if (i == Block.COBWEB.id || i == Block.LEAVES.id || Block.BY_ID[i] instanceof IShearable) {
+	@Inject(method = "postMine", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;postMine(Lnet/minecraft/item/ItemStack;IIIILnet/minecraft/entity/LivingEntity;)Z"))
+	private void reforged$postMine(ItemStack itemstack, int i, int j, int k, int l, LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir) {
+		if (i != Block.COBWEB.id && i != Block.LEAVES.id // Don't apply damage if it has already been applied before.
+				&& Block.BY_ID[i] instanceof IShearable) {
 			itemstack.applyDamage(1, livingEntity);
 		}
-
-		return super.postMine(itemstack, i, j, k, l, livingEntity);
 	}
 
 	@Override
