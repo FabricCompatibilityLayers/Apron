@@ -39,7 +39,7 @@ public abstract class TitleScreenMixin extends Screen {
 		int yOffset = FabricLoader.getInstance().isModLoaded("mojangfix") ? 22 : 12;
 
 		this.drawTextWithShadow(this.textRenderer,
-				String.format("(%s, %s)", rmlModsLoaded(), fabricModsLoaded()), 2, yOffset, 0x50_50_50);
+				String.format("Mods: %s, %s", rmlModsLoaded(), fabricModsLoaded()), 2, yOffset, 0x50_50_50);
 	}
 
 	@Inject(method = "init", at = @At("HEAD"))

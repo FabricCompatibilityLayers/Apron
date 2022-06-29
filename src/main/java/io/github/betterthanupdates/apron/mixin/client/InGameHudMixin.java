@@ -31,6 +31,6 @@ public abstract class InGameHudMixin extends GuiElement {
 			target = "Lnet/minecraft/util/math/MathHelper;floor(D)I"))
 	private void apron$addDebugLine(float bl, boolean i, int j, int par4, CallbackInfo ci) {
 		this.drawTextWithShadow(this.client.textRenderer,
-				String.format("%s, %s", rmlModsLoaded(), fabricModsLoaded()), 2, 98, 0xE0_E0_E0);
+				String.format("M: %s, %s", rmlModsLoaded(), fabricModsLoaded()), 2, 96, 0xE0_E0_E0);
 	}
 }

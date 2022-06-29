@@ -67,11 +67,11 @@ public final class Apron {
 	 * @return a string telling how many mods are loaded from ModLoader
 	 */
 	public static String rmlModsLoaded() {
-		return rmlModCount + " RML mods";
+		return rmlModCount + " RML";
 	}
 
 	public static String fabricModsLoaded() {
-		return fabricModCount + " Fabric mods";
+		return fabricModCount + " Fabric";
 	}
 
 	public static String getRemappedFieldName(Class<?> type, String name) {
