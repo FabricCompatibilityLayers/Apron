@@ -7,7 +7,8 @@ import io.github.betterthanupdates.Legacy;
 
 @Legacy
 public class ReforgedMod extends BaseModMp {
-	public ReforgedMod() {}
+	public ReforgedMod() {
+	}
 
 	public String Version() {
 		return String.format("[Forge %d.%d.%d, Reforged %d.%d.%d]",
