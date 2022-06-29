@@ -36,8 +36,10 @@ public abstract class TitleScreenMixin extends Screen {
 	@Inject(method = "render(IIF)V", at = @At(value = "INVOKE",
 			target = "Lorg/lwjgl/opengl/GL11;glPopMatrix()V", shift = At.Shift.AFTER, remap = false))
 	private void apron$renderMods(int a, int b, float c, CallbackInfo ci) {
+		int yOffset = FabricLoader.getInstance().isModLoaded("mojangfix") ? 22 : 12;
+
 		this.drawTextWithShadow(this.textRenderer,
-				String.format("(%s, %s)", rmlModsLoaded(), fabricModsLoaded()), 2, 12, 0x50_50_50);
+				String.format("(%s, %s)", rmlModsLoaded(), fabricModsLoaded()), 2, yOffset, 0x50_50_50);
 	}
 
 	@Inject(method = "init", at = @At("HEAD"))

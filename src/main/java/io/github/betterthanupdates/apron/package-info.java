@@ -3,5 +3,4 @@
  * <br>
  * Handles Mod Remapper API implementation, internal util classes, etc.
  */
-
 package io.github.betterthanupdates.apron;
