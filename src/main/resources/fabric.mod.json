@@ -8,8 +8,8 @@
     {
       "name": "Better Than Updates",
       "contact": {
-        "sources": "https://github.com/Better-Than-Updates-MC/babricated-forge",
-        "issues": "https://github.com/Better-Than-Updates-MC/babricated-forge/issues"
+        "sources": "https://github.com/BetterThanUpdates/Apron",
+        "issues": "https://github.com/BetterThanUpdates/Apron/issues"
       }
     }
   ],
@@ -78,7 +78,8 @@
   "depends": {
     "fabricloader": ">=0.13.3",
     "minecraft": "1.0.0-beta.7.3",
-    "mod-remapping-api": "^1.3.2"
+    "mod-remapping-api": "^1.3.2",
+    "legacy-fabric-logger-api-v1": "*"
   },
   "recommends": {
     "modmenu": "^2.0.0",
