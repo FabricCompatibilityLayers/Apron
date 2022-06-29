@@ -3,6 +3,9 @@ package shockahpi;
 import net.minecraft.util.NetherTeleporter;
 import net.minecraft.world.dimension.NetherDimension;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 public class DimensionNether extends DimensionBase {
 	public DimensionNether() {
 		super(-1, NetherDimension.class, NetherTeleporter.class);

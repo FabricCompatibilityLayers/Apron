@@ -9,7 +9,6 @@
     "ButtonBlockMixin",
     "ChestBlockMixin",
     "ChunkMixin",
-    "class_417Mixin",
     "CraftingResultSlotMixin",
     "DoorBlockMixin",
     "ExplosionMixin",
@@ -23,7 +22,6 @@
     "RailBlockMixin",
     "RedstoneDustBlockMixin",
     "RedstoneRepeaterBlockMixin",
-    "ToolItemMixin",
     "TorchBlockMixin",
     "TrapdoorBlockMixin",
     "WorldMixin"

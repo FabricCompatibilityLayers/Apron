@@ -21,7 +21,10 @@ import java.util.TreeMap;
 
 import net.minecraft.block.Block;
 
+import io.github.betterthanupdates.Legacy;
+
 @SuppressWarnings("unused")
+@Legacy
 public class Configuration {
 	private boolean[] configBlocks = null;
 	public static final int GENERAL_PROPERTY = 0;
@@ -76,7 +79,7 @@ public class Configuration {
 		try {
 			Integer.parseInt(prop.value);
 			return prop;
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException ignored) {
 			prop.value = Integer.toString(defaultValue);
 			return prop;
 		}
@@ -94,6 +97,7 @@ public class Configuration {
 
 	public Property getOrCreateProperty(String key, int kind, String defaultValue) {
 		TreeMap<String, Property> source = null;
+
 		switch (kind) {
 			case GENERAL_PROPERTY:
 				source = this.generalProperties;

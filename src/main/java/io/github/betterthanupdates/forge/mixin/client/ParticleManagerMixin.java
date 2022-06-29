@@ -2,7 +2,6 @@ package io.github.betterthanupdates.forge.mixin.client;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import forge.BlockTextureParticles;
 import forge.ITextureProvider;
@@ -10,9 +9,12 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.entity.particle.DiggingParticleEntity;
@@ -30,37 +32,23 @@ import io.github.betterthanupdates.forge.client.particle.ForgeParticleManager;
 @Mixin(ParticleManager.class)
 public abstract class ParticleManagerMixin implements ForgeParticleManager {
 	@Shadow
-	private List[] field_270;
-	@Shadow
 	private TextureManager textureManager;
 	@Shadow
 	protected World world;
-	@Shadow
-	private Random rand;
 
 	@Shadow
 	public abstract void addParticle(ParticleEntity particle);
 
+	// Forge Fields
 	@Unique
-	private List<BlockTextureParticles> effectList = new ArrayList<>();
+	private final List<BlockTextureParticles> effectList = new ArrayList<>();
 
 	/**
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Overwrite
-	public void method_320() {
-		for (int i = 0; i < 4; ++i) {
-			for (int j = 0; j < this.field_270[i].size(); ++j) {
-				ParticleEntity entityfx = (ParticleEntity) this.field_270[i].get(j);
-				entityfx.tick();
-
-				if (entityfx.removed) {
-					this.field_270[i].remove(j--);
-				}
-			}
-		}
-
+	@Inject(method = "method_320", at = @At("RETURN"))
+	private void forge$method_320(CallbackInfo ci) {
 		for (int x = 0; x < this.effectList.size(); ++x) {
 			BlockTextureParticles entry = this.effectList.get(x);
 
@@ -82,53 +70,28 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Overwrite
-	public void method_324(Entity entity, float f) {
+	@Redirect(method = "method_324", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/particle/ParticleEntity;method_2002(Lnet/minecraft/client/render/Tessellator;FFFFFF)V", ordinal = 0))
+	private void forge$method_2002(ParticleEntity entityfx, Tessellator tessellator, float f, float f1, float f5, float f2, float f3, float f4) {
+		if (!(entityfx instanceof DiggingParticleEntity)) {
+			entityfx.method_2002(tessellator, f, f1, f5, f2, f3, f4);
+		}
+	}
+
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
+	@Inject(method = "method_324", at = @At("RETURN"))
+	private void forge$method_324(Entity entity, float f, CallbackInfo ci) {
 		float f1 = MathHelper.cos(entity.yaw * 3.141593F / 180.0F);
 		float f2 = MathHelper.sin(entity.yaw * 3.141593F / 180.0F);
 		float f3 = -f2 * MathHelper.sin(entity.pitch * 3.141593F / 180.0F);
 		float f4 = f1 * MathHelper.sin(entity.pitch * 3.141593F / 180.0F);
 		float f5 = MathHelper.cos(entity.pitch * 3.141593F / 180.0F);
-		ParticleEntity.field_2645 = entity.prevRenderX + (entity.x - entity.prevRenderX) * (double) f;
-		ParticleEntity.field_2646 = entity.prevRenderY + (entity.y - entity.prevRenderY) * (double) f;
-		ParticleEntity.field_2647 = entity.prevRenderZ + (entity.z - entity.prevRenderZ) * (double) f;
-
-		for (int i = 0; i < 3; ++i) {
-			if (this.field_270[i].size() != 0) {
-				int j = 0;
-
-				if (i == 0) {
-					j = this.textureManager.getTextureId("/particles.png");
-				}
-
-				if (i == 1) {
-					j = this.textureManager.getTextureId("/terrain.png");
-				}
-
-				if (i == 2) {
-					j = this.textureManager.getTextureId("/gui/items.png");
-				}
-
-				GL11.glBindTexture(3553, j);
-				Tessellator tessellator = Tessellator.INSTANCE;
-				tessellator.start();
-
-				for (int k = 0; k < this.field_270[i].size(); ++k) {
-					ParticleEntity entityfx = (ParticleEntity) this.field_270[i].get(k);
-
-					if (!(entityfx instanceof DiggingParticleEntity)) {
-						entityfx.method_2002(tessellator, f, f1, f5, f2, f3, f4);
-					}
-				}
-
-				tessellator.tessellate();
-			}
-		}
 
 		Tessellator tessellator = Tessellator.INSTANCE;
 
-		for (int x = 0; x < this.effectList.size(); ++x) {
-			BlockTextureParticles entry = this.effectList.get(x);
+		for (BlockTextureParticles entry : this.effectList) {
 			GL11.glBindTexture(3553, this.textureManager.getTextureId(entry.texture));
 			tessellator.start();
 
@@ -145,14 +108,8 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Overwrite
-	public void method_323(World world) {
-		this.world = world;
-
-		for (int i = 0; i < 4; ++i) {
-			this.field_270[i].clear();
-		}
-
+	@Inject(method = "method_323", at = @At("RETURN"))
+	private void forge$method_323(World par1, CallbackInfo ci) {
 		for (BlockTextureParticles entry : this.effectList) {
 			entry.effects.clear();
 		}
@@ -160,31 +117,16 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 		this.effectList.clear();
 	}
 
+	Block cachedBlock;
+
 	/**
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Overwrite
-	public void addBlockBreakParticles(int i, int j, int k, int l, int i1) {
-		if (l != 0) {
-			Block block = Block.BY_ID[l];
-			int j1 = 4;
-
-			for (int k1 = 0; k1 < j1; ++k1) {
-				for (int l1 = 0; l1 < j1; ++l1) {
-					for (int i2 = 0; i2 < j1; ++i2) {
-						double d = (double) i + ((double) k1 + 0.5) / (double) j1;
-						double d1 = (double) j + ((double) l1 + 0.5) / (double) j1;
-						double d2 = (double) k + ((double) i2 + 0.5) / (double) j1;
-						int j2 = this.rand.nextInt(6);
-						DiggingParticleEntity dig_effect = new DiggingParticleEntity(
-								this.world, d, d1, d2, d - (double) i - 0.5, d1 - (double) j - 0.5, d2 - (double) k - 0.5, block, j2, i1
-						);
-						dig_effect.multiplyColor(i, j, k);
-						this.addDigParticleEffect(dig_effect, block);
-					}
-				}
-			}
+	@Inject(method = "addBlockBreakParticles", at = @At("HEAD"))
+	private void forge$addBlockBreakParticles(int j, int k, int l, int m, int par5, CallbackInfo ci) {
+		if (m != 0) {
+			this.cachedBlock = Block.BY_ID[m];
 		}
 	}
 
@@ -192,47 +134,33 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Overwrite
-	public void addBlockClickParticle(int i, int j, int k, int l) {
-		int i1 = this.world.getBlockId(i, j, k);
+	@Redirect(method = "addBlockBreakParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/ParticleManager;addParticle(Lnet/minecraft/client/entity/particle/ParticleEntity;)V"))
+	private void forge$addBlockBreakParticles(ParticleManager instance, ParticleEntity particleEntity) {
+		((ForgeParticleManager) instance).addDigParticleEffect((DiggingParticleEntity) particleEntity, this.cachedBlock);
+	}
 
-		if (i1 != 0) {
-			Block block = Block.BY_ID[i1];
-			float f = 0.1F;
-			double d = (double) i + this.rand.nextDouble() * (block.maxX - block.minX - (double) (f * 2.0F)) + (double) f + block.minX;
-			double d1 = (double) j + this.rand.nextDouble() * (block.maxY - block.minY - (double) (f * 2.0F)) + (double) f + block.minY;
-			double d2 = (double) k + this.rand.nextDouble() * (block.maxZ - block.minZ - (double) (f * 2.0F)) + (double) f + block.minZ;
+	Block cachedBlock2;
 
-			if (l == 0) {
-				d1 = (double) j + block.minY - (double) f;
-			}
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
+	@Inject(method = "addBlockClickParticle", at = @At("HEAD"))
+	private void forge$addBlockClickParticle(int j, int k, int l, int par4, CallbackInfo ci) {
+		int id = this.world.getBlockId(j, k, l);
 
-			if (l == 1) {
-				d1 = (double) j + block.maxY + (double) f;
-			}
-
-			if (l == 2) {
-				d2 = (double) k + block.minZ - (double) f;
-			}
-
-			if (l == 3) {
-				d2 = (double) k + block.maxZ + (double) f;
-			}
-
-			if (l == 4) {
-				d = (double) i + block.minX - (double) f;
-			}
-
-			if (l == 5) {
-				d = (double) i + block.maxX + (double) f;
-			}
-
-			DiggingParticleEntity dig_effect = new DiggingParticleEntity(this.world, d, d1, d2, 0.0, 0.0, 0.0, block, l, this.world.getBlockMeta(i, j, k));
-			dig_effect.multiplyColor(i, j, k);
-			dig_effect.method_2000(0.2F);
-			dig_effect.method_2001(0.6F);
-			this.addDigParticleEffect(dig_effect, block);
+		if (id != 0) {
+			this.cachedBlock2 = Block.BY_ID[id];
 		}
+	}
+
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
+	@Redirect(method = "addBlockClickParticle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/ParticleManager;addParticle(Lnet/minecraft/client/entity/particle/ParticleEntity;)V"))
+	private void forge$addBlockClickParticle(ParticleManager instance, ParticleEntity particleEntity) {
+		((ForgeParticleManager) instance).addDigParticleEffect((DiggingParticleEntity) particleEntity, this.cachedBlock2);
 	}
 
 	@Override

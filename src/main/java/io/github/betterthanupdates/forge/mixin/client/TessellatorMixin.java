@@ -19,9 +19,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.client.render.Tessellator;
 
+import io.github.betterthanupdates.forge.ForgeClientReflection;
 import io.github.betterthanupdates.forge.client.render.ForgeTessellator;
 
-// FIXME
 @Environment(EnvType.CLIENT)
 @Mixin(Tessellator.class)
 public abstract class TessellatorMixin implements ForgeTessellator {
@@ -54,27 +54,19 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 	protected abstract void clear();
 
 	@Shadow
-	private double textureX;
+	public boolean tessellating;
 	@Shadow
-	private double textureY;
+	private int bufferIndex;
 	@Shadow
-	private int color;
+	private int vboIndex;
 	@Shadow
-	private int normal;
+	private boolean canUseVbo;
 	@Shadow
-	public double xOffset;
+	public int drawingMode;
 	@Shadow
-	public double yOffset;
+	private int vboCount;
 	@Shadow
-	public double zOffset;
-	@Shadow public boolean tessellating;
-	@Shadow private int bufferIndex;
-	@Shadow private int vboIndex;
-	@Shadow private static boolean useVbo;
-	@Shadow private boolean canUseVbo;
-	@Shadow public int drawingMode;
-	@Shadow private int vboCount;
-	@Shadow private IntBuffer vertexBuffer;
+	private IntBuffer vertexBuffer;
 
 	// Forge Fields
 	@Unique
@@ -86,6 +78,10 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 	@Unique
 	private static final int TRI_VERTS_IN_BUFFER = NATIVE_BUFFER_SIZE / 48 * 6;
 
+	/**
+	 * @author Eloraam
+	 * @reason method instruction order is different from vanilla.
+	 */
 	@Inject(method = "<init>", at = @At("RETURN"))
 	private void ctr$overwrite(int par1, CallbackInfo ci) {
 		this.vertexCount = 0;
@@ -101,11 +97,14 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 		this.rawBufferSize = 0;
 	}
 
+	/**
+	 * @author Eloraam
+	 * @reason method instruction order is different from vanilla.
+	 */
 	@Inject(method = "<clinit>", at = @At("RETURN"))
 	private static void classCtr$overwrite(CallbackInfo ci) {
-		((TessellatorMixin) (Object) INSTANCE).defaultTexture = true;
-
-		// TODO
+		ForgeClientReflection.Tessellator$firstInstance = INSTANCE;
+		((ForgeTessellator) ForgeClientReflection.Tessellator$firstInstance).defaultTexture(true);
 	}
 
 	/**
@@ -135,7 +134,7 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 				byteBuffer.limit(vtc * 32);
 				offs += vtc;
 
-				if (useVbo) {
+				if (canUseVbo) {
 					this.vboIndex = (this.vboIndex + 1) % vboCount;
 					ARBVertexBufferObject.glBindBufferARB(34962, vertexBuffer.get(this.vboIndex));
 					ARBVertexBufferObject.glBufferDataARB(34962, byteBuffer, 35040);
@@ -217,8 +216,8 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 	 * @author Eloraam
 	 * @reason method instruction order is different from vanilla.
 	 */
-	@Overwrite
-	public void addVertex(double d, double d1, double d2) {
+	@Inject(method = "addVertex", at = @At("HEAD"))
+	private void forge$addVertex$1(double d, double d1, double d2, CallbackInfo ci) {
 		if (this.bufferIndex >= this.rawBufferSize - 32) {
 			if (this.rawBufferSize == 0) {
 				this.rawBufferSize = 65536;
@@ -228,48 +227,15 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 				this.bufferArray = Arrays.copyOf(this.bufferArray, this.rawBufferSize);
 			}
 		}
+	}
 
-		++this.vertexAmount;
-
-		if (this.drawingMode == 7 && useTriangles && this.vertexAmount % 4 == 0) {
-			for (int i = 0; i < 2; ++i) {
-				int j = 8 * (3 - i);
-
-				if (this.hasTexture) {
-					this.bufferArray[this.bufferIndex + 3] = this.bufferArray[this.bufferIndex - j + 3];
-					this.bufferArray[this.bufferIndex + 4] = this.bufferArray[this.bufferIndex - j + 4];
-				}
-
-				if (this.hasColor) {
-					this.bufferArray[this.bufferIndex + 5] = this.bufferArray[this.bufferIndex - j + 5];
-				}
-
-				this.bufferArray[this.bufferIndex + 0] = this.bufferArray[this.bufferIndex - j + 0];
-				this.bufferArray[this.bufferIndex + 1] = this.bufferArray[this.bufferIndex - j + 1];
-				this.bufferArray[this.bufferIndex + 2] = this.bufferArray[this.bufferIndex - j + 2];
-				++this.vertexCount;
-				this.bufferIndex += 8;
-			}
-		}
-
-		if (this.hasTexture) {
-			this.bufferArray[this.bufferIndex + 3] = Float.floatToRawIntBits((float) this.textureX);
-			this.bufferArray[this.bufferIndex + 4] = Float.floatToRawIntBits((float) this.textureY);
-		}
-
-		if (this.hasColor) {
-			this.bufferArray[this.bufferIndex + 5] = this.color;
-		}
-
-		if (this.hasNormals) {
-			this.bufferArray[this.bufferIndex + 6] = this.normal;
-		}
-
-		this.bufferArray[this.bufferIndex + 0] = Float.floatToRawIntBits((float) (d + this.xOffset));
-		this.bufferArray[this.bufferIndex + 1] = Float.floatToRawIntBits((float) (d1 + this.yOffset));
-		this.bufferArray[this.bufferIndex + 2] = Float.floatToRawIntBits((float) (d2 + this.zOffset));
-		this.bufferIndex += 8;
-		++this.vertexCount;
+	/**
+	 * @author Eloraam
+	 * @reason method instruction order is different from vanilla.
+	 */
+	@Inject(method = "addVertex", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Tessellator;tessellate()V"), cancellable = true)
+	private void forge$addVertex$2(double d, double d1, double d2, CallbackInfo ci) {
+		ci.cancel();
 	}
 
 	@Override

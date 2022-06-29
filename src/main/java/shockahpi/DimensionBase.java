@@ -3,8 +3,6 @@ package shockahpi;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import modloader.ModLoader;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MovementManager;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
@@ -15,8 +13,14 @@ import net.minecraft.util.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkCache;
 import net.minecraft.world.dimension.Dimension;
+import net.minecraft.world.dimension.NetherDimension;
+import net.minecraft.world.dimension.OverworldDimension;
+import net.minecraft.world.dimension.SkyDimension;
 import net.minecraft.world.source.WorldSource;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 public class DimensionBase {
 	public static ArrayList<DimensionBase> list = new ArrayList<>();
 	public static LinkedList<Integer> order = new LinkedList<>();
@@ -73,7 +77,7 @@ public class DimensionBase {
 	}
 
 	public static void respawn(boolean paramBoolean, int paramInt) {
-		Minecraft localMinecraft = ModLoader.getMinecraftInstance();
+		Minecraft localMinecraft = SAPI.getMinecraftInstance();
 
 		if (!localMinecraft.world.isClient && !localMinecraft.world.dimension.canPlayerSleep()) {
 			usePortal(0, true);
@@ -134,7 +138,6 @@ public class DimensionBase {
 		localMinecraft.player.entityId = j;
 		localMinecraft.player.method_494();
 		localMinecraft.interactionManager.method_1718(localMinecraft.player);
-
 		localMinecraft.loadIntoWorld("Respawning");
 
 		if (localMinecraft.currentScreen instanceof DeathScreen) {
@@ -147,7 +150,7 @@ public class DimensionBase {
 	}
 
 	private static void usePortal(int dimNumber, boolean resetOrder) {
-		Minecraft game = ModLoader.getMinecraftInstance();
+		Minecraft game = SAPI.getMinecraftInstance();
 		int oldDimension = game.player.dimensionId;
 		int newDimension = dimNumber;
 
@@ -212,5 +215,18 @@ public class DimensionBase {
 
 	public Loc getDistanceScale(Loc loc, boolean goingIn) {
 		return loc;
+	}
+
+	/*
+	 * Originally Dimension#getByID(I)Dimension;
+	 */
+	public static Dimension getByID(int i) {
+		DimensionBase dimensionbase = getDimByNumber(i);
+
+		if (dimensionbase != null) {
+			return dimensionbase.getWorldProvider();
+		} else {
+			return i == -1 ? new NetherDimension() : (i == 0 ? new OverworldDimension() : (i == 1 ? new SkyDimension() : null));
+		}
 	}
 }

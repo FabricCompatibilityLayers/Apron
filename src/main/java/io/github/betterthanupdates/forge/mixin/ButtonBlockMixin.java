@@ -1,8 +1,8 @@
 package io.github.betterthanupdates.forge.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ButtonBlock;
@@ -13,9 +13,6 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(ButtonBlock.class)
 public abstract class ButtonBlockMixin extends Block {
-	@Shadow
-	protected abstract boolean method_1048(World world, int x, int y, int z);
-
 	protected ButtonBlockMixin(int blockId, Material material) {
 		super(blockId, material);
 	}
@@ -24,106 +21,75 @@ public abstract class ButtonBlockMixin extends Block {
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Overwrite
-	public boolean canPlaceAt(World world, int x, int y, int z, int side) {
-		if (side == 2 && ((ForgeWorld) world).isBlockSolidOnSide(x, y, z + 1, 2)) {
-			return true;
-		} else if (side == 3 && ((ForgeWorld) world).isBlockSolidOnSide(x, y, z - 1, 3)) {
-			return true;
-		} else if (side == 4 && ((ForgeWorld) world).isBlockSolidOnSide(x + 1, y, z, 4)) {
-			return true;
-		} else {
-			return side == 5 && ((ForgeWorld) world).isBlockSolidOnSide(x - 1, y, z, 5);
-		}
+	@Redirect(method = {"canPlaceAt(Lnet/minecraft/world/World;IIII)Z", "onBlockPlaced"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z", ordinal = 0))
+	private boolean forge$canPlaceAt$1(World instance, int j, int k, int i) {
+		return ((ForgeWorld) instance).isBlockSolidOnSide(i, j, k, 2);
 	}
 
 	/**
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Overwrite
-	public boolean canPlaceAt(World world, int i, int j, int k) {
-		if (((ForgeWorld) world).isBlockSolidOnSide(i - 1, j, k, 5)) {
-			return true;
-		} else if (((ForgeWorld) world).isBlockSolidOnSide(i + 1, j, k, 4)) {
-			return true;
-		} else {
-			return ((ForgeWorld) world).isBlockSolidOnSide(i, j, k - 1, 3) ? true : ((ForgeWorld) world).isBlockSolidOnSide(i, j, k + 1, 2);
-		}
+	@Redirect(method = {"canPlaceAt(Lnet/minecraft/world/World;IIII)Z", "onBlockPlaced"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z", ordinal = 1))
+	private boolean forge$canPlaceAt$2(World instance, int j, int k, int i) {
+		return ((ForgeWorld) instance).isBlockSolidOnSide(i, j, k, 3);
 	}
 
 	/**
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Overwrite
-	public void onBlockPlaced(World world, int i, int j, int k, int l) {
-		int i1 = world.getBlockMeta(i, j, k);
-		int j1 = i1 & 8;
-		i1 &= 7;
-
-		if (l == 2 && ((ForgeWorld) world).isBlockSolidOnSide(i, j, k + 1, 2)) {
-			i1 = 4;
-		} else if (l == 3 && ((ForgeWorld) world).isBlockSolidOnSide(i, j, k - 1, 3)) {
-			i1 = 3;
-		} else if (l == 4 && ((ForgeWorld) world).isBlockSolidOnSide(i + 1, j, k, 4)) {
-			i1 = 2;
-		} else if (l == 5 && ((ForgeWorld) world).isBlockSolidOnSide(i - 1, j, k, 5)) {
-			i1 = 1;
-		} else {
-			i1 = this.method_1047(world, i, j, k);
-		}
-
-		world.setBlockMeta(i, j, k, i1 + j1);
+	@Redirect(method = {"canPlaceAt(Lnet/minecraft/world/World;IIII)Z", "onBlockPlaced"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z", ordinal = 2))
+	private boolean forge$canPlaceAt$3(World instance, int j, int k, int i) {
+		return ((ForgeWorld) instance).isBlockSolidOnSide(i, j, k, 4);
 	}
 
 	/**
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Overwrite
-	private int method_1047(World world, int i, int j, int k) {
-		if (((ForgeWorld) world).isBlockSolidOnSide(i - 1, j, k, 5)) {
-			return 1;
-		} else if (((ForgeWorld) world).isBlockSolidOnSide(i + 1, j, k, 4)) {
-			return 2;
-		} else if (((ForgeWorld) world).isBlockSolidOnSide(i, j, k - 1, 3)) {
-			return 3;
-		} else {
-			return !((ForgeWorld) world).isBlockSolidOnSide(i, j, k + 1, 2) ? 1 : 4;
-		}
+	@Redirect(method = {"canPlaceAt(Lnet/minecraft/world/World;IIII)Z", "onBlockPlaced"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z", ordinal = 3))
+	private boolean forge$canPlaceAt$4(World instance, int j, int k, int i) {
+		return ((ForgeWorld) instance).isBlockSolidOnSide(i, j, k, 5);
 	}
 
 	/**
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Overwrite
-	public void onAdjacentBlockUpdate(World world, int i, int j, int k, int l) {
-		if (this.method_1048(world, i, j, k)) {
-			int i1 = world.getBlockMeta(i, j, k) & 7;
-			boolean flag = false;
+	@Redirect(method = {"canPlaceAt(Lnet/minecraft/world/World;III)Z", "method_1047", "onAdjacentBlockUpdate"},
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z", ordinal = 0))
+	private boolean forge$canPlaceAt$5(World instance, int j, int k, int i) {
+		return ((ForgeWorld) instance).isBlockSolidOnSide(i, j, k, 5);
+	}
 
-			if (!((ForgeWorld) world).isBlockSolidOnSide(i - 1, j, k, 5) && i1 == 1) {
-				flag = true;
-			}
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
+	@Redirect(method = {"canPlaceAt(Lnet/minecraft/world/World;III)Z", "method_1047", "onAdjacentBlockUpdate"},
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z", ordinal = 1))
+	private boolean forge$canPlaceAt$6(World instance, int j, int k, int i) {
+		return ((ForgeWorld) instance).isBlockSolidOnSide(i, j, k, 4);
+	}
 
-			if (!((ForgeWorld) world).isBlockSolidOnSide(i + 1, j, k, 4) && i1 == 2) {
-				flag = true;
-			}
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
+	@Redirect(method = {"canPlaceAt(Lnet/minecraft/world/World;III)Z", "method_1047", "onAdjacentBlockUpdate"},
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z", ordinal = 2))
+	private boolean forge$canPlaceAt$7(World instance, int j, int k, int i) {
+		return ((ForgeWorld) instance).isBlockSolidOnSide(i, j, k, 3);
+	}
 
-			if (!((ForgeWorld) world).isBlockSolidOnSide(i, j, k - 1, 3) && i1 == 3) {
-				flag = true;
-			}
-
-			if (!((ForgeWorld) world).isBlockSolidOnSide(i, j, k + 1, 2) && i1 == 4) {
-				flag = true;
-			}
-
-			if (flag) {
-				this.drop(world, i, j, k, world.getBlockMeta(i, j, k));
-				world.setBlock(i, j, k, 0);
-			}
-		}
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
+	@Redirect(method = {"canPlaceAt(Lnet/minecraft/world/World;III)Z", "method_1047", "onAdjacentBlockUpdate"},
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z", ordinal = 3))
+	private boolean forge$canPlaceAt$8(World instance, int j, int k, int i) {
+		return ((ForgeWorld) instance).isBlockSolidOnSide(i, j, k, 2);
 	}
 }

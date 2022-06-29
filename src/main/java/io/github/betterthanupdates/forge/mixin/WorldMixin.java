@@ -1,20 +1,16 @@
 package io.github.betterthanupdates.forge.mixin;
 
-import java.util.List;
-
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.BlockEntity;
 import net.minecraft.util.math.AxixAlignedBoundingBox;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.dimension.Dimension;
 
 import io.github.betterthanupdates.forge.block.ForgeBlock;
@@ -23,47 +19,35 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 @Mixin(World.class)
 public abstract class WorldMixin implements BlockView, ForgeWorld {
 	@Shadow
-	@Final
-	public Dimension dimension;
-
-	@Shadow
-	public abstract boolean isBlockLoaded(int x, int y, int z);
-
-	@Shadow
-	public abstract boolean isAboveGround(int x, int y, int z);
-
-	@Shadow
-	public abstract int method_164(LightType lightType, int x, int y, int z);
-
-	@Shadow
-	public abstract void method_166(LightType lightType, int x1, int y1, int z1, int x2, int y2, int z2);
+	public abstract boolean canSpawnEntity(AxixAlignedBoundingBox box);
 
 	@Shadow
 	public abstract boolean method_155(int i, int j, int k, int l, int m, int n);
 
 	@Shadow
-	private boolean field_190;
+	@Final
+	public Dimension dimension;
 
 	@Shadow
-	private List field_185;
+	public abstract boolean isBlockLoaded(int i, int j, int k);
 
 	@Shadow
-	public List blockEntities;
+	public abstract boolean isAboveGround(int i, int j, int k);
 
 	@Shadow
-	public abstract Chunk getChunkFromCache(int chunkX, int chunkZ);
+	public abstract int method_164(LightType arg, int i, int j, int k);
 
 	@Shadow
-	public abstract boolean canSpawnEntity(AxixAlignedBoundingBox box);
+	public abstract void method_166(LightType arg, int i, int j, int k, int l, int m, int n);
 
 	/**
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public boolean isAir(int i, int j, int k) {
-		int iBlockID = this.getBlockId(i, j, k);
-		return iBlockID == 0 ? true : ((ForgeBlock) Block.BY_ID[iBlockID]).isAirBlock((World) (Object) this, i, j, k);
+	public boolean isAir(int x, int y, int z) {
+		int l = this.getBlockId(x, y, z);
+		return l == 0 || ((ForgeBlock) Block.BY_ID[l]).isAirBlock((World) (Object) this, x, y, z);
 	}
 
 	/**
@@ -133,51 +117,15 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public void setBlockEntity(int i, int j, int k, BlockEntity tileentity) {
-		if (!tileentity.isInvalid()) {
-			if (this.field_190) {
-				tileentity.x = i;
-				tileentity.y = j;
-				tileentity.z = k;
-				boolean found = false;
-
-				for (Object o : this.field_185) {
-					BlockEntity e = (BlockEntity) o;
-
-					if (e.x == i && e.y == j && e.z == k) {
-						found = true;
-						break;
-					}
-				}
-
-				if (!found) {
-					this.field_185.add(tileentity);
-				}
-			} else {
-				this.blockEntities.add(tileentity);
-				Chunk chunk = this.getChunkFromCache(i >> 4, k >> 4);
-
-				if (chunk != null) {
-					chunk.placeBlockEntity(i & 15, j, k & 15, tileentity);
-				}
-			}
-		}
-	}
-
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Overwrite
-	public boolean canSuffocate(int i, int j, int k) {
-		Block block = Block.BY_ID[this.getBlockId(i, j, k)];
-		return block == null ? false : ((ForgeBlock) block).isBlockNormalCube((World) (Object) this, i, j, k);
+	public boolean canSuffocate(int x, int y, int z) {
+		Block block = Block.BY_ID[this.getBlockId(x, y, z)];
+		return block != null && ((ForgeBlock) block).isBlockNormalCube((World) (Object) this, x, y, z);
 	}
 
 	@Override
-	public boolean isBlockSolidOnSide(int i, int j, int k, int side) {
-		Block block = Block.BY_ID[this.getBlockId(i, j, k)];
-		return block == null ? false : ((ForgeBlock) block).isBlockSolidOnSide((World) (Object) this, i, j, k, side);
+	public boolean isBlockSolidOnSide(int x, int y, int z, int side) {
+		Block block = Block.BY_ID[this.getBlockId(x, y, z)];
+		return block != null && ((ForgeBlock) block).isBlockSolidOnSide((World) (Object) this, x, y, z, side);
 	}
 
 	/**
@@ -185,17 +133,17 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	 * @reason implement Forge hooks
 	 */
 	@Overwrite
-	public boolean canPlaceBlock(int i, int j, int k, int l, boolean flag, int i1) {
-		int j1 = this.getBlockId(j, k, l);
+	public boolean canPlaceBlock(int id, int x, int y, int z, boolean flag, int i1) {
+		int j1 = this.getBlockId(x, y, z);
 		Block block = Block.BY_ID[j1];
-		Block block1 = Block.BY_ID[i];
-		AxixAlignedBoundingBox axisalignedbb = block1.getCollisionShape((World) (Object) this, j, k, l);
+		Block block1 = Block.BY_ID[id];
+		AxixAlignedBoundingBox box = block1.getCollisionShape((World) (Object) this, x, y, z);
 
 		if (flag) {
-			axisalignedbb = null;
+			box = null;
 		}
 
-		if (axisalignedbb != null && !this.canSpawnEntity(axisalignedbb)) {
+		if (box != null && !this.canSpawnEntity(box)) {
 			return false;
 		} else {
 			if (block == Block.FLOWING_WATER
@@ -207,11 +155,11 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 				block = null;
 			}
 
-			if (block != null && ((ForgeBlock) block).isBlockReplaceable((World) (Object) this, j, k, l)) {
+			if (block != null && ((ForgeBlock) block).isBlockReplaceable((World) (Object) this, x, y, z)) {
 				block = null;
 			}
 
-			return i > 0 && block == null && block1.canPlaceAt((World) (Object) this, j, k, l, i1);
+			return id > 0 && block == null && block1.canPlaceAt((World) (Object) this, x, y, z, i1);
 		}
 	}
 }

@@ -82,13 +82,13 @@ dependencies {
 	// Done
 //	modRuntimeOnly(group: "remapped.client", name: "modloader", version: "b1.7.3")
 //	modRuntimeOnly(group: "remapped.client", name: "modloadermp-1.7.3-unofficial", version: "v2")
-	modRuntimeOnly(group: "remapped.server", name: "modloadermp-1.7.3-unofficial-server", version: "v2")
-//	modRuntimeOnly(group: "remapped.client", name: "minecraftforge-client", version: "1.0.7-20110907")
+//	modRuntimeOnly(group: "remapped.server", name: "modloadermp-1.7.3-unofficial-server", version: "v2")
+//	modRuntimeOnly(group: "remapped.client", name: "reforged-client", version: "1.0.1")
 //	modRuntimeOnly(group: "remapped.client", name: "audiomod", version: "b1.7.3")
-//	modRuntimeOnly(group: "remapped.client", name: "shockahpi", version: "r8")
+//	modRuntimeOnly(group: "remapped.client", name: "shockahpi", version: "r5.1")
+//	modRuntimeOnly(group: "remapped.client", name: "playerapi-1.7.3", version: "v1.7")
 	// Todo
 //	modRuntimeOnly(group: "remapped.server", name: "minecraftforge-server", version: "1.0.7-20110907")
-//	modRuntimeOnly(group: "remapped.client", name: "playerapi-1.7.3", version: "v1.7")
 //	modRuntimeOnly(group: "remapped.client", name: "guiapi0.11.0", version: "1.7")
 //	modRuntimeOnly(group: "remapped.client", name: "modoptionsapi", version: "v0.7")
 //	modRuntimeOnly(group: "remapped.client", name: "guiapipatch", version: "v0.7")
@@ -124,6 +124,9 @@ jar {
 	}
 	from("FORGE_LICENSE")
 	from("PAULSCODE_LICENSE")
+
+	from("./original/client") { into("libs") }
+	from("./original/server") { into("libs") }
 }
 
 // configure the maven publication

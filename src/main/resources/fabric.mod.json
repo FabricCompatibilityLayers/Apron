@@ -3,7 +3,7 @@
   "id": "apron",
   "version": "${version}",
   "name": "Apron",
-  "description": "A compatibility layer for legacy API mods.\n- Risugami's ModLoader\n- Risugami's ModLoaderMP\n- Minecraft Forge\n- AudioMod\n- ShockAhPI",
+  "description": "A compatibility layer for legacy API mods.\n- Risugami's ModLoader\n- Risugami's ModLoaderMP\n- Minecraft Forge\n- Reforged\n- AudioMod\n- ShockAhPI\n- PlayerAPI",
   "authors": [
     {
       "name": "Better Than Updates",
@@ -59,8 +59,16 @@
       "environment": "*"
     },
     {
+      "config": "reforged.mixins.json",
+      "environment": "*"
+    },
+    {
       "config": "modloader.mixins.json",
       "environment": "*"
+    },
+    {
+      "config": "playerapi.mixins.json",
+      "environment": "client"
     },
     {
       "config": "shockahpi.mixins.json",
@@ -80,19 +88,19 @@
       "BaseMod": "modloader/BaseMod",
       "MLProp": "modloader/MLProp",
       "ModLoader": "modloader/ModLoader",
-
       "BaseModMp": "modloadermp/BaseModMp",
       "ISpawnable": "modloadermp/ISpawnable",
       "ModLoaderMp": "modloadermp/ModLoaderMp",
-      "Packet230ModLoader": "modloadermp/ModLoaderPacket"
+      "Packet230ModLoader": "modloadermp/ModLoaderPacket",
+      "mod_Reforged": "reforged/ReforgedMod"
     },
     "apron:client": {
       "EntityRendererProxy": "modloader/EntityRendererProxy",
       "ModTextureAnimation": "modloader/ModTextureAnimation",
       "ModTextureStatic": "modloader/ModTextureStatic",
-
       "NetClientHandlerEntity": "modloadermp/NetClientHandlerEntity",
-
+      "PlayerBase": "playerapi/PlayerBase",
+      "PlayerAPI": "playerapi/PlayerAPI",
       "ACPage": "shockahpi/AchievementPage",
       "AnimBase": "shockahpi/AnimBase",
       "AnimPulse": "shockahpi/AnimPulse",
@@ -102,24 +110,37 @@
       "DimensionNether": "shockahpi/DimensionNether",
       "DimensionOverworld": "shockahpi/DimensionOverworld",
       "DungeonLoot": "shockahpi/DungeonLoot",
-      "GuiYesNoFreezeDifficulty": "shockahpi/FreezeDifficultyScreen",
       "GenDeposit": "shockahpi/GenDeposit",
       "IInterceptBlockSet": "shockahpi/IInterceptBlockSet",
       "IInterceptHarvest": "shockahpi/IInterceptHarvest",
-      "INBT": "shockahpi/INBT",
-      "IReachBlock": "shockahpi/IReachBlock",
-      "IReachEntity": "shockahpi/IReachEntity",
+      "IReach": "shockahpi/IReach",
       "Loc": "shockahpi/Loc",
-      "mod_SAPI": "shockahpi/ShockAhPI",
-      "PlayerBase": "shockahpi/PlayerBase",
+      "PlayerBaseSAPI": "shockahpi/PlayerBaseSAPI",
       "SAPI": "shockahpi/SAPI",
-      "SAPIEntityPlayerSP": "shockahpi/SapiClientPlayerEntity",
       "Tool": "shockahpi/Tool",
-      "ToolBase": "shockahpi/ToolBase"
+      "dq": "io/github/betterthanupdates/shockahpi/item/ShockAhPIToolItem",
+      "ta": "io/github/betterthanupdates/shockahpi/item/ShockAhPIAxeItem",
+      "au": "io/github/betterthanupdates/shockahpi/item/ShockAhPIPickaxeItem",
+      "wc": "io/github/betterthanupdates/shockahpi/item/ShockAhPIShovelItem"
     },
     "apron:server": {
       "EntityTrackerEntry2": "modloadermp/EntityTrackerEntry",
       "Pair": "modloadermp/Pair"
+    },
+    "apron:mods": {
+      "client": {
+        "AudioMod": "1.7.3+beta.1",
+        "ShockAhPI": "5.1",
+        "PlayerAPI": "1.7",
+        "Reforged": "1.0.1"
+      },
+      "common": {
+        "ModLoader": "1.7.3+beta.1",
+        "ModLoaderMP": "1.7.3+beta.1",
+        "MinecraftForge": "1.0.6"
+      },
+      "server": {
+      }
     }
   }
 }

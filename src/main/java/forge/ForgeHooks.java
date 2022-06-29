@@ -5,8 +5,6 @@
 
 package forge;
 
-import static forge.MinecraftForge.LOGGER;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -18,12 +16,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SleepStatus;
 
+import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.forge.block.ForgeBlock;
 import io.github.betterthanupdates.forge.entity.player.ForgePlayerEntity;
 import io.github.betterthanupdates.forge.item.ForgeTool;
 import io.github.betterthanupdates.forge.item.ToolEffectiveness;
 
 @SuppressWarnings("unused")
+@Legacy
 public class ForgeHooks {
 	static LinkedList<ICraftingHandler> craftingHandlers = new LinkedList<>();
 	static LinkedList<IDestroyToolHandler> destroyToolHandlers = new LinkedList<>();
@@ -39,21 +39,21 @@ public class ForgeHooks {
 	public ForgeHooks() {
 	}
 
-	public static void onTakenFromCrafting(PlayerEntity player, ItemStack ist, Inventory craftMatrix) {
-		for (forge.ICraftingHandler handler : craftingHandlers) {
-			handler.onTakenFromCrafting(player, ist, craftMatrix);
+	public static void onTakenFromCrafting(PlayerEntity player, ItemStack itemStack, Inventory inventory) {
+		for (ICraftingHandler handler : craftingHandlers) {
+			handler.onTakenFromCrafting(player, itemStack, inventory);
 		}
 	}
 
-	public static void onDestroyCurrentItem(PlayerEntity player, ItemStack orig) {
-		for (forge.IDestroyToolHandler handler : destroyToolHandlers) {
-			handler.onDestroyCurrentItem(player, orig);
+	public static void onDestroyCurrentItem(PlayerEntity player, ItemStack itemStack) {
+		for (IDestroyToolHandler handler : destroyToolHandlers) {
+			handler.onDestroyCurrentItem(player, itemStack);
 		}
 	}
 
-	public static SleepStatus sleepInBedAt(PlayerEntity player, int i, int j, int k) {
-		for (forge.ISleepHandler handler : sleepHandlers) {
-			SleepStatus status = handler.sleepInBedAt(player, i, j, k);
+	public static SleepStatus sleepInBedAt(PlayerEntity player, int x, int y, int z) {
+		for (ISleepHandler handler : sleepHandlers) {
+			SleepStatus status = handler.sleepInBedAt(player, x, y, z);
 
 			if (status != null) {
 				return status;
@@ -67,45 +67,53 @@ public class ForgeHooks {
 		if (block.material.doesRequireTool()) {
 			return true;
 		} else {
-			ItemStack stack = player.inventory.getHeldItem();
+			ItemStack itemstack = player.inventory.getHeldItem();
+			return itemstack != null && canToolHarvestBlock(block, meta, itemstack);
+		}
+	}
 
-			if (stack == null) {
-				return false;
+	public static boolean canToolHarvestBlock(Block block, int meta, ItemStack itemStack) {
+		ForgeTool forgeTool = toolClasses.get(itemStack.itemId);
+
+		if (forgeTool == null) {
+			return itemStack.isEffectiveOn(block);
+		} else {
+			String toolType = forgeTool.toolType;
+			int harvestLevel = forgeTool.harvestLevel;
+
+			if (toolType.equalsIgnoreCase("paxel")) {
+				return true;
 			} else {
-				ForgeTool tc = toolClasses.get(stack.itemId);
+				Integer blockHarvestLevel = toolHarvestLevels.get(new ToolEffectiveness(block.id, meta, toolType));
 
-				if (tc == null) {
-					return stack.isEffectiveOn(block);
+				if (blockHarvestLevel == null) {
+					return itemStack.isEffectiveOn(block);
 				} else {
-					Integer bhl = toolHarvestLevels.get(new ToolEffectiveness(block.id, meta, tc.toolClass));
-
-					if (bhl == null) {
-						return stack.isEffectiveOn(block);
-					} else {
-						return bhl <= tc.harvestLevel && stack.isEffectiveOn(block);
-					}
+					return blockHarvestLevel <= harvestLevel && itemStack.isEffectiveOn(block);
 				}
 			}
 		}
 	}
 
-	public static float blockStrength(Block bl, PlayerEntity player, int md) {
-		float bh = ((ForgeBlock) bl).getHardness(md);
+	public static float blockStrength(Block block, PlayerEntity player, int meta) {
+		float blockHardness = ((ForgeBlock) block).getHardness(meta);
 
-		if (bh < 0.0F) {
+		if (blockHardness < 0.0F) {
 			return 0.0F;
 		} else {
-			return !canHarvestBlock(bl, player, md) ? 1.0F / bh / 100.0F : ((ForgePlayerEntity) player).getCurrentPlayerStrVsBlock(bl, md) / bh / 30.0F;
+			return !canHarvestBlock(block, player, meta) ? 1.0F / blockHardness / 100.0F
+					: ((ForgePlayerEntity) player).getCurrentPlayerStrVsBlock(block, meta) / blockHardness / 30.0F;
 		}
 	}
 
 	public static boolean isToolEffective(ItemStack tool, Block block, int meta) {
-		ForgeTool tc = toolClasses.get(tool.itemId);
+		ForgeTool forgeTool = toolClasses.get(tool.itemId);
 
-		if (tc == null) {
+		if (forgeTool == null) {
 			return false;
 		} else {
-			return toolEffectiveness.contains(new ToolEffectiveness(block.id, meta, tc.toolClass));
+			String toolType = forgeTool.toolType;
+			return toolType.equalsIgnoreCase("paxel") || toolEffectiveness.contains(new ToolEffectiveness(block.id, meta, toolType));
 		}
 	}
 
@@ -140,7 +148,8 @@ public class ForgeHooks {
 			MinecraftForge.setBlockHarvestLevel(Block.REDSTONE_ORE_LIT, "pickaxe", 2);
 			MinecraftForge.removeBlockEffectiveness(Block.REDSTONE_ORE, "pickaxe");
 			MinecraftForge.removeBlockEffectiveness(Block.REDSTONE_ORE_LIT, "pickaxe");
-			Block[] pickaxeEffective = new Block[] {
+
+			Block[] pickaxeEffectiveOn = new Block[] {
 				Block.COBBLESTONE,
 				Block.DOUBLE_STONE_SLAB,
 				Block.STONE_SLAB,
@@ -160,13 +169,16 @@ public class ForgeHooks {
 				Block.LAPIS_LAZULI_BLOCK
 			};
 
-			for (Block block : pickaxeEffective) {
+			for (Block block : pickaxeEffectiveOn) {
 				MinecraftForge.setBlockHarvestLevel(block, "pickaxe", 0);
 			}
 		}
 	}
 
+	public static void touch() {
+	}
+
 	static {
-		LOGGER.info("MinecraftForge V%d.%d.%d Initialized\n", majorVersion, minorVersion, revisionVersion);
+		MinecraftForge.LOGGER.info("MinecraftForge V%d.%d.%d Initialized", majorVersion, minorVersion, revisionVersion);
 	}
 }

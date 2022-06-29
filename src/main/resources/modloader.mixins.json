@@ -13,17 +13,17 @@
     "client.DisconnectingScreenMixin",
     "client.DisconnectPacketMixin",
     "client.EntityRenderDispatcherMixin",
-    "client.ItemEntityMixin",
     "client.GameStartupErrorPanelMixin",
+    "client.ItemEntityMixin",
     "client.ServerChunkCacheMixin"
   ],
   "server": [
-    "server.MinecraftServerMixin",
     "server.CommandManagerMixin",
+    "server.MinecraftServerMixin",
     "server.ServerEntityTrackerMixin",
     "server.ServerLoginPacketHandlerMixin",
-    "server.TrackedEntityMixin",
-    "server.ServerWorldSourceMixin"
+    "server.ServerWorldSourceMixin",
+    "server.TrackedEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

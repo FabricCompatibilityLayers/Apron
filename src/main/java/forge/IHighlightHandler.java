@@ -10,6 +10,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.HitResult;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 public interface IHighlightHandler {
-	boolean onBlockHighlight(WorldEventRenderer renderer, PlayerEntity player, HitResult result, int i, ItemStack stack, float f);
+	boolean onBlockHighlight(WorldEventRenderer worldEventRenderer, PlayerEntity player, HitResult hitResult, int i, ItemStack itemStack, float f);
 }

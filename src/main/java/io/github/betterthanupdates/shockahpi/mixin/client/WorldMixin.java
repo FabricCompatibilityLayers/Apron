@@ -1,8 +1,6 @@
 package io.github.betterthanupdates.shockahpi.mixin.client;
 
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,11 +20,6 @@ public abstract class WorldMixin implements BlockView {
 	@Shadow
 	public WorldProperties properties;
 
-	@Mutable
-	@Shadow
-	@Final
-	public Dimension dimension;
-
 	@Redirect(method = "<init>(Lnet/minecraft/world/dimension/DimensionData;Ljava/lang/String;JLnet/minecraft/world/dimension/Dimension;)V",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/dimension/Dimension;getByID(I)Lnet/minecraft/world/dimension/Dimension;", ordinal = 0))
 	private Dimension sapi$ctr1(int i) {
@@ -45,13 +38,33 @@ public abstract class WorldMixin implements BlockView {
 		return localDimensionBase.getWorldProvider();
 	}
 
-	@Inject(method = "setBlockWithMetadata", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;setBlockWithMetadata(IIIII)Z"))
-	private void sapi$setBlockWithMetadata(int i1, int j1, int k1, int l1, int i2, CallbackInfoReturnable<Boolean> cir) {
-		l1 = SAPI.interceptBlockSet((World) (Object) this, new Loc(i1, j1, k1), l1);
+	int cachedI, cachedJ, cachedK;
+
+	@Inject(method = "setBlockWithMetadata", at = @At("HEAD"))
+	private void sapi$setBlockWithMetadata(int i, int j, int k, int l, int i1, CallbackInfoReturnable<Boolean> cir) {
+		this.cachedI = i;
+		this.cachedJ = j;
+		this.cachedK = k;
 	}
 
-	@Inject(method = "setBlockInChunk", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;method_860(IIII)Z"))
-	private void sapi$setBlockInChunk(int i1, int j1, int k1, int l1, CallbackInfoReturnable<Boolean> cir) {
-		l1 = SAPI.interceptBlockSet((World) (Object) this, new Loc(i1, j1, k1), l1);
+	@Inject(method = "setBlockWithMetadata",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;setBlockWithMetadata(IIIII)Z"))
+	private void sapi$setBlockWithMetadata$1(int j, int k, int l, int m, int par5, CallbackInfoReturnable<Boolean> cir) {
+		par5 = SAPI.interceptBlockSet((World) (Object) this, new Loc(this.cachedI, this.cachedJ, this.cachedK), par5);
+	}
+
+	int cachedI2, cachedJ2, cachedK2;
+
+	@Inject(method = "setBlockInChunk", at = @At("HEAD"))
+	private void sapi$setBlockInChunk(int i, int j, int k, int l, CallbackInfoReturnable<Boolean> cir) {
+		this.cachedI2 = i;
+		this.cachedJ2 = j;
+		this.cachedK2 = k;
+	}
+
+	@Inject(method = "setBlockInChunk",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;method_860(IIII)Z"))
+	private void sapi$setBlockInChunk$1(int j, int k, int l, int par4, CallbackInfoReturnable<Boolean> cir) {
+		par4 = SAPI.interceptBlockSet((World) (Object) this, new Loc(this.cachedI2, this.cachedJ2, this.cachedK2), par4);
 	}
 }

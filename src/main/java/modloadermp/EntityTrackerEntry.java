@@ -3,6 +3,9 @@ package modloadermp;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 @Environment(EnvType.SERVER)
 public class EntityTrackerEntry {
 	public int entityId;

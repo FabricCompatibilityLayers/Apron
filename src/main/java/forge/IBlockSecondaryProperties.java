@@ -7,7 +7,10 @@ package forge;
 
 import net.minecraft.world.World;
 
+import io.github.betterthanupdates.Legacy;
+
 @SuppressWarnings("unused")
+@Legacy
 public interface IBlockSecondaryProperties {
 	boolean isBlockNormalCube(World world, int x, int y, int z);
 

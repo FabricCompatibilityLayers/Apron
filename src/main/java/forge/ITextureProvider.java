@@ -5,6 +5,9 @@
 
 package forge;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 public interface ITextureProvider {
 	String getTextureFile();
 }

@@ -1,5 +1,8 @@
 package shockahpi;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 public class AnimShift extends AnimBase {
 	private final int x;
 	private final int y;

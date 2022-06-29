@@ -8,6 +8,9 @@ package forge;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 public interface IDestroyToolHandler {
-	void onDestroyCurrentItem(PlayerEntity player, ItemStack stack);
+	void onDestroyCurrentItem(PlayerEntity player, ItemStack itemStack);
 }

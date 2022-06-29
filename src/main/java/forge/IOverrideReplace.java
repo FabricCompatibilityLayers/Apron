@@ -7,7 +7,10 @@ package forge;
 
 import net.minecraft.world.World;
 
+import io.github.betterthanupdates.Legacy;
+
 @SuppressWarnings("unused")
+@Legacy
 public interface IOverrideReplace {
 	boolean canReplaceBlock(World world, int i, int j, int k, int l);
 

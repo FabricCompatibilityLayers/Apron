@@ -5,6 +5,9 @@
 
 package forge;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 public class ArmorProperties {
 	public int damageRemove = 0;
 	public boolean allowRegularComputation = false;
@@ -12,8 +15,8 @@ public class ArmorProperties {
 	public ArmorProperties() {
 	}
 
-	public ArmorProperties(int damageRemove, boolean allowRegularCompuation) {
+	public ArmorProperties(int damageRemove, boolean allowRegularComputation) {
 		this.damageRemove = damageRemove;
-		this.allowRegularComputation = allowRegularCompuation;
+		this.allowRegularComputation = allowRegularComputation;
 	}
 }

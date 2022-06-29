@@ -5,6 +5,8 @@ import java.util.AbstractMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import io.github.betterthanupdates.Legacy;
+
 /**
  * A pair is a common type to use for storing two pieces of data together.<br>
  * Pairs are effectively the exact same thing as {@link java.util.AbstractMap.SimpleEntry}.
@@ -13,6 +15,7 @@ import net.fabricmc.api.Environment;
  * @param <R> The type of data to store on the right.
  * @see java.util.AbstractMap.SimpleEntry
  */
+@Legacy
 @Deprecated
 @Environment(EnvType.SERVER)
 public class Pair<L, R> extends AbstractMap.SimpleEntry<L, R> {

@@ -6,11 +6,11 @@ import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public class ForgeTool {
-	public String toolClass;
+	public String toolType;
 	public int harvestLevel;
 
-	public ForgeTool(final String toolClass, final int harvestLevel) {
-		this.toolClass = toolClass;
+	public ForgeTool(final String toolType, final int harvestLevel) {
+		this.toolType = toolType;
 		this.harvestLevel = harvestLevel;
 	}
 
@@ -22,7 +22,7 @@ public class ForgeTool {
 
 		if (other instanceof ForgeTool) {
 			ForgeTool tool = (ForgeTool) other;
-			toolClass = tool.toolClass;
+			toolClass = tool.toolType;
 			harvestLevel = tool.harvestLevel;
 		} else if (other instanceof List) {
 			List list = (List) other;
@@ -32,6 +32,6 @@ public class ForgeTool {
 			return false;
 		}
 
-		return this.toolClass.equals(toolClass) && this.harvestLevel == harvestLevel;
+		return this.toolType.equals(toolClass) && this.harvestLevel == harvestLevel;
 	}
 }

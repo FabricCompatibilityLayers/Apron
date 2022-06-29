@@ -28,10 +28,6 @@ public abstract class BlockMixin implements ForgeBlock {
 
 	@Shadow
 	@Final
-	public static int[] EMITTANCE;
-
-	@Shadow
-	@Final
 	public int id;
 
 	@Shadow
@@ -40,6 +36,10 @@ public abstract class BlockMixin implements ForgeBlock {
 
 	@Shadow
 	public abstract boolean isFullCube();
+
+	@Shadow
+	@Final
+	public static int[] EMITTANCE;
 
 	/**
 	 * @author Eloraam
@@ -109,8 +109,8 @@ public abstract class BlockMixin implements ForgeBlock {
 
 	@Override
 	public float blockStrength(World world, PlayerEntity player, int x, int y, int z) {
-		int md = world.getBlockMeta(x, y, z);
-		return this.blockStrength(player, md);
+		int meta = world.getBlockMeta(x, y, z);
+		return this.blockStrength(player, meta);
 	}
 
 	@Override

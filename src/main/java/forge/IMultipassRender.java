@@ -5,6 +5,9 @@
 
 package forge;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 public interface IMultipassRender {
-	boolean canRenderInPass(int i);
+	boolean canRenderInPass(int pass);
 }

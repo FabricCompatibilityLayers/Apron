@@ -14,8 +14,10 @@ import net.minecraft.packet.AbstractPacket;
 import net.minecraft.server.entity.player.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayPacketHandler;
 
+import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.apron.api.ApronApi;
 
+@Legacy
 public class ModLoaderPacket extends AbstractPacket {
 	private static final ApronApi APRON = ApronApi.getInstance();
 	private static final int MAX_DATA_LENGTH = 0xFFFF;
@@ -26,7 +28,7 @@ public class ModLoaderPacket extends AbstractPacket {
 	public float[] dataFloat = new float[0];
 	public String[] dataString = new String[0];
 	@Environment(EnvType.SERVER)
-	private static Map<PacketHandler, ServerPlayerEntity> playerMap = new HashMap<>();
+	private static final Map<PacketHandler, ServerPlayerEntity> playerMap = new HashMap<>();
 
 	public ModLoaderPacket() {
 	}

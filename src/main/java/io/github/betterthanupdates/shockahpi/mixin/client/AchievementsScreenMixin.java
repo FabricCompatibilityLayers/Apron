@@ -1,7 +1,6 @@
 package io.github.betterthanupdates.shockahpi.mixin.client;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
@@ -13,7 +12,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import shockahpi.AchievementPage;
 import shockahpi.SAPI;
 
 import net.minecraft.client.gui.screen.Screen;
@@ -29,10 +27,10 @@ import net.minecraft.stat.achievement.Achievements;
 import net.minecraft.util.io.StatsFileWriter;
 import net.minecraft.util.math.MathHelper;
 
-import io.github.betterthanupdates.shockahpi.SAPIAchievementsScreen;
+import io.github.betterthanupdates.shockahpi.client.gui.screen.ShockAhPIAchievementsScreen;
 
 @Mixin(AchievementsScreen.class)
-public class AchievementsScreenMixin extends Screen implements SAPIAchievementsScreen {
+public class AchievementsScreenMixin extends Screen implements ShockAhPIAchievementsScreen {
 	@Shadow
 	private StatsFileWriter statsFileWriter;
 	@Shadow
@@ -59,6 +57,7 @@ public class AchievementsScreenMixin extends Screen implements SAPIAchievementsS
 	protected double field_2623;
 	@Shadow
 	protected double field_2625;
+
 	// SAPI Fields
 	@Unique
 	private boolean draw = true;
@@ -268,28 +267,18 @@ public class AchievementsScreenMixin extends Screen implements SAPIAchievementsS
 				this.textRenderer.method_1904(s2, k6, j7 + 12, l7, -6250336);
 
 				if (this.statsFileWriter.isAchievementUnlocked(ny1)) {
-					try {
-						this.textRenderer.drawTextWithShadow(Internationalization.translate("achievement.taken"), k6, j7 + j8 + 4, -7302913);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					this.textRenderer.drawTextWithShadow(Internationalization.translate("achievement.taken"), k6, j7 + j8 + 4, -7302913);
 				}
 			} else {
-				try {
-					int i8 = Math.max(this.textRenderer.getTextWidth(s1), 120);
-					String s3 = Internationalization.translate("achievement.requires", ny1.parent.name);
-					int k8 = this.textRenderer.method_1902(s3, i8);
-					this.fillGradient(k6 - 3, j7 - 3, k6 + i8 + 3, j7 + k8 + 12 + 3, -1073741824, -1073741824);
-					this.textRenderer.method_1904(s3, k6, j7 + 12, i8, -9416624);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				int i8 = Math.max(this.textRenderer.getTextWidth(s1), 120);
+				String s3 = Internationalization.translate("achievement.requires", ny1.parent.name);
+				int k8 = this.textRenderer.method_1902(s3, i8);
+				this.fillGradient(k6 - 3, j7 - 3, k6 + i8 + 3, j7 + k8 + 12 + 3, -1073741824, -1073741824);
+				this.textRenderer.method_1904(s3, k6, j7 + 12, i8, -9416624);
 			}
 
-			this.textRenderer.drawTextWithShadow(s1, k6, j7,
-					this.statsFileWriter.isAchievementUnlockable(ny1) ? (ny1.isUnusual() ? -128 : -1) : (ny1.isUnusual()
-							? -8355776 : -8355712)
-			);
+			this.textRenderer
+					.drawTextWithShadow(s1, k6, j7, this.statsFileWriter.isAchievementUnlockable(ny1) ? (ny1.isUnusual() ? -128 : -1) : (ny1.isUnusual() ? -8355776 : -8355712));
 		}
 
 		GL11.glEnable(2929);
@@ -315,18 +304,19 @@ public class AchievementsScreenMixin extends Screen implements SAPIAchievementsS
 		float f2 = (float) (paramInt5 >> 16 & 0xFF) / 255.0F;
 		float f3 = (float) (paramInt5 >> 8 & 0xFF) / 255.0F;
 		float f4 = (float) (paramInt5 & 0xFF) / 255.0F;
+		Tessellator localns = Tessellator.INSTANCE;
 		GL11.glEnable(3042);
 		GL11.glDisable(3553);
 		GL11.glBlendFunc(770, 771);
 		GL11.glColor4f(f2, f3, f4, f1);
 
 		if (this.draw) {
-			Tessellator.INSTANCE.start();
-			Tessellator.INSTANCE.addVertex((double) paramInt1, (double) paramInt4, 0.0);
-			Tessellator.INSTANCE.addVertex((double) paramInt3, (double) paramInt4, 0.0);
-			Tessellator.INSTANCE.addVertex((double) paramInt3, (double) paramInt2, 0.0);
-			Tessellator.INSTANCE.addVertex((double) paramInt1, (double) paramInt2, 0.0);
-			Tessellator.INSTANCE.tessellate();
+			localns.start();
+			localns.addVertex((double) paramInt1, (double) paramInt4, 0.0);
+			localns.addVertex((double) paramInt3, (double) paramInt4, 0.0);
+			localns.addVertex((double) paramInt3, (double) paramInt2, 0.0);
+			localns.addVertex((double) paramInt1, (double) paramInt2, 0.0);
+			localns.tessellate();
 		}
 
 		GL11.glEnable(3553);
@@ -338,18 +328,13 @@ public class AchievementsScreenMixin extends Screen implements SAPIAchievementsS
 		if (this.checkHidden(achievement)) {
 			return false;
 		} else {
-			AchievementPage achievementPage = SAPI.acGetPage(achievement);
-			int tabID = 0;
-
-			if (achievementPage != null) {
-				tabID = achievementPage.getId();
-			}
+			int tabID = SAPI.acGetPage(achievement).getId();
 
 			if (tabID == SAPI.acCurrentPage) {
 				return true;
 			} else {
 				if (deep >= 1) {
-					List<Achievement> list = new ArrayList(Achievements.achievements);
+					ArrayList<Achievement> list = new ArrayList(Achievements.achievements);
 
 					for (int i = 0; i < list.size(); ++i) {
 						Achievement tmpAc = list.get(i);
@@ -382,7 +367,9 @@ public class AchievementsScreenMixin extends Screen implements SAPIAchievementsS
 
 	@Override
 	public boolean checkHidden(Achievement achievement) {
-		if (this.client.statFileWriter.isAchievementUnlocked(achievement)) {
+		if (achievement == null) {
+			return true;
+		} else if (this.client.statFileWriter.isAchievementUnlocked(achievement)) {
 			return false;
 		} else if (SAPI.acIsHidden(achievement)) {
 			return true;

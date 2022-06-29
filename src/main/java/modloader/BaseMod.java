@@ -19,7 +19,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
+import io.github.betterthanupdates.Legacy;
+
 @SuppressWarnings({"unused", "SameReturnValue", "EmptyMethod"})
+@Legacy
 public abstract class BaseMod {
 	/**
 	 * Used for adding new sources of fuel to the furnace.

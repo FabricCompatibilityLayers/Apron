@@ -1,0 +1,22 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "io.github.betterthanupdates.reforged.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "BlockMixin",
+    "ItemMixin",
+    "ShearsItemMixin",
+    "SheepEntityMixin",
+    "SmeltingRecipeRegistryMixin",
+    "FurnaceBlockEntityMixin"
+  ],
+  "client": [
+    "client.GameRendererMixin",
+    "client.MultiplayerClientInteractionManagerMixin",
+    "client.SinglePlayerInteractionManagerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

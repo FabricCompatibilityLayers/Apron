@@ -9,6 +9,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 public interface ICraftingHandler {
-	void onTakenFromCrafting(PlayerEntity player, ItemStack stack, Inventory inventory);
+	void onTakenFromCrafting(PlayerEntity player, ItemStack itemStack, Inventory inventory);
 }

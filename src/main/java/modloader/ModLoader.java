@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
@@ -85,10 +86,12 @@ import net.minecraft.world.source.NetherWorldSource;
 import net.minecraft.world.source.OverworldWorldSource;
 import net.minecraft.world.source.WorldSource;
 
+import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.apron.Apron;
 import io.github.betterthanupdates.apron.api.ApronApi;
 
 @SuppressWarnings("unused")
+@Legacy
 public class ModLoader {
 	// Apron
 	static final ApronApi APRON = ApronApi.getInstance();
@@ -115,7 +118,7 @@ public class ModLoader {
 	private static final Map<BaseMod, Map<KeyBinding, boolean[]>> keyList = new HashMap<>();
 	private static final File LOG_FILE = new File(Minecraft.getGameDirectory(), "ModLoader.txt");
 	private static final java.util.logging.Logger MOD_LOGGER = java.util.logging.Logger.getLogger("ModLoader");
-	public static final Logger LOGGER = Logger.get("Apron", "ModLoader");
+	public static final Logger LOGGER = Apron.getLogger("ModLoader");
 	private static FileHandler logHandler = null;
 	private static final LinkedList<BaseMod> MOD_LIST = new LinkedList<>();
 	private static int nextBlockModelID = 1000;
@@ -286,7 +289,9 @@ public class ModLoader {
 
 			//noinspection unchecked
 			setupProperties((Class<? extends BaseMod>) modClass);
-			BaseMod mod = (BaseMod) modClass.getDeclaredConstructor().newInstance();
+			Constructor<?> modConstructor = modClass.getDeclaredConstructor();
+			modConstructor.setAccessible(true);
+			BaseMod mod = (BaseMod) modConstructor.newInstance();
 			MOD_LIST.add(mod);
 			LOGGER.debug("Mod Loaded: \"" + mod + "\" from " + filename);
 		} catch (Throwable e) {
@@ -922,6 +927,10 @@ public class ModLoader {
 		TexturePackManager packManager = textureManager.texturePackManager;
 		InputStream input = packManager.texturePack.getResourceAsStream(path);
 
+		if (input == null && !path.startsWith("/")) {
+			input = packManager.texturePack.getResourceAsStream("/" + path);
+		}
+
 		if (input == null) {
 			throw new FileNotFoundException("Image not found: " + path);
 		} else {
@@ -1300,7 +1309,8 @@ public class ModLoader {
 			if (Block.BY_ID[id] != null && Item.byId[id] == null) {
 				Item.byId[id] = item;
 			}
-		} catch (IllegalArgumentException | IllegalAccessException | SecurityException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
+		} catch (IllegalArgumentException | IllegalAccessException | SecurityException | InstantiationException
+					| InvocationTargetException | NoSuchMethodException e) {
 			MOD_LOGGER.throwing("ModLoader", "RegisterBlock", e);
 			ThrowException(e);
 		}
@@ -1348,8 +1358,11 @@ public class ModLoader {
 	 * @param id               The given name of entity. Used for saving
 	 */
 	public static void RegisterTileEntity(Class<? extends BlockEntity> blockEntityClass, String id) {
-		BlockEntity.register(blockEntityClass, id);
-		if (APRON.isClient()) RegisterTileEntity(blockEntityClass, id, null);
+		if (APRON.isClient()) {
+			RegisterTileEntity(blockEntityClass, id, null);
+		} else {
+			BlockEntity.register(blockEntityClass, id);
+		}
 	}
 
 	/**
@@ -1363,6 +1376,8 @@ public class ModLoader {
 	@SuppressWarnings("unchecked")
 	public static void RegisterTileEntity(Class<? extends BlockEntity> blockEntityClass, String id, BlockEntityRenderer renderer) {
 		try {
+			BlockEntity.register(blockEntityClass, id);
+
 			if (renderer != null) {
 				BlockEntityRenderDispatcher ref = BlockEntityRenderDispatcher.INSTANCE;
 				Map<Class<? extends BlockEntity>, BlockEntityRenderer> renderers = (Map<Class<? extends BlockEntity>, BlockEntityRenderer>) ref.customRenderers;
@@ -1738,7 +1753,7 @@ public class ModLoader {
 		ThrowException("Exception occured in ModLoader", e);
 	}
 
-	private ModLoader() {
+	public ModLoader() {
 	}
 
 	@Environment(EnvType.SERVER)

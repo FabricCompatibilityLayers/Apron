@@ -2,6 +2,9 @@ package shockahpi;
 
 import java.awt.Color;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 public class AnimPulse extends AnimBase {
 	private int animState = 0;
 	private int animAdd = 1;

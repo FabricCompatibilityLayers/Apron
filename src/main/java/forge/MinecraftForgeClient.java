@@ -5,8 +5,6 @@
 
 package forge;
 
-import java.util.Objects;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -14,16 +12,14 @@ import net.minecraft.block.Block;
 import net.minecraft.client.render.block.BlockRenderer;
 import net.minecraft.item.Item;
 
-import io.github.betterthanupdates.apron.api.ApronApi;
+import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.apron.impl.client.ApronClientImpl;
 
 @SuppressWarnings("unused")
 @Environment(EnvType.CLIENT)
+@Legacy
 public class MinecraftForgeClient {
-	private static final ICustomItemRenderer[] customItemRenderers = new ICustomItemRenderer[Item.byId.length];
-
-	// Apron
-	private static final ApronClientImpl BAPI = (ApronClientImpl) ApronApi.getInstance();
+	private static final ICustomItemRenderer[] CUSTOM_ITEM_RENDERERS = new ICustomItemRenderer[Item.byId.length];
 
 	public MinecraftForgeClient() {
 	}
@@ -45,7 +41,7 @@ public class MinecraftForgeClient {
 	}
 
 	public static void preloadTexture(String texture) {
-		Objects.requireNonNull(BAPI.getTextureManager()).getTextureId(texture);
+		ApronClientImpl.instance.getTextureManager().getTextureId(texture);
 	}
 
 	public static void renderBlock(BlockRenderer blockRenderer, Block block, int x, int y, int z) {
@@ -59,10 +55,10 @@ public class MinecraftForgeClient {
 	}
 
 	public static void registerCustomItemRenderer(int itemID, ICustomItemRenderer renderer) {
-		customItemRenderers[itemID] = renderer;
+		CUSTOM_ITEM_RENDERERS[itemID] = renderer;
 	}
 
 	public static ICustomItemRenderer getCustomItemRenderer(int itemID) {
-		return customItemRenderers[itemID];
+		return CUSTOM_ITEM_RENDERERS[itemID];
 	}
 }

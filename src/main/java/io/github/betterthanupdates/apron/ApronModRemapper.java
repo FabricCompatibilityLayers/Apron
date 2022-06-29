@@ -31,11 +31,12 @@ public final class ApronModRemapper implements ModRemapper {
 	public void addRemapLibraries(List<RemapLibrary> libraries, EnvType environment) {
 		switch (environment) {
 			case CLIENT:
+				libraries.add(new RemapLibrary(getLibPath("audiomod-b1.7.3"), "audiomod.zip"));
 				libraries.add(new RemapLibrary(getLibPath("modloader-b1.7.3"), "modloader.zip"));
 				libraries.add(new RemapLibrary(getLibPath("modloadermp-1.7.3-unofficial-v2"), "modloadermp-client.zip"));
-				libraries.add(new RemapLibrary(getLibPath("minecraftforge-client-1.0.7-20110907"), "forge-client.zip"));
-				libraries.add(new RemapLibrary(getLibPath("audiomod-b1.7.3"), "audiomod.zip"));
-				libraries.add(new RemapLibrary(getLibPath("shockahpi-r8"), "shockahpi.zip"));
+				libraries.add(new RemapLibrary(getLibPath("playerapi-1.7.3-v1.7"), "playerapi.zip"));
+				libraries.add(new RemapLibrary(getLibPath("reforged-client-1.0.1"), "reforged-client.zip"));
+				libraries.add(new RemapLibrary(getLibPath("shockahpi-r5.1"), "shockahpi-r5.1.zip"));
 				break;
 			case SERVER:
 				libraries.add(new RemapLibrary(getLibPath("modloadermp-1.7.3-unofficial-server-v2"), "modloadermp-server.zip"));
@@ -49,16 +50,24 @@ public final class ApronModRemapper implements ModRemapper {
 		return new HashMap<>();
 	}
 
-	// TODO: Rename classes on right side to fit Yarn standards
 	@Override
 	public void getMappingList(RemapUtil.MappingList list) {
+		// TODO: Add this to custom mod metadata
+		if (Apron.getEnvironment() == EnvType.CLIENT) {
+			list.add("ToolBase", "shockahpi/ToolBase")
+					.field("Pickaxe", "PICKAXE", "Lshockahpi/ToolBase;")
+					.field("Shovel", "SHOVEL", "Lshockahpi/ToolBase;")
+					.field("Axe", "AXE", "Lshockahpi/ToolBase;");
+		}
+
 		addMappingsFromMetadata(list, null);
 		addMappingsFromMetadata(list, Apron.getEnvironment());
 	}
 
 	/**
 	 * Adds mappings directly from Apron's fabric.mod.json file.
-	 * @param list the mappings list for Mod Remapping API
+	 *
+	 * @param list        the mappings list for Mod Remapping API
 	 * @param environment the current Minecraft environment, provided by Fabric Loader
 	 */
 	private void addMappingsFromMetadata(RemapUtil.MappingList list, @Nullable EnvType environment) {
@@ -69,7 +78,7 @@ public final class ApronModRemapper implements ModRemapper {
 			final String obfuscated = mapping.getKey();
 			final String intermediary = mapping.getValue().getAsString();
 			list.add(obfuscated, intermediary);
-			Apron.LOGGER.debug("%s remapped to %s for compatibility.", intermediary, obfuscated);
+			Apron.LOGGER.debug("%s remapped to %s for compatibility.", obfuscated, intermediary);
 		}
 	}
 

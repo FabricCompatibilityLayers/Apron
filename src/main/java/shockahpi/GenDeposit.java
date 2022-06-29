@@ -7,6 +7,9 @@ import java.util.Random;
 
 import net.minecraft.world.World;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 public class GenDeposit {
 	private final int blockID;
 	private final List<Integer> set1stOn;

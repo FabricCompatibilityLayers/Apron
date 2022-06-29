@@ -1,8 +1,11 @@
 package io.github.betterthanupdates.forge.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.TrapdoorBlock;
@@ -14,82 +17,47 @@ import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(TrapdoorBlock.class)
 public abstract class TrapdoorBlockMixin extends Block {
-	@Shadow
-	public abstract void method_1059(World world, int x, int y, int z, boolean bl);
-
 	protected TrapdoorBlockMixin(int blockId, Material material) {
 		super(blockId, material);
 	}
 
+	int cachedMeta = 0;
+
 	/**
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Overwrite
-	public void onAdjacentBlockUpdate(World world, int x, int y, int z, int side) {
-		if (!world.isClient) {
-			int i1 = world.getBlockMeta(x, y, z);
-			int j1 = x;
-			int k1 = z;
-
-			if ((i1 & 3) == 0) {
-				k1 = z + 1;
-			}
-
-			if ((i1 & 3) == 1) {
-				--k1;
-			}
-
-			if ((i1 & 3) == 2) {
-				j1 = x + 1;
-			}
-
-			if ((i1 & 3) == 3) {
-				--j1;
-			}
-
-			if (!ForgeReflection.TrapdoorBlock$disableValidation && !((ForgeWorld) world).isBlockSolidOnSide(j1, y, k1, (i1 & 3) + 2)) {
-				world.setBlock(x, y, z, 0);
-				this.drop(world, x, y, z, i1);
-			}
-
-			if (side > 0 && Block.BY_ID[side].getEmitsRedstonePower()) {
-				boolean flag = world.hasRedstonePower(x, y, z);
-				this.method_1059(world, x, y, z, flag);
-			}
-		}
+	@Inject(method = "onAdjacentBlockUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getBlockMeta(III)I"))
+	private void forge$onAdjacentBlockUpdate(World i, int j, int k, int l, int par5, CallbackInfo ci) {
+		this.cachedMeta = i.getBlockMeta(j, k, l);
 	}
 
 	/**
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Overwrite
-	public boolean canPlaceAt(World world, int i, int j, int k, int l) {
-		if (ForgeReflection.TrapdoorBlock$disableValidation) {
-			return true;
-		} else if (l == 0) {
-			return false;
-		} else if (l == 1) {
-			return false;
-		} else {
-			if (l == 2) {
-				++k;
-			}
+	@Redirect(method = "onAdjacentBlockUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z"))
+	private boolean forge$disableValidation(World instance, int j, int k, int i) {
+		return !(!ForgeReflection.TrapdoorBlock$disableValidation && !((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, (this.cachedMeta & 3) + 2));
+	}
 
-			if (l == 3) {
-				--k;
-			}
+	int cachedL;
 
-			if (l == 4) {
-				++i;
-			}
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
+	@Inject(method = "canPlaceAt", at = @At("HEAD"))
+	private void forge$canPlaceAt(World i, int j, int k, int l, int par5, CallbackInfoReturnable<Boolean> cir) {
+		this.cachedL = par5;
+	}
 
-			if (l == 5) {
-				--i;
-			}
-
-			return ((ForgeWorld) world).isBlockSolidOnSide(i, j, k, l);
-		}
+	/**
+	 * @author Eloraam
+	 * @reason implement Forge hooks
+	 */
+	@Redirect(method = "canPlaceAt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z"))
+	private boolean forge$isBlockSolidOnSide(World instance, int j, int k, int i) {
+		return ((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, this.cachedL);
 	}
 }

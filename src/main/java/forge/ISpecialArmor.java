@@ -7,6 +7,9 @@ package forge;
 
 import net.minecraft.entity.player.PlayerEntity;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 public interface ISpecialArmor {
 	ArmorProperties getProperties(PlayerEntity player, int itemId, int meta);
 }

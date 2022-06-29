@@ -73,6 +73,7 @@ public interface ApronApi extends ModInitializer {
 	@Nullable PlayerEntity getPlayer();
 
 	String getModLoaderVersion();
+
 	String getModLoaderMPVersion();
 
 	String translate(String key);
@@ -82,5 +83,6 @@ public interface ApronApi extends ModInitializer {
 	boolean isClient();
 
 	String getUsedItemSpritesString();
+
 	String getUsedTerrainSpritesString();
 }

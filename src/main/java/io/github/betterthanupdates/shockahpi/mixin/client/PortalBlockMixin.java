@@ -4,9 +4,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import shockahpi.SapiClientPlayerEntity;
+import playerapi.PlayerAPI;
+import shockahpi.PlayerBaseSAPI;
 
 import net.minecraft.block.PortalBlock;
+import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
@@ -20,9 +22,10 @@ public abstract class PortalBlockMixin implements ShockAhPIPortalBlock {
 	}
 
 	@Inject(method = "onEntityCollision", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;method_1388()V"))
-	private void sapi$onEntityCollision(World i, int j, int k, int arg2, Entity par5, CallbackInfo ci) {
-		if (par5 instanceof SapiClientPlayerEntity) {
-			((SapiClientPlayerEntity) par5).portal = this.getDimNumber();
+	private void sapi$onEntityCollision(World i, int j, int k, int arg2, Entity entity, CallbackInfo ci) {
+		if (entity instanceof AbstractClientPlayerEntity) {
+			AbstractClientPlayerEntity entityplayersp = (AbstractClientPlayerEntity) entity;
+			PlayerAPI.getPlayerBase(entityplayersp, PlayerBaseSAPI.class).portal = this.getDimNumber();
 		}
 	}
 }

@@ -7,6 +7,9 @@ package forge;
 
 import net.minecraft.world.BlockView;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 public interface IConnectRedstone {
 	boolean canConnectRedstone(BlockView blockView, int x, int y, int z, int side);
 }

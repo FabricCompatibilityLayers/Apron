@@ -50,7 +50,7 @@ public abstract class WorldRendererMixin {
 	public boolean[] field_244;
 
 	@Shadow
-	public List field_224;
+	public List<BlockEntity> field_224;
 
 	@Shadow
 	public World world;
@@ -62,7 +62,7 @@ public abstract class WorldRendererMixin {
 	protected abstract void method_306();
 
 	@Shadow
-	private List field_228;
+	private List<BlockEntity> field_228;
 
 	@Shadow
 	public boolean field_223;
@@ -70,7 +70,8 @@ public abstract class WorldRendererMixin {
 	@Shadow
 	private boolean field_227;
 
-	@Shadow public static int chunkUpdates;
+	@Shadow
+	public static int chunkUpdates;
 
 	/**
 	 * @author Eloraam
@@ -92,12 +93,11 @@ public abstract class WorldRendererMixin {
 			}
 
 			Chunk.field_953 = false;
-			HashSet hashset = new HashSet();
-			hashset.addAll(this.field_224);
+			HashSet<BlockEntity> hashset = new HashSet<>(this.field_224);
 			this.field_224.clear();
 			int l1 = 1;
-			WorldPopulationRegion region = new WorldPopulationRegion(this.world, i - l1, j - l1, k - l1, l + l1, i1 + l1, j1 + l1);
-			BlockRenderer blockRenderer = new BlockRenderer(region);
+			WorldPopulationRegion chunkcache = new WorldPopulationRegion(this.world, i - l1, j - l1, k - l1, l + l1, i1 + l1, j1 + l1);
+			BlockRenderer renderblocks = new BlockRenderer(chunkcache);
 
 			for (int i2 = 0; i2 < 2; ++i2) {
 				boolean flag = false;
@@ -107,7 +107,7 @@ public abstract class WorldRendererMixin {
 				for (int j2 = j; j2 < i1; ++j2) {
 					for (int k2 = k; k2 < j1; ++k2) {
 						for (int l2 = i; l2 < l; ++l2) {
-							int i3 = region.getBlockId(l2, j2, k2);
+							int i3 = chunkcache.getBlockId(l2, j2, k2);
 
 							if (i3 > 0) {
 								if (!flag2) {
@@ -125,10 +125,10 @@ public abstract class WorldRendererMixin {
 								}
 
 								if (i2 == 0 && Block.HAS_BLOCK_ENTITY[i3]) {
-									BlockEntity blockEntity = region.getBlockEntity(l2, j2, k2);
+									BlockEntity tileentity = chunkcache.getBlockEntity(l2, j2, k2);
 
-									if (BlockEntityRenderDispatcher.INSTANCE.hasCustomRenderer(blockEntity)) {
-										this.field_224.add(blockEntity);
+									if (BlockEntityRenderDispatcher.INSTANCE.hasCustomRenderer(tileentity)) {
+										this.field_224.add(tileentity);
 									}
 								}
 
@@ -140,9 +140,9 @@ public abstract class WorldRendererMixin {
 								}
 
 								if (ForgeHooksClient.canRenderInPass(block, i2)) {
-									ForgeHooksClient.beforeBlockRender(block, blockRenderer);
-									flag1 |= blockRenderer.render(block, l2, j2, k2);
-									ForgeHooksClient.afterBlockRender(block, blockRenderer);
+									ForgeHooksClient.beforeBlockRender(block, renderblocks);
+									flag1 |= renderblocks.render(block, l2, j2, k2);
+									ForgeHooksClient.afterBlockRender(block, renderblocks);
 								}
 							}
 						}
@@ -168,11 +168,10 @@ public abstract class WorldRendererMixin {
 				}
 			}
 
-			HashSet hashset1 = new HashSet();
-			hashset1.addAll(this.field_224);
+			HashSet<BlockEntity> hashset1 = new HashSet<>(this.field_224);
 			hashset1.removeAll(hashset);
 			this.field_228.addAll(hashset1);
-			hashset.removeAll(this.field_224);
+			this.field_224.forEach(hashset::remove);
 			this.field_228.removeAll(hashset);
 			this.field_223 = Chunk.field_953;
 			this.field_227 = true;

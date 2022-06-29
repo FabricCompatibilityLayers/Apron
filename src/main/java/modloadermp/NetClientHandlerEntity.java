@@ -5,6 +5,9 @@ import net.fabricmc.api.Environment;
 
 import net.minecraft.entity.Entity;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 @Environment(EnvType.CLIENT)
 public class NetClientHandlerEntity {
 	public boolean entityHasOwner;

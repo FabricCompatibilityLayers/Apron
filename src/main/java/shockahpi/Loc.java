@@ -7,7 +7,10 @@ import net.minecraft.util.Vec3i;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
+import io.github.betterthanupdates.Legacy;
+
 @SuppressWarnings("unused")
+@Legacy
 public class Loc {
 	public final double x;
 	public final double y;
@@ -117,7 +120,7 @@ public class Loc {
 	}
 
 	public static Loc[] vecAdjacent() {
-		return new Loc[]{new Loc(0, 0, 1), new Loc(0, 0, -1), new Loc(0, 1, 0), new Loc(0, -1, 0), new Loc(1, 0, 0), new Loc(-1, 0, 0)};
+		return new Loc[] {new Loc(0, 0, 1), new Loc(0, 0, -1), new Loc(0, 1, 0), new Loc(0, -1, 0), new Loc(1, 0, 0), new Loc(-1, 0, 0)};
 	}
 
 	public Loc[] adjacent() {
@@ -131,7 +134,7 @@ public class Loc {
 	}
 
 	public static Loc[] vecAdjacent2D() {
-		return new Loc[]{new Loc(0, 1), new Loc(0, -1), new Loc(1, 0), new Loc(-1, 0)};
+		return new Loc[] {new Loc(0, 1), new Loc(0, -1), new Loc(1, 0), new Loc(-1, 0)};
 	}
 
 	public Loc[] adjacent2D() {

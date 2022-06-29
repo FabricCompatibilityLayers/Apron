@@ -8,12 +8,12 @@ import org.jetbrains.annotations.ApiStatus;
 public class ToolEffectiveness {
 	public int blockId;
 	public int meta;
-	public String toolClass;
+	public String toolType;
 
-	public ToolEffectiveness(final int blockId, final int meta, final String toolClass) {
+	public ToolEffectiveness(final int blockId, final int meta, final String toolType) {
 		this.blockId = blockId;
 		this.meta = meta;
-		this.toolClass = toolClass;
+		this.toolType = toolType;
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class ToolEffectiveness {
 			ToolEffectiveness effectiveness = (ToolEffectiveness) other;
 			blockId = effectiveness.blockId;
 			meta = effectiveness.meta;
-			toolClass = effectiveness.toolClass;
+			toolClass = effectiveness.toolType;
 		} else if (other instanceof List) {
 			List list = (List) other;
 			blockId = (int) list.get(0);
@@ -37,6 +37,6 @@ public class ToolEffectiveness {
 			return false;
 		}
 
-		return blockId == this.blockId && meta == this.meta && toolClass.equals(this.toolClass);
+		return blockId == this.blockId && meta == this.meta && toolClass.equals(this.toolType);
 	}
 }

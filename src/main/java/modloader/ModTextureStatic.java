@@ -1,6 +1,6 @@
 package modloader;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import net.fabricmc.api.EnvType;
@@ -9,9 +9,11 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.render.TextureBinder;
 
+import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.apron.impl.client.ApronClientImpl;
 
 @SuppressWarnings("unused")
+@Legacy
 @Environment(EnvType.CLIENT)
 public class ModTextureStatic extends TextureBinder {
 	private boolean oldAnaglyph;

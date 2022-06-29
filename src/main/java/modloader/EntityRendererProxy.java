@@ -6,6 +6,9 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.GameRenderer;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 @Environment(EnvType.CLIENT)
 public class EntityRendererProxy extends GameRenderer {
 	private final Minecraft game;

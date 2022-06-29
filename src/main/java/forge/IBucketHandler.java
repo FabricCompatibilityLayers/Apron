@@ -8,6 +8,9 @@ package forge;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 public interface IBucketHandler {
-	ItemStack fillCustomBucket(World world, int i, int j, int k);
+	ItemStack fillCustomBucket(World world, int x, int y, int z);
 }

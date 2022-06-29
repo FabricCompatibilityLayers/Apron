@@ -34,13 +34,14 @@ import net.minecraft.server.entity.player.ServerPlayerEntity;
 import net.minecraft.server.network.ServerEntityTracker;
 import net.minecraft.world.World;
 
+import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.apron.api.ApronApi;
 
 @SuppressWarnings("unused")
+@Legacy
 public class ModLoaderMp {
 	// Apron
 	private static final ApronApi APRON = ApronApi.getInstance();
-
 	public static final String NAME = "ModLoaderMP";
 	public static final String VERSION = APRON.getModLoaderMPVersion();
 	private static boolean hasInit = false;
@@ -498,7 +499,7 @@ public class ModLoaderMp {
 		for (String bannedMod : bannedMods) {
 			for (int k = 0; k < modloaderPacket.dataString.length; ++k) {
 				if (modloaderPacket.dataString[k].lastIndexOf("mod_") != -1
-					&& modloaderPacket.dataString[k].substring(modloaderPacket.dataString[k].lastIndexOf("mod_")).startsWith(bannedMod)) {
+						&& modloaderPacket.dataString[k].substring(modloaderPacket.dataString[k].lastIndexOf("mod_")).startsWith(bannedMod)) {
 					arraylist.add(modloaderPacket.dataString[k]);
 				}
 			}

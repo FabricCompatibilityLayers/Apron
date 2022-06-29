@@ -8,6 +8,9 @@ package forge;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.SleepStatus;
 
+import io.github.betterthanupdates.Legacy;
+
+@Legacy
 public interface ISleepHandler {
 	SleepStatus sleepInBedAt(PlayerEntity player, int x, int y, int z);
 }

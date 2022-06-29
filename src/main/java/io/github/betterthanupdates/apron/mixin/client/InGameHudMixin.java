@@ -1,8 +1,6 @@
 package io.github.betterthanupdates.apron.mixin.client;
 
-import static io.github.betterthanupdates.apron.Apron.fabricModsLoaded;
-import static io.github.betterthanupdates.apron.Apron.rmlModsLoaded;
-import static io.github.betterthanupdates.apron.Apron.versionString;
+import static io.github.betterthanupdates.apron.Apron.*;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

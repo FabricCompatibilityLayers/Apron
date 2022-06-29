@@ -9,9 +9,11 @@ import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.CommandSource;
 import net.minecraft.server.entity.player.ServerPlayerEntity;
 
+import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.apron.Apron;
 
 @SuppressWarnings("unused")
+@Legacy
 public abstract class BaseModMp extends BaseMod {
 	public BaseModMp() {
 	}
