@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 
+import itemspriteapi.IItemTexture;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.tinyremapper.extension.mixin.common.data.Pair;
@@ -156,8 +157,16 @@ public class ForgeHooksClient {
 	}
 
 	public static void overrideTexture(Object o) {
-		if (o instanceof ITextureProvider) {
-			GL11.glBindTexture(3553, ApronClientImpl.instance.getTextureManager().getTextureId(((ITextureProvider) o).getTextureFile()));
+		String textureFile = "";
+
+		if (o instanceof ITextureProvider) { // Forge hook
+			textureFile = ((ITextureProvider) o).getTextureFile();
+		} else if (o instanceof IItemTexture) { // ItemSpriteAPI hook
+			textureFile = ((IItemTexture) o).getTextureFile();
+		}
+
+		if (!textureFile.isEmpty()) {
+			GL11.glBindTexture(3553, ApronClientImpl.instance.getTextureManager().getTextureId(textureFile));
 		}
 	}
 
