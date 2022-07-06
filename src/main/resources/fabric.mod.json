@@ -123,7 +123,9 @@
       "dq": "io/github/betterthanupdates/shockahpi/item/ShockAhPIToolItem",
       "ta": "io/github/betterthanupdates/shockahpi/item/ShockAhPIAxeItem",
       "au": "io/github/betterthanupdates/shockahpi/item/ShockAhPIPickaxeItem",
-      "wc": "io/github/betterthanupdates/shockahpi/item/ShockAhPIShovelItem"
+      "wc": "io/github/betterthanupdates/shockahpi/item/ShockAhPIShovelItem",
+      "IItemTexture": "itemspriteapi/IItemTexture",
+      "ItemTexture": "itemspriteapi/ItemTexture"
     },
     "apron:server": {
       "EntityTrackerEntry2": "modloadermp/EntityTrackerEntry",
@@ -134,7 +136,8 @@
         "AudioMod": "1.7.3+beta.1",
         "ShockAhPI": "5.1",
         "PlayerAPI": "1.7",
-        "Reforged": "1.0.1"
+        "Reforged": "1.0.1",
+        "ItemSpriteAPI": "1.2"
       },
       "common": {
         "ModLoader": "1.7.3+beta.1",
