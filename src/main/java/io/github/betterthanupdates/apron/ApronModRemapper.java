@@ -33,6 +33,7 @@ public final class ApronModRemapper implements ModRemapper {
 			case CLIENT:
 				libraries.add(new RemapLibrary(getLibPath("audiomod-b1.7.3"), "audiomod.zip"));
 				libraries.add(new RemapLibrary(getLibPath("itemspriteapi-v1.2"), "itemspriteapi.zip"));
+				libraries.add(new RemapLibrary(getLibPath("guiapi0.11.0-1.7"), "guiapi-0.11.0.zip"));
 				libraries.add(new RemapLibrary(getLibPath("modloader-b1.7.3"), "modloader.zip"));
 				libraries.add(new RemapLibrary(getLibPath("modloadermp-1.7.3-unofficial-v2"), "modloadermp-client.zip"));
 				libraries.add(new RemapLibrary(getLibPath("playerapi-1.7.3-v1.7"), "playerapi.zip"));

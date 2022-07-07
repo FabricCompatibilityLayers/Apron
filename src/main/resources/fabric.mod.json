@@ -59,6 +59,10 @@
       "environment": "*"
     },
     {
+      "config": "guiapi.mixins.json",
+      "environment": "client"
+    },
+    {
       "config": "reforged.mixins.json",
       "environment": "*"
     },
@@ -125,7 +129,33 @@
       "au": "io/github/betterthanupdates/shockahpi/item/ShockAhPIPickaxeItem",
       "wc": "io/github/betterthanupdates/shockahpi/item/ShockAhPIShovelItem",
       "IItemTexture": "itemspriteapi/IItemTexture",
-      "ItemTexture": "itemspriteapi/ItemTexture"
+      "ItemTexture": "itemspriteapi/ItemTexture",
+      "GuiApiHelper": "guiapi/GuiApiHelper",
+      "GuiModScreen": "guiapi/GuiModScreen",
+      "GuiModSelect": "guiapi/GuiModSelect",
+      "GuiWidgetScreen": "guiapi/GuiWidgetScreen",
+      "ModAction": "guiapi/ModAction",
+      "ModSettings": "guiapi/ModSettings",
+      "ModSettingScreen": "guiapi/ModSettingScreen",
+      "Setting": "guiapi/Setting",
+      "SettingBoolean": "guiapi/SettingBoolean",
+      "SettingFloat": "guiapi/SettingFloat",
+      "SettingInt": "guiapi/SettingInt",
+      "SettingKey": "guiapi/SettingKey",
+      "SettingMulti": "guiapi/SettingMulti",
+      "SettingText": "guiapi/SettingText",
+      "WidgetBoolean": "guiapi/WidgetBoolean",
+      "WidgetClassicTwocolumn": "guiapi/WidgetClassicTwocolumn",
+      "WidgetFloat": "guiapi/WidgetFloat",
+      "WidgetInt": "guiapi/WidgetInt",
+      "WidgetKeybinding": "guiapi/WidgetKeybinding",
+      "WidgetMulti": "guiapi/WidgetMulti",
+      "WidgetSetting": "guiapi/WidgetSetting",
+      "WidgetSimplewindow": "guiapi/WidgetSimplewindow",
+      "WidgetSimplecolumn": "guiapi/WidgetSimplecolumn",
+      "WidgetSingleRow": "guiapi/WidgetSingleRow",
+      "WidgetSlider": "guiapi/WidgetSlider",
+      "WidgetText": "guiapi/WidgetText"
     },
     "apron:server": {
       "EntityTrackerEntry2": "modloadermp/EntityTrackerEntry",
@@ -137,7 +167,8 @@
         "ShockAhPI": "5.1",
         "PlayerAPI": "1.7",
         "Reforged": "1.0.1",
-        "ItemSpriteAPI": "1.2"
+        "ItemSpriteAPI": "1.2",
+        "GuiAPI": "0.11.0"
       },
       "common": {
         "ModLoader": "1.7.3+beta.1",
