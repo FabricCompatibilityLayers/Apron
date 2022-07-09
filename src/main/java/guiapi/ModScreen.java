@@ -43,7 +43,7 @@ public class ModScreen extends Screen {
 		show(new ModScreen(currentScreen, screen));
 	}
 
-	protected ModScreen(Screen screen) {
+	public ModScreen(Screen screen) {
 		this.parentScreen = screen;
 		currentScreen = this;
 		this.passEvents = false;

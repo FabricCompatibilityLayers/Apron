@@ -17,7 +17,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 public class OptionsScreenMixin extends Screen {
 	@Inject(method = "init", at = @At("RETURN"))
 	private void guiapi$init(CallbackInfo ci) {
-		this.buttons.add(new ButtonWidget(300, this.width / 2 - 100, this.height / 6 + 144, "Global Mod Settings"));
+		this.buttons.add(new ButtonWidget(300, this.width / 2 - 100, this.height / 6 + 192, "Global Mod Settings"));
 	}
 
 	@Inject(method = "buttonClicked", at = @At("RETURN"))
