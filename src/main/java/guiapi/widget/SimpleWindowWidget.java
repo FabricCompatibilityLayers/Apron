@@ -36,7 +36,7 @@ public class SimpleWindowWidget extends Widget {
 		this.init(showbackButton, s);
 	}
 
-	protected void init(Boolean showBack, String titleText) {
+	public void init(Boolean showBack, String titleText) {
 		if (titleText != null) {
 			this.titleWidget = new Label(titleText);
 			this.add(this.titleWidget);

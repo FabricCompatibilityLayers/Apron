@@ -8,12 +8,12 @@ import java.util.ArrayList;
 
 public class ModAction implements Runnable, PropertyChangeListener {
 	public Object dataRef;
-	protected Object[] defaultArguments;
-	protected ArrayList<ModAction> mergedActions = new ArrayList<>();
-	protected String methodName;
-	protected Class<?>[] methodParams = new Class[0];
+	public Object[] defaultArguments;
+	public ArrayList<ModAction> mergedActions = new ArrayList<>();
+	public String methodName;
+	public Class<?>[] methodParams = new Class[0];
 	public String nameRef;
-	protected Object objectRef;
+	public Object objectRef;
 
 	public ModAction(Object o, String method, Class<?>... params) {
 		this.nameRef = method;
@@ -37,11 +37,11 @@ public class ModAction implements Runnable, PropertyChangeListener {
 		this.dataRef = data;
 	}
 
-	protected ModAction(String name) {
+	public ModAction(String name) {
 		this.nameRef = name;
 	}
 
-	protected Boolean argsMatch(Class<?>[] classTypes, Object[] arguments) {
+	public Boolean argsMatch(Class<?>[] classTypes, Object[] arguments) {
 		if (classTypes.length != arguments.length) {
 			return false;
 		} else {
@@ -74,7 +74,7 @@ public class ModAction implements Runnable, PropertyChangeListener {
 		}
 	}
 
-	protected Object callInt(Object... args) throws Exception {
+	public Object callInt(Object... args) throws Exception {
 		if (!this.argsMatch(this.methodParams, args) && this.defaultArguments != null) {
 			args = this.defaultArguments;
 		}
@@ -87,7 +87,7 @@ public class ModAction implements Runnable, PropertyChangeListener {
 		}
 	}
 
-	protected Method GetMethodRecursively(Object o, String method) {
+	public Method GetMethodRecursively(Object o, String method) {
 		Class<?> currentclass = o instanceof Class ? (Class<?>) o : o.getClass();
 
 		while (true) {
@@ -154,7 +154,7 @@ public class ModAction implements Runnable, PropertyChangeListener {
 		}
 	}
 
-	protected void setupHandler(Object o, String method) {
+	public void setupHandler(Object o, String method) {
 		try {
 			this.GetMethodRecursively(o, method);
 		} catch (Exception var4) {

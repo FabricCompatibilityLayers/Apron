@@ -7,9 +7,9 @@ import de.matthiasmann.twl.Widget;
 public class SingleRowWidget extends Widget {
 	public int defaultHeight = 20;
 	public int defaultWidth = 150;
-	protected ArrayList<Integer> heights = new ArrayList<>();
-	protected ArrayList<Widget> widgets = new ArrayList<>();
-	protected ArrayList<Integer> widths = new ArrayList<>();
+	public ArrayList<Integer> heights = new ArrayList<>();
+	public ArrayList<Widget> widgets = new ArrayList<>();
+	public ArrayList<Integer> widths = new ArrayList<>();
 	public int xSpacing = 3;
 
 	public SingleRowWidget(int defwidth, int defheight, Widget... widgets) {
