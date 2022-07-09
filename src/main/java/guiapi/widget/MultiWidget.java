@@ -1,13 +1,17 @@
-package guiapi;
+package guiapi.widget;
 
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.model.SimpleButtonModel;
+import guiapi.ModScreen;
+import guiapi.ModSettingScreen;
+import guiapi.ModSettings;
+import guiapi.setting.MultiSetting;
 
-public class WidgetMulti extends WidgetSetting implements Runnable {
+public class MultiWidget extends SettingWidget implements Runnable {
 	public Button button;
-	public SettingMulti value;
+	public MultiSetting value;
 
-	public WidgetMulti(SettingMulti setting, String title) {
+	public MultiWidget(MultiSetting setting, String title) {
 		super(title);
 		this.setTheme("");
 		this.value = setting;
@@ -19,25 +23,30 @@ public class WidgetMulti extends WidgetSetting implements Runnable {
 		this.update();
 	}
 
+	@Override
 	public void addCallback(Runnable paramRunnable) {
 		this.button.getModel().addActionCallback(paramRunnable);
 	}
 
+	@Override
 	public void removeCallback(Runnable paramRunnable) {
 		this.button.getModel().removeActionCallback(paramRunnable);
 	}
 
+	@Override
 	public void run() {
 		this.value.next(ModSettingScreen.guiContext);
 		this.update();
-		GuiModScreen.clicksound();
+		ModScreen.clicksound();
 	}
 
+	@Override
 	public void update() {
 		this.button.setText(this.userString());
 		ModSettings.dbgout("multi update " + this.userString());
 	}
 
+	@Override
 	public String userString() {
 		return this.niceName.length() > 0
 				? String.format("%s: %s", this.niceName, this.value.getLabel(ModSettingScreen.guiContext))

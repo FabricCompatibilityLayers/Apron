@@ -1,9 +1,11 @@
-package guiapi;
+package guiapi.setting;
 
-public class SettingMulti extends Setting<Integer> {
+import guiapi.ModSettings;
+
+public class MultiSetting extends Setting<Integer> {
 	public String[] labelValues;
 
-	public SettingMulti(String title, int defValue, String... labelValues) {
+	public MultiSetting(String title, int defValue, String... labelValues) {
 		if (labelValues.length != 0) {
 			this.values.put("", defValue);
 			this.defaultValue = defValue;
@@ -12,10 +14,11 @@ public class SettingMulti extends Setting<Integer> {
 		}
 	}
 
-	public SettingMulti(String title, String... labelValues) {
+	public MultiSetting(String title, String... labelValues) {
 		this(title, 0, labelValues);
 	}
 
+	@Override
 	public void fromString(String s, String context) {
 		int x = -1;
 
@@ -38,6 +41,7 @@ public class SettingMulti extends Setting<Integer> {
 		}
 	}
 
+	@Override
 	public Integer get(String context) {
 		if (this.values.get(context) != null) {
 			return this.values.get(context);
@@ -68,6 +72,7 @@ public class SettingMulti extends Setting<Integer> {
 		this.set(tempvalue, context);
 	}
 
+	@Override
 	public void set(Integer v, String context) {
 		this.values.put(context, v);
 
@@ -98,6 +103,7 @@ public class SettingMulti extends Setting<Integer> {
 		}
 	}
 
+	@Override
 	public String toString(String context) {
 		return this.labelValues[this.get(context)];
 	}

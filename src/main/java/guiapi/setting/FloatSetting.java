@@ -1,23 +1,23 @@
-package guiapi;
+package guiapi.setting;
 
-public class SettingFloat extends Setting<Float> {
+public class FloatSetting extends Setting<Float> {
 	public float maximumValue;
 	public float minimumValue;
 	public float stepValue;
 
-	public SettingFloat(String title) {
+	public FloatSetting(String title) {
 		this(title, 0.0F, 0.0F, 0.1F, 1.0F);
 	}
 
-	public SettingFloat(String title, float defValue) {
+	public FloatSetting(String title, float defValue) {
 		this(title, defValue, 0.0F, 0.1F, 1.0F);
 	}
 
-	public SettingFloat(String title, float defValue, float minValue, float maxValue) {
+	public FloatSetting(String title, float defValue, float minValue, float maxValue) {
 		this(title, defValue, minValue, 0.1F, maxValue);
 	}
 
-	public SettingFloat(String title, float defValue, float minValue, float stepValue, float maxValue) {
+	public FloatSetting(String title, float defValue, float minValue, float stepValue, float maxValue) {
 		this.values.put("", defValue);
 		this.defaultValue = defValue;
 		this.minimumValue = minValue;
@@ -32,6 +32,7 @@ public class SettingFloat extends Setting<Float> {
 		}
 	}
 
+	@Override
 	public void fromString(String s, String context) {
 		this.values.put(context, new Float(s));
 
@@ -40,6 +41,7 @@ public class SettingFloat extends Setting<Float> {
 		}
 	}
 
+	@Override
 	public Float get(String context) {
 		if (this.values.get(context) != null) {
 			return this.values.get(context);
@@ -48,6 +50,7 @@ public class SettingFloat extends Setting<Float> {
 		}
 	}
 
+	@Override
 	public void set(Float v, String context) {
 		if (this.stepValue > 0.0F) {
 			this.values.put(context, (float) Math.round(v / this.stepValue) * this.stepValue);
@@ -64,6 +67,7 @@ public class SettingFloat extends Setting<Float> {
 		}
 	}
 
+	@Override
 	public String toString(String context) {
 		return "" + this.get(context);
 	}

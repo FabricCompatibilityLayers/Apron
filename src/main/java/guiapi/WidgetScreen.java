@@ -9,8 +9,8 @@ import de.matthiasmann.twl.theme.ThemeManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ScreenScaler;
 
-public class GuiWidgetScreen extends Widget {
-	public static GuiWidgetScreen instance;
+public class WidgetScreen extends Widget {
+	public static WidgetScreen instance;
 	public static int screenheight;
 	public static int screenwidth;
 	public Widget currentWidget = null;
@@ -20,15 +20,15 @@ public class GuiWidgetScreen extends Widget {
 	public ScreenScaler screenSize = null;
 	public ThemeManager theme = null;
 
-	public static GuiWidgetScreen getInstance() {
+	public static WidgetScreen getInstance() {
 		if (instance == null) {
 			try {
-				instance = new GuiWidgetScreen();
+				instance = new WidgetScreen();
 				instance.renderer = new LWJGLRenderer();
 				String themename = "twlGuiTheme.xml";
 				instance.gui = new GUI(instance, instance.renderer, new LWJGLInput());
-				ModSettings.dbgout(GuiWidgetScreen.class.getClassLoader().getResource(themename).toString());
-				instance.theme = ThemeManager.createThemeManager(GuiWidgetScreen.class.getClassLoader().getResource(themename), instance.renderer);
+				ModSettings.dbgout(WidgetScreen.class.getClassLoader().getResource(themename).toString());
+				instance.theme = ThemeManager.createThemeManager(WidgetScreen.class.getClassLoader().getResource(themename), instance.renderer);
 
 				if (instance.theme == null) {
 					throw new RuntimeException("I don't think you installed the theme correctly ...");
@@ -51,9 +51,10 @@ public class GuiWidgetScreen extends Widget {
 		return instance;
 	}
 
-	public GuiWidgetScreen() {
+	public WidgetScreen() {
 	}
 
+	@Override
 	public void layout() {
 		this.screenSize = new ScreenScaler(this.minecraftInstance.options, this.minecraftInstance.actualWidth, this.minecraftInstance.actualHeight);
 

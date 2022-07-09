@@ -1,18 +1,22 @@
-package guiapi;
+package guiapi.widget;
 
 import de.matthiasmann.twl.EditField;
 import de.matthiasmann.twl.Label;
 import de.matthiasmann.twl.model.StringModel;
 import de.matthiasmann.twl.utils.CallbackSupport;
+import guiapi.ModScreen;
+import guiapi.ModSettingScreen;
+import guiapi.ModSettings;
+import guiapi.setting.TextSetting;
 
-public class WidgetText extends WidgetSetting implements StringModel {
+public class TextWidget extends SettingWidget implements StringModel {
 	private Runnable[] callbacks;
 	public Label displayLabel;
 	public EditField editField;
 	public int setmode = 0;
-	public SettingText settingReference;
+	public TextSetting settingReference;
 
-	public WidgetText(SettingText setting, String title) {
+	public TextWidget(TextSetting setting, String title) {
 		super(title);
 		this.setTheme("");
 		this.settingReference = setting;
@@ -30,14 +34,17 @@ public class WidgetText extends WidgetSetting implements StringModel {
 		this.update();
 	}
 
+	@Override
 	public void addCallback(Runnable callback) {
 		this.callbacks = CallbackSupport.addCallbackToList(this.callbacks, callback, Runnable.class);
 	}
 
+	@Override
 	public String getValue() {
 		return this.settingReference.get();
 	}
 
+	@Override
 	public void layout() {
 		if (this.displayLabel != null) {
 			this.displayLabel.setPosition(this.getX(), this.getY() + this.getHeight() / 2 - this.displayLabel.computeTextHeight() / 2);
@@ -50,12 +57,14 @@ public class WidgetText extends WidgetSetting implements StringModel {
 		}
 	}
 
+	@Override
 	public void removeCallback(Runnable callback) {
 		this.callbacks = CallbackSupport.removeCallbackFromList(this.callbacks, callback);
 	}
 
+	@Override
 	public void setValue(String _value) {
-		GuiModScreen.clicksound();
+		ModScreen.clicksound();
 		ModSettings.dbgout(String.format("setvalue %s", this.editField.getText()));
 
 		if (this.setmode <= 0) {
@@ -67,6 +76,7 @@ public class WidgetText extends WidgetSetting implements StringModel {
 		CallbackSupport.fireCallbacks(this.callbacks);
 	}
 
+	@Override
 	public void update() {
 		ModSettings.dbgout("update");
 
@@ -83,6 +93,7 @@ public class WidgetText extends WidgetSetting implements StringModel {
 		ModSettings.dbgout(String.format("update %s", this.editField.getText()));
 	}
 
+	@Override
 	public String userString() {
 		return String.format("%s: %s", this.niceName, this.settingReference.get(ModSettingScreen.guiContext));
 	}

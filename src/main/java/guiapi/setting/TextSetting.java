@@ -1,25 +1,23 @@
-package guiapi;
+package guiapi.setting;
 
-public class SettingBoolean extends Setting<Boolean> {
-	public SettingBoolean(String name) {
-		this(name, false);
+public class TextSetting extends Setting<String> {
+	public TextSetting(String title, String defaulttext) {
+		this.values.put("", defaulttext);
+		this.defaultValue = defaulttext;
+		this.backendName = title;
 	}
 
-	public SettingBoolean(String name, Boolean defValue) {
-		this.defaultValue = defValue;
-		this.values.put("", this.defaultValue);
-		this.backendName = name;
-	}
-
+	@Override
 	public void fromString(String s, String context) {
-		this.values.put(context, s.equals("true"));
+		this.values.put(context, s);
 
 		if (this.displayWidget != null) {
 			this.displayWidget.update();
 		}
 	}
 
-	public Boolean get(String context) {
+	@Override
+	public String get(String context) {
 		if (this.values.get(context) != null) {
 			return this.values.get(context);
 		} else {
@@ -27,7 +25,8 @@ public class SettingBoolean extends Setting<Boolean> {
 		}
 	}
 
-	public void set(Boolean v, String context) {
+	@Override
+	public void set(String v, String context) {
 		this.values.put(context, v);
 
 		if (this.parent != null) {
@@ -39,7 +38,8 @@ public class SettingBoolean extends Setting<Boolean> {
 		}
 	}
 
+	@Override
 	public String toString(String context) {
-		return this.get(context) ? "true" : "false";
+		return this.get(context);
 	}
 }

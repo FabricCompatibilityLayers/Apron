@@ -1,19 +1,22 @@
-package guiapi;
+package guiapi.widget;
 
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.model.SimpleButtonModel;
+import guiapi.ModScreen;
+import guiapi.ModSettingScreen;
+import guiapi.setting.BooleanSetting;
 
-public class WidgetBoolean extends WidgetSetting implements Runnable {
+public class BooleanWidget extends SettingWidget implements Runnable {
 	public Button button;
 	public String falseText;
-	public SettingBoolean settingReference;
+	public BooleanSetting settingReference;
 	public String trueText;
 
-	public WidgetBoolean(SettingBoolean setting, String title) {
+	public BooleanWidget(BooleanSetting setting, String title) {
 		this(setting, title, "true", "false");
 	}
 
-	public WidgetBoolean(SettingBoolean setting, String title, String truetext, String falsetext) {
+	public BooleanWidget(BooleanSetting setting, String title, String truetext, String falsetext) {
 		super(title);
 		this.setTheme("");
 		this.trueText = truetext;
@@ -27,27 +30,32 @@ public class WidgetBoolean extends WidgetSetting implements Runnable {
 		this.update();
 	}
 
+	@Override
 	public void addCallback(Runnable paramRunnable) {
 		this.button.getModel().addActionCallback(paramRunnable);
 	}
 
+	@Override
 	public void removeCallback(Runnable paramRunnable) {
 		this.button.getModel().removeActionCallback(paramRunnable);
 	}
 
+	@Override
 	public void run() {
 		if (this.settingReference != null) {
 			this.settingReference.set(!this.settingReference.get(ModSettingScreen.guiContext), ModSettingScreen.guiContext);
 		}
 
 		this.update();
-		GuiModScreen.clicksound();
+		ModScreen.clicksound();
 	}
 
+	@Override
 	public void update() {
 		this.button.setText(this.userString());
 	}
 
+	@Override
 	public String userString() {
 		if (this.settingReference != null) {
 			if (this.niceName.length() > 0) {

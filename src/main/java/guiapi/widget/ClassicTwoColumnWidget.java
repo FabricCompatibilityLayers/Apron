@@ -1,11 +1,11 @@
-package guiapi;
+package guiapi.widget;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import de.matthiasmann.twl.Widget;
 
-public class WidgetClassicTwocolumn extends Widget {
+public class ClassicTwoColumnWidget extends Widget {
 	public int childDefaultHeight = 20;
 	public int childWidth = 150;
 	public int defaultPadding = 4;
@@ -14,7 +14,7 @@ public class WidgetClassicTwocolumn extends Widget {
 	public int splitDistance = 10;
 	public int verticalPadding = 0;
 
-	public WidgetClassicTwocolumn(Widget... widgets) {
+	public ClassicTwoColumnWidget(Widget... widgets) {
 		for (Widget widget : widgets) {
 			this.add(widget);
 		}
@@ -22,6 +22,7 @@ public class WidgetClassicTwocolumn extends Widget {
 		this.setTheme("");
 	}
 
+	@Override
 	public int getPreferredHeight() {
 		int totalheight = this.verticalPadding;
 
@@ -85,10 +86,12 @@ public class WidgetClassicTwocolumn extends Widget {
 		return totalheight;
 	}
 
+	@Override
 	public int getPreferredWidth() {
 		return this.getParent().getWidth();
 	}
 
+	@Override
 	public void layout() {
 		if (this.getParent().getTheme().equals("scrollpane-notch")) {
 			this.verticalPadding = 10;

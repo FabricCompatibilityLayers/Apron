@@ -121,6 +121,7 @@ public class ModAction implements Runnable, PropertyChangeListener {
 		}
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent paramPropertyChangeEvent) {
 		if (this.methodParams.length == 1 && this.methodParams[0] == PropertyChangeEvent.class) {
 			try {
@@ -134,6 +135,7 @@ public class ModAction implements Runnable, PropertyChangeListener {
 		}
 	}
 
+	@Override
 	public void run() {
 		try {
 			this.call();

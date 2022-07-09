@@ -9,6 +9,19 @@ import java.util.HashMap;
 import java.util.Properties;
 
 import de.matthiasmann.twl.Widget;
+import guiapi.setting.BooleanSetting;
+import guiapi.setting.FloatSetting;
+import guiapi.setting.IntSetting;
+import guiapi.setting.KeySetting;
+import guiapi.setting.MultiSetting;
+import guiapi.setting.Setting;
+import guiapi.setting.TextSetting;
+import guiapi.widget.BooleanWidget;
+import guiapi.widget.FloatWidget;
+import guiapi.widget.IntWidget;
+import guiapi.widget.KeybindingWidget;
+import guiapi.widget.MultiWidget;
+import guiapi.widget.TextWidget;
 
 import net.minecraft.client.Minecraft;
 
@@ -68,145 +81,145 @@ public class ModSettings {
 		all.add(this);
 	}
 
-	public SettingBoolean addSetting(ModSettingScreen screen, String nicename, String backendname, boolean value) {
-		SettingBoolean s = new SettingBoolean(backendname, value);
-		WidgetBoolean w = new WidgetBoolean(s, nicename);
+	public BooleanSetting addSetting(ModSettingScreen screen, String nicename, String backendname, boolean value) {
+		BooleanSetting s = new BooleanSetting(backendname, value);
+		BooleanWidget w = new BooleanWidget(s, nicename);
 		screen.append(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingBoolean addSetting(ModSettingScreen screen, String nicename, String backendname, boolean value, String truestring, String falsestring) {
-		SettingBoolean s = new SettingBoolean(backendname, value);
-		WidgetBoolean w = new WidgetBoolean(s, nicename, truestring, falsestring);
+	public BooleanSetting addSetting(ModSettingScreen screen, String nicename, String backendname, boolean value, String truestring, String falsestring) {
+		BooleanSetting s = new BooleanSetting(backendname, value);
+		BooleanWidget w = new BooleanWidget(s, nicename, truestring, falsestring);
 		screen.append(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingFloat addSetting(ModSettingScreen screen, String nicename, String backendname, float value) {
-		SettingFloat s = new SettingFloat(backendname, value);
-		WidgetFloat w = new WidgetFloat(s, nicename);
+	public FloatSetting addSetting(ModSettingScreen screen, String nicename, String backendname, float value) {
+		FloatSetting s = new FloatSetting(backendname, value);
+		FloatWidget w = new FloatWidget(s, nicename);
 		screen.append(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingFloat addSetting(ModSettingScreen screen, String nicename, String backendname, float value, float min, float step, float max) {
-		SettingFloat s = new SettingFloat(backendname, value, min, step, max);
-		WidgetFloat w = new WidgetFloat(s, nicename);
+	public FloatSetting addSetting(ModSettingScreen screen, String nicename, String backendname, float value, float min, float step, float max) {
+		FloatSetting s = new FloatSetting(backendname, value, min, step, max);
+		FloatWidget w = new FloatWidget(s, nicename);
 		screen.append(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingKey addSetting(ModSettingScreen screen, String nicename, String backendname, int value) {
-		SettingKey s = new SettingKey(backendname, value);
-		WidgetKeybinding w = new WidgetKeybinding(s, nicename);
+	public KeySetting addSetting(ModSettingScreen screen, String nicename, String backendname, int value) {
+		KeySetting s = new KeySetting(backendname, value);
+		KeybindingWidget w = new KeybindingWidget(s, nicename);
 		screen.append(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingInt addSetting(ModSettingScreen screen, String nicename, String backendname, int value, int min, int max) {
-		SettingInt s = new SettingInt(backendname, value, min, 1, max);
-		WidgetInt w = new WidgetInt(s, nicename);
+	public IntSetting addSetting(ModSettingScreen screen, String nicename, String backendname, int value, int min, int max) {
+		IntSetting s = new IntSetting(backendname, value, min, 1, max);
+		IntWidget w = new IntWidget(s, nicename);
 		screen.append(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingInt addSetting(ModSettingScreen screen, String nicename, String backendname, int value, int min, int step, int max) {
-		SettingInt s = new SettingInt(backendname, value, min, step, max);
-		WidgetInt w = new WidgetInt(s, nicename);
+	public IntSetting addSetting(ModSettingScreen screen, String nicename, String backendname, int value, int min, int step, int max) {
+		IntSetting s = new IntSetting(backendname, value, min, step, max);
+		IntWidget w = new IntWidget(s, nicename);
 		screen.append(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingMulti addSetting(ModSettingScreen screen, String nicename, String backendname, int value, String... labels) {
-		SettingMulti s = new SettingMulti(backendname, value, labels);
-		WidgetMulti w = new WidgetMulti(s, nicename);
+	public MultiSetting addSetting(ModSettingScreen screen, String nicename, String backendname, int value, String... labels) {
+		MultiSetting s = new MultiSetting(backendname, value, labels);
+		MultiWidget w = new MultiWidget(s, nicename);
 		screen.append(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingText addSetting(ModSettingScreen screen, String nicename, String backendname, String value) {
-		SettingText s = new SettingText(backendname, value);
-		WidgetText w = new WidgetText(s, nicename);
+	public TextSetting addSetting(ModSettingScreen screen, String nicename, String backendname, String value) {
+		TextSetting s = new TextSetting(backendname, value);
+		TextWidget w = new TextWidget(s, nicename);
 		screen.append(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingBoolean addSetting(Widget w2, String nicename, String backendname, boolean value) {
-		SettingBoolean s = new SettingBoolean(backendname, value);
-		WidgetBoolean w = new WidgetBoolean(s, nicename);
+	public BooleanSetting addSetting(Widget w2, String nicename, String backendname, boolean value) {
+		BooleanSetting s = new BooleanSetting(backendname, value);
+		BooleanWidget w = new BooleanWidget(s, nicename);
 		w2.add(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingBoolean addSetting(Widget w2, String nicename, String backendname, boolean value, String truestring, String falsestring) {
-		SettingBoolean s = new SettingBoolean(backendname, value);
-		WidgetBoolean w = new WidgetBoolean(s, nicename, truestring, falsestring);
+	public BooleanSetting addSetting(Widget w2, String nicename, String backendname, boolean value, String truestring, String falsestring) {
+		BooleanSetting s = new BooleanSetting(backendname, value);
+		BooleanWidget w = new BooleanWidget(s, nicename, truestring, falsestring);
 		w2.add(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingFloat addSetting(Widget w2, String nicename, String backendname, float value) {
-		SettingFloat s = new SettingFloat(backendname, value);
-		WidgetFloat w = new WidgetFloat(s, nicename);
+	public FloatSetting addSetting(Widget w2, String nicename, String backendname, float value) {
+		FloatSetting s = new FloatSetting(backendname, value);
+		FloatWidget w = new FloatWidget(s, nicename);
 		w2.add(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingFloat addSetting(Widget w2, String nicename, String backendname, float value, float min, float step, float max) {
-		SettingFloat s = new SettingFloat(backendname, value, min, step, max);
-		WidgetFloat w = new WidgetFloat(s, nicename);
+	public FloatSetting addSetting(Widget w2, String nicename, String backendname, float value, float min, float step, float max) {
+		FloatSetting s = new FloatSetting(backendname, value, min, step, max);
+		FloatWidget w = new FloatWidget(s, nicename);
 		w2.add(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingKey addSetting(Widget w2, String nicename, String backendname, int value) {
-		SettingKey s = new SettingKey(backendname, value);
-		WidgetKeybinding w = new WidgetKeybinding(s, nicename);
+	public KeySetting addSetting(Widget w2, String nicename, String backendname, int value) {
+		KeySetting s = new KeySetting(backendname, value);
+		KeybindingWidget w = new KeybindingWidget(s, nicename);
 		w2.add(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingInt addSetting(Widget w2, String nicename, String backendname, int value, int min, int max) {
-		SettingInt s = new SettingInt(backendname, value, min, 1, max);
-		WidgetInt w = new WidgetInt(s, nicename);
+	public IntSetting addSetting(Widget w2, String nicename, String backendname, int value, int min, int max) {
+		IntSetting s = new IntSetting(backendname, value, min, 1, max);
+		IntWidget w = new IntWidget(s, nicename);
 		w2.add(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingInt addSetting(Widget w2, String nicename, String backendname, int value, int min, int step, int max) {
-		SettingInt s = new SettingInt(backendname, value, min, step, max);
-		WidgetInt w = new WidgetInt(s, nicename);
+	public IntSetting addSetting(Widget w2, String nicename, String backendname, int value, int min, int step, int max) {
+		IntSetting s = new IntSetting(backendname, value, min, step, max);
+		IntWidget w = new IntWidget(s, nicename);
 		w2.add(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingMulti addSetting(Widget w2, String nicename, String backendname, int value, String... labels) {
-		SettingMulti s = new SettingMulti(backendname, value, labels);
-		WidgetMulti w = new WidgetMulti(s, nicename);
+	public MultiSetting addSetting(Widget w2, String nicename, String backendname, int value, String... labels) {
+		MultiSetting s = new MultiSetting(backendname, value, labels);
+		MultiWidget w = new MultiWidget(s, nicename);
 		w2.add(w);
 		this.append(s);
 		return s;
 	}
 
-	public SettingText addSetting(Widget w2, String nicename, String backendname, String value) {
-		SettingText s = new SettingText(backendname, value);
-		WidgetText w = new WidgetText(s, nicename);
+	public TextSetting addSetting(Widget w2, String nicename, String backendname, String value) {
+		TextSetting s = new TextSetting(backendname, value);
+		TextWidget w = new TextWidget(s, nicename);
 		w2.add(w);
 		this.append(s);
 		return s;
@@ -223,96 +236,96 @@ public class ModSettings {
 		}
 	}
 
-	public ArrayList<SettingBoolean> getAllBooleanSettings() {
+	public ArrayList<BooleanSetting> getAllBooleanSettings() {
 		return this.getAllBooleanSettings(currentContext);
 	}
 
-	public ArrayList<SettingBoolean> getAllBooleanSettings(String context) {
-		ArrayList<SettingBoolean> settings = new ArrayList<>();
+	public ArrayList<BooleanSetting> getAllBooleanSettings(String context) {
+		ArrayList<BooleanSetting> settings = new ArrayList<>();
 
 		for (Setting<?> setting : this.Settings) {
-			if (SettingBoolean.class.isAssignableFrom(setting.getClass())) {
-				settings.add((SettingBoolean) setting);
+			if (BooleanSetting.class.isAssignableFrom(setting.getClass())) {
+				settings.add((BooleanSetting) setting);
 			}
 		}
 
 		return settings;
 	}
 
-	public ArrayList<SettingFloat> getAllFloatSettings() {
+	public ArrayList<FloatSetting> getAllFloatSettings() {
 		return this.getAllFloatSettings(currentContext);
 	}
 
-	public ArrayList<SettingFloat> getAllFloatSettings(String context) {
-		ArrayList<SettingFloat> settings = new ArrayList<>();
+	public ArrayList<FloatSetting> getAllFloatSettings(String context) {
+		ArrayList<FloatSetting> settings = new ArrayList<>();
 
 		for (Setting<?> setting : this.Settings) {
-			if (SettingFloat.class.isAssignableFrom(setting.getClass())) {
-				settings.add((SettingFloat) setting);
+			if (FloatSetting.class.isAssignableFrom(setting.getClass())) {
+				settings.add((FloatSetting) setting);
 			}
 		}
 
 		return settings;
 	}
 
-	public ArrayList<SettingInt> getAllIntSettings() {
+	public ArrayList<IntSetting> getAllIntSettings() {
 		return this.getAllIntSettings(currentContext);
 	}
 
-	public ArrayList<SettingInt> getAllIntSettings(String context) {
-		ArrayList<SettingInt> settings = new ArrayList<>();
+	public ArrayList<IntSetting> getAllIntSettings(String context) {
+		ArrayList<IntSetting> settings = new ArrayList<>();
 
 		for (Setting<?> setting : this.Settings) {
-			if (SettingInt.class.isAssignableFrom(setting.getClass())) {
-				settings.add((SettingInt) setting);
+			if (IntSetting.class.isAssignableFrom(setting.getClass())) {
+				settings.add((IntSetting) setting);
 			}
 		}
 
 		return settings;
 	}
 
-	public ArrayList<SettingKey> getAllKeySettings() {
+	public ArrayList<KeySetting> getAllKeySettings() {
 		return this.getAllKeySettings(currentContext);
 	}
 
-	public ArrayList<SettingKey> getAllKeySettings(String context) {
-		ArrayList<SettingKey> settings = new ArrayList<>();
+	public ArrayList<KeySetting> getAllKeySettings(String context) {
+		ArrayList<KeySetting> settings = new ArrayList<>();
 
 		for (Setting<?> setting : this.Settings) {
-			if (SettingKey.class.isAssignableFrom(setting.getClass())) {
-				settings.add((SettingKey) setting);
+			if (KeySetting.class.isAssignableFrom(setting.getClass())) {
+				settings.add((KeySetting) setting);
 			}
 		}
 
 		return settings;
 	}
 
-	public ArrayList<SettingMulti> getAllMultiSettings() {
+	public ArrayList<MultiSetting> getAllMultiSettings() {
 		return this.getAllMultiSettings(currentContext);
 	}
 
-	public ArrayList<SettingMulti> getAllMultiSettings(String context) {
-		ArrayList<SettingMulti> settings = new ArrayList<>();
+	public ArrayList<MultiSetting> getAllMultiSettings(String context) {
+		ArrayList<MultiSetting> settings = new ArrayList<>();
 
 		for (Setting<?> setting : this.Settings) {
-			if (SettingMulti.class.isAssignableFrom(setting.getClass())) {
-				settings.add((SettingMulti) setting);
+			if (MultiSetting.class.isAssignableFrom(setting.getClass())) {
+				settings.add((MultiSetting) setting);
 			}
 		}
 
 		return settings;
 	}
 
-	public ArrayList<SettingText> getAllTextSettings() {
+	public ArrayList<TextSetting> getAllTextSettings() {
 		return this.getAllTextSettings(currentContext);
 	}
 
-	public ArrayList<SettingText> getAllTextSettings(String context) {
-		ArrayList<SettingText> settings = new ArrayList<>();
+	public ArrayList<TextSetting> getAllTextSettings(String context) {
+		ArrayList<TextSetting> settings = new ArrayList<>();
 
 		for (Setting<?> setting : this.Settings) {
-			if (SettingText.class.isAssignableFrom(setting.getClass())) {
-				settings.add((SettingText) setting);
+			if (TextSetting.class.isAssignableFrom(setting.getClass())) {
+				settings.add((TextSetting) setting);
 			}
 		}
 
@@ -325,8 +338,8 @@ public class ModSettings {
 
 	public Boolean getBooleanSetting(String backendName, String context) {
 		for (Setting<?> setting : this.Settings) {
-			if (SettingBoolean.class.isAssignableFrom(setting.getClass()) && setting.backendName.equals(backendName)) {
-				return ((SettingBoolean) setting).get(context);
+			if (BooleanSetting.class.isAssignableFrom(setting.getClass()) && setting.backendName.equals(backendName)) {
+				return ((BooleanSetting) setting).get(context);
 			}
 		}
 
@@ -339,8 +352,8 @@ public class ModSettings {
 
 	public Float getFloatSetting(String backendName, String context) {
 		for (Setting<?> setting : this.Settings) {
-			if (SettingFloat.class.isAssignableFrom(setting.getClass()) && setting.backendName.equals(backendName)) {
-				return ((SettingFloat) setting).get(context);
+			if (FloatSetting.class.isAssignableFrom(setting.getClass()) && setting.backendName.equals(backendName)) {
+				return ((FloatSetting) setting).get(context);
 			}
 		}
 
@@ -353,8 +366,8 @@ public class ModSettings {
 
 	public Integer getIntSetting(String backendName, String context) {
 		for (Setting<?> setting : this.Settings) {
-			if (SettingInt.class.isAssignableFrom(setting.getClass()) && setting.backendName.equals(backendName)) {
-				return ((SettingInt) setting).get(context);
+			if (IntSetting.class.isAssignableFrom(setting.getClass()) && setting.backendName.equals(backendName)) {
+				return ((IntSetting) setting).get(context);
 			}
 		}
 
@@ -367,8 +380,8 @@ public class ModSettings {
 
 	public Integer getKeySetting(String backendName, String context) {
 		for (Setting<?> setting : this.Settings) {
-			if (SettingKey.class.isAssignableFrom(setting.getClass()) && setting.backendName.equals(backendName)) {
-				return ((SettingKey) setting).get(context);
+			if (KeySetting.class.isAssignableFrom(setting.getClass()) && setting.backendName.equals(backendName)) {
+				return ((KeySetting) setting).get(context);
 			}
 		}
 
@@ -381,8 +394,8 @@ public class ModSettings {
 
 	public Integer getMultiSetting(String backendName, String context) {
 		for (Setting<?> setting : this.Settings) {
-			if (SettingMulti.class.isAssignableFrom(setting.getClass()) && setting.backendName.equals(backendName)) {
-				return ((SettingMulti) setting).get(context);
+			if (MultiSetting.class.isAssignableFrom(setting.getClass()) && setting.backendName.equals(backendName)) {
+				return ((MultiSetting) setting).get(context);
 			}
 		}
 
@@ -395,8 +408,8 @@ public class ModSettings {
 
 	public String getMultiSettingLabel(String backendName, String context) {
 		for (Setting<?> setting : this.Settings) {
-			if (SettingMulti.class.isAssignableFrom(setting.getClass()) && setting.backendName.equals(backendName)) {
-				return ((SettingMulti) setting).getLabel(context);
+			if (MultiSetting.class.isAssignableFrom(setting.getClass()) && setting.backendName.equals(backendName)) {
+				return ((MultiSetting) setting).getLabel(context);
 			}
 		}
 
@@ -409,8 +422,8 @@ public class ModSettings {
 
 	public String getTextSetting(String backendName, String context) {
 		for (Setting<?> setting : this.Settings) {
-			if (SettingText.class.isAssignableFrom(setting.getClass()) && setting.backendName.equals(backendName)) {
-				return ((SettingText) setting).get(context);
+			if (TextSetting.class.isAssignableFrom(setting.getClass()) && setting.backendName.equals(backendName)) {
+				return ((TextSetting) setting).get(context);
 			}
 		}
 
