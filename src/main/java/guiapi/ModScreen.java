@@ -8,8 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ScreenScaler;
 
-public class GuiModScreen extends Screen {
-	public static GuiModScreen currentScreen;
+public class ModScreen extends Screen {
+	public static ModScreen currentScreen;
 	public int backgroundType = 0;
 	public Widget mainwidget;
 	public Screen parentScreen;
@@ -19,8 +19,8 @@ public class GuiModScreen extends Screen {
 			Minecraft m = ModSettings.getMcinst();
 			m.openScreen(currentScreen.parentScreen);
 
-			if (currentScreen.parentScreen instanceof GuiModScreen) {
-				currentScreen = (GuiModScreen) currentScreen.parentScreen;
+			if (currentScreen.parentScreen instanceof ModScreen) {
+				currentScreen = (ModScreen) currentScreen.parentScreen;
 				currentScreen.setActive();
 			} else {
 				currentScreen = null;
@@ -33,29 +33,30 @@ public class GuiModScreen extends Screen {
 		m.soundHelper.playSound("random.click", 1.0F, 1.0F);
 	}
 
-	public static void show(GuiModScreen screen) {
+	public static void show(ModScreen screen) {
 		Minecraft m = ModSettings.getMcinst();
 		m.openScreen(screen);
 		screen.setActive();
 	}
 
 	public static void show(Widget screen) {
-		show(new GuiModScreen(currentScreen, screen));
+		show(new ModScreen(currentScreen, screen));
 	}
 
-	protected GuiModScreen(Screen screen) {
+	protected ModScreen(Screen screen) {
 		this.parentScreen = screen;
 		currentScreen = this;
 		this.passEvents = false;
 	}
 
-	public GuiModScreen(Screen screen, Widget widget) {
+	public ModScreen(Screen screen, Widget widget) {
 		this.mainwidget = widget;
 		this.parentScreen = screen;
 		currentScreen = this;
 		this.passEvents = false;
 	}
 
+	@Override
 	public void render(int var1, int var2, float var3) {
 		switch (this.backgroundType) {
 			case 0:
@@ -65,21 +66,22 @@ public class GuiModScreen extends Screen {
 				this.renderDirtBackground(0);
 		}
 
-		LWJGLRenderer var4 = (LWJGLRenderer) GuiWidgetScreen.getInstance().gui.getRenderer();
+		LWJGLRenderer var4 = (LWJGLRenderer) WidgetScreen.getInstance().gui.getRenderer();
 		ScreenScaler var5 = new ScreenScaler(
-				GuiWidgetScreen.getInstance().minecraftInstance.options,
-				GuiWidgetScreen.getInstance().minecraftInstance.actualWidth,
-				GuiWidgetScreen.getInstance().minecraftInstance.actualHeight
+				WidgetScreen.getInstance().minecraftInstance.options,
+				WidgetScreen.getInstance().minecraftInstance.actualWidth,
+				WidgetScreen.getInstance().minecraftInstance.actualHeight
 		);
 		RenderScale.scale = var5.scale;
 		var4.syncViewportSize();
-		GuiWidgetScreen.getInstance().gui.update();
+		WidgetScreen.getInstance().gui.update();
 	}
 
+	@Override
 	public void method_130() {
 	}
 
 	private void setActive() {
-		GuiWidgetScreen.getInstance().setScreen(this.mainwidget);
+		WidgetScreen.getInstance().setScreen(this.mainwidget);
 	}
 }

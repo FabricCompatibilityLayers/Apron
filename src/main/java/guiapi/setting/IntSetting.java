@@ -1,23 +1,25 @@
-package guiapi;
+package guiapi.setting;
 
-public class SettingInt extends Setting<Integer> {
+import guiapi.ModSettings;
+
+public class IntSetting extends Setting<Integer> {
 	public int maximumValue;
 	public int minimumValue;
 	public int stepValue;
 
-	public SettingInt(String title) {
+	public IntSetting(String title) {
 		this(title, 0, 0, 1, 100);
 	}
 
-	public SettingInt(String title, int defValue) {
+	public IntSetting(String title, int defValue) {
 		this(title, defValue, 0, 1, 100);
 	}
 
-	public SettingInt(String title, int defValue, int minValue, int maxValue) {
+	public IntSetting(String title, int defValue, int minValue, int maxValue) {
 		this(title, defValue, minValue, 1, maxValue);
 	}
 
-	public SettingInt(String title, int defValue, int minValue, int stepValue, int maxValue) {
+	public IntSetting(String title, int defValue, int minValue, int stepValue, int maxValue) {
 		this.values.put("", defValue);
 		this.defaultValue = defValue;
 		this.minimumValue = minValue;
@@ -32,6 +34,7 @@ public class SettingInt extends Setting<Integer> {
 		}
 	}
 
+	@Override
 	public void fromString(String s, String context) {
 		this.values.put(context, Integer.valueOf(s));
 
@@ -42,6 +45,7 @@ public class SettingInt extends Setting<Integer> {
 		ModSettings.dbgout("fromstring " + s);
 	}
 
+	@Override
 	public Integer get(String context) {
 		if (this.values.get(context) != null) {
 			return this.values.get(context);
@@ -50,6 +54,7 @@ public class SettingInt extends Setting<Integer> {
 		}
 	}
 
+	@Override
 	public void set(Integer v, String context) {
 		ModSettings.dbgout("set " + v);
 
@@ -68,6 +73,7 @@ public class SettingInt extends Setting<Integer> {
 		}
 	}
 
+	@Override
 	public String toString(String context) {
 		return "" + this.get(context);
 	}

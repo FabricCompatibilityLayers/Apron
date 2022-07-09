@@ -1,13 +1,15 @@
-package guiapi;
+package guiapi.setting;
 
 import java.util.HashMap;
 
 import de.matthiasmann.twl.Widget;
+import guiapi.ModSettings;
+import guiapi.widget.SettingWidget;
 
 public abstract class Setting<T> extends Widget {
 	public String backendName;
 	public T defaultValue;
-	public WidgetSetting displayWidget = null;
+	public SettingWidget displayWidget = null;
 	public ModSettings parent = null;
 	public HashMap<String, T> values = new HashMap<>();
 

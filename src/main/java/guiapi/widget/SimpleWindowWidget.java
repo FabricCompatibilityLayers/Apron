@@ -1,33 +1,34 @@
-package guiapi;
+package guiapi.widget;
 
 import de.matthiasmann.twl.Button;
 import de.matthiasmann.twl.Label;
 import de.matthiasmann.twl.ScrollPane;
 import de.matthiasmann.twl.Widget;
 import de.matthiasmann.twl.model.SimpleButtonModel;
+import guiapi.GuiApiHelper;
 
-public class WidgetSimplewindow extends Widget {
+public class SimpleWindowWidget extends Widget {
 	public Button backButton = new Button();
-	public WidgetSingleRow buttonBar = new WidgetSingleRow(0, 0);
+	public SingleRowWidget buttonBar = new SingleRowWidget(0, 0);
 	public int hPadding = 30;
 	public Widget mainWidget = new Widget();
 	public Label titleWidget = new Label();
 	public int vBottomPadding = 40;
 	public int vTopPadding = 30;
 
-	public WidgetSimplewindow() {
-		this(new WidgetClassicTwocolumn(), "", true);
+	public SimpleWindowWidget() {
+		this(new ClassicTwoColumnWidget(), "", true);
 	}
 
-	public WidgetSimplewindow(Widget w) {
+	public SimpleWindowWidget(Widget w) {
 		this(w, "", true);
 	}
 
-	public WidgetSimplewindow(Widget w, String s) {
+	public SimpleWindowWidget(Widget w, String s) {
 		this(w, s, true);
 	}
 
-	public WidgetSimplewindow(Widget w, String s, Boolean showbackButton) {
+	public SimpleWindowWidget(Widget w, String s, Boolean showbackButton) {
 		ScrollPane mainWidget_ = new ScrollPane(w);
 		mainWidget_.setFixed(ScrollPane.Fixed.HORIZONTAL);
 		this.mainWidget = mainWidget_;
@@ -47,7 +48,7 @@ public class WidgetSimplewindow extends Widget {
 			this.backButton = new Button(new SimpleButtonModel());
 			this.backButton.getModel().addActionCallback(GuiApiHelper.backModAction);
 			this.backButton.setText("Back");
-			this.buttonBar = new WidgetSingleRow(200, 20, this.backButton);
+			this.buttonBar = new SingleRowWidget(200, 20, this.backButton);
 			this.add(this.buttonBar);
 		} else {
 			this.vBottomPadding = 0;
@@ -56,6 +57,7 @@ public class WidgetSimplewindow extends Widget {
 		this.add(this.mainWidget);
 	}
 
+	@Override
 	public void layout() {
 		if (this.buttonBar != null) {
 			this.buttonBar.setSize(this.buttonBar.getPreferredWidth(), this.buttonBar.getPreferredHeight());

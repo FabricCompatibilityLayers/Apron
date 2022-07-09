@@ -10,10 +10,12 @@ import de.matthiasmann.twl.model.SimpleButtonModel;
 import de.matthiasmann.twl.textarea.HTMLTextAreaModel;
 import de.matthiasmann.twl.textarea.SimpleTextAreaModel;
 import de.matthiasmann.twl.textarea.TextAreaModel;
+import guiapi.widget.SimpleWindowWidget;
+import guiapi.widget.SingleColumnWidget;
 
 public class GuiApiHelper {
-	public static final ModAction backModAction = new ModAction(GuiModScreen.class, "back");
-	public static final ModAction clickModAction = new ModAction(GuiModScreen.class, "clicksound");
+	public static final ModAction backModAction = new ModAction(ModScreen.class, "back");
+	public static final ModAction clickModAction = new ModAction(ModScreen.class, "clicksound");
 	private ArrayList<AbstractMap.SimpleEntry<String, ModAction>> buttonInfo_;
 	private String displayText_;
 
@@ -101,10 +103,10 @@ public class GuiApiHelper {
 	}
 
 	public static Widget makeTextDisplayAndGoBack(String titleText, String displayText, String buttonText, Boolean htmlMode) {
-		WidgetSinglecolumn widget = new WidgetSinglecolumn();
+		SingleColumnWidget widget = new SingleColumnWidget();
 		widget.add(makeTextArea(displayText, htmlMode));
 		widget.overrideHeight = false;
-		WidgetSimplewindow window = new WidgetSimplewindow(widget, titleText);
+		SimpleWindowWidget window = new SimpleWindowWidget(widget, titleText);
 		window.backButton.setText(buttonText);
 		return window;
 	}
@@ -134,7 +136,7 @@ public class GuiApiHelper {
 	}
 
 	public Widget genWidget(Boolean showBackButton) {
-		WidgetSinglecolumn widget = new WidgetSinglecolumn();
+		SingleColumnWidget widget = new SingleColumnWidget();
 		TextArea textarea = makeTextArea(this.displayText_, false);
 		widget.add(textarea);
 		widget.heightOverrideExceptions.put(textarea, 0);
@@ -143,7 +145,7 @@ public class GuiApiHelper {
 			widget.add(makeButton(entry.getKey(), entry.getValue(), true));
 		}
 
-		return new WidgetSimplewindow(widget, null, showBackButton);
+		return new SimpleWindowWidget(widget, null, showBackButton);
 	}
 
 	static {

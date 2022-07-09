@@ -1,13 +1,14 @@
-package guiapi;
+package guiapi.widget;
 
 import de.matthiasmann.twl.Widget;
 
-public class WidgetSinglecolumn extends WidgetClassicTwocolumn {
-	public WidgetSinglecolumn(Widget... widgets) {
+public class SingleColumnWidget extends ClassicTwoColumnWidget {
+	public SingleColumnWidget(Widget... widgets) {
 		super(widgets);
 		this.childWidth = 200;
 	}
 
+	@Override
 	public int getPreferredHeight() {
 		int totalheight = this.verticalPadding;
 
@@ -39,10 +40,12 @@ public class WidgetSinglecolumn extends WidgetClassicTwocolumn {
 		return totalheight;
 	}
 
+	@Override
 	public int getPreferredWidth() {
 		return Math.max(this.getParent().getWidth(), this.childWidth);
 	}
 
+	@Override
 	public void layout() {
 		int totalheight = this.verticalPadding;
 

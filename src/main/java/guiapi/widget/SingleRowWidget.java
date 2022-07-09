@@ -1,10 +1,10 @@
-package guiapi;
+package guiapi.widget;
 
 import java.util.ArrayList;
 
 import de.matthiasmann.twl.Widget;
 
-public class WidgetSingleRow extends Widget {
+public class SingleRowWidget extends Widget {
 	public int defaultHeight = 20;
 	public int defaultWidth = 150;
 	protected ArrayList<Integer> heights = new ArrayList<>();
@@ -12,7 +12,7 @@ public class WidgetSingleRow extends Widget {
 	protected ArrayList<Integer> widths = new ArrayList<>();
 	public int xSpacing = 3;
 
-	public WidgetSingleRow(int defwidth, int defheight, Widget... widgets) {
+	public SingleRowWidget(int defwidth, int defheight, Widget... widgets) {
 		this.setTheme("");
 		this.defaultWidth = defwidth;
 		this.defaultHeight = defheight;
@@ -22,6 +22,7 @@ public class WidgetSingleRow extends Widget {
 		}
 	}
 
+	@Override
 	public void add(Widget widget) {
 		this.add(widget, this.defaultWidth, this.defaultHeight);
 	}
@@ -37,6 +38,7 @@ public class WidgetSingleRow extends Widget {
 		return this.heights.get(idx) >= 0 ? this.heights.get(idx) : this.widgets.get(idx).getPreferredHeight();
 	}
 
+	@Override
 	public int getPreferredHeight() {
 		int maxheights = 0;
 
@@ -49,6 +51,7 @@ public class WidgetSingleRow extends Widget {
 		return maxheights;
 	}
 
+	@Override
 	public int getPreferredWidth() {
 		int totalwidth = (this.widths.size() - 1) * this.xSpacing;
 		totalwidth = Math.max(totalwidth, 0);
@@ -64,6 +67,7 @@ public class WidgetSingleRow extends Widget {
 		return this.widths.get(idx) >= 0 ? this.widths.get(idx) : this.widgets.get(idx).getPreferredWidth();
 	}
 
+	@Override
 	public void layout() {
 		int curXpos = 0;
 
@@ -75,6 +79,7 @@ public class WidgetSingleRow extends Widget {
 		}
 	}
 
+	@Override
 	public Widget removeChild(int idx) {
 		this.widgets.remove(idx);
 		this.heights.remove(idx);
@@ -82,6 +87,7 @@ public class WidgetSingleRow extends Widget {
 		return super.removeChild(idx);
 	}
 
+	@Override
 	public boolean removeChild(Widget widget) {
 		int idx = this.widgets.indexOf(widget);
 		this.widgets.remove(idx);

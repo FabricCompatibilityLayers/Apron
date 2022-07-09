@@ -1,18 +1,20 @@
-package guiapi;
+package guiapi.setting;
 
+import guiapi.ModSettings;
 import org.lwjgl.input.Keyboard;
 
-public class SettingKey extends Setting<Integer> {
-	public SettingKey(String title, int key) {
+public class KeySetting extends Setting<Integer> {
+	public KeySetting(String title, int key) {
 		this.defaultValue = key;
 		this.values.put("", key);
 		this.backendName = title;
 	}
 
-	public SettingKey(String title, String key) {
+	public KeySetting(String title, String key) {
 		this(title, Keyboard.getKeyIndex(key));
 	}
 
+	@Override
 	public void fromString(String s, String context) {
 		if (s.equals("UNBOUND")) {
 			this.values.put(context, 0);
@@ -25,6 +27,7 @@ public class SettingKey extends Setting<Integer> {
 		}
 	}
 
+	@Override
 	public Integer get(String context) {
 		if (this.values.get(context) != null) {
 			return this.values.get(context);
@@ -41,6 +44,7 @@ public class SettingKey extends Setting<Integer> {
 		return this.get(context) != -1 && Keyboard.isKeyDown(this.get(context));
 	}
 
+	@Override
 	public void set(Integer v, String context) {
 		this.values.put(context, v);
 
@@ -61,6 +65,7 @@ public class SettingKey extends Setting<Integer> {
 		this.set(Keyboard.getKeyIndex(v), context);
 	}
 
+	@Override
 	public String toString(String context) {
 		return Keyboard.getKeyName(this.get(context));
 	}

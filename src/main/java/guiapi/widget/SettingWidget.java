@@ -1,24 +1,25 @@
-package guiapi;
+package guiapi.widget;
 
 import java.util.ArrayList;
 
 import de.matthiasmann.twl.Widget;
 
-public abstract class WidgetSetting extends Widget {
-	public static ArrayList<WidgetSetting> all = new ArrayList<>();
+public abstract class SettingWidget extends Widget {
+	public static ArrayList<SettingWidget> all = new ArrayList<>();
 	public String niceName;
 
 	public static void updateAll() {
-		for (WidgetSetting widgetSetting : all) {
-			widgetSetting.update();
+		for (SettingWidget settingWidget : all) {
+			settingWidget.update();
 		}
 	}
 
-	public WidgetSetting(String nicename) {
+	public SettingWidget(String nicename) {
 		this.niceName = nicename;
 		all.add(this);
 	}
 
+	@Override
 	public void add(Widget child) {
 		String T = child.getTheme();
 
@@ -33,6 +34,7 @@ public abstract class WidgetSetting extends Widget {
 
 	public abstract void addCallback(Runnable runnable);
 
+	@Override
 	public void layout() {
 		for (int i = 0; i < this.getNumChildren(); ++i) {
 			Widget w = this.getChild(i);
