@@ -152,7 +152,7 @@
       "WidgetMulti": "guiapi/widget/MultiWidget",
       "WidgetSetting": "guiapi/widget/SettingWidget",
       "WidgetSimplewindow": "guiapi/widget/SimpleWindowWidget",
-      "WidgetSimplecolumn": "guiapi/widget/SimpleColumnWidget",
+      "WidgetSinglecolumn": "guiapi/widget/SingleColumnWidget",
       "WidgetSingleRow": "guiapi/widget/SingleRowWidget",
       "WidgetSlider": "guiapi/widget/SliderWidget",
       "WidgetText": "guiapi/widget/TextWidget"

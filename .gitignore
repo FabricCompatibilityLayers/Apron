@@ -32,3 +32,5 @@ bin/
 # Fabric
 
 run/
+
+.ignored/
