@@ -16,8 +16,8 @@ import guiapi.widget.SingleColumnWidget;
 public class GuiApiHelper {
 	public static final ModAction backModAction = new ModAction(ModScreen.class, "back");
 	public static final ModAction clickModAction = new ModAction(ModScreen.class, "clicksound");
-	private ArrayList<AbstractMap.SimpleEntry<String, ModAction>> buttonInfo_;
-	private String displayText_;
+	private final ArrayList<AbstractMap.SimpleEntry<String, ModAction>> buttonInfo;
+	private final String displayText;
 
 	public static GuiApiHelper createChoiceMenu(String displayText) {
 		return new GuiApiHelper(displayText);
@@ -97,7 +97,7 @@ public class GuiApiHelper {
 
 		if (model instanceof SimpleTextAreaModel) {
 			((SimpleTextAreaModel) model).setText(text, false);
-		} else {
+		} else if (model instanceof HTMLTextAreaModel) {
 			((HTMLTextAreaModel) model).setHtml(text);
 		}
 	}
@@ -112,8 +112,8 @@ public class GuiApiHelper {
 	}
 
 	private GuiApiHelper(String displayText) {
-		this.displayText_ = displayText;
-		this.buttonInfo_ = new ArrayList<>();
+		this.displayText = displayText;
+		this.buttonInfo = new ArrayList<>();
 	}
 
 	public void addButton(String text, ModAction action, Boolean mergeBack) {
@@ -124,7 +124,7 @@ public class GuiApiHelper {
 			buttonAction.nameRef = "Button '" + text + "' with back.";
 		}
 
-		this.buttonInfo_.add(new AbstractMap.SimpleEntry<>(text, buttonAction));
+		this.buttonInfo.add(new AbstractMap.SimpleEntry<>(text, buttonAction));
 	}
 
 	public void addButton(String text, String methodName, Object me, Boolean mergeBack) {
@@ -137,11 +137,11 @@ public class GuiApiHelper {
 
 	public Widget genWidget(Boolean showBackButton) {
 		SingleColumnWidget widget = new SingleColumnWidget();
-		TextArea textarea = makeTextArea(this.displayText_, false);
+		TextArea textarea = makeTextArea(this.displayText, false);
 		widget.add(textarea);
 		widget.heightOverrideExceptions.put(textarea, 0);
 
-		for (AbstractMap.SimpleEntry<String, ModAction> entry : this.buttonInfo_) {
+		for (AbstractMap.SimpleEntry<String, ModAction> entry : this.buttonInfo) {
 			widget.add(makeButton(entry.getKey(), entry.getValue(), true));
 		}
 

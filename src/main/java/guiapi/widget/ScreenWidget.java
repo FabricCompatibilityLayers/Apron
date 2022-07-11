@@ -1,16 +1,17 @@
-package guiapi;
+package guiapi.widget;
 
 import de.matthiasmann.twl.GUI;
 import de.matthiasmann.twl.Widget;
 import de.matthiasmann.twl.input.lwjgl.LWJGLInput;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.theme.ThemeManager;
+import guiapi.ModSettings;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ScreenScaler;
 
-public class WidgetScreen extends Widget {
-	public static WidgetScreen instance;
+public class ScreenWidget extends Widget {
+	public static ScreenWidget instance;
 	public static int screenheight;
 	public static int screenwidth;
 	public Widget currentWidget = null;
@@ -20,15 +21,15 @@ public class WidgetScreen extends Widget {
 	public ScreenScaler screenSize = null;
 	public ThemeManager theme = null;
 
-	public static WidgetScreen getInstance() {
+	public static ScreenWidget getInstance() {
 		if (instance == null) {
 			try {
-				instance = new WidgetScreen();
+				instance = new ScreenWidget();
 				instance.renderer = new LWJGLRenderer();
-				String themename = "twlGuiTheme.xml";
+				String themeName = "twlGuiTheme.xml";
 				instance.gui = new GUI(instance, instance.renderer, new LWJGLInput());
-				ModSettings.dbgout(WidgetScreen.class.getClassLoader().getResource(themename).toString());
-				instance.theme = ThemeManager.createThemeManager(WidgetScreen.class.getClassLoader().getResource(themename), instance.renderer);
+				ModSettings.dbgout(ScreenWidget.class.getClassLoader().getResource(themeName).toString());
+				instance.theme = ThemeManager.createThemeManager(ScreenWidget.class.getClassLoader().getResource(themeName), instance.renderer);
 
 				if (instance.theme == null) {
 					throw new RuntimeException("I don't think you installed the theme correctly ...");
@@ -51,7 +52,7 @@ public class WidgetScreen extends Widget {
 		return instance;
 	}
 
-	public WidgetScreen() {
+	public ScreenWidget() {
 	}
 
 	@Override

@@ -10,7 +10,7 @@ public class SingleColumnWidget extends ClassicTwoColumnWidget {
 
 	@Override
 	public int getPreferredHeight() {
-		int totalheight = this.verticalPadding;
+		int totalHeight = this.verticalPadding;
 
 		for (int i = 0; i < this.getNumChildren(); ++i) {
 			Widget widget = this.getChild(i);
@@ -34,10 +34,10 @@ public class SingleColumnWidget extends ClassicTwoColumnWidget {
 				}
 			}
 
-			totalheight += height + this.defaultPadding;
+			totalHeight += height + this.defaultPadding;
 		}
 
-		return totalheight;
+		return totalHeight;
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class SingleColumnWidget extends ClassicTwoColumnWidget {
 
 	@Override
 	public void layout() {
-		int totalheight = this.verticalPadding;
+		int totalHeight = this.verticalPadding;
 
 		for (int i = 0; i < this.getNumChildren(); ++i) {
 			Widget w = this.getChild(i);
@@ -72,8 +72,8 @@ public class SingleColumnWidget extends ClassicTwoColumnWidget {
 			}
 
 			w.setSize(this.childWidth, height);
-			w.setPosition(this.getX() + this.getWidth() / 2 - w.getWidth() / 2, this.getY() + totalheight);
-			totalheight += height + this.defaultPadding;
+			w.setPosition(this.getX() + this.getWidth() / 2 - w.getWidth() / 2, this.getY() + totalHeight);
+			totalHeight += height + this.defaultPadding;
 		}
 	}
 }

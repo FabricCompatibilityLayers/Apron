@@ -3,6 +3,7 @@ package guiapi;
 import de.matthiasmann.twl.Widget;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
 import de.matthiasmann.twl.renderer.lwjgl.RenderScale;
+import guiapi.widget.ScreenWidget;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -66,15 +67,15 @@ public class ModScreen extends Screen {
 				this.renderDirtBackground(0);
 		}
 
-		LWJGLRenderer var4 = (LWJGLRenderer) WidgetScreen.getInstance().gui.getRenderer();
+		LWJGLRenderer var4 = (LWJGLRenderer) ScreenWidget.getInstance().gui.getRenderer();
 		ScreenScaler var5 = new ScreenScaler(
-				WidgetScreen.getInstance().minecraftInstance.options,
-				WidgetScreen.getInstance().minecraftInstance.actualWidth,
-				WidgetScreen.getInstance().minecraftInstance.actualHeight
+				ScreenWidget.getInstance().minecraftInstance.options,
+				ScreenWidget.getInstance().minecraftInstance.actualWidth,
+				ScreenWidget.getInstance().minecraftInstance.actualHeight
 		);
 		RenderScale.scale = var5.scale;
 		var4.syncViewportSize();
-		WidgetScreen.getInstance().gui.update();
+		ScreenWidget.getInstance().gui.update();
 	}
 
 	@Override
@@ -82,6 +83,6 @@ public class ModScreen extends Screen {
 	}
 
 	private void setActive() {
-		WidgetScreen.getInstance().setScreen(this.mainwidget);
+		ScreenWidget.getInstance().setScreen(this.mainwidget);
 	}
 }

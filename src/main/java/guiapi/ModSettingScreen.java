@@ -19,25 +19,25 @@ public class ModSettingScreen {
 		this(name, name);
 	}
 
-	public ModSettingScreen(String nicename, String buttontitle) {
+	public ModSettingScreen(String niceName, String buttonTitle) {
 		modScreens.add(this);
-		this.buttonTitle = buttontitle;
-		this.niceName = nicename;
+		this.buttonTitle = buttonTitle;
+		this.niceName = niceName;
 		this.widgetColumn = new ClassicTwoColumnWidget();
 		this.theWidget = new SimpleWindowWidget(this.widgetColumn, this.niceName);
 	}
 
-	public ModSettingScreen(Widget widget, String buttontitle) {
+	public ModSettingScreen(Widget widget, String buttonTitle) {
 		modScreens.add(this);
-		this.buttonTitle = buttontitle;
+		this.buttonTitle = buttonTitle;
 		this.theWidget = widget;
 	}
 
-	public void append(Widget newwidget) {
+	public void append(Widget newWidget) {
 		if (this.widgetColumn != null) {
-			this.widgetColumn.add(newwidget);
+			this.widgetColumn.add(newWidget);
 		} else {
-			this.theWidget.add(newwidget);
+			this.theWidget.add(newWidget);
 		}
 	}
 

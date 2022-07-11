@@ -24,7 +24,7 @@ public class ClassicTwoColumnWidget extends Widget {
 
 	@Override
 	public int getPreferredHeight() {
-		int totalheight = this.verticalPadding;
+		int totalHeight = this.verticalPadding;
 
 		for (int i = 0; i < this.getNumChildren(); i += 2) {
 			Widget w = this.getChild(i);
@@ -80,10 +80,10 @@ public class ClassicTwoColumnWidget extends Widget {
 				}
 			}
 
-			totalheight += height + this.defaultPadding;
+			totalHeight += height + this.defaultPadding;
 		}
 
-		return totalheight;
+		return totalHeight;
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class ClassicTwoColumnWidget extends Widget {
 			this.verticalPadding = 10;
 		}
 
-		int totalheight = this.verticalPadding;
+		int totalHeight = this.verticalPadding;
 
 		for (int i = 0; i < this.getNumChildren(); i += 2) {
 			Widget w = this.getChild(i);
@@ -155,14 +155,14 @@ public class ClassicTwoColumnWidget extends Widget {
 			}
 
 			w.setSize(this.childWidth, height);
-			w.setPosition(this.getX() + this.getWidth() / 2 - (this.childWidth + this.splitDistance / 2), this.getY() + totalheight);
+			w.setPosition(this.getX() + this.getWidth() / 2 - (this.childWidth + this.splitDistance / 2), this.getY() + totalHeight);
 
 			if (w2 != null) {
 				w2.setSize(this.childWidth, height);
-				w2.setPosition(this.getX() + this.getWidth() / 2 + this.splitDistance / 2, this.getY() + totalheight);
+				w2.setPosition(this.getX() + this.getWidth() / 2 + this.splitDistance / 2, this.getY() + totalHeight);
 			}
 
-			totalheight += height + this.defaultPadding;
+			totalHeight += height + this.defaultPadding;
 		}
 	}
 }

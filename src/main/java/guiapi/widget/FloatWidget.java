@@ -19,9 +19,9 @@ public class FloatWidget extends SettingWidget implements Runnable {
 		this.decimalPlaces = _decimalPlaces;
 		this.settingReference = setting;
 		this.settingReference.displayWidget = this;
-		SimpleFloatModel smodel = new SimpleFloatModel(this.settingReference.minimumValue, this.settingReference.maximumValue, this.settingReference.get());
-		smodel.addCallback(this);
-		this.slider = new SliderWidget(smodel);
+		SimpleFloatModel simpleModel = new SimpleFloatModel(this.settingReference.minimumValue, this.settingReference.maximumValue, this.settingReference.get());
+		simpleModel.addCallback(this);
+		this.slider = new SliderWidget(simpleModel);
 
 		if (this.settingReference.stepValue > 0.0F && this.settingReference.stepValue <= this.settingReference.maximumValue) {
 			this.slider.setStepSize(this.settingReference.stepValue);
