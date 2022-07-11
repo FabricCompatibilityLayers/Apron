@@ -233,6 +233,9 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 										case "ModLoaderMp":
 											value = "modloadermp." + stringValue;
 											break;
+										case "ModSettings":
+											value = "guiapi." + stringValue;
+											break;
 										case "tallGrass":
 											value = "field_1845";
 											break;
@@ -285,6 +288,12 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 								case "betatweaks/block/BlockTNTPunchable":
 									if (stringValue.equals("tnt")) {
 										value = "field_995";
+									}
+
+									break;
+								case "betatweaks/GuiAPIHandler":
+									if (stringValue.equals("GuiApiHelper")) {
+										value = "guiapi.GuiApiHelper";
 									}
 
 									break;
