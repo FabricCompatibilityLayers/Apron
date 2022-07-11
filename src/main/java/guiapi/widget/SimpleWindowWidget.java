@@ -28,12 +28,12 @@ public class SimpleWindowWidget extends Widget {
 		this(w, s, true);
 	}
 
-	public SimpleWindowWidget(Widget w, String s, Boolean showbackButton) {
-		ScrollPane mainWidget_ = new ScrollPane(w);
-		mainWidget_.setFixed(ScrollPane.Fixed.HORIZONTAL);
-		this.mainWidget = mainWidget_;
+	public SimpleWindowWidget(Widget w, String s, Boolean showBackButton) {
+		ScrollPane mainWidgetPane = new ScrollPane(w);
+		mainWidgetPane.setFixed(ScrollPane.Fixed.HORIZONTAL);
+		this.mainWidget = mainWidgetPane;
 		this.setTheme("");
-		this.init(showbackButton, s);
+		this.init(showBackButton, s);
 	}
 
 	public void init(Boolean showBack, String titleText) {

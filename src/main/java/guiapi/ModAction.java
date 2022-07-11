@@ -60,13 +60,13 @@ public class ModAction implements Runnable, PropertyChangeListener {
 			if (this.mergedActions.isEmpty()) {
 				return new Object[]{this.callInt(args)};
 			} else {
-				Object[] returnvals = new Object[this.mergedActions.size()];
+				Object[] returnVals = new Object[this.mergedActions.size()];
 
-				for (int i = 0; i < returnvals.length; ++i) {
-					returnvals[i] = this.mergedActions.get(i).callInt(args);
+				for (int i = 0; i < returnVals.length; ++i) {
+					returnVals[i] = this.mergedActions.get(i).callInt(args);
 				}
 
-				return returnvals;
+				return returnVals;
 			}
 		} catch (Exception var4) {
 			var4.printStackTrace();
@@ -88,24 +88,24 @@ public class ModAction implements Runnable, PropertyChangeListener {
 	}
 
 	public Method GetMethodRecursively(Object o, String method) {
-		Class<?> currentclass = o instanceof Class ? (Class<?>) o : o.getClass();
+		Class<?> currentClass = o instanceof Class ? (Class<?>) o : o.getClass();
 
 		while (true) {
 			try {
-				if (currentclass == null) {
+				if (currentClass == null) {
 					return null;
 				}
 
-				Method returnval = currentclass.getDeclaredMethod(method, this.methodParams);
+				Method returnVal = currentClass.getDeclaredMethod(method, this.methodParams);
 
-				if (returnval != null) {
-					returnval.setAccessible(true);
-					return returnval;
+				if (returnVal != null) {
+					returnVal.setAccessible(true);
+					return returnVal;
 				}
 			} catch (Throwable var5) {
 			}
 
-			currentclass = currentclass.getSuperclass();
+			currentClass = currentClass.getSuperclass();
 		}
 	}
 
@@ -128,10 +128,10 @@ public class ModAction implements Runnable, PropertyChangeListener {
 				this.call(paramPropertyChangeEvent);
 			} catch (Exception var3) {
 				var3.printStackTrace();
-				throw new RuntimeException("Error when calling PropertyChangeListener callback. Modaction is '" + this.nameRef + "'.", var3);
+				throw new RuntimeException("Error when calling PropertyChangeListener callback. ModAction is '" + this.nameRef + "'.", var3);
 			}
 		} else {
-			throw new RuntimeException("invalid method parameters for a PropertyChangeListener callback. Modaction is '" + this.nameRef + "'.");
+			throw new RuntimeException("invalid method parameters for a PropertyChangeListener callback. ModAction is '" + this.nameRef + "'.");
 		}
 	}
 
@@ -141,7 +141,7 @@ public class ModAction implements Runnable, PropertyChangeListener {
 			this.call();
 		} catch (Exception var2) {
 			var2.printStackTrace();
-			throw new RuntimeException("Error when calling Runnable callback. Modaction is '" + this.nameRef + "'.", var2);
+			throw new RuntimeException("Error when calling Runnable callback. ModAction is '" + this.nameRef + "'.", var2);
 		}
 	}
 

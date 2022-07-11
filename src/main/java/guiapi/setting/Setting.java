@@ -16,8 +16,8 @@ public abstract class Setting<T> extends Widget {
 	public Setting() {
 	}
 
-	public void copyContext(String srccontext, String destcontext) {
-		this.values.put(destcontext, this.values.get(srccontext));
+	public void copyContext(String srcContext, String destinationContext) {
+		this.values.put(destinationContext, this.values.get(srcContext));
 	}
 
 	public abstract void fromString(String string, String string2);

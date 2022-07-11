@@ -21,9 +21,9 @@ public class ModSelect extends ModScreen {
 			w.add(GuiApiHelper.makeButton(m.buttonTitle, "selectScreen", ModSelect.class, false, new Class[]{Integer.class}, i));
 		}
 
-		SimpleWindowWidget mainwidget = new SimpleWindowWidget(w, "Select a Mod");
-		mainwidget.hPadding = 0;
-		mainwidget.mainWidget.setTheme("scrollpane-notch");
-		this.mainwidget = mainwidget;
+		SimpleWindowWidget mainWidget = new SimpleWindowWidget(w, "Select a Mod");
+		mainWidget.hPadding = 0;
+		mainWidget.mainWidget.setTheme("scrollpane-notch");
+		this.mainwidget = mainWidget;
 	}
 }

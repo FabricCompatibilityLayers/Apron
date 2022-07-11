@@ -12,10 +12,10 @@ public class SingleRowWidget extends Widget {
 	public ArrayList<Integer> widths = new ArrayList<>();
 	public int xSpacing = 3;
 
-	public SingleRowWidget(int defwidth, int defheight, Widget... widgets) {
+	public SingleRowWidget(int defWidth, int defHeight, Widget... widgets) {
 		this.setTheme("");
-		this.defaultWidth = defwidth;
-		this.defaultHeight = defheight;
+		this.defaultWidth = defWidth;
+		this.defaultHeight = defHeight;
 
 		for (Widget widget : widgets) {
 			this.add(widget);
@@ -40,27 +40,27 @@ public class SingleRowWidget extends Widget {
 
 	@Override
 	public int getPreferredHeight() {
-		int maxheights = 0;
+		int maxHeights = 0;
 
 		for (int i = 0; i < this.heights.size(); ++i) {
-			if (this.getHeight(i) > maxheights) {
-				maxheights = this.getHeight(i);
+			if (this.getHeight(i) > maxHeights) {
+				maxHeights = this.getHeight(i);
 			}
 		}
 
-		return maxheights;
+		return maxHeights;
 	}
 
 	@Override
 	public int getPreferredWidth() {
-		int totalwidth = (this.widths.size() - 1) * this.xSpacing;
-		totalwidth = Math.max(totalwidth, 0);
+		int totalWidth = (this.widths.size() - 1) * this.xSpacing;
+		totalWidth = Math.max(totalWidth, 0);
 
 		for (int i = 0; i < this.widths.size(); ++i) {
-			totalwidth += this.getWidth(i);
+			totalWidth += this.getWidth(i);
 		}
 
-		return totalwidth;
+		return totalWidth;
 	}
 
 	private int getWidth(int idx) {
@@ -69,13 +69,13 @@ public class SingleRowWidget extends Widget {
 
 	@Override
 	public void layout() {
-		int curXpos = 0;
+		int curXPos = 0;
 
 		for (int i = 0; i < this.widgets.size(); ++i) {
 			Widget w = this.widgets.get(i);
-			w.setPosition(curXpos + this.getX(), this.getY());
+			w.setPosition(curXPos + this.getX(), this.getY());
 			w.setSize(this.getWidth(i), this.getHeight(i));
-			curXpos += this.getWidth(i) + this.xSpacing;
+			curXPos += this.getWidth(i) + this.xSpacing;
 		}
 	}
 

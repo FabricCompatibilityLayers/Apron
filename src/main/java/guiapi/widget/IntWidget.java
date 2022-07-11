@@ -14,17 +14,17 @@ public class IntWidget extends SettingWidget implements Runnable {
 		this.setTheme("");
 		this.settingReference = setting;
 		this.settingReference.displayWidget = this;
-		SimpleFloatModel smodel = new SimpleFloatModel(
+		SimpleFloatModel simpleModel = new SimpleFloatModel(
 				(float) this.settingReference.minimumValue, (float) this.settingReference.maximumValue, (float) this.settingReference.get().intValue()
 		);
-		this.slider = new SliderWidget(smodel);
+		this.slider = new SliderWidget(simpleModel);
 		this.slider.setFormat(String.format("%s: %%.0f", this.niceName));
 
 		if (this.settingReference.stepValue > 1 && this.settingReference.stepValue <= this.settingReference.maximumValue) {
 			this.slider.setStepSize((float) this.settingReference.stepValue);
 		}
 
-		smodel.addCallback(this);
+		simpleModel.addCallback(this);
 		this.add(this.slider);
 		this.update();
 	}

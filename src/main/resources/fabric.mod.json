@@ -133,7 +133,7 @@
       "GuiApiHelper": "guiapi/GuiApiHelper",
       "GuiModScreen": "guiapi/ModScreen",
       "GuiModSelect": "guiapi/ModSelect",
-      "GuiWidgetScreen": "guiapi/WidgetScreen",
+      "GuiWidgetScreen": "guiapi/widget/ScreenWidget",
       "ModAction": "guiapi/ModAction",
       "ModSettings": "guiapi/ModSettings",
       "ModSettingScreen": "guiapi/ModSettingScreen",

@@ -35,12 +35,12 @@ public class KeybindingWidget extends SettingWidget implements Runnable {
 	public boolean handleEvent(Event evt) {
 		if (evt.isKeyEvent() && !evt.isKeyPressedEvent() && this.booleanModel.getValue()) {
 			System.out.println(Keyboard.getKeyName(evt.getKeyCode()));
-			int tmpvalue = evt.getKeyCode();
+			int tmpValue = evt.getKeyCode();
 
-			if (tmpvalue == this.CLEARKEY) {
+			if (tmpValue == this.CLEARKEY) {
 				this.settingReference.set(0, ModSettingScreen.guiContext);
-			} else if (tmpvalue != this.NEVERMINDKEY) {
-				this.settingReference.set(tmpvalue, ModSettingScreen.guiContext);
+			} else if (tmpValue != this.NEVERMINDKEY) {
+				this.settingReference.set(tmpValue, ModSettingScreen.guiContext);
 			}
 
 			this.booleanModel.setValue(false);

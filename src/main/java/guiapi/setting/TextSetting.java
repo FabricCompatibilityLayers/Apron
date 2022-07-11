@@ -1,9 +1,9 @@
 package guiapi.setting;
 
 public class TextSetting extends Setting<String> {
-	public TextSetting(String title, String defaulttext) {
-		this.values.put("", defaulttext);
-		this.defaultValue = defaulttext;
+	public TextSetting(String title, String defaultText) {
+		this.values.put("", defaultText);
+		this.defaultValue = defaultText;
 		this.backendName = title;
 	}
 

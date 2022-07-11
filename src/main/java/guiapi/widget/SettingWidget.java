@@ -14,8 +14,8 @@ public abstract class SettingWidget extends Widget {
 		}
 	}
 
-	public SettingWidget(String nicename) {
-		this.niceName = nicename;
+	public SettingWidget(String niceName) {
+		this.niceName = niceName;
 		all.add(this);
 	}
 

@@ -16,14 +16,14 @@ public class BooleanWidget extends SettingWidget implements Runnable {
 		this(setting, title, "true", "false");
 	}
 
-	public BooleanWidget(BooleanSetting setting, String title, String truetext, String falsetext) {
+	public BooleanWidget(BooleanSetting setting, String title, String trueText, String falseText) {
 		super(title);
 		this.setTheme("");
-		this.trueText = truetext;
-		this.falseText = falsetext;
-		SimpleButtonModel bmodel = new SimpleButtonModel();
-		this.button = new Button(bmodel);
-		bmodel.addActionCallback(this);
+		this.trueText = trueText;
+		this.falseText = falseText;
+		SimpleButtonModel buttonModel = new SimpleButtonModel();
+		this.button = new Button(buttonModel);
+		buttonModel.addActionCallback(this);
 		this.add(this.button);
 		this.settingReference = setting;
 		this.settingReference.displayWidget = this;
