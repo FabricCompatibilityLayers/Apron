@@ -171,8 +171,10 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 								break;
 							case "betatweaks/Utils":
 							case "hmi/Utils":
-								if (methodName.equals("getField")) {
+							case "overrideapi/utils/Reflection":
+								if (methodName.equals("getField") || methodName.equals("findField")) {
 									methodOwner = "io/github/betterthanupdates/apron/ReflectionUtils";
+									methodName = "getField";
 								}
 
 								break;
@@ -327,6 +329,14 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 								case "AetherItems":
 									if (stringValue.equals("mod_TooManyItems")) {
 										value = "net.minecraft." + stringValue;
+									}
+
+									break;
+
+								// OverrideAPI
+								case "overrideapi/utils/gui/GuiHandler":
+									if (stringValue.equals("net.minecraft.src.")) {
+										value = "";
 									}
 
 									break;
