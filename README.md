@@ -17,7 +17,7 @@ Apron provides the following APIs and mods, with more surely to come...
   - [ ] Server
 - Reforged
   - [x] Client
-  - [x] Server
+  - [ ] Server
 
 ### Client:
 
