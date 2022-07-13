@@ -11,13 +11,13 @@ Apron provides the following APIs and mods, with more surely to come...
 
 - Risugami's ModLoaderMP
   - [x] Client
-  - [ ] Server
+  - [x] Server
 - Minecraft Forge
   - [x] Client
   - [ ] Server
 - Reforged
   - [x] Client
-  - [ ] Server
+  - [x] Server
 
 ### Client:
 
