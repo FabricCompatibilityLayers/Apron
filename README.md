@@ -3,12 +3,25 @@
 Apron adds a compatibility layer between Fabric and several legacy modding APIs.
 In essence, it is a complete reimplementation of the API mods of yesteryear.
 
-Apron provides the following APIs and mods, with more surely to come:
+## Provided APIs
+
+Apron provides the following APIs and mods, with more surely to come...
+
+### Common
+
+- Risugami's ModLoaderMP
+  - [x] Client
+  - [ ] Server
+- Minecraft Forge
+  - [x] Client
+  - [ ] Server
+- Reforged
+  - [x] Client
+  - [ ] Server
+
+### Client:
 
 - [x] Risugami's ModLoader
-- [x] Risugami's ModLoaderMP
-- [x] Minecraft Forge
-- [x] Reforged
 - [x] ShockAhPI
 - [x] PlayerAPI
 - [x] AudioMod (Works with MultiMC!)
