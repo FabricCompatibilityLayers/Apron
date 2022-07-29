@@ -38,6 +38,7 @@ import javax.imageio.ImageIO;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
+import net.fabricmc.loader.api.FabricLoader;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -102,7 +103,7 @@ public class ModLoader {
 	private static final Map<Integer, BaseMod> BLOCK_MODELS = new HashMap<>();
 	@Environment(EnvType.CLIENT)
 	private static final Map<Integer, Boolean> BLOCK_SPECIAL_INV = new HashMap<>();
-	private static final File CONFIG_DIR = new File(Minecraft.getGameDirectory(), "/config/");
+	private static final File CONFIG_DIR = FabricLoader.getInstance().getConfigDir().toFile();
 	private static final File CONFIG_FILE = new File(CONFIG_DIR, "ModLoader.cfg");
 	public static Level cfgLoggingLevel = Level.FINER;
 	private static long clock = 0L;
@@ -116,7 +117,7 @@ public class ModLoader {
 	private static int itemSpritesLeft = 0;
 	@Environment(EnvType.CLIENT)
 	private static final Map<BaseMod, Map<KeyBinding, boolean[]>> keyList = new HashMap<>();
-	private static final File LOG_FILE = new File(Minecraft.getGameDirectory(), "ModLoader.txt");
+	private static final File LOG_FILE = new File(FabricLoader.getInstance().getGameDir().toFile(), "ModLoader.txt");
 	private static final java.util.logging.Logger MOD_LOGGER = java.util.logging.Logger.getLogger("ModLoader");
 	public static final Logger LOGGER = Apron.getLogger("ModLoader");
 	private static FileHandler logHandler = null;
@@ -726,14 +727,7 @@ public class ModLoader {
 		}
 
 		if (APRON.isClient()) {
-			try {
-				Minecraft client = getMinecraftInstance();
-				if (client != null) client.gameRenderer = new EntityRendererProxy(client);
-			} catch (SecurityException | IllegalArgumentException e) {
-				MOD_LOGGER.throwing("ModLoader", "init", e);
-				ThrowException(e);
-				throw new RuntimeException(e);
-			}
+			initGameRenderer();
 		}
 
 		try {
@@ -807,6 +801,18 @@ public class ModLoader {
 
 		hasInit = true;
 		LOGGER.debug("Initialized");
+	}
+
+	@Environment(EnvType.CLIENT)
+	private static void initGameRenderer() {
+		try {
+			Minecraft client = getMinecraftInstance();
+			if (client != null) client.gameRenderer = new EntityRendererProxy(client);
+		} catch (SecurityException | IllegalArgumentException e) {
+			MOD_LOGGER.throwing("ModLoader", "init", e);
+			ThrowException(e);
+			throw new RuntimeException(e);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
