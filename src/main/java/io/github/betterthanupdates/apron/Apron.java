@@ -1,22 +1,14 @@
 package io.github.betterthanupdates.apron;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 import fr.catcore.modremapperapi.utils.Constants;
 import modloader.BaseMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.MappingResolver;
 import net.fabricmc.loader.api.ModContainer;
-import net.fabricmc.loader.impl.launch.FabricLauncherBase;
-import net.fabricmc.mapping.tree.ClassDef;
-import net.fabricmc.mapping.tree.FieldDef;
-import net.fabricmc.mapping.tree.MethodDef;
-import net.fabricmc.mapping.tree.ParameterDef;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
 import org.jetbrains.annotations.ApiStatus;
 import org.spongepowered.include.com.google.common.collect.ImmutableList;
@@ -72,66 +64,6 @@ public final class Apron {
 
 	public static String fabricModsLoaded() {
 		return fabricModCount + " Fabric";
-	}
-
-	public static String getRemappedFieldName(Class<?> type, String name) {
-		final MappingResolver resolver = FabricLoader.getInstance().getMappingResolver();
-
-		for (ClassDef def : FabricLauncherBase.getLauncher().getMappingConfiguration().getMappings().getClasses()) {
-			if (def.getName(resolver.getCurrentRuntimeNamespace())
-					.replace(".", "/").equals(type.getName().replace(".", "/"))) {
-				for (FieldDef fieldDef : def.getFields()) {
-					if (Objects.equals(fieldDef.getName(getEnvironment().equals(EnvType.CLIENT) ? "client" : "server"), name)) {
-						return fieldDef.getName(resolver.getCurrentRuntimeNamespace());
-					}
-				}
-			}
-		}
-
-		if (type.getSuperclass() != null) {
-			name = getRemappedFieldName(type.getSuperclass(), name);
-		}
-
-		return name;
-	}
-
-	public static String getRemappedMethodName(Class<?> type, String name, Class<?>[] parameterNames) {
-		final MappingResolver resolver = FabricLoader.getInstance().getMappingResolver();
-
-		for (ClassDef def : FabricLauncherBase.getLauncher().getMappingConfiguration().getMappings().getClasses()) {
-			if (def.getName(resolver.getCurrentRuntimeNamespace())
-					.replace(".", "/").equals(type.getName().replace(".", "/"))) {
-				for (MethodDef methodDef : def.getMethods()) {
-					boolean cont = false;
-
-					if (Objects.equals(methodDef.getName(getEnvironment().equals(EnvType.CLIENT) ? "client" : "server"), name)) {
-						if (parameterNames.length == methodDef.getParameters().size()) {
-							List<ParameterDef> parameterDefList = new ArrayList<>(methodDef.getParameters());
-
-							for (int i = 0; i < parameterNames.length; i++) {
-								String parameterName = parameterNames[i].getName();
-								String mappedParameterName = parameterDefList.get(i).getName(resolver.getCurrentRuntimeNamespace());
-
-								if (!parameterName.equals(mappedParameterName)) {
-									cont = true;
-									break;
-								}
-							}
-
-							if (cont) continue;
-
-							return methodDef.getName(resolver.getCurrentRuntimeNamespace());
-						}
-					}
-				}
-			}
-		}
-
-		if (type.getSuperclass() != null) {
-			name = getRemappedMethodName(type.getSuperclass(), name, parameterNames);
-		}
-
-		return name;
 	}
 
 	/**
