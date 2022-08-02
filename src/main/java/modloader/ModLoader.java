@@ -35,6 +35,7 @@ import java.util.zip.ZipInputStream;
 
 import javax.imageio.ImageIO;
 
+import fr.catcore.modremapperapi.remapping.RemapUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
@@ -615,7 +616,7 @@ public class ModLoader {
 	@SuppressWarnings("unchecked")
 	public static <T, E> T getPrivateValue(Class<? super E> instanceClass, E instance, String fieldName) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
 		try {
-			fieldName = Apron.getRemappedFieldName(instanceClass, fieldName);
+			fieldName = RemapUtil.getRemappedFieldName(instanceClass, fieldName);
 			Field f = instanceClass.getDeclaredField(fieldName);
 			f.setAccessible(true);
 			return (T) f.get(instance);
@@ -1605,7 +1606,7 @@ public class ModLoader {
 	 */
 	public static <T, E> void setPrivateValue(Class<? super T> instanceClass, T instance, String fieldName, E value) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
 		try {
-			fieldName = Apron.getRemappedFieldName(instanceClass, fieldName);
+			fieldName = RemapUtil.getRemappedFieldName(instanceClass, fieldName);
 			Field f = instanceClass.getDeclaredField(fieldName);
 
 			if (field_modifiers == null) {
