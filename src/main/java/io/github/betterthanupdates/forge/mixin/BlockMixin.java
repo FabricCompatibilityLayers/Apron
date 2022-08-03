@@ -24,9 +24,6 @@ import io.github.betterthanupdates.forge.block.ForgeBlock;
 @Mixin(Block.class)
 public abstract class BlockMixin implements ForgeBlock {
 	@Shadow
-	protected float hardness;
-
-	@Shadow
 	@Final
 	public int id;
 
@@ -40,6 +37,9 @@ public abstract class BlockMixin implements ForgeBlock {
 	@Shadow
 	@Final
 	public static int[] EMITTANCE;
+
+	@Shadow
+	public abstract float getHardness();
 
 	/**
 	 * @author Eloraam
@@ -104,7 +104,7 @@ public abstract class BlockMixin implements ForgeBlock {
 	 */
 	@Override
 	public float getHardness(int meta) {
-		return this.hardness;
+		return this.getHardness();
 	}
 
 	@Override
