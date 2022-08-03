@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -18,7 +16,6 @@ import playerapi.PlayerBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.PlayerKeypressManager;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.util.Session;
 import net.minecraft.entity.Entity;
@@ -37,16 +34,12 @@ import io.github.betterthanupdates.playerapi.client.entity.player.PlayerAPIClien
 @Mixin(AbstractClientPlayerEntity.class)
 public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity implements PlayerAPIClientPlayerEntity {
 	@Shadow
-	public PlayerKeypressManager playerKeypressManager;
-
-	@Shadow
 	public Minecraft client;
 
 	public AbstractClientPlayerEntityMixin(World arg) {
 		super(arg);
 	}
 
-	@Unique
 	public List<PlayerBase> playerBases = new ArrayList<>();
 
 	@Inject(method = "<init>", at = @At("RETURN"))
@@ -148,13 +141,9 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity imple
 		if (PlayerAPI.displayGUIDispenser((AbstractClientPlayerEntity) (Object) this, par1)) ci.cancel();
 	}
 
-	/**
-	 * @author PlayerAPI author
-	 * @reason
-	 */
-	@Overwrite
-	public int getArmorValue() {
-		return PlayerAPI.getPlayerArmorValue((AbstractClientPlayerEntity) (Object) this, this.inventory.getArmorValue());
+	@Inject(method = "getArmorValue", at = @At("RETURN"), cancellable = true)
+	private void papi$getArmorValue(CallbackInfoReturnable<Integer> cir) {
+		cir.setReturnValue(PlayerAPI.getPlayerArmorValue((AbstractClientPlayerEntity) (Object) this, cir.getReturnValue()));
 	}
 
 	@Override
@@ -174,13 +163,9 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity imple
 		return PlayerAPI.isInWater((AbstractClientPlayerEntity) (Object) this, this.field_1612);
 	}
 
-	/**
-	 * @author PlayerAPI author
-	 * @reason
-	 */
-	@Overwrite
-	public boolean method_1373() {
-		return PlayerAPI.isSneaking((AbstractClientPlayerEntity) (Object) this, this.playerKeypressManager.sneak && !this.lyingOnBed);
+	@Inject(method = "method_1373", at = @At("RETURN"), cancellable = true)
+	private void papi$isSneaking(CallbackInfoReturnable<Boolean> cir) {
+		cir.setReturnValue(PlayerAPI.isSneaking((AbstractClientPlayerEntity) (Object) this, cir.getReturnValue()));
 	}
 
 	@Override
@@ -266,26 +251,28 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity imple
 		super.movementInputToVelocity(f, f1, f2);
 	}
 
-	/**
-	 * @author PlayerAPI author
-	 * @reason
-	 */
-	@Overwrite
-	public void move(double d, double d1, double d2) {
+	@Inject(method = "move", at = @At("HEAD"))
+	private void papi$beforeMoveEntity(double d, double d1, double d2, CallbackInfo ci) {
 		PlayerAPI.beforeMoveEntity((AbstractClientPlayerEntity) (Object) this, d, d1, d2);
+	}
 
-		if (!PlayerAPI.moveEntity((AbstractClientPlayerEntity) (Object) this, d, d1, d2)) {
-			super.move(d, d1, d2);
+	@Inject(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;move(DDD)V"), cancellable = true)
+	private void papi$moveEntity(double d, double d1, double d2, CallbackInfo ci) {
+		if (PlayerAPI.moveEntity((AbstractClientPlayerEntity) (Object) this, d, d1, d2)) {
+			ci.cancel();
 		}
+	}
 
+	@Inject(method = "move", at = @At("RETURN"))
+	private void papi$afterMoveEntity(double d, double d1, double d2, CallbackInfo ci) {
 		PlayerAPI.afterMoveEntity((AbstractClientPlayerEntity) (Object) this, d, d1, d2);
 	}
 
 	@Override
 	public SleepStatus trySleep(int i, int j, int k) {
 		PlayerAPI.beforeSleepInBedAt((AbstractClientPlayerEntity) (Object) this, i, j, k);
-		SleepStatus enumstatus = PlayerAPI.sleepInBedAt((AbstractClientPlayerEntity) (Object) this, i, j, k);
-		return enumstatus == null ? super.trySleep(i, j, k) : enumstatus;
+		SleepStatus sleepStatus = PlayerAPI.sleepInBedAt((AbstractClientPlayerEntity) (Object) this, i, j, k);
+		return sleepStatus == null ? super.trySleep(i, j, k) : sleepStatus;
 	}
 
 	@Override
@@ -376,12 +363,8 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity imple
 		return super.getBrightnessAtEyes(f);
 	}
 
-	/**
-	 * @author PlayerAPI author
-	 * @reason
-	 */
-	@Overwrite
-	public void sendChatMessage(String s) {
+	@Inject(method = "sendChatMessage", at = @At("RETURN"))
+	private void papi$sendChatMessage(String s, CallbackInfo ci) {
 		PlayerAPI.sendChatMessage((AbstractClientPlayerEntity) (Object) this, s);
 	}
 

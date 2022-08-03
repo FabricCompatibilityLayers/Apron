@@ -17,6 +17,6 @@ public class BlockMixin implements ItemConvertible {
 
 	@Override
 	public Item asItem() {
-		return Item.byId[this.id - 256];
+		return Item.byId[this.id];
 	}
 }

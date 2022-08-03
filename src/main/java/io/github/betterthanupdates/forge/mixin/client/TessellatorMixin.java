@@ -229,14 +229,14 @@ public abstract class TessellatorMixin implements ForgeTessellator {
 		}
 	}
 
-	/**
-	 * @author Eloraam
-	 * @reason method instruction order is different from vanilla.
-	 */
-	@Inject(method = "addVertex", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Tessellator;tessellate()V"), cancellable = true)
-	private void forge$addVertex$2(double d, double d1, double d2, CallbackInfo ci) {
-		ci.cancel();
-	}
+	//	/**
+	//	 * @author Eloraam
+	//	 * @reason method instruction order is different from vanilla.
+	//	 */
+	//	@Inject(method = "addVertex", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Tessellator;tessellate()V"), cancellable = true)
+	//	private void forge$addVertex$2(double d, double d1, double d2, CallbackInfo ci) {
+	//		ci.cancel();
+	//	}
 
 	@Override
 	public boolean defaultTexture() {
