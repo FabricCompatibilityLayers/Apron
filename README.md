@@ -26,7 +26,7 @@ Apron provides the following APIs and mods, with more surely to come...
 - [x] PlayerAPI
 - [x] AudioMod (Works with MultiMC!)
 - [x] GuiAPI
-- [ ] ModOptionsAPI
+- [x] ModOptionsAPI
 
 ## Setup
 
