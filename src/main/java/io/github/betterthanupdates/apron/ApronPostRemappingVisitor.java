@@ -340,6 +340,14 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 									}
 
 									break;
+
+								// SmartGui
+								case "kz/chesschicken/smartygui/commonloader/GameUtils":
+									if (stringValue.equals("a")) {
+										value = "field_2791";
+									}
+
+									break;
 							}
 						}
 
