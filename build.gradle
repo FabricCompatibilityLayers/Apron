@@ -49,6 +49,25 @@ repositories {
 	}
 
 	maven {
+		name 'StationAPI'
+		url 'https://maven.glass-launcher.net/snapshots'
+//		content {
+//			includeGroup 'net.modificationstation'
+//			includeGroup 'net.modificationstation.*'
+//		}
+	}
+	// Used for a StationAPI dependency.
+	maven {
+		name = 'Froge'
+		url 'https://maven.minecraftforge.net/'
+	}
+	// Used for mappings.
+	maven {
+		name = 'Glass Releases'
+		url = 'https://maven.glass-launcher.net/releases'
+	}
+
+	maven {
 		name 'Modrinth'
 		url 'https://api.modrinth.com/maven'
 		content {
@@ -58,9 +77,6 @@ repositories {
 	maven {
 		name 'JitPack'
 		url 'https://jitpack.io'
-		content {
-			includeGroup 'com.github.*'
-		}
 	}
 
 	flatDir {
@@ -83,6 +99,8 @@ dependencies {
 	// GuiAPI Dependencies
 	include implementation(group: "de.matthiasmann", name: "twl", version: "unknown")
 	include implementation(group: "org.xmlpull", name: "xml-pull", version: "unknown")
+
+	modApi("net.modificationstation:StationAPI:c539a99")
 
 	// Done
 //	modRuntimeOnly(group: "remapped.client", name: "modloader", version: "b1.7.3")

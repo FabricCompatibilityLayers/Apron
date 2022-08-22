@@ -30,8 +30,6 @@
     "client.BlockRendererMixin",
     "client.ClientInteractionManagerMixin",
     "client.GameRendererMixin",
-    "client.HeldItemRendererMixin",
-    "client.ItemRendererMixin",
     "client.MultiplayerClientInteractionManagerMixin",
     "client.ParticleManagerMixin",
     "client.PistonRendererMixin",
