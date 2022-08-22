@@ -50,6 +50,7 @@
   "accessWidener": "apron.accesswidener",
   "mixins": [
     "apron.mixins.json",
+    "apron.stationapi.mixins.json",
     {
       "config": "audiomod.mixins.json",
       "environment": "client"
