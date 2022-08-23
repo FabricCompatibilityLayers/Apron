@@ -51,6 +51,7 @@
   "mixins": [
     "apron.mixins.json",
     "apron.stationapi.mixins.json",
+    "apron.stationapi.forge.mixins.json",
     {
       "config": "audiomod.mixins.json",
       "environment": "client"

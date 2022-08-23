@@ -1,14 +1,12 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "io.github.betterthanupdates",
+  "package": "io.github.betterthanupdates.stapi.mixin",
   "mixins": [
   ],
   "client": [
-    "stapi.mixin.client.forge.ArsenicOverlayRendererMixin",
-    "forge.mixin.client.HeldItemRendererMixin",
-    "stapi.mixin.client.forge.ArsenicItemRendererMixin",
-    "forge.mixin.client.ItemRendererMixin"
+    "client.forge.ArsenicOverlayRendererMixin",
+    "client.forge.ArsenicItemRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

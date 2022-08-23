@@ -21,7 +21,7 @@ import net.minecraft.item.ItemStack;
 
 @Mixin(ArsenicOverlayRenderer.class)
 public class ArsenicOverlayRendererMixin {
-	@Shadow
+	@Shadow(remap = false)
 	@Final
 	private class_556Accessor access;
 

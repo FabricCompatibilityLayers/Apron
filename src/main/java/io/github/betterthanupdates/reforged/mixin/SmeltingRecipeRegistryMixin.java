@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.SmeltingRecipeRegistry;
@@ -17,6 +18,7 @@ import io.github.betterthanupdates.reforged.recipe.ReforgedSmeltingRecipeRegistr
 public class SmeltingRecipeRegistryMixin implements ReforgedSmeltingRecipeRegistry {
 	@Shadow
 	private Map<Integer, ItemStack> recipes;
+	@Unique
 	private final Map<List<Integer>, ItemStack> metaSmeltingList = new HashMap<>();
 
 	@Override
