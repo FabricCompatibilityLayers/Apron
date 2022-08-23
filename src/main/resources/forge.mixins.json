@@ -8,7 +8,6 @@
     "BucketItemMixin",
     "ButtonBlockMixin",
     "ChestBlockMixin",
-    "ChunkMixin",
     "CraftingResultSlotMixin",
     "DoorBlockMixin",
     "ExplosionMixin",
@@ -36,8 +35,7 @@
     "client.PlayerRendererMixin",
     "client.SinglePlayerInteractionManagerMixin",
     "client.TessellatorMixin",
-    "client.TextureManagerMixin",
-    "client.WorldRendererMixin"
+    "client.TextureManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
