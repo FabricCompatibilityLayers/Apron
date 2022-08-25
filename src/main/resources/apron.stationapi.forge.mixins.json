@@ -9,7 +9,8 @@
     "client.HeldItemRendererMixin",
     "client.ItemRendererMixin",
     "client.VanillaTessellatorMixin",
-    "client.WorldRendererMixin"
+    "client.WorldRendererMixin",
+    "client.SinglePlayerInteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

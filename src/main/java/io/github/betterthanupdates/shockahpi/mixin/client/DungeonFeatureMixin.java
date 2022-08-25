@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 import shockahpi.SAPI;
 
 import net.minecraft.block.Block;
@@ -17,6 +18,9 @@ import net.minecraft.world.feature.Feature;
 
 @Mixin(DungeonFeature.class)
 public abstract class DungeonFeatureMixin extends Feature {
+	@Shadow
+	protected abstract ItemStack getRandomChestItem(Random random);
+
 	/**
 	 * @author SAPI
 	 * @reason
@@ -134,14 +138,14 @@ public abstract class DungeonFeatureMixin extends Feature {
 		}
 	}
 
-	/**
-	 * @author SAPI
-	 * @reason
-	 */
-	@Overwrite
-	private ItemStack getRandomChestItem(Random paramRandom) {
-		return SAPI.dungeonGetRandomItem();
-	}
+	//	/**
+	//	 * @author SAPI
+	//	 * @reason
+	//	 */
+	//	@Overwrite
+	//	private ItemStack getRandomChestItem(Random paramRandom) {
+	//		return SAPI.dungeonGetRandomItem();
+	//	}
 
 	/**
 	 * @author SAPI
