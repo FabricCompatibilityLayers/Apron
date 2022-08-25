@@ -8,25 +8,14 @@ import modloadermp.NetClientHandlerEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.BoatEntity;
-import net.minecraft.entity.ChestMinecartEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.FallingBlockEntity;
-import net.minecraft.entity.FishHookEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.PrimedTntEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.entity.projectile.FireballEntity;
-import net.minecraft.entity.projectile.SnowballEntity;
-import net.minecraft.entity.projectile.ThrownEggEntity;
 import net.minecraft.network.ClientPlayPacketHandler;
 import net.minecraft.network.PacketHandler;
 import net.minecraft.packet.play.EntitySpawnS2CPacket;
@@ -43,79 +32,26 @@ public abstract class ClientPlayPacketHandlerMixin extends PacketHandler {
 	protected abstract Entity getEntity(int i);
 
 	/**
-	 * @author Risugami
-	 * @reason ModLoaderMP can handle spawning custom entities
-	 * TODO(halotroop2288): rewrite as an {@link Inject} Mixin
+	 * @author StationAPI
 	 */
-	@Overwrite
-	public void onEntitySpawn(EntitySpawnS2CPacket packet23vehiclespawn) {
-		double d = (double) packet23vehiclespawn.x / 32.0;
-		double d1 = (double) packet23vehiclespawn.y / 32.0;
-		double d2 = (double) packet23vehiclespawn.z / 32.0;
-		Entity obj = null;
+	@ModifyVariable(
+			method = "onEntitySpawn",
+			index = 8,
+			at = @At(
+					value = "LOAD",
+					ordinal = 0
+			)
+	)
+	private Entity modloader$onEntitySpawn(Entity entity, EntitySpawnS2CPacket packet) {
+		double d = (double) packet.x / 32.0;
+		double d1 = (double) packet.y / 32.0;
+		double d2 = (double) packet.z / 32.0;
 
-		if (packet23vehiclespawn.type == 10) {
-			obj = new ChestMinecartEntity(this.world, d, d1, d2, 0);
-		}
-
-		if (packet23vehiclespawn.type == 11) {
-			obj = new ChestMinecartEntity(this.world, d, d1, d2, 1);
-		}
-
-		if (packet23vehiclespawn.type == 12) {
-			obj = new ChestMinecartEntity(this.world, d, d1, d2, 2);
-		}
-
-		if (packet23vehiclespawn.type == 90) {
-			obj = new FishHookEntity(this.world, d, d1, d2);
-		}
-
-		if (packet23vehiclespawn.type == 60) {
-			obj = new ArrowEntity(this.world, d, d1, d2);
-		}
-
-		if (packet23vehiclespawn.type == 61) {
-			obj = new SnowballEntity(this.world, d, d1, d2);
-		}
-
-		if (packet23vehiclespawn.type == 63) {
-			obj = new FireballEntity(
-					this.world,
-					d,
-					d1,
-					d2,
-					(double) packet23vehiclespawn.field_1667 / 8000.0,
-					(double) packet23vehiclespawn.field_1668 / 8000.0,
-					(double) packet23vehiclespawn.field_1669 / 8000.0
-			);
-			packet23vehiclespawn.flag = 0;
-		}
-
-		if (packet23vehiclespawn.type == 62) {
-			obj = new ThrownEggEntity(this.world, d, d1, d2);
-		}
-
-		if (packet23vehiclespawn.type == 1) {
-			obj = new BoatEntity(this.world, d, d1, d2);
-		}
-
-		if (packet23vehiclespawn.type == 50) {
-			obj = new PrimedTntEntity(this.world, d, d1, d2);
-		}
-
-		if (packet23vehiclespawn.type == 70) {
-			obj = new FallingBlockEntity(this.world, d, d1, d2, Block.SAND.id);
-		}
-
-		if (packet23vehiclespawn.type == 71) {
-			obj = new FallingBlockEntity(this.world, d, d1, d2, Block.GRAVEL.id);
-		}
-
-		NetClientHandlerEntity netclienthandlerentity = ModLoaderMp.HandleNetClientHandlerEntities(packet23vehiclespawn.type);
+		NetClientHandlerEntity netclienthandlerentity = ModLoaderMp.HandleNetClientHandlerEntities(packet.type);
 
 		if (netclienthandlerentity != null) {
 			try {
-				obj = netclienthandlerentity.entityClass
+				entity = netclienthandlerentity.entityClass
 						.getConstructor(World.class, Double.TYPE, Double.TYPE, Double.TYPE)
 						.newInstance(this.world, d, d1, d2);
 
@@ -126,7 +62,7 @@ public abstract class ClientPlayPacketHandlerMixin extends PacketHandler {
 						throw new Exception(String.format("Entity's owner field must be of type Entity, but it is of type %s.", field.getType()));
 					}
 
-					Entity entity1 = this.getEntity(packet23vehiclespawn.flag);
+					Entity entity1 = this.getEntity(packet.flag);
 
 					if (entity1 == null) {
 						ModLoaderMp.Log("Received spawn packet for entity with owner, but owner was not found.");
@@ -137,41 +73,16 @@ public abstract class ClientPlayPacketHandlerMixin extends PacketHandler {
 							);
 						}
 
-						field.set(obj, entity1);
+						field.set(entity, entity1);
 					}
 				}
 			} catch (Exception e) {
 				ModLoader.getLogger().throwing("NetClientHandler", "handleVehicleSpawn", e);
-				ModLoader.ThrowException(String.format("Error initializing entity of type %s.", packet23vehiclespawn.type), e);
-				return;
+				ModLoader.ThrowException(String.format("Error initializing entity of type %s.", packet.type), e);
 			}
 		}
 
-		if (obj != null) {
-			obj.clientX = packet23vehiclespawn.x;
-			obj.clientY = packet23vehiclespawn.y;
-			obj.clientZ = packet23vehiclespawn.z;
-			obj.yaw = 0.0F;
-			obj.pitch = 0.0F;
-			obj.entityId = packet23vehiclespawn.entityId;
-			this.world.method_1495(packet23vehiclespawn.entityId, obj);
-
-			if (packet23vehiclespawn.flag > 0) {
-				if (packet23vehiclespawn.type == 60) {
-					Entity entity = this.getEntity(packet23vehiclespawn.flag);
-
-					if (entity instanceof LivingEntity) {
-						((ArrowEntity) obj).owner = (LivingEntity) entity;
-					}
-				}
-
-				obj.setVelocity(
-						(double) packet23vehiclespawn.field_1667 / 8000.0,
-						(double) packet23vehiclespawn.field_1668 / 8000.0,
-						(double) packet23vehiclespawn.field_1669 / 8000.0
-				);
-			}
-		}
+		return entity;
 	}
 
 	/**

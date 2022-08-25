@@ -15,9 +15,6 @@ import net.minecraft.entity.BlockEntity;
 import net.minecraft.entity.block.FurnaceBlockEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.SmeltingRecipeRegistry;
-
-import io.github.betterthanupdates.reforged.recipe.ReforgedSmeltingRecipeRegistry;
 
 @Mixin(FurnaceBlockEntity.class)
 public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inventory {
@@ -41,6 +38,9 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 
 	@Shadow
 	public int cookTime;
+
+	@Shadow
+	public abstract void craftRecipe();
 
 	/**
 	 * @author Risugami
@@ -96,36 +96,6 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Inv
 
 		if (flag1) {
 			this.markDirty();
-		}
-	}
-
-	/**
-	 * @author Risugami
-	 * @author Kleadron
-	 * @reason
-	 * TODO(halotroop2288): rewrite as an {@link Inject} Mixin
-	 */
-	@Environment(EnvType.CLIENT)
-	@Overwrite
-	public void craftRecipe() {
-		if (this.canAcceptRecipeOutput()) {
-			ItemStack itemstack = ((ReforgedSmeltingRecipeRegistry) SmeltingRecipeRegistry.getInstance()).getSmeltingResult(this.inventory[0]);
-
-			if (this.inventory[2] == null) {
-				this.inventory[2] = itemstack.copy();
-			} else if (this.inventory[2].isDamageAndIDIdentical(itemstack)) {
-				this.inventory[2].count += itemstack.count;
-			}
-
-			if (this.inventory[0].getItem().hasContainerItemType()) {
-				this.inventory[0] = new ItemStack(this.inventory[0].getItem().getContainerItemType());
-			} else {
-				--this.inventory[0].count;
-			}
-
-			if (this.inventory[0].count <= 0) {
-				this.inventory[0] = null;
-			}
 		}
 	}
 
