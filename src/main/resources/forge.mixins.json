@@ -33,7 +33,6 @@
     "client.ParticleManagerMixin",
     "client.PistonRendererMixin",
     "client.PlayerRendererMixin",
-    "client.SinglePlayerInteractionManagerMixin",
     "client.TessellatorMixin",
     "client.TextureManagerMixin"
   ],
