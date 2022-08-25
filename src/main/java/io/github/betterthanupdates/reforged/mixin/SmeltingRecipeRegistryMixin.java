@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.fabricmc.loader.api.FabricLoader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -13,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.SmeltingRecipeRegistry;
 
 import io.github.betterthanupdates.reforged.recipe.ReforgedSmeltingRecipeRegistry;
+import io.github.betterthanupdates.stapi.StationAPIHelper;
 
 @Mixin(SmeltingRecipeRegistry.class)
 public class SmeltingRecipeRegistryMixin implements ReforgedSmeltingRecipeRegistry {
@@ -28,11 +30,20 @@ public class SmeltingRecipeRegistryMixin implements ReforgedSmeltingRecipeRegist
 
 	@Override
 	public ItemStack getSmeltingResult(ItemStack item) {
-		if (item == null) {
-			return null;
+		if (!FabricLoader.getInstance().isModLoaded("stationapi")) {
+			ItemStack reforgedStack = this.reforged$getSmeltingResult(item);
+			return reforgedStack != null ? reforgedStack : this.recipes.get(item.itemId);
 		} else {
-			ItemStack ret = this.metaSmeltingList.get(Arrays.asList(item.itemId, item.getMeta()));
-			return ret != null ? ret : this.recipes.get(item.itemId);
+			return StationAPIHelper.SmeltingRegistry$getResultFor(item);
 		}
+	}
+
+	@Override
+	public ItemStack reforged$getSmeltingResult(ItemStack itemStack) {
+		if (itemStack != null) {
+			return this.metaSmeltingList.get(Arrays.asList(itemStack.itemId, itemStack.getMeta()));
+		}
+
+		return null;
 	}
 }

@@ -1,13 +1,12 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "io.github.betterthanupdates.stapi.mixin",
+  "package": "io.github.betterthanupdates.reforged.mixin",
   "mixins": [
-    "reforged.SmeltingRegistryMixin"
+    "FurnaceBlockEntityMixin"
   ],
   "client": [
-    "client.forge.ArsenicOverlayRendererMixin",
-    "client.forge.ArsenicItemRendererMixin"
+    "client.GameRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

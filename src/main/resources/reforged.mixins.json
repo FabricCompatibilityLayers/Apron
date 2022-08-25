@@ -8,11 +8,9 @@
     "ItemMixin",
     "ShearsItemMixin",
     "SheepEntityMixin",
-    "SmeltingRecipeRegistryMixin",
-    "FurnaceBlockEntityMixin"
+    "SmeltingRecipeRegistryMixin"
   ],
   "client": [
-    "client.GameRendererMixin",
     "client.MultiplayerClientInteractionManagerMixin",
     "client.SinglePlayerInteractionManagerMixin"
   ],

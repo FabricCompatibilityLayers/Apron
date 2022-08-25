@@ -45,13 +45,14 @@
     ],
     "mod-remapper-api:modremapper": [
       "io.github.betterthanupdates.apron.ApronModRemapper"
+    ],
+    "stationapi:event_bus": [
+      "io.github.betterthanupdates.stapi.event.ApronCustomReachImpl"
     ]
   },
   "accessWidener": "apron.accesswidener",
   "mixins": [
     "apron.mixins.json",
-    "apron.stationapi.mixins.json",
-    "apron.stationapi.forge.mixins.json",
     {
       "config": "audiomod.mixins.json",
       "environment": "client"
@@ -79,7 +80,11 @@
     {
       "config": "shockahpi.mixins.json",
       "environment": "client"
-    }
+    },
+    "apron.stationapi.mixins.json",
+    "apron.stationapi.forge.mixins.json",
+    "apron.stationapi.modloader.mixins.json",
+    "apron.stationapi.reforged.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.13.3",
