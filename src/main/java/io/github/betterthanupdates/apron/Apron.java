@@ -82,7 +82,7 @@ public final class Apron {
 		if (className.contains(".")) {
 			String[] parts = className.split("\\.");
 
-			if (parts.length == 3 && Objects.equals(parts[0], "net") && Objects.equals(parts[1], "minecraft")) {
+			if (parts.length == 3 && (Objects.equals(parts[0], "net") || Objects.equals(parts[0], "Lnet")) && Objects.equals(parts[1], "minecraft")) {
 				return className.replace("net.minecraft.", "");
 			}
 		}
