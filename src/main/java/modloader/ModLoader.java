@@ -773,8 +773,8 @@ public class ModLoader {
 			for (BaseMod mod : MOD_LIST) {
 				mod.ModsLoaded();
 
-				if (!props.containsKey(mod.getClass().getName())) {
-					props.setProperty(mod.getClass().getName(), "on");
+				if (!props.containsKey(Apron.getOriginalClassName(mod.getClass().getName()))) {
+					props.setProperty(Apron.getOriginalClassName(mod.getClass().getName()), "on");
 				}
 			}
 
@@ -1630,7 +1630,7 @@ public class ModLoader {
 
 	private static void setupProperties(Class<? extends BaseMod> mod) throws IllegalArgumentException, IllegalAccessException, IOException, SecurityException {
 		Properties modprops = new Properties();
-		File modcfgfile = new File(CONFIG_DIR, mod.getName() + ".cfg");
+		File modcfgfile = new File(CONFIG_DIR, Apron.getOriginalClassName(mod.getName()) + ".cfg");
 
 		if (modcfgfile.exists() && modcfgfile.canRead()) {
 			modprops.load(Files.newInputStream(modcfgfile.toPath()));
