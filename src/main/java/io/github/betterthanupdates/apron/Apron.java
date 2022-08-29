@@ -2,6 +2,7 @@ package io.github.betterthanupdates.apron;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import fr.catcore.modremapperapi.utils.Constants;
@@ -75,5 +76,17 @@ public final class Apron {
 
 	public static Logger getLogger(String name) {
 		return Logger.get(NAME, name);
+	}
+
+	public static String getOriginalClassName(String className) {
+		if (className.contains(".")) {
+			String[] parts = className.split("\\.");
+
+			if (parts.length == 3 && Objects.equals(parts[0], "net") && Objects.equals(parts[1], "minecraft")) {
+				return className.replace("net.minecraft.", "");
+			}
+		}
+
+		return className;
 	}
 }
