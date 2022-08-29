@@ -3,7 +3,8 @@
   "minVersion": "0.8",
   "package": "io.github.betterthanupdates.stapi.mixin",
   "mixins": [
-    "reforged.SmeltingRegistryMixin"
+    "reforged.SmeltingRegistryMixin",
+    "vanilla.BlockMixin"
   ],
   "client": [
     "client.forge.ArsenicOverlayRendererMixin",

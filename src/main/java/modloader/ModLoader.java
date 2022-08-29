@@ -41,6 +41,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
 import net.fabricmc.loader.api.FabricLoader;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
+import net.modificationstation.stationapi.api.registry.ModID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.input.Keyboard;
@@ -91,6 +92,7 @@ import net.minecraft.world.source.WorldSource;
 import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.apron.Apron;
 import io.github.betterthanupdates.apron.api.ApronApi;
+import io.github.betterthanupdates.stapi.StationAPIHelper;
 
 @SuppressWarnings("unused")
 @Legacy
@@ -281,8 +283,14 @@ public class ModLoader {
 				return;
 			}
 
-			if (props.containsKey(name) && (props.getProperty(name).equalsIgnoreCase("no") || props.getProperty(name).equalsIgnoreCase("off"))) {
+			String modName = Apron.getOriginalClassName(name);
+
+			if (props.containsKey(modName) && (props.getProperty(modName).equalsIgnoreCase("no") || props.getProperty(modName).equalsIgnoreCase("off"))) {
 				return;
+			}
+
+			if (FabricLoader.getInstance().isModLoaded("stationapi")) {
+				StationAPIHelper.MOD_ID = modName;
 			}
 
 			Class<?> modClass = loader.loadClass(name);
@@ -304,6 +312,10 @@ public class ModLoader {
 	}
 
 	private static void addInternalMod(BaseMod mod) {
+		if (FabricLoader.getInstance().isModLoaded("stationapi")) {
+			StationAPIHelper.MOD_ID = Apron.getOriginalClassName(mod.getClass().getName());
+		}
+
 		MOD_LIST.add(mod);
 		LOGGER.info("Internal mod loaded: %s %s", mod.getClass().getSimpleName(), mod.Version());
 	}
@@ -767,15 +779,28 @@ public class ModLoader {
 
 			BUILTIN_RML_MODS.forEach(supplier -> addInternalMod(supplier.get()));
 
+			if (FabricLoader.getInstance().isModLoaded("stationapi")) {
+				StationAPIHelper.MOD_ID = "";
+			}
+
 			LOGGER.info("Done initializing.");
 			props.setProperty("loggingLevel", cfgLoggingLevel.getName());
 
 			for (BaseMod mod : MOD_LIST) {
+				if (FabricLoader.getInstance().isModLoaded("stationapi")) {
+					StationAPIHelper.MOD_ID = Apron.getOriginalClassName(mod.getClass().getName());
+					System.out.println(StationAPIHelper.MOD_ID);
+				}
+
 				mod.ModsLoaded();
 
 				if (!props.containsKey(Apron.getOriginalClassName(mod.getClass().getName()))) {
 					props.setProperty(Apron.getOriginalClassName(mod.getClass().getName()), "on");
 				}
+			}
+
+			if (FabricLoader.getInstance().isModLoaded("stationapi")) {
+				StationAPIHelper.MOD_ID = "";
 			}
 
 			if (APRON.isClient()) {
@@ -1304,13 +1329,20 @@ public class ModLoader {
 			}
 
 			int id = block.id;
+
+			if (StationAPIHelper.BLOCKS.get(id).modID.equals(ModID.of("mod_Zeppelin"))) return;
+
 			BlockItem item;
+
+			int newId = id - 256;
+			System.out.println(id + ":" + newId);
+			System.out.println(id + "->" + Item.byId[id]);
 
 			if (itemClass != null) {
 				item = itemClass.getConstructor(Integer.TYPE)
-						.newInstance(id - 256);
+						.newInstance(newId);
 			} else {
-				item = new BlockItem(id - 256);
+				item = new BlockItem(newId);
 			}
 
 			if (Block.BY_ID[id] != null && Item.byId[id] == null) {
