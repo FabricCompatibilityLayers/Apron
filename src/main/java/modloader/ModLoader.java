@@ -1330,7 +1330,7 @@ public class ModLoader {
 
 			int id = block.id;
 
-			if (StationAPIHelper.BLOCKS.get(id).modID.equals(ModID.of("mod_Zeppelin"))) return;
+			if (StationAPIHelper.BLOCKS.get(id).equals(ModID.of("mod_Zeppelin"))) return;
 
 			BlockItem item;
 
