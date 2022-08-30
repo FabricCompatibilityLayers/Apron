@@ -41,6 +41,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
 import net.fabricmc.loader.api.FabricLoader;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
+import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.registry.ModID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -1330,13 +1331,11 @@ public class ModLoader {
 
 			int id = block.id;
 
-			if (StationAPIHelper.BLOCKS.get(id).equals(ModID.of("mod_Zeppelin"))) return;
+			if (Objects.requireNonNull(BlockRegistry.INSTANCE.getId(block)).equals(ModID.of("mod_Zeppelin").id("Controller"))) return;
 
 			BlockItem item;
 
 			int newId = id - 256;
-			System.out.println(id + ":" + newId);
-			System.out.println(id + "->" + Item.byId[id]);
 
 			if (itemClass != null) {
 				item = itemClass.getConstructor(Integer.TYPE)
