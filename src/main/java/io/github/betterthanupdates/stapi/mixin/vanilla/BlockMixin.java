@@ -8,10 +8,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 
 import io.github.betterthanupdates.stapi.StationAPIHelper;
 
@@ -26,14 +25,10 @@ public class BlockMixin {
 		return StationAPIHelper.assignBlockId(id);
 	}
 
-	@Inject(method = "<init>(ILnet/minecraft/block/material/Material;)V", at = @At("RETURN"))
-	private void apron_stapi_registerBlock(int arg, Material par2, CallbackInfo ci) {
-		System.out.println(this.id + "->" + this.toString());
-
+	@Inject(method = "setTranslationKey", at = @At("RETURN"))
+	private void apron_stapi_registerBlock(String key, CallbackInfoReturnable<Block> cir) {
 		if (StationAPIHelper.BLOCKS.containsKey(this.id)) {
-			System.out.println(this.id);
-			//			Registry.register(BlockRegistry.INSTANCE, this.id, StationAPIHelper.BLOCKS.get(this.id).toString(), (Block) (Object) this);
-			Registry.register(BlockRegistry.INSTANCE, StationAPIHelper.BLOCKS.get(this.id), (Block) (Object) this);
+			Registry.register(BlockRegistry.INSTANCE, StationAPIHelper.BLOCKS.get(this.id).id(key), (Block) (Object) this);
 		}
 	}
 }
