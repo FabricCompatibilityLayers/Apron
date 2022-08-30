@@ -60,7 +60,7 @@ public class ItemMixin {
 	@Shadow
 	public static Item GOLD_AXE;
 
-	@Inject(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/stat/Stats;setupItemStats()V"))
+	@Inject(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/food/FoodItem;<init>(IIZ)V", ordinal = 1))
 	private static void sapi$cinit(CallbackInfo ci) {
 		IRON_SHOVEL = new ShockAhPIShovelItem(0, ToolMaterial.IRON).setTexturePosition(2, 5).setTranslationKey("shovelIron");
 		IRON_PICKAXE = new ShockAhPIPickaxeItem(1, ToolMaterial.IRON).setTexturePosition(2, 6).setTranslationKey("pickaxeIron");
