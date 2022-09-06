@@ -28,7 +28,21 @@ public class BlockMixin {
 	@Inject(method = "setTranslationKey", at = @At("RETURN"))
 	private void apron_stapi_registerBlock(String key, CallbackInfoReturnable<Block> cir) {
 		if (StationAPIHelper.BLOCKS.containsKey(this.id)) {
-			Registry.register(BlockRegistry.INSTANCE, StationAPIHelper.BLOCKS.get(this.id).id(key), (Block) (Object) this);
+			String id = key;
+
+			if (BlockRegistry.INSTANCE.containsId(StationAPIHelper.BLOCKS.get(this.id).id(id))) {
+				int i = 0;
+				String alternativeId = id + i;
+
+				while (BlockRegistry.INSTANCE.containsId(StationAPIHelper.BLOCKS.get(this.id).id(alternativeId))) {
+					i++;
+					alternativeId = id + i;
+				}
+
+				id = alternativeId;
+			}
+
+			Registry.register(BlockRegistry.INSTANCE, StationAPIHelper.BLOCKS.get(this.id).id(id), (Block) (Object) this);
 		}
 	}
 }
