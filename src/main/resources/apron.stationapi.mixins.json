@@ -4,7 +4,8 @@
   "package": "io.github.betterthanupdates.stapi.mixin",
   "mixins": [
     "reforged.SmeltingRegistryMixin",
-    "vanilla.BlockMixin"
+    "vanilla.BlockMixin",
+    "vanilla.ItemMixin"
   ],
   "client": [
     "client.forge.ArsenicOverlayRendererMixin",

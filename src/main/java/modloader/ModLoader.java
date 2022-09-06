@@ -93,6 +93,7 @@ import net.minecraft.world.source.WorldSource;
 import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.apron.Apron;
 import io.github.betterthanupdates.apron.api.ApronApi;
+import io.github.betterthanupdates.stapi.StAPIBlockHelper;
 import io.github.betterthanupdates.stapi.StationAPIHelper;
 
 @SuppressWarnings("unused")
@@ -1331,7 +1332,15 @@ public class ModLoader {
 
 			int id = block.id;
 
-			if (Objects.requireNonNull(BlockRegistry.INSTANCE.getId(block)).equals(ModID.of("mod_Zeppelin").id("Controller"))) return;
+			if (BlockRegistry.INSTANCE.getId(block) == null) {
+				((StAPIBlockHelper) block).register();
+			}
+
+			if (itemClass == null && (Objects.requireNonNull(BlockRegistry.INSTANCE.getId(block)).equals(ModID.of("mod_Zeppelin").id("Controller"))
+					|| Objects.requireNonNull(BlockRegistry.INSTANCE.getId(block)).equals(ModID.of("mod_TF2Teleporter").id("TF2 Teleporter"))
+					|| Objects.requireNonNull(BlockRegistry.INSTANCE.getId(block)).equals(ModID.of("mod_TF2Teleporter").id("TF2 Teleporter0")))) {
+				return;
+			}
 
 			BlockItem item;
 

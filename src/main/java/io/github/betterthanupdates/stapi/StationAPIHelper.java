@@ -7,6 +7,7 @@ import net.modificationstation.stationapi.api.recipe.SmeltingRegistry;
 import net.modificationstation.stationapi.api.registry.ModID;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class StationAPIHelper {
@@ -21,6 +22,7 @@ public class StationAPIHelper {
 	}
 
 	public static final Map<Integer, ModID> BLOCKS = new HashMap<>();
+	public static final Map<Integer, ModID> ITEMS = new HashMap<>();
 
 	public static int assignBlockId(int id) {
 		if (MOD_ID.isEmpty()) return id;
@@ -32,6 +34,16 @@ public class StationAPIHelper {
 		return id;
 	}
 
+	public static int assignItemId(int id) {
+		if (MOD_ID.isEmpty()) return id;
+
+		id = getFreeItemId();
+
+		ITEMS.put(id, getCurrentModId());
+
+		return id - 256;
+	}
+
 	public static int getFreeBlockId() {
 		for (int i = 1; i < Block.BY_ID.length; i++) {
 			if (Block.BY_ID[i] == null) {
@@ -40,5 +52,15 @@ public class StationAPIHelper {
 		}
 
 		throw new RuntimeException("There are no more available IDs for blocks!");
+	}
+
+	public static int getFreeItemId() {
+		for (int i = 1; i < Item.byId.length; i++) {
+			if (Item.byId[i] == null) {
+				return i;
+			}
+		}
+
+		throw new RuntimeException("There are no more available IDs for items!");
 	}
 }
