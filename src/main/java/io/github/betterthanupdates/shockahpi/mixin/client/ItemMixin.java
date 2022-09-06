@@ -60,8 +60,31 @@ public class ItemMixin {
 	@Shadow
 	public static Item GOLD_AXE;
 
+	@Shadow
+	public static Item[] byId;
+
 	@Inject(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/food/FoodItem;<init>(IIZ)V", ordinal = 1))
 	private static void sapi$cinit(CallbackInfo ci) {
+		byId[256] = null;
+		byId[257] = null;
+		byId[258] = null;
+
+		byId[269] = null;
+		byId[270] = null;
+		byId[271] = null;
+
+		byId[273] = null;
+		byId[274] = null;
+		byId[275] = null;
+
+		byId[277] = null;
+		byId[278] = null;
+		byId[279] = null;
+
+		byId[284] = null;
+		byId[285] = null;
+		byId[286] = null;
+
 		IRON_SHOVEL = new ShockAhPIShovelItem(0, ToolMaterial.IRON).setTexturePosition(2, 5).setTranslationKey("shovelIron");
 		IRON_PICKAXE = new ShockAhPIPickaxeItem(1, ToolMaterial.IRON).setTexturePosition(2, 6).setTranslationKey("pickaxeIron");
 		IRON_AXE = new ShockAhPIAxeItem(2, ToolMaterial.IRON).setTexturePosition(2, 7).setTranslationKey("hatchetIron");
