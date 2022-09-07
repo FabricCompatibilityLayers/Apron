@@ -1,12 +1,17 @@
 package shockahpi;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
+
+import net.fabricmc.loader.api.FabricLoader;
 
 import net.minecraft.block.Block;
 import net.minecraft.stat.achievement.Achievement;
 
 import io.github.betterthanupdates.Legacy;
+import io.github.betterthanupdates.stapi.StationAPIHelper;
 
 /**
  * aka "ACPage" after remapping.
@@ -37,6 +42,10 @@ public class AchievementPage {
 		for (Achievement achievement : achievements) {
 			this.list.add(achievement.id);
 		}
+
+		if (this.id == 0 && FabricLoader.getInstance().isModLoaded("stationapi")) {
+			StationAPIHelper.registerMinecraftAchievement(achievements);
+		}
 	}
 
 	public int bgGetSprite(Random random, int x, int y) {
@@ -62,5 +71,9 @@ public class AchievementPage {
 
 	public int getId() {
 		return id;
+	}
+
+	public List<Integer> getList() {
+		return Collections.unmodifiableList(this.list);
 	}
 }

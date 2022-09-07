@@ -4,7 +4,6 @@
   "package": "io.github.betterthanupdates.shockahpi.mixin.client",
   "compatibilityLevel": "JAVA_8",
   "client": [
-    "AchievementsScreenMixin",
     "DimensionFileMixin",
     "DungeonFeatureMixin",
     "ItemMixin",

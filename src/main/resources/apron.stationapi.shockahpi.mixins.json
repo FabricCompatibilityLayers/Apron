@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "io.github.betterthanupdates.shockahpi.mixin",
+  "mixins": [
+  ],
+  "client": [
+    "client.AchievementsScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "plugin": "io.github.betterthanupdates.stapi.MixinPlugin"
+}

@@ -3,6 +3,7 @@ package shockahpi;
 import java.util.ArrayList;
 import java.util.Random;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
 import playerapi.PlayerAPI;
 
@@ -17,6 +18,7 @@ import net.minecraft.world.World;
 import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.apron.Apron;
 import io.github.betterthanupdates.apron.api.ApronApi;
+import io.github.betterthanupdates.stapi.StationAPIHelper;
 
 /**
  * ShockAhPi - Adding new possibilities in 3... 2... 1...
@@ -263,10 +265,14 @@ public class SAPI {
 
 	public static void acPageAdd(AchievementPage acpage) {
 		ACHIEVEMENT_PAGES.add(acpage);
+
+		if (acpage.id != 0 && FabricLoader.getInstance().isModLoaded("stationapi")) {
+			StationAPIHelper.createStAPIAchievementPage(acpage);
+		}
 	}
 
-	public static void acHide(Achievement[] aachievement) {
-		for (Achievement achievement : aachievement) {
+	public static void acHide(Achievement[] achievements) {
+		for (Achievement achievement : achievements) {
 			acHidden.add(achievement.id);
 		}
 	}
