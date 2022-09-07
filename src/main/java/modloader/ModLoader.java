@@ -791,7 +791,6 @@ public class ModLoader {
 			for (BaseMod mod : MOD_LIST) {
 				if (FabricLoader.getInstance().isModLoaded("stationapi")) {
 					StationAPIHelper.MOD_ID = Apron.getOriginalClassName(mod.getClass().getName());
-					System.out.println(StationAPIHelper.MOD_ID);
 				}
 
 				mod.ModsLoaded();

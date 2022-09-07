@@ -38,7 +38,12 @@ public class ArsenicItemRendererMixin {
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/modificationstation/stationapi/api/util/math/MatrixStack;translate(DDD)V", ordinal = 0, remap = false))
 	private void forge$render$1(ItemEntity entityitem, double d, double d1, double d2, float f, float f1, CallbackInfo ci) {
 		ItemStack itemstack = entityitem.stack;
-		ForgeHooksClient.overrideTexture(Block.BY_ID[itemstack.itemId]);
+
+		if (itemstack.itemId > Block.BY_ID.length) {
+			ForgeHooksClient.overrideTexture(itemstack.getItem());
+		} else {
+			ForgeHooksClient.overrideTexture(Block.BY_ID[itemstack.itemId]);
+		}
 	}
 
 	/**
