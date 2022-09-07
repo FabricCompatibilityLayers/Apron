@@ -42,7 +42,7 @@ import net.fabricmc.loader.impl.launch.FabricLauncherBase;
 import net.fabricmc.loader.api.FabricLoader;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
-import net.modificationstation.stationapi.api.registry.ModID;
+import net.modificationstation.stationapi.api.registry.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.input.Keyboard;
@@ -1335,10 +1335,47 @@ public class ModLoader {
 				((StAPIBlockHelper) block).register();
 			}
 
-			if (itemClass == null && (Objects.requireNonNull(BlockRegistry.INSTANCE.getId(block)).equals(ModID.of("mod_Zeppelin").id("Controller"))
-					|| Objects.requireNonNull(BlockRegistry.INSTANCE.getId(block)).equals(ModID.of("mod_TF2Teleporter").id("TF2 Teleporter"))
-					|| Objects.requireNonNull(BlockRegistry.INSTANCE.getId(block)).equals(ModID.of("mod_TF2Teleporter").id("TF2 Teleporter0")))) {
-				return;
+			if (itemClass == null) {
+				Identifier identifier = Objects.requireNonNull(BlockRegistry.INSTANCE.getId(block));
+
+				switch (identifier.modID.toString()) {
+					case "mod_Zeppelin":
+						if (identifier.id.equals("Controller")) return;
+
+						break;
+					case "mod_TF2Teleporter":
+						switch (identifier.id) {
+							case "TF2 Teleporter":
+							case "TF2 Teleporter0":
+								return;
+							default:
+								break;
+						}
+
+						break;
+					case "mod_BuildCraftEnergy":
+						if (identifier.id.equals("255_")) return;
+
+						break;
+					case "mod_palmLeaves":
+						switch (identifier.id) {
+							case "Coconut":
+							case "Crocosmia":
+							case "Orchid":
+							case "Palm Sapling":
+							case "Iris":
+							case "Pineapple":
+							case "Bamboo":
+							case "Commelina Diffusa":
+								return;
+							default:
+								break;
+						}
+
+						break;
+					default:
+						break;
+				}
 			}
 
 			BlockItem item;
