@@ -5,10 +5,12 @@ import java.util.Map;
 
 import net.modificationstation.stationapi.api.recipe.SmeltingRegistry;
 import net.modificationstation.stationapi.api.registry.ModID;
+import shockahpi.AchievementPage;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stat.achievement.Achievement;
 
 public class StationAPIHelper {
 	public static ItemStack SmeltingRegistry$getResultFor(ItemStack itemStack) {
@@ -62,5 +64,19 @@ public class StationAPIHelper {
 		}
 
 		throw new RuntimeException("There are no more available IDs for items!");
+	}
+
+	public static void createStAPIAchievementPage(AchievementPage page) {
+		new StAPIAchievementPage(page);
+	}
+
+	public static void registerMinecraftAchievement(Achievement... achievements) {
+		net.modificationstation.stationapi.api.client.gui.screen.menu.AchievementPage mcPage = net.modificationstation.stationapi.api.client.gui.screen.menu.AchievementPage.getCurrentPage();
+
+		while (!mcPage.name().equals("Minecraft")) {
+			mcPage = net.modificationstation.stationapi.api.client.gui.screen.menu.AchievementPage.nextPage();
+		}
+
+		mcPage.addAchievements(achievements);
 	}
 }

@@ -84,7 +84,8 @@
     "apron.stationapi.mixins.json",
     "apron.stationapi.forge.mixins.json",
     "apron.stationapi.modloader.mixins.json",
-    "apron.stationapi.reforged.mixins.json"
+    "apron.stationapi.reforged.mixins.json",
+    "apron.stationapi.shockahpi.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.13.3",
