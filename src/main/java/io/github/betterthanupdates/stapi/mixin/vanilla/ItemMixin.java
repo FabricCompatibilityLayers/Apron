@@ -28,7 +28,7 @@ public class ItemMixin {
 
 	@Inject(method = "setTranslationKey", at = @At("RETURN"))
 	private void apron_stapi_registerItem(String key, CallbackInfoReturnable<Item> cir) {
-		if (StationAPIHelper.ITEMS.containsKey(this.id)) {
+		if (StationAPIHelper.ITEMS.containsKey(this.id) && !ItemRegistry.INSTANCE.getKey((Item) (Object) this).isPresent()) {
 			String id = key;
 
 			if (ItemRegistry.INSTANCE.containsId(StationAPIHelper.ITEMS.get(this.id).id(id))) {
