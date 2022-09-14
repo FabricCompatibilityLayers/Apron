@@ -2,8 +2,11 @@ package io.github.betterthanupdates.stapi;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import net.modificationstation.stationapi.api.recipe.SmeltingRegistry;
+import net.modificationstation.stationapi.api.registry.BlockRegistry;
+import net.modificationstation.stationapi.api.registry.Identifier;
 import net.modificationstation.stationapi.api.registry.ModID;
 import shockahpi.AchievementPage;
 
@@ -78,5 +81,58 @@ public class StationAPIHelper {
 		}
 
 		mcPage.addAchievements(achievements);
+	}
+
+	public static void lateRegisterBlock(Block block) {
+		if (BlockRegistry.INSTANCE.getId(block) == null) {
+			((StAPIBlockHelper) block).register();
+		}
+	}
+
+	public static boolean cancelItemBlockCTR(Block block) {
+		boolean bol = false;
+
+		Identifier identifier = Objects.requireNonNull(BlockRegistry.INSTANCE.getId(block));
+
+		switch (identifier.modID.toString()) {
+			case "mod_Zeppelin":
+				if (identifier.id.equals("Controller")) bol = true;
+
+				break;
+			case "mod_TF2Teleporter":
+				switch (identifier.id) {
+					case "TF2 Teleporter":
+					case "TF2 Teleporter0":
+						bol = true;
+					default:
+						break;
+				}
+
+				break;
+			case "mod_BuildCraftEnergy":
+				if (identifier.id.equals("255_")) bol = true;
+
+				break;
+			case "mod_palmLeaves":
+				switch (identifier.id) {
+					case "Coconut":
+					case "Crocosmia":
+					case "Orchid":
+					case "Palm Sapling":
+					case "Iris":
+					case "Pineapple":
+					case "Bamboo":
+					case "Commelina Diffusa":
+						bol = true;
+					default:
+						break;
+				}
+
+				break;
+			default:
+				break;
+		}
+
+		return bol;
 	}
 }
