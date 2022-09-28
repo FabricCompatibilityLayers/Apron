@@ -36,57 +36,8 @@
   "license": "MIT",
   "icon": "assets/apron/icon.png",
   "environment": "*",
-  "entrypoints": {
-    "client": [
-      "io.github.betterthanupdates.apron.impl.client.ApronClientImpl"
-    ],
-    "server": [
-      "io.github.betterthanupdates.apron.impl.server.ApronServerImpl"
-    ],
-    "mod-remapper-api:modremapper": [
-      "io.github.betterthanupdates.apron.ApronModRemapper"
-    ],
-    "stationapi:event_bus": [
-      "io.github.betterthanupdates.stapi.event.ApronCustomReachImpl"
-    ]
-  },
-  "accessWidener": "apron.accesswidener",
-  "mixins": [
-    "apron.mixins.json",
-    {
-      "config": "audiomod.mixins.json",
-      "environment": "client"
-    },
-    {
-      "config": "forge.mixins.json",
-      "environment": "*"
-    },
-    {
-      "config": "guiapi.mixins.json",
-      "environment": "client"
-    },
-    {
-      "config": "reforged.mixins.json",
-      "environment": "*"
-    },
-    {
-      "config": "modloader.mixins.json",
-      "environment": "*"
-    },
-    {
-      "config": "playerapi.mixins.json",
-      "environment": "client"
-    },
-    {
-      "config": "shockahpi.mixins.json",
-      "environment": "client"
-    },
-    "apron.stationapi.mixins.json",
-    "apron.stationapi.forge.mixins.json",
-    "apron.stationapi.modloader.mixins.json",
-    "apron.stationapi.reforged.mixins.json",
-    "apron.stationapi.shockahpi.mixins.json"
-  ],
+  "entrypoints": {},
+  "mixins": [],
   "depends": {
     "fabricloader": ">=0.13.3",
     "minecraft": "1.0.0-beta.7.3",

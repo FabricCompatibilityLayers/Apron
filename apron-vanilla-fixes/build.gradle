@@ -1,0 +1,11 @@
+version = getSubprojectVersion(this)
+
+repositories {
+	flatDir {
+		dirs "./mods"
+	}
+}
+
+dependencies {
+//	modCompileOnly(group: "mods", name: "hmi", version: "v4.2.0")
+}

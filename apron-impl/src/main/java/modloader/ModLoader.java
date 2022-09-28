@@ -1609,19 +1609,19 @@ public class ModLoader {
 			Field f = instanceClass.getDeclaredFields()[fieldIndex];
 			f.setAccessible(true);
 
-			if (field_modifiers == null) {
-				field_modifiers = Field.class.getDeclaredField("modifiers");
-				field_modifiers.setAccessible(true);
-			}
-
-			int modifiers = field_modifiers.getInt(f);
-
-			if ((modifiers & 16) != 0) {
-				field_modifiers.setInt(f, modifiers & -17);
-			}
+			//			if (field_modifiers == null) {
+			//				field_modifiers = Field.class.getDeclaredField("modifiers");
+			//				field_modifiers.setAccessible(true);
+			//			}
+			//
+			//			int modifiers = field_modifiers.getInt(f);
+			//
+			//			if ((modifiers & 16) != 0) {
+			//				field_modifiers.setInt(f, modifiers & -17);
+			//			}
 
 			f.set(instance, value);
-		} catch (IllegalAccessException | NoSuchFieldException e) {
+		} catch (IllegalAccessException e) {
 			MOD_LOGGER.throwing("ModLoader", "setPrivateValue", e);
 			ThrowException("An impossible error has occured!", e);
 		}
@@ -1645,16 +1645,16 @@ public class ModLoader {
 			fieldName = RemapUtil.getRemappedFieldName(instanceClass, fieldName);
 			Field f = instanceClass.getDeclaredField(fieldName);
 
-			if (field_modifiers == null) {
-				field_modifiers = Field.class.getDeclaredField("modifiers");
-				field_modifiers.setAccessible(true);
-			}
-
-			int modifiers = field_modifiers.getInt(f);
-
-			if ((modifiers & 16) != 0) {
-				field_modifiers.setInt(f, modifiers & -17);
-			}
+			//			if (field_modifiers == null) {
+			//				field_modifiers = Field.class.getDeclaredField("modifiers");
+			//				field_modifiers.setAccessible(true);
+			//			}
+			//
+			//			int modifiers = field_modifiers.getInt(f);
+			//
+			//			if ((modifiers & 16) != 0) {
+			//				field_modifiers.setInt(f, modifiers & -17);
+			//			}
 
 			f.setAccessible(true);
 			f.set(instance, value);

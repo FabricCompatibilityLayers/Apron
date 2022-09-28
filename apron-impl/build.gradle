@@ -1,0 +1,14 @@
+version = getSubprojectVersion(this)
+
+loom {
+    accessWidenerPath = file("src/main/resources/apron.accesswidener")
+}
+
+dependencies {
+	include modApi("maven.modrinth:mod-remapping-api:${rootProject.mod_remapping_api_version}")
+	// AudioMod dependency
+	include implementation('org.slick2d:slick2d-core:1.0.2')
+	// GuiAPI Dependencies
+	include implementation(group: "de.matthiasmann", name: "twl", version: "unknown")
+	include implementation(group: "org.xmlpull", name: "xml-pull", version: "unknown")
+}

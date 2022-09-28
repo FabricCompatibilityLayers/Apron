@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "id": "apron-impl",
+  "version": "${version}",
+  "name": "Apron Implementation",
+  "description": "A compatibility layer for legacy API mods.\n- Risugami's ModLoader\n- Risugami's ModLoaderMP\n- Minecraft Forge\n- Reforged\n- AudioMod\n- ShockAhPI\n- PlayerAPI",
+  "authors": [
+    {
+      "name": "Better Than Updates",
+      "contact": {
+        "sources": "https://github.com/BetterThanUpdates/Apron",
+        "issues": "https://github.com/BetterThanUpdates/Apron/issues"
+      }
+    }
+  ],
+  "contributors": [
+    {
+      "name": "CatCore",
+      "contact": {
+        "sources": "https://github.com/arthurbambou/Fabricated-Legacy-Forge",
+        "issues": "https://github.com/arthurbambou/Fabricated-Legacy-Forge/issues"
+      }
+    },
+    {
+      "name": "halotroop2288",
+      "contact": {
+        "email": "carolinejoybell@gmail.com"
+      }
+    }
+  ],
+  "contact": {
+    "homepage": "https://BetterThanUpdates.github.io/",
+    "sources": "https://github.com/BetterThanUpdates/Apron",
+    "issues": "https://github.com/BetterThanUpdates/Apron/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/apron/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "io.github.betterthanupdates.apron.impl.client.ApronClientImpl"
+    ],
+    "server": [
+      "io.github.betterthanupdates.apron.impl.server.ApronServerImpl"
+    ],
+    "mod-remapper-api:modremapper": [
+      "io.github.betterthanupdates.apron.ApronModRemapper"
+    ],
+    "stationapi:event_bus": [
+      "io.github.betterthanupdates.stapi.event.ApronCustomReachImpl"
+    ]
+  },
+  "accessWidener": "apron.accesswidener",
+  "mixins": [
+    "apron.mixins.json",
+    {
+      "config": "audiomod.mixins.json",
+      "environment": "client"
+    },
+    {
+      "config": "forge.mixins.json",
+      "environment": "*"
+    },
+    {
+      "config": "guiapi.mixins.json",
+      "environment": "client"
+    },
+    {
+      "config": "reforged.mixins.json",
+      "environment": "*"
+    },
+    {
+      "config": "modloader.mixins.json",
+      "environment": "*"
+    },
+    {
+      "config": "playerapi.mixins.json",
+      "environment": "client"
+    },
+    {
+      "config": "shockahpi.mixins.json",
+      "environment": "client"
+    },
+    "apron.stationapi.mixins.json",
+    "apron.stationapi.forge.mixins.json",
+    "apron.stationapi.modloader.mixins.json",
+    "apron.stationapi.reforged.mixins.json",
+    "apron.stationapi.shockahpi.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.13.3",
+    "minecraft": "1.0.0-beta.7.3",
+    "mod-remapping-api": "^1.3.2",
+    "legacy-fabric-logger-api-v1": "*"
+  },
+  "recommends": {
+    "modmenu": "^2.0.0",
+    "mojangfix": ">=0.5.1"
+  }
+}

@@ -18,3 +18,7 @@ pluginManagement {
 }
 
 rootProject.name = "Apron"
+
+include "apron-impl"
+include "apron-vanilla-fixes"
+include "apron-stapi-fixes"
