@@ -170,17 +170,10 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 
 								break;
 							case "betatweaks/Utils":
-							//							case "hmi/Utils":
 							case "overrideapi/utils/Reflection":
 								if (methodName.equals("getField") || methodName.equals("findField")) {
 									methodOwner = "io/github/betterthanupdates/apron/ReflectionUtils";
 									methodName = "getField";
-								}
-
-								break;
-							case "reifnsk/minimap/ReiMinimap":
-								if (methodName.equals("getField") && methodDescriptor.equals("(Ljava/lang/Class;Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;")) {
-									methodOwner = "io/github/betterthanupdates/apron/ReflectionUtils";
 								}
 
 								break;
@@ -198,30 +191,6 @@ public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvi
 								case "mod_TwilightForest":
 									if (name.equals("<init>") && stringValue.equals("DimensionTwilightForest")) {
 										value = "net.minecraft." + stringValue;
-									}
-
-									break;
-
-								// How Many Items
-								case "hmi/Utils":
-									if (stringValue.equals("getSlotAtPosition")) {
-										value = "method_986";
-									} else if (stringValue.equals("drawGradientRect")) {
-										value = "method_1933";
-									}
-
-									break;
-								case "hmi/GuiOverlay":
-									switch (stringValue) {
-										case "mouseClicked":
-											value = "method_124";
-											break;
-										case "keyTyped":
-											value = "method_117";
-											break;
-										case "mouseMovedOrUp":
-											value = "method_128";
-											break;
 									}
 
 									break;

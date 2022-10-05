@@ -49,5 +49,8 @@
   "recommends": {
     "modmenu": "^2.0.0",
     "mojangfix": ">=0.5.1"
+  },
+  "custom": {
+    "mod-remapper-api:nomixins": "dummy"
   }
 }
