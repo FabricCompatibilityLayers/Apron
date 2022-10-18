@@ -1,19 +1,17 @@
 package io.github.betterthanupdates.apron;
 
+import fr.catcore.modremapperapi.api.ApplyVisitorProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.tinyremapper.TinyRemapper;
-import net.fabricmc.tinyremapper.api.TrClass;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.TypePath;
 
-public class ApronPostRemappingVisitor implements TinyRemapper.ApplyVisitorProvider {
+public class ApronPostRemappingVisitor implements ApplyVisitorProvider {
 	@Override
-	public ClassVisitor insertApplyVisitor(TrClass cls, ClassVisitor next) {
-		final String className = cls.getName();
+	public ClassVisitor insertApplyVisitor(String className, ClassVisitor next) {
 		return new ClassVisitor(Opcodes.ASM9, next) {
 			@Override
 			public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {

@@ -1,17 +1,10 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "io.github.betterthanupdates.apron.fixes.vanilla.mixin",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [],
-  "client": [
-    "client.hmi.UtilsMixin",
-    "client.reimap.ReiMinimapMixin"
-  ],
-  "server": [
-  ],
   "injectors": {
     "defaultRequire": 1
   },
-  "plugin": "io.github.betterthanupdates.apron.fixes.vanilla.plugin.MixinPlugin"
+  "package": "io.github.betterthanupdates.apron.fixes.vanilla.mixin",
+  "mixins": []
 }

@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.apron.fixes.vanilla.mixin.client.hmi;
+package io.github.betterthanupdates.apron.fixes.vanilla.compat.mixin.client.hmi;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

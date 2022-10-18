@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.apron.fixes.vanilla.mixin.client.reimap;
+package io.github.betterthanupdates.apron.fixes.vanilla.compat.mixin.client.reimap;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;

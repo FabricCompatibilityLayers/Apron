@@ -1,0 +1,11 @@
+{
+  "package": "io.github.betterthanupdates.apron.fixes.vanilla.compat.mixin",
+  "mixins": [],
+  "client": [
+    "client.hmi.UtilsMixin",
+    "client.reimap.ReiMinimapMixin"
+  ],
+  "server": [
+  ],
+  "parent": "apron-vanilla-fixes.mixins.json"
+}

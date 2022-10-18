@@ -6,25 +6,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import fr.catcore.modremapperapi.api.ApplyVisitorProvider;
 import fr.catcore.modremapperapi.api.ModRemapper;
 import fr.catcore.modremapperapi.api.RemapLibrary;
 import fr.catcore.modremapperapi.remapping.RemapUtil;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.CustomValue;
 import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.fabricmc.tinyremapper.TinyRemapper;
+import net.legacyfabric.fabric.api.logger.v1.Logger;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 @ApiStatus.Internal
 public final class ApronModRemapper implements ModRemapper {
+	public static final ModContainer MOD_CONTAINER = FabricLoader.getInstance().getModContainer("apron").orElseThrow(RuntimeException::new);
+	public static final Logger LOGGER = Logger.get("ApronRemapper");
 	@Override
 	public String[] getJarFolders() {
 		return new String[0];
 	}
 
 	private Path getLibPath(String name) {
-		return Apron.MOD_CONTAINER.findPath("./libs/" + name + ".zip").orElseThrow(RuntimeException::new);
+		return MOD_CONTAINER.findPath("./libs/" + name + ".zip").orElseThrow(RuntimeException::new);
 	}
 
 	@Override
@@ -55,7 +60,7 @@ public final class ApronModRemapper implements ModRemapper {
 	@Override
 	public void getMappingList(RemapUtil.MappingList list) {
 		// TODO: Add this to custom mod metadata
-		if (Apron.getEnvironment() == EnvType.CLIENT) {
+		if (getEnvironment() == EnvType.CLIENT) {
 			list.add("ToolBase", "shockahpi/ToolBase")
 					.field("Pickaxe", "PICKAXE", "Lshockahpi/ToolBase;")
 					.field("Shovel", "SHOVEL", "Lshockahpi/ToolBase;")
@@ -63,7 +68,7 @@ public final class ApronModRemapper implements ModRemapper {
 		}
 
 		addMappingsFromMetadata(list, null);
-		addMappingsFromMetadata(list, Apron.getEnvironment());
+		addMappingsFromMetadata(list, getEnvironment());
 	}
 
 	/**
@@ -73,24 +78,28 @@ public final class ApronModRemapper implements ModRemapper {
 	 * @param environment the current Minecraft environment, provided by Fabric Loader
 	 */
 	private void addMappingsFromMetadata(RemapUtil.MappingList list, @Nullable EnvType environment) {
-		final ModMetadata metadata = Apron.MOD_CONTAINER.getMetadata();
+		final ModMetadata metadata = MOD_CONTAINER.getMetadata();
 		final String custom = "apron:" + (environment == null ? "common" : environment.name().toLowerCase());
 
 		for (Map.Entry<String, CustomValue> mapping : metadata.getCustomValue(custom).getAsObject()) {
 			final String obfuscated = mapping.getKey();
 			final String intermediary = mapping.getValue().getAsString();
 			list.add(obfuscated, intermediary);
-			Apron.LOGGER.debug("%s remapped to %s for compatibility.", obfuscated, intermediary);
+			LOGGER.debug("%s remapped to %s for compatibility.", obfuscated, intermediary);
 		}
 	}
 
 	@Override
-	public Optional<TinyRemapper.ApplyVisitorProvider> getPostRemappingVisitor() {
-		return Optional.of(new ApronPostRemappingVisitor());
+	public Optional<ApplyVisitorProvider> getPostRemappingVisitor() {
+		return Optional.empty();
 	}
 
 	@Override
 	public Optional<String> getDefaultPackage() {
 		return Optional.of("net/minecraft/");
+	}
+
+	public static EnvType getEnvironment() {
+		return FabricLoader.getInstance().getEnvironmentType();
 	}
 }

@@ -36,7 +36,14 @@
   "license": "MIT",
   "icon": "assets/apron/icon.png",
   "environment": "*",
-  "entrypoints": {},
+  "entrypoints": {
+    "mm:early_risers": [
+      "io.github.betterthanupdates.apron.fixes.vanilla.plugin.InitVanillaFixModule"
+    ],
+    "preLaunch": [
+      "io.github.betterthanupdates.apron.fixes.vanilla.plugin.InitVanillaFixModulePre"
+    ]
+  },
   "mixins": [
     "apron-vanilla-fixes.mixins.json"
   ],
@@ -49,8 +56,5 @@
   "recommends": {
     "modmenu": "^2.0.0",
     "mojangfix": ">=0.5.1"
-  },
-  "custom": {
-    "mod-remapper-api:nomixins": "dummy"
   }
 }
