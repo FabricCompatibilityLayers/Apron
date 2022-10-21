@@ -41,6 +41,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
 import net.fabricmc.loader.api.FabricLoader;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.input.Keyboard;
@@ -274,7 +275,8 @@ public class ModLoader {
 		}
 	}
 
-	private static void addInternalMod(ClassLoader loader, String filename) {
+	@ApiStatus.Internal
+	public static void addInternalMod(ClassLoader loader, String filename) {
 		try {
 			String name = filename.replace("/", ".").replace("\\", ".").replace(".class", "");
 

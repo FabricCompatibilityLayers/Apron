@@ -3,7 +3,9 @@
   "mixins": [],
   "client": [
     "client.hmi.UtilsMixin",
-    "client.reimap.ReiMinimapMixin"
+    "client.reimap.ReiMinimapMixin",
+    "client.betatweaks.UtilsMixin",
+    "client.betatweaks.GuiAPIHandlerMixin"
   ],
   "server": [
   ],
