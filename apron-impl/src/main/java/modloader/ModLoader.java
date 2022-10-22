@@ -915,7 +915,11 @@ public class ModLoader {
 		try {
 			chk = Class.forName(modName, false, ModLoader.class.getClassLoader());
 		} catch (ClassNotFoundException e) {
-			return false;
+			try {
+				chk = Class.forName("net.minecraft." + modName, false, ModLoader.class.getClassLoader());
+			} catch (ClassNotFoundException e2) {
+				return false;
+			}
 		}
 
 		for (BaseMod mod : MOD_LIST) {
