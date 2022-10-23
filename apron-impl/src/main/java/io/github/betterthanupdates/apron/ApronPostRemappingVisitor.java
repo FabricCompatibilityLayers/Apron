@@ -167,13 +167,6 @@ public class ApronPostRemappingVisitor implements ApplyVisitorProvider {
 								}
 
 								break;
-							case "overrideapi/utils/Reflection":
-								if (methodName.equals("getField") || methodName.equals("findField")) {
-									methodOwner = "io/github/betterthanupdates/apron/ReflectionUtils";
-									methodName = "getField";
-								}
-
-								break;
 						}
 
 						super.visitMethodInsn(opcode, methodOwner, methodName, methodDescriptor, isInterface);
@@ -181,68 +174,6 @@ public class ApronPostRemappingVisitor implements ApplyVisitorProvider {
 
 					@Override
 					public void visitLdcInsn(Object value) {
-						if (value instanceof String) {
-							String stringValue = (String) value;
-							switch (className) {
-								// Twilight Forest
-								case "mod_TwilightForest":
-									if (name.equals("<init>") && stringValue.equals("DimensionTwilightForest")) {
-										value = "net.minecraft." + stringValue;
-									}
-
-									break;
-
-								// TooManyItems
-								case "TMIUtils":
-									if (stringValue.equals("a")) {
-										value = "field_2791";
-									} else if (stringValue.equals("d")) {
-										value = "field_754";
-									}
-
-									break;
-								case "TMICompatibility":
-									if (stringValue.equals("mod_ZanMinimap") || stringValue.equals("ConvenientInventory")) {
-										value = "net.minecraft." + stringValue;
-									}
-
-									break;
-
-								// Seasons Mod
-								case "mod_seasons":
-								case "SeasonsNBT":
-									if (stringValue.equals("saveDirectory")) {
-										value = "field_279";
-									}
-
-									break;
-
-								// Aether
-								case "AetherItems":
-									if (stringValue.equals("mod_TooManyItems")) {
-										value = "net.minecraft." + stringValue;
-									}
-
-									break;
-
-								// OverrideAPI
-								case "overrideapi/utils/gui/GuiHandler":
-									if (stringValue.equals("net.minecraft.src.")) {
-										value = "";
-									}
-
-									break;
-
-								// SmartGui
-								case "kz/chesschicken/smartygui/commonloader/GameUtils":
-									if (stringValue.equals("a")) {
-										value = "field_2791";
-									}
-
-									break;
-							}
-						}
-
 						super.visitLdcInsn(value);
 					}
 				};

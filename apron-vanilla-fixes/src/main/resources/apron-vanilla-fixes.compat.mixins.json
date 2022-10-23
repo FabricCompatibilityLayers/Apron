@@ -5,7 +5,8 @@
     "client.hmi.UtilsMixin",
     "client.reimap.ReiMinimapMixin",
     "client.betatweaks.UtilsMixin",
-    "client.betatweaks.GuiAPIHandlerMixin"
+    "client.betatweaks.GuiAPIHandlerMixin",
+    "client.twilightforest.TwilightForestMixin"
   ],
   "server": [
   ],
