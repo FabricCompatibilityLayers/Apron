@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import fr.catcore.modremapperapi.api.ApplyVisitorProvider;
 import fr.catcore.modremapperapi.api.ModRemapper;
 import fr.catcore.modremapperapi.api.RemapLibrary;
 import fr.catcore.modremapperapi.remapping.RemapUtil;
+import fr.catcore.modremapperapi.remapping.VisitorInfos;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -71,6 +71,54 @@ public final class ApronModRemapper implements ModRemapper {
 		addMappingsFromMetadata(list, getEnvironment());
 	}
 
+	@Override
+	public void registerVisitors(VisitorInfos infos) {
+		String[][] toolFixes = new String[][] {
+			new String[]{"net/minecraft/class_632", "io/github/betterthanupdates/shockahpi/item/ShockAhPIToolItem"},
+			new String[]{"net/minecraft/class_420", "io/github/betterthanupdates/shockahpi/item/ShockAhPIAxeItem"},
+			new String[]{"net/minecraft/class_116", "io/github/betterthanupdates/shockahpi/item/ShockAhPIPickaxeItem"},
+			new String[]{"net/minecraft/class_501", "io/github/betterthanupdates/shockahpi/item/ShockAhPIShovelItem"}
+		};
+
+		for (String[] entry : toolFixes) {
+			infos.registerSuperType(new VisitorInfos.Type(entry[0]), new VisitorInfos.Type(entry[1]));
+			infos.registerTypeAnnotation(new VisitorInfos.Type(entry[0]), new VisitorInfos.Type(entry[1]));
+			infos.registerMethodTypeIns(new VisitorInfos.Type(entry[0]), new VisitorInfos.Type(entry[1]));
+			infos.registerMethodFieldIns(new VisitorInfos.MethodNamed(entry[0], ""), new VisitorInfos.MethodNamed(entry[1], ""));
+			infos.registerMethodMethodIns(new VisitorInfos.MethodNamed(entry[0], ""), new VisitorInfos.MethodNamed(entry[1], ""));
+		}
+
+		infos.registerMethodMethodIns(
+				new VisitorInfos.MethodNamed("net/minecraft/class_13", "setRedstoneColors"),
+				new VisitorInfos.MethodNamed("io/github/betterthanupdates/forge/ForgeClientReflection", "BlockRenderer$setRedstoneColors")
+		);
+		infos.registerMethodMethodIns(
+				new VisitorInfos.MethodNamed("net/minecraft/class_50", "getByID"),
+				new VisitorInfos.MethodNamed("shockahpi/DimensionBase", "getByID")
+		);
+
+		infos.registerMethodFieldIns(
+				new VisitorInfos.MethodNamed("net/minecraft/class_67", "renderingWorldRenderer"),
+				new VisitorInfos.MethodNamed("io/github/betterthanupdates/forge/ForgeClientReflection", "Tessellator$renderingWorldRenderer")
+		);
+		infos.registerMethodFieldIns(
+				new VisitorInfos.MethodNamed("net/minecraft/class_67", "firstInstance"),
+				new VisitorInfos.MethodNamed("io/github/betterthanupdates/forge/ForgeClientReflection", "Tessellator$firstInstance")
+		);
+		infos.registerMethodFieldIns(
+				new VisitorInfos.MethodNamed("net/minecraft/class_13", "cfgGrassFix"),
+				new VisitorInfos.MethodNamed("io/github/betterthanupdates/forge/ForgeClientReflection", "BlockRenderer$cfgGrassFix")
+		);
+		infos.registerMethodFieldIns(
+				new VisitorInfos.MethodNamed("net/minecraft/class_13", "redstoneColors"),
+				new VisitorInfos.MethodNamed("io/github/betterthanupdates/forge/ForgeClientReflection", "BlockRenderer$redstoneColors")
+		);
+		infos.registerMethodFieldIns(
+				new VisitorInfos.MethodNamed("net/minecraft/class_328", "disableValidation"),
+				new VisitorInfos.MethodNamed("io/github/betterthanupdates/forge/ForgeReflection", "TrapdoorBlock$disableValidation")
+		);
+	}
+
 	/**
 	 * Adds mappings directly from Apron's fabric.mod.json file.
 	 *
@@ -87,11 +135,6 @@ public final class ApronModRemapper implements ModRemapper {
 			list.add(obfuscated, intermediary);
 			LOGGER.debug("%s remapped to %s for compatibility.", obfuscated, intermediary);
 		}
-	}
-
-	@Override
-	public Optional<ApplyVisitorProvider> getPostRemappingVisitor() {
-		return Optional.empty();
 	}
 
 	@Override
