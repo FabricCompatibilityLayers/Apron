@@ -6,7 +6,8 @@
     "client.reimap.ReiMinimapMixin",
     "client.betatweaks.UtilsMixin",
     "client.betatweaks.GuiAPIHandlerMixin",
-    "client.twilightforest.TwilightForestMixin"
+    "client.twilightforest.TwilightForestMixin",
+    "client.portalgun.PortalGunMixin"
   ],
   "server": [
   ],
