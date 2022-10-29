@@ -1,9 +1,6 @@
-package io.github.betterthanupdates.guiapi.mixin.client;
+package io.github.betterthanupdates.modoptionsapi.mixin.client;
 
-import guiapi.ModScreen;
-import guiapi.ModSelect;
-import guiapi.ModSettingScreen;
-import guiapi.widget.SettingWidget;
+import modoptionsapi.gui.ModMenu;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,18 +13,16 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 @Mixin(OptionsScreen.class)
 public class OptionsScreenMixin extends Screen {
 	@Inject(method = "init", at = @At("RETURN"))
-	private void guiapi$init(CallbackInfo ci) {
+	private void modoptionsapi$init(CallbackInfo ci) {
 		// TODO: This string needs to be localized, eventually.
-		this.buttons.add(new ButtonWidget(300, this.width / 2 - 200, this.height / 6 + 192, "GuiAPI's Global Mod Settings"));
+		this.buttons.add(new ButtonWidget(301, this.width / 2, this.height / 6 + 192, "ModOptionsAPI's Mod Options"));
 	}
 
 	@Inject(method = "buttonClicked", at = @At("RETURN"))
-	private void guiapi$buttonClicked(ButtonWidget par1, CallbackInfo ci) {
-		if (par1.active && par1.id == 300) {
+	private void modoptionsapi$buttonClicked(ButtonWidget guibutton, CallbackInfo ci) {
+		if (guibutton.active && guibutton.id == 301) {
 			this.client.options.saveOptions();
-			ModSettingScreen.guiContext = "";
-			SettingWidget.updateAll();
-			ModScreen.show(new ModSelect(this));
+			this.client.openScreen(new ModMenu(this));
 		}
 	}
 }

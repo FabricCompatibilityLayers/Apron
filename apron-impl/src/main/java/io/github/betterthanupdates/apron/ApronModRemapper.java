@@ -41,6 +41,7 @@ public final class ApronModRemapper implements ModRemapper {
 				libraries.add(new RemapLibrary(getLibPath("guiapi0.11.0-1.7"), "guiapi-0.11.0.zip"));
 				libraries.add(new RemapLibrary(getLibPath("modloader-b1.7.3"), "modloader.zip"));
 				libraries.add(new RemapLibrary(getLibPath("modloadermp-1.7.3-unofficial-v2"), "modloadermp-client.zip"));
+				libraries.add(new RemapLibrary(getLibPath("modoptionsapi-v0.7"), "modoptionsapi.zip"));
 				libraries.add(new RemapLibrary(getLibPath("playerapi-1.7.3-v1.7"), "playerapi.zip"));
 				libraries.add(new RemapLibrary(getLibPath("reforged-client-1.0.1"), "reforged-client.zip"));
 				libraries.add(new RemapLibrary(getLibPath("shockahpi-r5.1"), "shockahpi-r5.1.zip"));

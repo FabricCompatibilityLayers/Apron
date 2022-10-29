@@ -152,9 +152,9 @@ allprojects {
 	//	modRuntimeOnly(group: "remapped.client", name: "playerapi-1.7.3", version: "v1.7")
 	//	modRuntimeOnly(group: "remapped.client", name: "itemspriteapi", version: "v1.2")
 	// 	modRuntimeOnly(group: "remapped.client", name: "guiapi0.11.0", version: "1.7")
+	//	modRuntimeOnly(group: "remapped.client", name: "modoptionsapi", version: "v0.7")
 		// Todo
 	//	modRuntimeOnly(group: "remapped.server", name: "minecraftforge-server", version: "1.0.7-20110907")
-	//	modRuntimeOnly(group: "remapped.client", name: "modoptionsapi", version: "v0.7")
 	}
 
 	tasks.withType(ProcessResources).configureEach {

@@ -3,7 +3,7 @@
   "id": "apron",
   "version": "${version}",
   "name": "Apron",
-  "description": "A compatibility layer for legacy API mods.\n- Risugami's ModLoader\n- Risugami's ModLoaderMP\n- Minecraft Forge\n- Reforged\n- AudioMod\n- ShockAhPI\n- PlayerAPI",
+  "description": "A compatibility layer for legacy API mods.",
   "authors": [
     {
       "name": "Better Than Updates",
@@ -122,15 +122,16 @@
     },
     "apron:mods": {
       "client": {
+        "ModLoader": "1.7.3+beta.1",
         "AudioMod": "1.7.3+beta.1",
         "ShockAhPI": "5.1",
         "PlayerAPI": "1.7",
         "Reforged": "1.0.1",
         "ItemSpriteAPI": "1.2",
-        "GuiAPI": "0.11.0"
+        "GuiAPI": "0.11.0",
+        "ModOptionsAPI": "0.7"
       },
       "common": {
-        "ModLoader": "1.7.3+beta.1",
         "ModLoaderMP": "1.7.3+beta.1",
         "MinecraftForge": "1.0.6"
       },
