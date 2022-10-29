@@ -9,7 +9,7 @@ plugins {
 
 def ENV = System.getenv()
 
-version = "1.7.3+build." + (ENV.GITHUB_ACTIONS ? ENV.BUILD_NUMBER : "local")
+version = "1.7.3+build." + (ENV.GITHUB_ACTIONS ? ENV.GITHUB_RUN_NUMBER : "local")
 
 def getSubprojectVersion(project) {
 	return rootProject.version
