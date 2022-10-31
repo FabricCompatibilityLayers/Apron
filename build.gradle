@@ -9,7 +9,7 @@ plugins {
 
 def ENV = System.getenv()
 
-version = "1.7.3+build." + (ENV.GITHUB_ACTIONS ? ENV.GITHUB_RUN_NUMBER : "local")
+version = rootProject.mod_version
 
 def getSubprojectVersion(project) {
 	return rootProject.version
@@ -199,13 +199,6 @@ subprojects {
 
 	javadoc.enabled = false
 }
-
-task remapMavenJar(type: net.fabricmc.loom.task.RemapJarTask, dependsOn: jar) {
-	input = jar.archiveFile
-	archiveFileName = "${archivesBaseName}-${project.version}-maven.jar"
-	addNestedDependencies = false
-}
-build.dependsOn remapMavenJar
 
 subprojects.each {
 	remapJar.dependsOn("${it.path}:remapJar")
