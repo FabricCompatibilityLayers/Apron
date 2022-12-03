@@ -92,6 +92,7 @@ import net.minecraft.world.source.WorldSource;
 import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.apron.Apron;
 import io.github.betterthanupdates.apron.api.ApronApi;
+import io.github.betterthanupdates.bhapi.BHApiHelper;
 import io.github.betterthanupdates.stapi.StationAPIHelper;
 
 @SuppressWarnings("unused")
@@ -762,6 +763,10 @@ public class ModLoader {
 			LOGGER.debug(VERSION + " initializing...");
 			File source = new File(ModLoader.class.getProtectionDomain().getCodeSource().getLocation().toURI());
 
+			if (FabricLoader.getInstance().isModLoaded("bhapi")) {
+				BHApiHelper.unfreezeItemRegistry();
+			}
+
 			if (MOD_CACHE_FOLDER.isDirectory()) {
 				readFromModFolder(MOD_CACHE_FOLDER);
 			} else {
@@ -814,6 +819,10 @@ public class ModLoader {
 
 			initStats();
 			saveConfig();
+
+			if (FabricLoader.getInstance().isModLoaded("bhapi")) {
+				BHApiHelper.freezeItemRegistry();
+			}
 		} catch (Throwable e) {
 			MOD_LOGGER.throwing("ModLoader", "init", e);
 			ThrowException("ModLoader has failed to initialize.", e);
