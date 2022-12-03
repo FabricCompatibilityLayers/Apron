@@ -12,20 +12,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 
+import io.github.betterthanupdates.apron.APIInternal;
 import io.github.betterthanupdates.apron.Apron;
-import io.github.betterthanupdates.apron.impl.client.ApronClientImpl;
-import io.github.betterthanupdates.apron.impl.server.ApronServerImpl;
 
 public interface ApronApi extends ModInitializer {
 	@NotNull
 	static ApronApi getInstance() {
-		switch (Apron.getEnvironment()) {
-			case SERVER:
-				return ApronServerImpl.instance;
-			case CLIENT:
-			default:
-				return ApronClientImpl.instance;
-		}
+		return APIInternal.getInstance();
 	}
 
 	/**
@@ -54,14 +47,14 @@ public interface ApronApi extends ModInitializer {
 	 * This will print a line when this class officially becomes usable.<br>
 	 * If it's used any time before then, it's <i>probably</i> going to break something.
 	 */
-	@Override
 	@MustBeInvokedByOverriders
-	default void onInitialize() {
-		if (getInstance() != null) {
-			throw new RuntimeException("Tried to create two Apron APIs at once!");
-		}
-
+	default void onInitialized() {
 		Apron.LOGGER.info("Apron API is now ready for use!");
+	}
+
+	@Override
+	default void onInitialize() {
+		getInstance();
 	}
 
 	@Nullable Runnable getGame();

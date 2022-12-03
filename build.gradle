@@ -142,6 +142,8 @@ allprojects {
 
 		modApi("net.modificationstation:StationAPI:${rootProject.stapi_version}")
 
+//		modRuntimeOnly(group: "remapped.client", name: "mangopack")
+
 		// Done
 	//	modRuntimeOnly(group: "remapped.client", name: "modloader", version: "b1.7.3")
 	//	modRuntimeOnly(group: "remapped.client", name: "modloadermp-1.7.3-unofficial", version: "v2")

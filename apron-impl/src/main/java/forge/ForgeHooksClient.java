@@ -25,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.HitResult;
 
 import io.github.betterthanupdates.Legacy;
+import io.github.betterthanupdates.apron.api.ApronApi;
 import io.github.betterthanupdates.apron.impl.client.ApronClientImpl;
 import io.github.betterthanupdates.forge.ForgeClientReflection;
 
@@ -96,7 +97,7 @@ public class ForgeHooksClient {
 		int textureId;
 
 		if (!textures.containsKey(name)) {
-			textureId = ApronClientImpl.instance.getTextureManager().getTextureId(name);
+			textureId = ((ApronClientImpl) ApronApi.getInstance()).getTextureManager().getTextureId(name);
 			textures.put(name, textureId);
 		} else {
 			textureId = textures.get(name);
@@ -114,7 +115,7 @@ public class ForgeHooksClient {
 		Tessellator.INSTANCE = ForgeClientReflection.Tessellator$firstInstance;
 
 		if (!inWorld) {
-			GL11.glBindTexture(3553, ApronClientImpl.instance.getTextureManager().getTextureId("/terrain.png"));
+			GL11.glBindTexture(3553, ((ApronClientImpl) ApronApi.getInstance()).getTextureManager().getTextureId("/terrain.png"));
 		}
 	}
 
@@ -122,7 +123,7 @@ public class ForgeHooksClient {
 		renderPass = pass;
 		Tessellator.INSTANCE = ForgeClientReflection.Tessellator$firstInstance;
 		ForgeClientReflection.Tessellator$renderingWorldRenderer = true;
-		GL11.glBindTexture(3553, ApronClientImpl.instance.getTextureManager().getTextureId("/terrain.png"));
+		GL11.glBindTexture(3553, ((ApronClientImpl) ApronApi.getInstance()).getTextureManager().getTextureId("/terrain.png"));
 		renderTextureTest.clear();
 		renderTextureList.clear();
 		inWorld = true;
@@ -138,7 +139,7 @@ public class ForgeHooksClient {
 			tessellator.tessellate();
 		}
 
-		GL11.glBindTexture(3553, ApronClientImpl.instance.getTextureManager().getTextureId("/terrain.png"));
+		GL11.glBindTexture(3553, ((ApronClientImpl) ApronApi.getInstance()).getTextureManager().getTextureId("/terrain.png"));
 		Tessellator.INSTANCE = ForgeClientReflection.Tessellator$firstInstance;
 		ForgeClientReflection.Tessellator$renderingWorldRenderer = false;
 	}
@@ -166,7 +167,7 @@ public class ForgeHooksClient {
 		}
 
 		if (!textureFile.isEmpty()) {
-			GL11.glBindTexture(3553, ApronClientImpl.instance.getTextureManager().getTextureId(textureFile));
+			GL11.glBindTexture(3553, ((ApronClientImpl) ApronApi.getInstance()).getTextureManager().getTextureId(textureFile));
 		}
 	}
 

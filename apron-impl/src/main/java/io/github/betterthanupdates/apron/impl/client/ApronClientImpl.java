@@ -2,9 +2,7 @@ package io.github.betterthanupdates.apron.impl.client;
 
 import java.util.List;
 
-import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.include.com.google.common.collect.ImmutableList;
 
@@ -22,10 +20,7 @@ import io.github.betterthanupdates.apron.api.ApronApi;
  * If any method inside this class is called before the client is initialized,
  * something has gone horribly wrong.
  */
-public final class ApronClientImpl implements ApronApi, ClientModInitializer {
-	@ApiStatus.Internal
-	public static ApronClientImpl instance;
-
+public final class ApronClientImpl implements ApronApi {
 	@Nullable
 	private Minecraft client;
 
@@ -102,10 +97,9 @@ public final class ApronClientImpl implements ApronApi, ClientModInitializer {
 	 * This will set the {@link #instance} so that this implementation can be used by the API.
 	 */
 	@Override
-	public void onInitializeClient() {
-		ApronApi.super.onInitialize();
+	public void onInitialized() {
+		ApronApi.super.onInitialized();
 		this.client = (Minecraft) FabricLoaderImpl.INSTANCE.getGameInstance();
-		instance = this;
 	}
 
 	@Override

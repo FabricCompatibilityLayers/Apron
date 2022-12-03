@@ -13,6 +13,7 @@ import net.minecraft.client.render.block.BlockRenderer;
 import net.minecraft.item.Item;
 
 import io.github.betterthanupdates.Legacy;
+import io.github.betterthanupdates.apron.api.ApronApi;
 import io.github.betterthanupdates.apron.impl.client.ApronClientImpl;
 
 @SuppressWarnings("unused")
@@ -41,7 +42,7 @@ public class MinecraftForgeClient {
 	}
 
 	public static void preloadTexture(String texture) {
-		ApronClientImpl.instance.getTextureManager().getTextureId(texture);
+		((ApronClientImpl) ApronApi.getInstance()).getTextureManager().getTextureId(texture);
 	}
 
 	public static void renderBlock(BlockRenderer blockRenderer, Block block, int x, int y, int z) {

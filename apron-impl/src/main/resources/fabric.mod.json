@@ -37,12 +37,6 @@
   "icon": "assets/apron/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "io.github.betterthanupdates.apron.impl.client.ApronClientImpl"
-    ],
-    "server": [
-      "io.github.betterthanupdates.apron.impl.server.ApronServerImpl"
-    ],
     "mod-remapper-api:modremapper": [
       "io.github.betterthanupdates.apron.ApronModRemapper"
     ],

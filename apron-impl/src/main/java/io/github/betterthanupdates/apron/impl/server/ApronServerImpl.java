@@ -2,9 +2,7 @@ package io.github.betterthanupdates.apron.impl.server;
 
 import java.util.List;
 
-import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.resource.language.Internationalization;
@@ -14,10 +12,7 @@ import net.minecraft.world.World;
 
 import io.github.betterthanupdates.apron.api.ApronApi;
 
-public final class ApronServerImpl implements ApronApi, DedicatedServerModInitializer {
-	@ApiStatus.Internal
-	public static ApronApi instance;
-
+public final class ApronServerImpl implements ApronApi {
 	private static final MinecraftServer server = (MinecraftServer) FabricLoaderImpl.INSTANCE.getGameInstance();
 
 	@Override
@@ -83,9 +78,8 @@ public final class ApronServerImpl implements ApronApi, DedicatedServerModInitia
 	 * This will set the {@link #instance} so that this implementation can be used by the API.
 	 */
 	@Override
-	public void onInitializeServer() {
-		ApronApi.super.onInitialize();
-		instance = this;
+	public void onInitialized() {
+		ApronApi.super.onInitialized();
 	}
 
 	@Override
