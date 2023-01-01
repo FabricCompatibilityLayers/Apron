@@ -1,9 +1,7 @@
 package io.github.betterthanupdates.shockahpi.mixin.client;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.Overwrite;
 import playerapi.PlayerAPI;
 import shockahpi.PlayerBaseSAPI;
 
@@ -21,11 +19,19 @@ public abstract class PortalBlockMixin implements ShockAhPIPortalBlock {
 		return -1;
 	}
 
-	@Inject(method = "onEntityCollision", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;method_1388()V"))
-	private void sapi$onEntityCollision(World i, int j, int k, int arg2, Entity entity, CallbackInfo ci) {
-		if (entity instanceof AbstractClientPlayerEntity) {
-			AbstractClientPlayerEntity entityplayersp = (AbstractClientPlayerEntity) entity;
-			PlayerAPI.getPlayerBase(entityplayersp, PlayerBaseSAPI.class).portal = this.getDimNumber();
+	/**
+	 * @author SAPI
+	 * @reason yes
+	 */
+	@Overwrite
+	public void onEntityCollision(World world, int i, int j, int k, Entity entity) {
+		if (entity.vehicle == null && entity.passenger == null) {
+			if (entity instanceof AbstractClientPlayerEntity) {
+				AbstractClientPlayerEntity entityplayersp = (AbstractClientPlayerEntity) entity;
+				((PlayerBaseSAPI) PlayerAPI.getPlayerBase(entityplayersp, PlayerBaseSAPI.class)).portal = this.getDimNumber();
+			}
+
+			entity.method_1388();
 		}
 	}
 }
