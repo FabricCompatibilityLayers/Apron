@@ -8,7 +8,8 @@
     "client.betatweaks.GuiAPIHandlerMixin",
     "client.twilightforest.TwilightForestMixin",
     "client.portalgun.PortalGunMixin",
-    "client.aether.TitleScreenMixin"
+    "client.aether.TitleScreenMixin",
+    "client.aether.AetherItemsMixin"
   ],
   "server": [
   ],
