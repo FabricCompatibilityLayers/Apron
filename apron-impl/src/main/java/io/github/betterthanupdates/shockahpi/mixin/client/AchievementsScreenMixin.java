@@ -62,7 +62,7 @@ public class AchievementsScreenMixin extends Screen implements ShockAhPIAchievem
 	@Unique
 	private boolean draw = true;
 
-	@Inject(method = "init", at = @At("RETURN"))
+	@Inject(method = "initVanillaScreen", at = @At("RETURN"))
 	private void sapi$init(CallbackInfo ci) {
 		this.buttons.add(new OptionButtonWidget(11, this.width / 2 - 113, this.height / 2 + 74, 20, 20, "<"));
 		this.buttons.add(new OptionButtonWidget(12, this.width / 2 - 93, this.height / 2 + 74, 20, 20, ">"));

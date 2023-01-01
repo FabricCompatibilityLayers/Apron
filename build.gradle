@@ -77,16 +77,8 @@ allprojects {
 			}
 		}
 		maven {
-			name 'halotroop'
-			url 'https://repo.blucobalt.dev/repository/maven-halotroop'
-			content {
-				includeGroup 'com.halotroop'
-				includeGroup 'io.github.betterthanupdates'
-			}
-		}
-		maven {
 			name 'Legacy Fabric'
-			url "https://maven.legacyfabric.net/"
+			url "https://repo.legacyfabric.net/repository/legacyfabric/"
 			content {
 				includeGroup 'net.legacyfabric'
 				includeGroup 'net.legacyfabric.legacy-fabric-api'
@@ -135,7 +127,7 @@ allprojects {
 
 	dependencies {
 		minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-		mappings "io.github.betterthanupdates:yarn:b1.7.3+build.${rootProject.mappings}"
+		mappings "net.legacyfabric:beta-yarn:${rootProject.minecraft_version}+build.${rootProject.mappings}"
 		modApi "babric:fabric-loader:${rootProject.loader_version}"
 
 		modApi("net.legacyfabric.legacy-fabric-api:legacy-fabric-logger-api-v1:${rootProject.lfapi_version}")

@@ -33,7 +33,7 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Inject(method = "method_1716", at = @At("HEAD"))
+	@Inject(method = "breakBlock", at = @At("HEAD"))
 	private void forge$method_1716(int i, int j, int k, int l, CallbackInfoReturnable<Boolean> cir) {
 		this.cachedMeta = this.client.world.getBlockMeta(i, j, k);
 	}
@@ -42,7 +42,7 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Redirect(method = "method_1716", at = @At(value = "INVOKE",
+	@Redirect(method = "breakBlock", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/client/entity/player/AbstractClientPlayerEntity;canRemoveBlock(Lnet/minecraft/block/Block;)Z"))
 	private boolean forge$method_1716(AbstractClientPlayerEntity instance, Block block) {
 		return ((ForgeBlock) block).canHarvestBlock(instance, this.cachedMeta);
@@ -54,7 +54,7 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Inject(method = "method_1707", at = @At("HEAD"))
+	@Inject(method = "destroyFireAndBreakBlock", at = @At("HEAD"))
 	private void forge$method_1707(int i, int j, int k, int l, CallbackInfo ci) {
 		this.cachedI = i;
 		this.cachedJ = j;
@@ -65,7 +65,7 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Redirect(method = "method_1707", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F"))
+	@Redirect(method = "destroyFireAndBreakBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F"))
 	private float forge$method_1707(Block instance, PlayerEntity playerEntity) {
 		return ((ForgeBlock) instance).blockStrength(this.client.world, playerEntity, this.cachedI, this.cachedJ, this.cachedK);
 	}
@@ -76,7 +76,7 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Inject(method = "method_1721", at = @At("HEAD"))
+	@Inject(method = "dig", at = @At("HEAD"))
 	private void forge$method_1721(int i, int j, int k, int l, CallbackInfo ci) {
 		this.cachedI2 = i;
 		this.cachedJ2 = j;
@@ -87,7 +87,7 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Redirect(method = "method_1721", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F"))
+	@Redirect(method = "dig", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F"))
 	private float forge$method_1721(Block instance, PlayerEntity playerEntity) {
 		return ((ForgeBlock) instance).blockStrength(this.client.world, playerEntity, this.cachedI2, this.cachedJ2, this.cachedK2);
 	}

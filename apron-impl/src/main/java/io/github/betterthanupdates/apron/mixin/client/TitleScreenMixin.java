@@ -10,7 +10,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,9 +24,6 @@ import io.github.betterthanupdates.apron.Apron;
 @Environment(EnvType.CLIENT)
 @Mixin(TitleScreen.class)
 public abstract class TitleScreenMixin extends Screen {
-	@Shadow
-	public abstract void init();
-
 	@ModifyConstant(method = "render", constant = @Constant(stringValue = "Minecraft Beta 1.7.3"))
 	private String apron$renderVersion(final String constant) {
 		return Apron.versionString(constant);
@@ -42,7 +38,7 @@ public abstract class TitleScreenMixin extends Screen {
 				String.format("Mods: %s, %s", rmlModsLoaded(), fabricModsLoaded()), 2, yOffset, 0x50_50_50);
 	}
 
-	@Inject(method = "init", at = @At("HEAD"))
+	@Inject(method = "initVanillaScreen", at = @At("HEAD"))
 	private void apron$initStart(CallbackInfo ci) {
 		Apron.fabricModCount = FabricLoader.getInstance().getAllMods().stream()
 				.filter((modContainer -> !Objects.equals(modContainer.getMetadata().getId(), "minecraft"))).count();

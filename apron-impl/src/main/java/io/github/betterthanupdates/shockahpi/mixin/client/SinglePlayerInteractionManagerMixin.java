@@ -30,7 +30,7 @@ public abstract class SinglePlayerInteractionManagerMixin extends ClientInteract
 	 * @author ShockAh
 	 * @reason Implement ShockAhPI function
 	 */
-	@Inject(method = "method_1716", cancellable = true, at = @At(value = "INVOKE", shift = At.Shift.BEFORE,
+	@Inject(method = "breakBlock", cancellable = true, at = @At(value = "INVOKE", shift = At.Shift.BEFORE,
 			target = "Lnet/minecraft/block/Block;afterBreak(Lnet/minecraft/world/World;Lnet/minecraft/entity/player/PlayerEntity;IIII)V")
 	)
 	public void shockahpi$breakBlock_beforeAfterBreak(int x, int y, int z, int par4, CallbackInfoReturnable<Boolean> cir) {

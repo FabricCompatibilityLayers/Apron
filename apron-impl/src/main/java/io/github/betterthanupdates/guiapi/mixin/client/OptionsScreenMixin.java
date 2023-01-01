@@ -15,7 +15,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 
 @Mixin(OptionsScreen.class)
 public class OptionsScreenMixin extends Screen {
-	@Inject(method = "init", at = @At("RETURN"))
+	@Inject(method = "initVanillaScreen", at = @At("RETURN"))
 	private void guiapi$init(CallbackInfo ci) {
 		// TODO: This string needs to be localized, eventually.
 		this.buttons.add(new ButtonWidget(300, this.width / 2 - 200, this.height / 6 + 192, "GuiAPI's Global Mod Settings"));

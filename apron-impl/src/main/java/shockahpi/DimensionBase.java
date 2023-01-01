@@ -137,7 +137,7 @@ public class DimensionBase {
 		localMinecraft.player.playerKeypressManager = new MovementManager(localMinecraft.options);
 		localMinecraft.player.entityId = j;
 		localMinecraft.player.method_494();
-		localMinecraft.interactionManager.method_1718(localMinecraft.player);
+		localMinecraft.interactionManager.setDefaultHotbar(localMinecraft.player);
 		localMinecraft.loadIntoWorld("Respawning");
 
 		if (localMinecraft.currentScreen instanceof DeathScreen) {
@@ -193,7 +193,7 @@ public class DimensionBase {
 		game.player.setPositionAndAngles(loc.x, game.player.y, loc.z, game.player.yaw, game.player.pitch);
 		game.world.method_193(game.player, false);
 		world = new World(game.world, dimNew.getWorldProvider());
-		game.showLevelProgress(world, (newDimension == 0 ? "Leaving" : "Entering") + " the " + (newDimension == 0 ? dimOld.name : dimNew.name), game.player);
+		game.initWorld(world, (newDimension == 0 ? "Leaving" : "Entering") + " the " + (newDimension == 0 ? dimOld.name : dimNew.name), game.player);
 		game.player.world = game.world;
 		game.player.setPositionAndAngles(loc.x, game.player.y, loc.z, game.player.yaw, game.player.pitch);
 		game.world.method_193(game.player, false);

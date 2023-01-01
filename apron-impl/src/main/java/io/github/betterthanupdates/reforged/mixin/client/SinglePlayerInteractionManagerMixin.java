@@ -18,7 +18,7 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 		super(minecraft);
 	}
 
-	@Inject(method = "method_1716", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "breakBlock", at = @At("HEAD"), cancellable = true)
 	private void reforged$method_1716(int i, int j, int k, int l, CallbackInfoReturnable<Boolean> cir) {
 		ItemStack itemstack = this.client.player.getHeldItem();
 

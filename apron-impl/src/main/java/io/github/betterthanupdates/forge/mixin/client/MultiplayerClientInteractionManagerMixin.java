@@ -29,7 +29,7 @@ public abstract class MultiplayerClientInteractionManagerMixin extends ClientInt
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Inject(method = "method_1707", at = @At("HEAD"))
+	@Inject(method = "destroyFireAndBreakBlock", at = @At("HEAD"))
 	private void forge$method_1707(int j, int k, int l, int par4, CallbackInfo ci) {
 		this.cachedI = j;
 		this.cachedJ = k;
@@ -40,7 +40,7 @@ public abstract class MultiplayerClientInteractionManagerMixin extends ClientInt
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Redirect(method = "method_1707", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F"))
+	@Redirect(method = "destroyFireAndBreakBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F"))
 	private float forge$method_1707(Block instance, PlayerEntity playerEntity) {
 		return ((ForgeBlock) instance).blockStrength(this.client.world, playerEntity, this.cachedI, this.cachedJ, this.cachedK);
 	}
@@ -51,7 +51,7 @@ public abstract class MultiplayerClientInteractionManagerMixin extends ClientInt
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Inject(method = "method_1721", at = @At("HEAD"))
+	@Inject(method = "dig", at = @At("HEAD"))
 	private void forge$method_1721(int j, int k, int l, int par4, CallbackInfo ci) {
 		this.cachedI2 = j;
 		this.cachedJ2 = k;
@@ -62,7 +62,7 @@ public abstract class MultiplayerClientInteractionManagerMixin extends ClientInt
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Redirect(method = "method_1721", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F"))
+	@Redirect(method = "dig", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F"))
 	private float forge$method_1721(Block instance, PlayerEntity playerEntity) {
 		return ((ForgeBlock) instance).blockStrength(this.client.world, playerEntity, this.cachedI2, this.cachedJ2, this.cachedK2);
 	}

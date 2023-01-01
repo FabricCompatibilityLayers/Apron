@@ -12,7 +12,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 
 @Mixin(PauseScreen.class)
 public class PauseMenuMixin extends Screen {
-	@Inject(method = "init", at = @At("RETURN"))
+	@Inject(method = "initVanillaScreen", at = @At("RETURN"))
 	private void modoptionsapi$addButton(CallbackInfo ci) {
 		this.buttons.add(new ButtonWidget(30, this.width / 2 - 100, this.height / 4 + 148 + -16, "Mod World Options"));
 	}
