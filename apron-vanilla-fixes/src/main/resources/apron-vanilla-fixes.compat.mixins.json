@@ -7,9 +7,11 @@
     "client.betatweaks.UtilsMixin",
     "client.betatweaks.GuiAPIHandlerMixin",
     "client.twilightforest.TwilightForestMixin",
-    "client.portalgun.PortalGunMixin"
+    "client.portalgun.PortalGunMixin",
+    "client.aether.TitleScreenMixin"
   ],
   "server": [
   ],
-  "parent": "apron-vanilla-fixes.mixins.json"
+  "parent": "apron-vanilla-fixes.mixins.json",
+  "plugin": "io.github.betterthanupdates.apron.fixes.vanilla.plugin.MixinPluginCompat"
 }

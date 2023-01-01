@@ -7,7 +7,11 @@
     "BlockMixin",
     "ItemEntityMixin",
     "ItemMixin",
-    "ItemStackMixin"
+    "ItemStackMixin",
+    "ButtonWidgetAccessor",
+    "EntityAccessor",
+    "SoundHelperAccessor",
+    "WorldAccessor"
   ],
   "client": [
     "client.InGameHudMixin",

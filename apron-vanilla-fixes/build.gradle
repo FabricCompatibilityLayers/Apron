@@ -7,4 +7,5 @@ repositories {
 }
 
 dependencies {
+	modCompileOnly(group: "remapped.client", name: "aether")
 }

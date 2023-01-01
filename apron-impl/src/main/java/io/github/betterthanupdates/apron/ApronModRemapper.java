@@ -118,6 +118,15 @@ public final class ApronModRemapper implements ModRemapper {
 				new VisitorInfos.MethodNamed("net/minecraft/class_328", "disableValidation"),
 				new VisitorInfos.MethodNamed("io/github/betterthanupdates/forge/ForgeReflection", "TrapdoorBlock$disableValidation")
 		);
+
+		for (String fName : new String[] {
+			"mmactive", "renderOption", "themeOption", "musicId", "loadingWorld", "ach"
+		}) {
+			infos.registerMethodFieldIns(
+					new VisitorInfos.MethodNamed("net/minecraft/class_197", fName),
+					new VisitorInfos.MethodNamed("io/github/betterthanupdates/apron/fixes/vanilla/AetherHelper", fName)
+			);
+		}
 	}
 
 	/**
