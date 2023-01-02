@@ -15,8 +15,8 @@
     "client.overrideapi.OverrideAPIMixin",
     "client.overrideapi.GuiHandlerMixin",
     "client.infsprites.CoreMixin",
-    "client.infsprites.TessellatorsMixin",
-    "client.infsprites.TextureManagerInvoker"
+    "client.infsprites.UtilMixin",
+    "client.infsprites.ProxyTransformerMixin"
   ],
   "server": [
   ],

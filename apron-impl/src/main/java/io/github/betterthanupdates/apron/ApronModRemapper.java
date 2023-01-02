@@ -127,6 +127,11 @@ public final class ApronModRemapper implements ModRemapper {
 					new VisitorInfos.MethodNamed("io/github/betterthanupdates/apron/fixes/vanilla/AetherHelper", fName)
 			);
 		}
+
+		infos.registerMethodMethodIns(
+				new VisitorInfos.MethodNamed("overrideapi/utils/Reflection", "findField"),
+				new VisitorInfos.MethodNamed("io/github/betterthanupdates/apron/ReflectionUtils", "getField")
+		);
 	}
 
 	/**
