@@ -20,7 +20,7 @@ public class Reforged {
 
 	private static boolean searchedForIDResolver;
 	private static boolean foundIDResolver;
-	private static final ArrayList<IReachEntity> REACH_ENTITIES = new ArrayList<>();
+	private static final ArrayList<IReachEntity> reachesEntity = new ArrayList<>();
 	public static boolean disableVersionCheckCrash = false;
 
 	public Reforged() {
@@ -40,13 +40,13 @@ public class Reforged {
 	}
 
 	public static void reachAdd(IReachEntity reachEntity) {
-		REACH_ENTITIES.add(reachEntity);
+		reachesEntity.add(reachEntity);
 	}
 
 	public static float reachGetEntityPlayer(PlayerEntity player) {
 		ItemStack itemstack = player.inventory.getHeldItem();
 
-		for (IReachEntity reachEntity : REACH_ENTITIES) {
+		for (IReachEntity reachEntity : reachesEntity) {
 			if (reachEntity.reachEntityItemMatches(itemstack)) {
 				return reachEntity.getReachEntity(itemstack);
 			}

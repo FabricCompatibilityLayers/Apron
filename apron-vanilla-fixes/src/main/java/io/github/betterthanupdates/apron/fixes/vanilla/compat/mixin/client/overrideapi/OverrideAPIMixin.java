@@ -1,9 +1,14 @@
 package io.github.betterthanupdates.apron.fixes.vanilla.compat.mixin.client.overrideapi;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import overrideapi.OverrideAPI;
 
 @Pseudo
@@ -27,5 +32,10 @@ public class OverrideAPIMixin {
 	@ModifyConstant(method = "getUniqueButtonID", constant = @Constant(stringValue = "controlList"), remap = false)
 	private static String fixFieldNameP4(String constant) {
 		return "buttons";
+	}
+
+	@Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/lang/Class;getClassLoader()Ljava/lang/ClassLoader;", remap = false))
+	private ClassLoader fixClassLoaderIssue(Class instance) {
+		return new URLClassLoader(new URL[]{}, null);
 	}
 }

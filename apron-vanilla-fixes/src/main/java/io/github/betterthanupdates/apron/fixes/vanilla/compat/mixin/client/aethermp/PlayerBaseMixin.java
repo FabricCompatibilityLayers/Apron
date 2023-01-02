@@ -1,6 +1,5 @@
 package io.github.betterthanupdates.apron.fixes.vanilla.compat.mixin.client.aethermp;
 
-import net.minecraft.world.World;
 import net.mine_diver.aethermp.player.PlayerBaseAetherMp;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
