@@ -3,7 +3,9 @@ package io.github.betterthanupdates.apron.fixes.vanilla.compat.mixin.client.infs
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import fr.catcore.modremapperapi.remapping.RemapUtil;
@@ -17,10 +19,18 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import overrideapi.proxy.asm.ClassReader;
 import overrideapi.proxy.asm.ClassWriter;
+import overrideapi.proxy.asm.tree.AbstractInsnNode;
+import overrideapi.proxy.asm.tree.AnnotationNode;
 import overrideapi.proxy.asm.tree.ClassNode;
 import overrideapi.proxy.asm.tree.FieldInsnNode;
 import overrideapi.proxy.asm.tree.FieldNode;
+import overrideapi.proxy.asm.tree.InsnList;
 import overrideapi.proxy.asm.tree.MethodInsnNode;
+import overrideapi.proxy.asm.tree.MethodNode;
+
+import net.minecraft.class_66;
+import net.minecraft.client.render.WorldEventRenderer;
+import net.minecraft.client.texture.TextureManager;
 
 @Mixin(ProxyTransformer.class)
 public abstract class ProxyTransformerMixin {
@@ -52,6 +62,21 @@ public abstract class ProxyTransformerMixin {
 		return null;
 	}
 
+	@Shadow(remap = false)
+	private static String toTarget(Class<?> owner, MethodNode method) {
+		return null;
+	}
+
+	@Shadow(remap = false)
+	private static String toTargetCustomName(Class<?> owner, MethodNode method, String methodName) {
+		return null;
+	}
+
+	@Shadow(remap = false)
+	private static String toTargetInsn(MethodInsnNode methodInsn) {
+		return null;
+	}
+
 	/**
 	 * @author Cat Core
 	 * @reason remap annotation fields on the fly
@@ -64,70 +89,90 @@ public abstract class ProxyTransformerMixin {
 		Map<String, String> shadowFieldRemap = new HashMap();
 		Map<String, String> shadowMethodRemap = new HashMap();
 		log("Building shadow field remap map...");
-		((List)classNode.fields.stream().filter(field -> field.invisibleAnnotations != null).collect(Collectors.toList()))
-				.forEach(field -> field.invisibleAnnotations.stream().filter(ann -> SHADOW.equals(ann.desc)).findFirst().ifPresent(ann -> {
-					classNode.fields.remove(field);
-					String fieldName = field.name;
+		((List)((List)classNode.fields).stream().filter(field -> ((List)((FieldNode)field).invisibleAnnotations) != null).collect(Collectors.toList()))
+				.forEach(field -> ((List)((FieldNode)field).invisibleAnnotations).stream().filter(ann -> SHADOW.equals(((AnnotationNode)ann).desc)).findFirst().ifPresent(ann -> {
+					FieldNode feild = (FieldNode) field;
+					AnnotationNode nan = (AnnotationNode) ann;
+					classNode.fields.remove(feild);
+					String fieldName = feild.name;
 					String rawPatcher = "";
-					if (ann.values != null) {
-						for(int i = 0; i < ann.values.size(); i += 2) {
-							String var9 = (String)ann.values.get(i);
+					if (nan.values != null) {
+						for(int i = 0; i < nan.values.size(); i += 2) {
+							String var9 = (String)nan.values.get(i);
 							switch(var9) {
 							case "obfuscatedName":
 								if (!Util.workspace) {
-									fieldName = (String)ann.values.get(i + 1);
+									fieldName = RemapUtil.getRemappedFieldName(targetClass, (String)nan.values.get(i + 1));
 								}
 								break;
 							case "requiredPatcher":
-								rawPatcher = (String)ann.values.get(i + 1);
+								rawPatcher = (String)nan.values.get(i + 1);
 							}
 						}
 					}
 
 					if (!rawPatcher.isEmpty() && !Patchers.PATCHED_VIEW.contains(Identifier.of(rawPatcher))) {
-						log(" - Skipping field \"" + field.name + "\" because \"" + rawPatcher + "\" patcher isn't initialized");
+						log(" - Skipping field \"" + feild.name + "\" because \"" + rawPatcher + "\" patcher isn't initialized");
 					} else {
-						shadowFieldRemap.put(toTarget(proxyClass, field), toTargetCustomName(targetClass, field, fieldName));
-						log(" - " + proxyClass.getSimpleName() + ";" + field.name + " -> " + targetClass.getSimpleName() + ";" + fieldName);
+						shadowFieldRemap.put(toTarget(proxyClass, feild), toTargetCustomName(targetClass, feild, fieldName));
+						log(" - " + proxyClass.getSimpleName() + ";" + feild.name + " -> " + targetClass.getSimpleName() + ";" + fieldName);
 					}
 				}));
 		log("Built!");
 		log("Building shadow method remap map...");
-		((List)classNode.methods.stream().filter(method -> method.invisibleAnnotations != null).collect(Collectors.toList()))
-				.forEach(method -> method.invisibleAnnotations.stream().filter(ann -> SHADOW.equals(ann.desc)).findFirst().ifPresent(ann -> {
-					classNode.methods.remove(method);
-					String methodName = method.name;
+		((List)((List)classNode.methods).stream().filter(method -> ((List)((MethodNode)method).invisibleAnnotations) != null).collect(Collectors.toList()))
+				.forEach(method -> ((List)((MethodNode)method).invisibleAnnotations).stream().filter(ann -> SHADOW.equals(((AnnotationNode)ann).desc)).findFirst().ifPresent(ann -> {
+					MethodNode metodh = (MethodNode) method;
+					AnnotationNode nan = (AnnotationNode) ann;
+					classNode.methods.remove(metodh);
+					String methodName = metodh.name;
 					String rawPatcher = "";
-					if (ann.values != null) {
-						for(int i = 0; i < ann.values.size(); i += 2) {
-							String var9 = (String)ann.values.get(i);
+					if (nan.values != null) {
+						for(int i = 0; i < nan.values.size(); i += 2) {
+							String var9 = (String)nan.values.get(i);
 							switch(var9) {
 							case "obfuscatedName":
 								if (!Util.workspace) {
-									methodName = (String)ann.values.get(i + 1);
+									methodName = (String)nan.values.get(i + 1);
+
+									if (targetClass == TextureManager.class) {
+										if (Objects.equals(methodName, "a")) {
+											methodName = "method_1086";
+										}
+									} else if (targetClass == WorldEventRenderer.class) {
+										if (Objects.equals(methodName, "b")) {
+											methodName = "method_1553";
+										}
+									} else if (targetClass == class_66.class) {
+										if (Objects.equals(methodName, "g")) {
+											methodName = "method_306";
+										}
+									}
 								}
 								break;
 							case "requiredPatcher":
-								rawPatcher = (String)ann.values.get(i + 1);
+								rawPatcher = (String)nan.values.get(i + 1);
 							}
 						}
 					}
 
 					if (!rawPatcher.isEmpty() && !Patchers.PATCHED_VIEW.contains(Identifier.of(rawPatcher))) {
-						log(" - Skipping method \"" + method.name + "\" because \"" + rawPatcher + "\" patcher isn't initialized");
+						log(" - Skipping method \"" + metodh.name + "\" because \"" + rawPatcher + "\" patcher isn't initialized");
 					} else {
-						shadowMethodRemap.put(toTarget(proxyClass, method), toTargetCustomName(targetClass, method, methodName));
-						log(" - " + proxyClass.getSimpleName() + ";" + method.name + " -> " + targetClass.getSimpleName() + ";" + methodName);
+						shadowMethodRemap.put(toTarget(proxyClass, metodh), toTargetCustomName(targetClass, metodh, methodName));
+						log(" - " + proxyClass.getSimpleName() + ";" + metodh.name + " -> " + targetClass.getSimpleName() + ";" + methodName);
 					}
 				}));
 		log("Built!");
 		log("Remapping methods...");
-		classNode.methods.forEach(method -> {
-			log(" - " + method.name + "...");
-			method.instructions.iterator().forEachRemaining(insn -> {
-				switch(insn.getType()) {
+		((List)classNode.methods).forEach(method -> {
+			MethodNode metodh = (MethodNode) method;
+			log(" - " + metodh.name + "...");
+			((ListIterator)metodh.instructions.iterator()).forEachRemaining(insn -> {
+				AbstractInsnNode inns = (AbstractInsnNode) insn;
+				switch(inns.getType()) {
 				case 4:
-					FieldInsnNode fieldInsn = (FieldInsnNode)insn;
+					FieldInsnNode fieldInsn = (FieldInsnNode)inns;
 					String fieldTarget = toTargetInsn(fieldInsn);
 					if (shadowFieldRemap.containsKey(fieldTarget)) {
 						String remapped = (String)shadowFieldRemap.get(fieldTarget);
@@ -139,7 +184,7 @@ public abstract class ProxyTransformerMixin {
 					}
 					break;
 				case 5:
-					MethodInsnNode methodInsn = (MethodInsnNode)insn;
+					MethodInsnNode methodInsn = (MethodInsnNode)inns;
 					String methodTarget = toTargetInsn(methodInsn);
 					if (shadowMethodRemap.containsKey(methodTarget)) {
 						String remapped = (String)shadowMethodRemap.get(methodTarget);
