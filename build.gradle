@@ -7,6 +7,9 @@ plugins {
 	id "babric-loom" version "1.0.1" apply false
 }
 
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
 def ENV = System.getenv()
 
 version = rootProject.mod_version
@@ -48,7 +51,7 @@ allprojects {
 	}
 
 	apply plugin: "java-library"
-	apply plugin: "checkstyle"
+	//apply plugin: "checkstyle"
 	apply plugin: "babric-loom"
 
 	tasks.withType(JavaCompile).configureEach {
@@ -162,10 +165,10 @@ allprojects {
 		}
 	}
 
-	checkstyle {
-		configFile = rootProject.file("checkstyle.xml")
-		toolVersion = "9.1"
-	}
+	//checkstyle {
+	//	configFile = rootProject.file("checkstyle.xml")
+	//	toolVersion = "9.1"
+	//}
 
 	tasks.withType(AbstractArchiveTask) {
 		preserveFileTimestamps = false

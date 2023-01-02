@@ -9,7 +9,14 @@
     "client.twilightforest.TwilightForestMixin",
     "client.portalgun.PortalGunMixin",
     "client.aether.TitleScreenMixin",
-    "client.aether.AetherItemsMixin"
+    "client.aether.AetherItemsMixin",
+    "client.aethermp.AetherMPMixin",
+    "client.aethermp.PlayerBaseMixin",
+    "client.overrideapi.OverrideAPIMixin",
+    "client.overrideapi.GuiHandlerMixin",
+    "client.infsprites.CoreMixin",
+    "client.infsprites.TessellatorsMixin",
+    "client.infsprites.TextureManagerInvoker"
   ],
   "server": [
   ],
