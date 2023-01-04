@@ -78,7 +78,8 @@ public final class ApronModRemapper implements ModRemapper {
 			new String[]{"net/minecraft/class_632", "io/github/betterthanupdates/shockahpi/item/ShockAhPIToolItem"},
 			new String[]{"net/minecraft/class_420", "io/github/betterthanupdates/shockahpi/item/ShockAhPIAxeItem"},
 			new String[]{"net/minecraft/class_116", "io/github/betterthanupdates/shockahpi/item/ShockAhPIPickaxeItem"},
-			new String[]{"net/minecraft/class_501", "io/github/betterthanupdates/shockahpi/item/ShockAhPIShovelItem"}
+			new String[]{"net/minecraft/class_501", "io/github/betterthanupdates/shockahpi/item/ShockAhPIShovelItem"},
+			new String[]{"net/mine_diver/infsprites/render/Tessellators", "io/github/betterthanupdates/apron/fixes/vanilla/InfSpriteTessellators"}
 		};
 
 		for (String[] entry : toolFixes) {
