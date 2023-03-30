@@ -1,0 +1,8 @@
+version = getSubprojectVersion(this)
+
+dependencies {
+    modCompileOnly(files("mods/aether.jar"))
+	modCompileOnly(files("mods/aethermp.jar"))
+	modCompileOnly(files("mods/infsprite.jar"))
+	modCompileOnly(files("mods/overrideapi.jar"))
+}

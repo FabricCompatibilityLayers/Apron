@@ -55,7 +55,7 @@ allprojects {
 	apply plugin: "babric-loom"
 
 	tasks.withType(JavaCompile).configureEach {
-		it.options.release = project.name == "apron-stapi-fixes" ? 17 : 8
+		it.options.release = 8
 	}
 
 	java {
@@ -87,12 +87,6 @@ allprojects {
 				includeGroup 'net.legacyfabric.legacy-fabric-api'
 			}
 		}
-
-		maven {
-			name 'StationAPI'
-			url 'https://maven.glass-launcher.net/snapshots'
-		}
-		// Used for a StationAPI dependency.
 		maven {
 			name = 'Froge'
 			url 'https://maven.minecraftforge.net/'
@@ -135,9 +129,9 @@ allprojects {
 
 		modApi("net.legacyfabric.legacy-fabric-api:legacy-fabric-logger-api-v1:${rootProject.lfapi_version}")
 
-		modApi("net.modificationstation:StationAPI:${rootProject.stapi_version}")
-
-		modApi("com.github.paulevsGitch:BHAPI:${project.bhapi_version}")
+//		modApi("net.modificationstation:StationAPI:${rootProject.stapi_version}")
+//
+//		modApi("com.github.paulevsGitch:BHAPI:${project.bhapi_version}")
 
 //		modRuntimeOnly(group: "remapped.client", name: "mangopack")
 
@@ -166,11 +160,6 @@ allprojects {
 		}
 	}
 
-	//checkstyle {
-	//	configFile = rootProject.file("checkstyle.xml")
-	//	toolVersion = "9.1"
-	//}
-
 	tasks.withType(AbstractArchiveTask) {
 		preserveFileTimestamps = false
 		reproducibleFileOrder = true
@@ -179,8 +168,8 @@ allprojects {
 
 subprojects {
 	dependencies {
-		if (project.name != "apron-impl") {
-			api(project.dependencies.project(path: ":apron-impl", configuration: 'namedElements'))
+		if (project.name != "apron") {
+			api(project.dependencies.project(path: ":apron", configuration: 'namedElements'))
 		}
 	}
 

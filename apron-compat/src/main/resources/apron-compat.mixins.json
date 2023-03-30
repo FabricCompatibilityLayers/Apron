@@ -1,0 +1,26 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "package": "io.github.betterthanupdates.apron.compat.mixin",
+  "mixins": [
+    "aether.AetherItemsMixin",
+    "aethermp.AetherMPMixin",
+    "aethermp.PlayerBaseMixin",
+    "betatweaks.GuiAPIHandlerMixin",
+    "betatweaks.UtilsMixin",
+    "hmi.UtilsMixin",
+    "infsprites.CoreMixin",
+    "infsprites.ProxyTransformerMixin",
+    "infsprites.UtilMixin",
+    "overrideapi.GuiHandlerMixin",
+    "overrideapi.OverrideAPIMixin",
+    "portalgun.PortalGunMixin",
+    "reimap.ReiMinimapMixin",
+    "twilightforest.TwilightForestMixin"
+  ],
+  "plugin": "io.github.betterthanupdates.apron.compat.MixinCompatPlugin"
+}
