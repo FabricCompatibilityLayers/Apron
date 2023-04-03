@@ -131,6 +131,11 @@ public final class ApronModRemapper implements ModRemapper {
 				new VisitorInfos.Type("net/minecraft/gm"),
 				new VisitorInfos.Type("net/minecraft/class_124")
 		);
+
+		infos.registerMethodTypeIns(
+				new VisitorInfos.Type("net/minecraft/yq"),
+				new VisitorInfos.Type("net/minecraft/class_474")
+		);
 	}
 
 	/**

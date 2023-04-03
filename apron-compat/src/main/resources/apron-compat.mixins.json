@@ -20,7 +20,13 @@
     "overrideapi.OverrideAPIMixin",
     "portalgun.PortalGunMixin",
     "reimap.ReiMinimapMixin",
-    "twilightforest.TwilightForestMixin"
+    "twilightforest.TwilightForestMixin",
+    "betterthanwolves.BTWMixin",
+    "betterthanwolves.FCBlockCompanionCubeMixin",
+    "betterthanwolves.CactusBlockMixin",
+    "betterthanwolves.CakeBlockMixin",
+    "betterthanwolves.CropBlockMixin",
+    "betterthanwolves.FireBlockMixin"
   ],
   "plugin": "io.github.betterthanupdates.apron.compat.MixinCompatPlugin"
 }

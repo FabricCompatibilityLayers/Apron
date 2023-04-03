@@ -1,6 +1,7 @@
 package io.github.betterthanupdates.apron.compat;
 
 import com.llamalad7.mixinextras.MixinExtrasBootstrap;
+import io.github.betterthanupdates.apron.Apron;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -21,7 +22,16 @@ public class MixinCompatPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		return false;
+		//if (mixinClassName.contains("betterthanwolves")) {
+		//	try {
+		//		Class.forName("net.minecraft.mod_FCBetterThanWolves", false, getClass().getClassLoader());;
+		//		System.out.println("Applying BTW specific mixin: " + mixinClassName);
+		//		return true;
+		//	} catch (ClassNotFoundException e) {
+		//		return false;
+		//	}
+		//}
+		return true;
 	}
 
 	@Override
