@@ -2,9 +2,9 @@ package io.github.betterthanupdates.apron.fixes.vanilla.compat.mixin.client.aeth
 
 import static io.github.betterthanupdates.apron.fixes.vanilla.AetherHelper.*;
 
-import java.util.Collections;
 import java.util.List;
 
+import modloader.ModLoader;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,7 +30,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.resource.language.TranslationStorage;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.storage.WorldMetadata;
 import net.minecraft.world.storage.WorldStorage;
 
@@ -44,7 +43,7 @@ public abstract class TitleScreenMixin extends Screen {
 
 	@Shadow
 	private ButtonWidget multiplayerButton;
-	private List<WorldMetadata> saveList;
+	private WorldMetadata latestSave;
 	private String hoverText;
 
 	@Inject(method = "tick", at = @At("TAIL"))
@@ -59,6 +58,12 @@ public abstract class TitleScreenMixin extends Screen {
 
 	@Inject(method = "initVanillaScreen", at = @At("TAIL"))
 	public void initVanillaScreen(CallbackInfo ci) {
+		final WorldStorage worldStorage = this.client.getWorldStorage();
+		final List<WorldMetadata> saves = worldStorage.getMetadata();
+		if (!saves.isEmpty()) {
+			latestSave = saves.get(0);
+		}
+
 		mmactive = true;
 		this.client.achievement = new GuiAchievementAether(this.client);
 		this.client.overlay = new GuiIngameAether(this.client);
@@ -74,26 +79,7 @@ public abstract class TitleScreenMixin extends Screen {
 			loadingWorld = false;
 		}
 
-		this.client.options.hideHud = true;
-		this.client.options.thirdPerson = true;
-
-		if (renderOption) {
-			this.client.interactionManager = new SingleplayerInteractionManager(this.client);
-
-			if (this.client.world == null) {
-				this.loadSaves();
-				final String saveFileName = this.getSaveFileName(0);
-				final String saveName = this.getSaveName(0);
-
-				if (saveName != null && saveFileName != null) {
-					this.client.createOrLoadWorld(saveFileName, saveName, 0L);
-					((WorldAccessor) this.client.world).setAutoSaveInterval(999999999);
-				} else {
-					renderOption = false;
-				}
-			}
-		}
-
+		showWorldPreview();
 		addButtons();
 	}
 
@@ -113,7 +99,7 @@ public abstract class TitleScreenMixin extends Screen {
 	}
 
 	@ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/menu/TitleScreen;blit(IIIIII)V", ordinal = 0))
-	public void render$modifyBlit0(Args args) {
+	public void render$renderLogoPart1(Args args) {
 		if (!themeOption && renderOption) {
 			GL11.glPushMatrix();
 			GL11.glScalef(0.8F, 0.8F, 0.8F);
@@ -129,7 +115,7 @@ public abstract class TitleScreenMixin extends Screen {
 	}
 
 	@ModifyArgs(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/menu/TitleScreen;blit(IIIIII)V", ordinal = 1))
-	public void render$modifyBlit1(Args args) {
+	public void render$renderLogoPart2(Args args) {
 		if (renderOption) {
 			args.set(0, 170);
 			args.set(1, 15);
@@ -140,14 +126,14 @@ public abstract class TitleScreenMixin extends Screen {
 	}
 
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/menu/TitleScreen;blit(IIIIII)V", ordinal = 1, shift = At.Shift.AFTER))
-	public void render$afterBlit1(CallbackInfo ci) {
+	public void render$hideSplashText(CallbackInfo ci) {
 		if (!themeOption && renderOption) {
 			GL11.glPopMatrix();
 		}
 	}
 
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/menu/TitleScreen;drawTextWithShadowCentred(Lnet/minecraft/client/render/TextRenderer;Ljava/lang/String;III)V"))
-	public void drawSplashText(TitleScreen instance, TextRenderer textRenderer, String s, int i, int j, int k) {
+	public void render$drawSplashText(TitleScreen instance, TextRenderer textRenderer, String s, int i, int j, int k) {
 		if (!renderOption) {
 			this.drawTextWithShadowCentred(textRenderer, s, i, j, k);
 		}
@@ -172,57 +158,55 @@ public abstract class TitleScreenMixin extends Screen {
 
 	@Override
 	protected void mouseReleased(int x, int y, int k) {
-		this.hoverText = "";
-
 		for (Object o : this.buttons) {
-			ButtonWidget button = (ButtonWidget) o;
+			final ButtonWidget button = (ButtonWidget) o;
 
-			if (x >= button.x && y >= button.y && x < button.x + ((ButtonWidgetAccessor) button).getWidth() && y < button.y + ((ButtonWidgetAccessor) button).getHeight()) {
-				switch (button.id) {
-					case 5:
-						this.hoverText = "Toggle World";
-						break;
-					case 6:
-						if (themeOption) {
-							this.hoverText = "Normal Theme";
-						} else {
-							this.hoverText = "Aether Theme";
-						}
+			if (x < button.x || y < button.y || x >= button.x + ((ButtonWidgetAccessor) button).getWidth() || y >= button.y + ((ButtonWidgetAccessor) button).getHeight()) {
+				continue;
+			}
 
-						break;
-					case 7:
-						this.hoverText = "Quick Load";
-				}
+			switch (button.id) {
+				case 5:
+					this.hoverText = "Toggle World";
+					break;
+				case 6:
+					if (themeOption) {
+						this.hoverText = "Normal Theme";
+					} else {
+						this.hoverText = "Aether Theme";
+					}
+
+					break;
+				case 7:
+					this.hoverText = "Quick Load";
 			}
 		}
 	}
 
 	@Inject(method = "buttonClicked", at = @At("HEAD"))
-	public void buttonClicked(ButtonWidget arg, CallbackInfo ci) {
-		if (arg.id == 5) {
-			if (!renderOption) {
-				renderOption = true;
-				this.loadSaves();
-				final String saveFileName = this.getSaveFileName(0);
-				final String saveName = this.getSaveName(0);
+	public void buttonClicked(ButtonWidget button, CallbackInfo ci) {
+		if (button.id == 1) {
+			this.client.openScreen(new GuiSelectWorldAether(this, musicId));
+		}
 
-				if (saveName == null) {
-					renderOption = false;
-				} else {
-					this.client.createOrLoadWorld(saveFileName, saveName, 0L);
-				}
+		if (button.id == 2) {
+			this.client.openScreen(new GuiMultiplayerAether(this, musicId));
+		}
+
+		if (button.id == 5) {
+			renderOption = !renderOption;
+			if (renderOption) {
+				showWorldPreview();
 			} else {
-				renderOption = false;
-				this.client.world = null;
-				this.client.player = null;
+				hideWorldPreview();
 			}
 		}
 
-		if (arg.id == 6) {
+		if (button.id == 6) {
 			themeOption = !themeOption;
 		}
 
-		if (arg.id == 7) {
+		if (button.id == 7) {
 			this.client.openScreen(null);
 			mmactive = false;
 
@@ -236,52 +220,38 @@ public abstract class TitleScreenMixin extends Screen {
 		addButtons();
 	}
 
-	@ModifyArg(method = "buttonClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/SelectWorldScreen;<init>(Lnet/minecraft/client/gui/screen/Screen;)V"))
-	public Screen buttonClicked$selectWorld(Screen screen) {
-		return new GuiSelectWorldAether(this, musicId);
-	}
-
-	@ModifyArg(method = "buttonClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/SelectWorldScreen;<init>(Lnet/minecraft/client/gui/screen/Screen;)V"))
-	public Screen buttonClicked$multiplayer(Screen screen) {
-		return new GuiMultiplayerAether(this, musicId);
-	}
-
 	private void addButtons() {
-		buttons.clear();
+		buttons.removeIf(o -> ((ButtonWidget) o).id < 8);
 
-		TranslationStorage var1 = TranslationStorage.getInstance();
+		final TranslationStorage var1 = TranslationStorage.getInstance();
 		this.buttons.add(new ButtonWidget(5, this.width - 24, 4, 20, 20, var1.translate("W")));
 		this.buttons.add(new ButtonWidget(6, this.width - 48, 4, 20, 20, var1.translate("T")));
 
-
-		if(themeOption) {
-			if (renderOption) {
-				int var5 = this.height / 4 + 20;
+		if (renderOption) {
+			final int var5 = this.height / 4 + 20;
+			if (themeOption) {
 				this.buttons.add(new GuiAetherButton(0, this.width / 4 - 100, var5 + 72, var1.translate("menu.options")));
 				this.buttons.add(new GuiAetherButton(1, this.width / 4 - 100, var5, var1.translate("menu.singleplayer")));
 				this.buttons.add(this.multiplayerButton = new GuiAetherButton(2, this.width / 4 - 100, var5 + 24, var1.translate("menu.multiplayer")));
 				this.buttons.add(new GuiAetherButton(3, this.width / 4 - 100, var5 + 48, var1.translate("menu.mods")));
 				this.buttons.add(new GuiAetherButton(4, this.width / 4 - 100, var5 + 96, var1.translate("menu.quit")));
-				this.buttons.add(new ButtonWidget(7, this.width - 72, 4, 20, 20, var1.translate("Q")));
 			} else {
-				int var5 = this.height / 4 + 40;
-				this.buttons.add(new GuiAetherButton(0, this.width / 2 - 110, var5 + 72, 98, 20, var1.translate("menu.options")));
-				this.buttons.add(new GuiAetherButton(1, this.width / 2 - 110, var5, var1.translate("menu.singleplayer")));
-				this.buttons.add(this.multiplayerButton = new GuiAetherButton(2, this.width / 2 - 110, var5 + 24, var1.translate("menu.multiplayer")));
-				this.buttons.add(new GuiAetherButton(3, this.width / 2 - 110, var5 + 48, var1.translate("menu.mods")));
-				this.buttons.add(new GuiAetherButton(4, this.width / 2 + 2 - 10, var5 + 72, 98, 20, var1.translate("menu.quit")));
-			}
-		} else {
-			if (renderOption) {
-				int var5 = this.height / 4 + 20;
 				this.buttons.add(new ButtonWidget(0, this.width / 4 - 100, var5 + 72, var1.translate("menu.options")));
 				this.buttons.add(new ButtonWidget(1, this.width / 4 - 100, var5, var1.translate("menu.singleplayer")));
 				this.buttons.add(this.multiplayerButton = new ButtonWidget(2, this.width / 4 - 100, var5 + 24, var1.translate("menu.multiplayer")));
 				this.buttons.add(new ButtonWidget(3, this.width / 4 - 100, var5 + 48, var1.translate("menu.mods")));
 				this.buttons.add(new ButtonWidget(4, this.width / 4 - 100, var5 + 96, var1.translate("menu.quit")));
-				this.buttons.add(new ButtonWidget(7, this.width - 72, 4, 20, 20, var1.translate("Q")));
+			}
+			this.buttons.add(new ButtonWidget(7, this.width - 72, 4, 20, 20, var1.translate("Q")));
+		} else {
+			final int var5 = this.height / 4 + 40;
+			if (themeOption) {
+				this.buttons.add(new GuiAetherButton(0, this.width / 2 - 110, var5 + 72, 98, 20, var1.translate("menu.options")));
+				this.buttons.add(new GuiAetherButton(1, this.width / 2 - 110, var5, var1.translate("menu.singleplayer")));
+				this.buttons.add(this.multiplayerButton = new GuiAetherButton(2, this.width / 2 - 110, var5 + 24, var1.translate("menu.multiplayer")));
+				this.buttons.add(new GuiAetherButton(3, this.width / 2 - 110, var5 + 48, var1.translate("menu.mods")));
+				this.buttons.add(new GuiAetherButton(4, this.width / 2 + 2 - 10, var5 + 72, 98, 20, var1.translate("menu.quit")));
 			} else {
-				int var5 = this.height / 4 + 40;
 				this.buttons.add(new ButtonWidget(0, this.width / 2 - 110, var5 + 72, 98, 20, var1.translate("menu.options")));
 				this.buttons.add(new ButtonWidget(1, this.width / 2 - 110, var5, var1.translate("menu.singleplayer")));
 				this.buttons.add(this.multiplayerButton = new ButtonWidget(2, this.width / 2 - 110, var5 + 24, var1.translate("menu.multiplayer")));
@@ -291,37 +261,27 @@ public abstract class TitleScreenMixin extends Screen {
 		}
 	}
 
-	protected String getSaveName(int i) {
-		if (this.saveList.size() < i + 1) {
-			return null;
-		} else {
-			String s = (this.saveList.get(i)).getWorldName();
-
-			if (s == null || MathHelper.isStringEmpty(s)) {
-				TranslationStorage stringtranslate = TranslationStorage.getInstance();
-				s = stringtranslate.translate("selectWorld.world") + " " + (i + 1);
-			}
-
-			return s;
-		}
+	private void showWorldPreview() {
+		this.client.interactionManager = new SingleplayerInteractionManager(this.client);
+		ModLoader.getMinecraftInstance().options.hideHud = true;
+		this.client.options.thirdPerson = true;
+		this.client.createOrLoadWorld(latestSave.getFileName(), latestSave.getWorldName(), 0L);
+		((WorldAccessor) this.client.world).setAutoSaveInterval(999999999);
 	}
 
-	private void loadSaves() {
-		WorldStorage isaveformat = this.client.getWorldStorage();
-		this.saveList = isaveformat.getMetadata();
-		Collections.sort(this.saveList);
-	}
-
-	protected String getSaveFileName(int i) {
-		return this.saveList.size() < i + 1 ? null : (this.saveList.get(i)).getFileName();
+	private void hideWorldPreview() {
+		this.client.world = null;
+		this.client.player = null;
 	}
 
 	@Override
 	public void renderBackground() {
-		if (themeOption && !renderOption) {
+		if (renderOption) return;
+
+		if (themeOption) {
 			this.renderAetherBackground();
 		} else {
-			super.renderBackground();
+			this.renderDirtBackground(0);
 		}
 	}
 
@@ -339,6 +299,11 @@ public abstract class TitleScreenMixin extends Screen {
 		tessellator.vertex(this.width, 0.0, 0.0, (float) this.width / f, 0.0);
 		tessellator.vertex(0.0, 0.0, 0.0, 0.0, 0.0);
 		tessellator.tessellate();
+	}
+
+	@Override
+	public boolean isPauseScreen() {
+		return false;
 	}
 
 	@Override
