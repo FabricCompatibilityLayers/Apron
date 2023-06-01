@@ -8,11 +8,11 @@ import java.util.Random;
 
 import net.fabricmc.loader.api.FabricLoader;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import paulscode.sound.SoundSystem;
 import paulscode.sound.SoundSystemConfig;
@@ -23,7 +23,6 @@ import net.minecraft.client.options.GameOptions;
 import net.minecraft.client.sound.SoundEntry;
 import net.minecraft.client.sound.SoundHelper;
 import net.minecraft.client.sound.SoundMap;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
 import io.github.betterthanupdates.apron.api.ApronApi;
@@ -48,16 +47,9 @@ public abstract class SoundHelperMixin {
 	private SoundMap music;
 	@Shadow
 	private static boolean initialized;
-	@Shadow
-	private GameOptions gameOptions;
-
-	@Shadow
-	protected abstract void setLibsAndCodecs();
 
 	@Shadow
 	private static SoundSystem soundSystem;
-	@Shadow
-	private int soundUID;
 	// AudioMod Fields
 	@Unique
 	private final SoundMap cave = new SoundMap();
@@ -135,18 +127,35 @@ public abstract class SoundHelperMixin {
 	 * @author Risugami
 	 * @reason AudioMod patches
 	 */
-	@Overwrite
-	public void updateMusicVolume() {
-		if (!initialized && (this.gameOptions.soundVolume != 0.0F || this.gameOptions.musicVolume != 0.0F)) {
-			this.setLibsAndCodecs();
-		}
+	@Redirect(method = "updateMusicVolume", at = @At(value = "FIELD", target = "Lnet/minecraft/client/sound/SoundHelper;initialized:Z", ordinal = 1))
+	public boolean updateMusicVolume() {
+		return initialized && soundSystem != null;
+	}
 
-		if (soundSystem != null && initialized) {
-			if (this.gameOptions.musicVolume == 0.0F) {
-				soundSystem.stop("BgMusic");
-			} else {
-				soundSystem.setVolume("BgMusic", this.gameOptions.musicVolume);
-			}
+	/**
+	 * @author Risugami
+	 * @reason AudioMod patches
+	 */
+	@Redirect(method = "handleBackgroundMusic", at = @At(value = "FIELD", target = "Lnet/minecraft/client/sound/SoundHelper;initialized:Z"))
+	public boolean handleBackgroundMusic() {
+		return initialized && soundSystem != null;
+	}
+
+	/**
+	 * @author Risugami
+	 * @reason AudioMod patches
+	 */
+	@Redirect(method = "handleBackgroundMusic", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/sound/SoundMap;getRandomSound()Lnet/minecraft/client/sound/SoundEntry;"))
+	public SoundEntry handleBackgroundMusic(SoundMap instance) {
+		if (this.client != null
+				&& this.client.player != null
+				&& !this.client
+				.player
+				.world
+				.isAboveGroundCached(MathHelper.floor(this.client.player.x), MathHelper.floor(this.client.player.y), MathHelper.floor(this.client.player.z))) {
+			return this.cave.getRandomSound();
+		} else {
+			return this.music.getRandomSound();
 		}
 	}
 
@@ -154,147 +163,35 @@ public abstract class SoundHelperMixin {
 	 * @author Risugami
 	 * @reason AudioMod patches
 	 */
-	@Overwrite
-	public void handleBackgroundMusic() {
-		if (initialized && this.gameOptions.musicVolume != 0.0F && soundSystem != null) {
-			if (!soundSystem.playing("BgMusic") && !soundSystem.playing("streaming")) {
-				if (this.musicCountdown > 0) {
-					--this.musicCountdown;
-					return;
-				}
-
-				SoundEntry entry;
-				if (this.client != null
-						&& this.client.player != null
-						&& !this.client
-						.player
-						.world
-						.isAboveGroundCached(MathHelper.floor(this.client.player.x), MathHelper.floor(this.client.player.y), MathHelper.floor(this.client.player.z))) {
-					entry = this.cave.getRandomSound();
-				} else {
-					entry = this.music.getRandomSound();
-				}
-
-				if (entry != null) {
-					this.musicCountdown = this.rand.nextInt(MUSIC_INTERVAL) + MUSIC_INTERVAL;
-					soundSystem.backgroundMusic("BgMusic", entry.soundUrl, entry.soundName, false);
-					soundSystem.setVolume("BgMusic", this.gameOptions.musicVolume);
-					soundSystem.play("BgMusic");
-				}
-			}
-		}
+	@Redirect(method = "setSoundPosition", at = @At(value = "FIELD", target = "Lnet/minecraft/client/sound/SoundHelper;initialized:Z"))
+	public boolean setSoundPosition() {
+		return initialized && soundSystem != null;
 	}
 
 	/**
 	 * @author Risugami
 	 * @reason AudioMod patches
 	 */
-	@Overwrite
-	public void setSoundPosition(LivingEntity entity, float paramFloat) {
-		if (initialized && this.gameOptions.soundVolume != 0.0F && soundSystem != null) {
-			if (entity != null) {
-				float f1 = entity.prevYaw + (entity.yaw - entity.prevYaw) * paramFloat;
-				double d1 = entity.prevX + (entity.x - entity.prevX) * (double) paramFloat;
-				double d2 = entity.prevY + (entity.y - entity.prevY) * (double) paramFloat;
-				double d3 = entity.prevZ + (entity.z - entity.prevZ) * (double) paramFloat;
-				float f2 = MathHelper.cos(-f1 * (float) (Math.PI / 180.0) - (float) Math.PI);
-				float f3 = MathHelper.sin(-f1 * (float) (Math.PI / 180.0) - (float) Math.PI);
-				float f4 = -f3;
-				float f5 = 0.0F;
-				float f6 = -f2;
-				float f7 = 0.0F;
-				float f8 = 1.0F;
-				float f9 = 0.0F;
-				soundSystem.setListenerPosition((float) d1, (float) d2, (float) d3);
-				soundSystem.setListenerOrientation(f4, f5, f6, f7, f8, f9);
-			}
-		}
+	@Redirect(method = "playStreaming", at = @At(value = "FIELD", target = "Lnet/minecraft/client/sound/SoundHelper;initialized:Z"))
+	public boolean playSound() {
+		return initialized && soundSystem != null;
 	}
 
 	/**
 	 * @author Risugami
 	 * @reason AudioMod patches
 	 */
-	@Overwrite
-	public void playStreaming(String soundId, float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5) {
-		if (initialized && this.gameOptions.soundVolume != 0.0F && soundSystem != null) {
-			String str = "streaming";
-
-			if (soundSystem.playing("streaming")) {
-				soundSystem.stop("streaming");
-			}
-
-			if (soundId != null) {
-				SoundEntry entry = this.streaming.getRandomSoundForId(soundId);
-
-				if (entry != null && paramFloat4 > 0.0F) {
-					if (soundSystem.playing("BgMusic")) {
-						soundSystem.stop("BgMusic");
-					}
-
-					float f1 = 16.0F;
-					soundSystem.newStreamingSource(true, str, entry.soundUrl, entry.soundName, false, paramFloat1, paramFloat2, paramFloat3, 2, f1 * 4.0F);
-					soundSystem.setVolume(str, 0.5F * this.gameOptions.soundVolume);
-					soundSystem.play(str);
-				}
-			}
-		}
+	@Redirect(method = "playSound(Ljava/lang/String;FFFFF)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/sound/SoundHelper;initialized:Z"))
+	public boolean playSound$1() {
+		return initialized && soundSystem != null;
 	}
 
 	/**
 	 * @author Risugami
 	 * @reason AudioMod patches
 	 */
-	@Overwrite
-	public void playSound(String paramString, float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4, float paramFloat5) {
-		if (initialized && this.gameOptions.soundVolume != 0.0F && soundSystem != null) {
-			SoundEntry entry = this.sounds.getRandomSoundForId(paramString);
-
-			if (entry != null && paramFloat4 > 0.0F) {
-				this.soundUID = (this.soundUID + 1) % 256;
-				String str = "sound_" + this.soundUID;
-				float f1 = 16.0F;
-
-				if (paramFloat4 > 1.0F) {
-					f1 *= paramFloat4;
-				}
-
-				soundSystem.newSource(paramFloat4 > 1.0F, str, entry.soundUrl, entry.soundName, false, paramFloat1, paramFloat2, paramFloat3, 2, f1);
-				soundSystem.setPitch(str, paramFloat5);
-
-				if (paramFloat4 > 1.0F) {
-					paramFloat4 = 1.0F;
-				}
-
-				soundSystem.setVolume(str, paramFloat4 * this.gameOptions.soundVolume);
-				soundSystem.play(str);
-			}
-		}
-	}
-
-	/**
-	 * @author Risugami
-	 * @reason AudioMod patches
-	 */
-	@Overwrite
-	public void playSound(String paramString, float paramFloat1, float paramFloat2) {
-		if (initialized && this.gameOptions.soundVolume != 0.0F && soundSystem != null) {
-			SoundEntry entry = this.sounds.getRandomSoundForId(paramString);
-
-			if (entry != null) {
-				this.soundUID = (this.soundUID + 1) % 256;
-				String str = "sound_" + this.soundUID;
-				soundSystem.newSource(false, str, entry.soundUrl, entry.soundName, false, 0.0F, 0.0F, 0.0F, 0, 0.0F);
-
-				if (paramFloat1 > 1.0F) {
-					paramFloat1 = 1.0F;
-				}
-
-				paramFloat1 *= 0.25F;
-				soundSystem.setPitch(str, paramFloat2);
-				soundSystem.setVolume(str, paramFloat1 * this.gameOptions.soundVolume);
-				soundSystem.play(str);
-			}
-		}
+	@Redirect(method = "playSound(Ljava/lang/String;FF)V", at = @At(value = "FIELD", target = "Lnet/minecraft/client/sound/SoundHelper;initialized:Z"))
+	public boolean playSound$2() {
+		return initialized && soundSystem != null;
 	}
 }
