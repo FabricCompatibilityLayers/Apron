@@ -27,7 +27,6 @@ public class MixinPluginCompat implements IMixinConfigPlugin {
 				return false;
 			}
 		}
-
 		return true;
 	}
 

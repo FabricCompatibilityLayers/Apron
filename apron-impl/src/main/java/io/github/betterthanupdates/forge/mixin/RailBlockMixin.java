@@ -1,9 +1,10 @@
 package io.github.betterthanupdates.forge.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.RailBlock;
@@ -22,19 +23,19 @@ public abstract class RailBlockMixin extends Block {
 	 * @author Eloraam
 	 * @reason provide a sane way of knowing whether a block is a rail
 	 */
-	@Overwrite
-	public static final boolean method_1109(World world, int x, int y, int z) {
+	@Inject(method = "method_1109", at = @At("TAIL"), cancellable = true)
+	private static void method_1109(World world, int x, int y, int z, CallbackInfoReturnable<Boolean> cir) {
 		int l = world.getBlockId(x, y, z);
-		return Block.BY_ID[l] instanceof RailBlock;
+		cir.setReturnValue(Block.BY_ID[l] instanceof RailBlock);
 	}
 
 	/**
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Overwrite
-	public static final boolean isRail(int i) {
-		return Block.BY_ID[i] instanceof RailBlock;
+	@Inject(method = "isRail", at = @At("TAIL"), cancellable = true)
+	private static void isRail(int i, CallbackInfoReturnable<Boolean> cir) {
+		cir.setReturnValue(Block.BY_ID[i] instanceof RailBlock);
 	}
 
 	/**

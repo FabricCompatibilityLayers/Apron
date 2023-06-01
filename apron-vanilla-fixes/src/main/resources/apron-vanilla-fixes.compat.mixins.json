@@ -21,5 +21,6 @@
   "server": [
   ],
   "parent": "apron-vanilla-fixes.mixins.json",
-  "plugin": "io.github.betterthanupdates.apron.fixes.vanilla.plugin.MixinPluginCompat"
+  "plugin": "io.github.betterthanupdates.apron.fixes.vanilla.plugin.MixinPluginCompat",
+  "refmap": "apron-vanilla-fixes-refmap.json"
 }

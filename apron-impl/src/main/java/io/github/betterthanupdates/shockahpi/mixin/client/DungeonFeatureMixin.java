@@ -3,13 +3,13 @@ package io.github.betterthanupdates.shockahpi.mixin.client;
 import java.util.Random;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import shockahpi.SAPI;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.block.ChestBlockEntity;
-import net.minecraft.entity.block.MobSpawnerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.feature.DungeonFeature;
@@ -17,120 +17,30 @@ import net.minecraft.world.feature.Feature;
 
 @Mixin(DungeonFeature.class)
 public abstract class DungeonFeatureMixin extends Feature {
+
 	/**
 	 * @author SAPI
 	 * @reason
 	 */
-	@Overwrite
-	public boolean generate(World paramfd, Random paramRandom, int paramInt1, int paramInt2, int paramInt3) {
-		int i = 3;
-		int j = paramRandom.nextInt(2) + 2;
-		int k = paramRandom.nextInt(2) + 2;
-		int m = 0;
+	@Inject(method = "generate", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/World;getBlockEntity(III)Lnet/minecraft/entity/BlockEntity;", ordinal = 0, shift = At.Shift.BY, by = 2), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+	public void generate(World world, Random random, int i, int j, int k, CallbackInfoReturnable<Boolean> cir,
+						 int l1, int l2, int l3, int l4, int l5, int l6, int l7, int l8, int l9, int l10, ChestBlockEntity chestBlockEntity) {
+		for (int i6 = 0; i6 < Math.min(19, SAPI.dungeonGetAmountOfGuaranteed()); ++i6) {
+			ItemStack stack = SAPI.dungeonGetGuaranteed(i6).getStack();
 
-		int i1;
-		int i2;
-		int n;
-		for(n = paramInt1 - j - 1; n <= paramInt1 + j + 1; ++n) {
-			for(i1 = paramInt2 - 1; i1 <= paramInt2 + i + 1; ++i1) {
-				for(i2 = paramInt3 - k - 1; i2 <= paramInt3 + k + 1; ++i2) {
-					Material localln = paramfd.getMaterial(n, i1, i2);
-					if (i1 == paramInt2 - 1 && !localln.isSolid()) {
-						return false;
-					}
-
-					if (i1 == paramInt2 + i + 1 && !localln.isSolid()) {
-						return false;
-					}
-
-					if ((n == paramInt1 - j - 1 || n == paramInt1 + j + 1 || i2 == paramInt3 - k - 1 || i2 == paramInt3 + k + 1) && i1 == paramInt2 && paramfd.isAir(n, i1, i2) && paramfd.isAir(n, i1 + 1, i2)) {
-						++m;
-					}
-				}
+			if (stack != null) {
+				chestBlockEntity.setInventoryItem(random.nextInt(chestBlockEntity.getInventorySize()), stack);
 			}
 		}
+	}
 
-		if (m >= 1 && m <= 5) {
-			for(n = paramInt1 - j - 1; n <= paramInt1 + j + 1; ++n) {
-				for(i1 = paramInt2 + i; i1 >= paramInt2 - 1; --i1) {
-					for(i2 = paramInt3 - k - 1; i2 <= paramInt3 + k + 1; ++i2) {
-						if (n != paramInt1 - j - 1 && i1 != paramInt2 - 1 && i2 != paramInt3 - k - 1 && n != paramInt1 + j + 1 && i1 != paramInt2 + i + 1 && i2 != paramInt3 + k + 1) {
-							paramfd.setBlock(n, i1, i2, 0);
-						} else if (i1 >= 0 && !paramfd.getMaterial(n, i1 - 1, i2).isSolid()) {
-							paramfd.setBlock(n, i1, i2, 0);
-						} else if (paramfd.getMaterial(n, i1, i2).isSolid()) {
-							if (i1 == paramInt2 - 1 && paramRandom.nextInt(4) != 0) {
-								paramfd.setBlock(n, i1, i2, Block.MOSSY_COBBLESTONE.id);
-							} else {
-								paramfd.setBlock(n, i1, i2, Block.COBBLESTONE.id);
-							}
-						}
-					}
-				}
-			}
-
-			label126:
-			for(n = 0; n < 2; ++n) {
-				for(i1 = 0; i1 < 3; ++i1) {
-					i2 = paramInt1 + paramRandom.nextInt(j * 2 + 1) - j;
-					int i4 = paramInt3 + paramRandom.nextInt(k * 2 + 1) - k;
-					if (paramfd.isAir(i2, paramInt2, i4)) {
-						int i5 = 0;
-						if (paramfd.getMaterial(i2 - 1, paramInt2, i4).isSolid()) {
-							++i5;
-						}
-
-						if (paramfd.getMaterial(i2 + 1, paramInt2, i4).isSolid()) {
-							++i5;
-						}
-
-						if (paramfd.getMaterial(i2, paramInt2, i4 - 1).isSolid()) {
-							++i5;
-						}
-
-						if (paramfd.getMaterial(i2, paramInt2, i4 + 1).isSolid()) {
-							++i5;
-						}
-
-						if (i5 == 1) {
-							paramfd.setBlock(i2, paramInt2, i4, Block.CHEST.id);
-							ChestBlockEntity localjs = (ChestBlockEntity)paramfd.getBlockEntity(i2, paramInt2, i4);
-
-							int i6;
-							ItemStack stack;
-							for(i6 = 0; i6 < 8; ++i6) {
-								stack = this.getRandomChestItem(paramRandom);
-								if (stack != null) {
-									localjs.setInventoryItem(paramRandom.nextInt(localjs.getInventorySize()), stack);
-								}
-							}
-
-							i6 = 0;
-
-							while(true) {
-								if (i6 >= Math.min(19, SAPI.dungeonGetAmountOfGuaranteed())) {
-									continue label126;
-								}
-
-								stack = SAPI.dungeonGetGuaranteed(i6).getStack();
-								if (stack != null) {
-									localjs.setInventoryItem(paramRandom.nextInt(localjs.getInventorySize()), stack);
-								}
-
-								++i6;
-							}
-						}
-					}
-				}
-			}
-
-			paramfd.setBlock(paramInt1, paramInt2, paramInt3, Block.MOB_SPAWNER.id);
-			MobSpawnerEntity localcy = (MobSpawnerEntity)paramfd.getBlockEntity(paramInt1, paramInt2, paramInt3);
-			localcy.setEntityId(this.getRandomEntity(paramRandom));
-			return true;
-		} else {
-			return false;
-		}
+	/**
+	 * @author SAPI
+	 * @reason
+	 */
+	@Inject(method = "getRandomChestItem", at = @At("HEAD"), cancellable = true)
+	private void getRandomChestItem(Random paramRandom, CallbackInfoReturnable<ItemStack> cir) {
+		cir.setReturnValue(SAPI.dungeonGetRandomItem());
 	}
 
 	/**
@@ -146,8 +56,8 @@ public abstract class DungeonFeatureMixin extends Feature {
 	 * @author SAPI
 	 * @reason
 	 */
-	@Overwrite
-	private String getRandomEntity(Random paramRandom) {
-		return SAPI.dungeonGetRandomMob();
+	@Inject(method = "getRandomEntity", at = @At("HEAD"), cancellable = true)
+	private void getRandomEntity(Random paramRandom, CallbackInfoReturnable<String> cir) {
+		cir.setReturnValue(SAPI.dungeonGetRandomMob());
 	}
 }

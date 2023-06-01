@@ -4,6 +4,9 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.math.AxixAlignedBoundingBox;
@@ -44,10 +47,10 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Overwrite
-	public boolean isAir(int x, int y, int z) {
+	@Inject(method = "isAir", at = @At("RETURN"), cancellable = true)
+	public void isAir(int x, int y, int z, CallbackInfoReturnable<Boolean> cir) {
 		int l = this.getBlockId(x, y, z);
-		return l == 0 || ((ForgeBlock) Block.BY_ID[l]).isAirBlock((World) (Object) this, x, y, z);
+		cir.setReturnValue(l == 0 || ((ForgeBlock) Block.BY_ID[l]).isAirBlock((World) (Object) this, x, y, z));
 	}
 
 	/**
@@ -116,10 +119,10 @@ public abstract class WorldMixin implements BlockView, ForgeWorld {
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Overwrite
-	public boolean canSuffocate(int x, int y, int z) {
+	@Inject(method = "canSuffocate", at = @At("HEAD"), cancellable = true)
+	public void canSuffocate(int x, int y, int z, CallbackInfoReturnable<Boolean> cir) {
 		Block block = Block.BY_ID[this.getBlockId(x, y, z)];
-		return block != null && ((ForgeBlock) block).isBlockNormalCube((World) (Object) this, x, y, z);
+		cir.setReturnValue(block != null && ((ForgeBlock) block).isBlockNormalCube((World) (Object) this, x, y, z));
 	}
 
 	@Override
