@@ -19,7 +19,6 @@ import net.minecraft.world.World;
 import io.github.betterthanupdates.forge.block.ForgeBlock;
 import io.github.betterthanupdates.forge.world.ForgeWorld;
 
-@Debug(export = true)
 @Mixin(World.class)
 public abstract class WorldMixin implements BlockView, ForgeWorld {
 
