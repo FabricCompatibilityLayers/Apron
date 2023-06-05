@@ -1,180 +1,59 @@
 package io.github.betterthanupdates.forge.mixin.client;
 
-import java.util.HashSet;
-import java.util.List;
-
-import forge.ForgeHooksClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import org.lwjgl.opengl.GL11;
+import forge.ForgeHooksClient;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.block.Block;
 import net.minecraft.class_66;
-import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderer;
-import net.minecraft.client.render.entity.BlockEntityRenderDispatcher;
-import net.minecraft.entity.BlockEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldPopulationRegion;
-import net.minecraft.world.chunk.Chunk;
 
-@SuppressWarnings("rawtypes")
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
+
 @Environment(EnvType.CLIENT)
 @Mixin(class_66.class)
 public abstract class WorldRendererMixin {
-	@Shadow
-	public boolean field_249;
 
-	@Shadow
-	public int field_231;
+	@Inject(method = "method_296", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Tessellator;start()V", shift = At.Shift.BEFORE))
+	public void method_296$beforeRenderPass(CallbackInfo ci, @Local(index = 11) int i2) {
+		ForgeHooksClient.beforeRenderPass(i2);
+	}
 
-	@Shadow
-	public int field_232;
+	@Inject(method = "method_296", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Tessellator;tessellate()V", shift = At.Shift.BEFORE))
+	public void method_296$afterRenderPass(CallbackInfo ci, @Local(index = 11) int i2) {
+		ForgeHooksClient.afterRenderPass(i2);
+	}
 
-	@Shadow
-	public int field_233;
-
-	@Shadow
-	public int field_234;
-
-	@Shadow
-	public int field_235;
-
-	@Shadow
-	public int field_236;
-
-	@Shadow
-	public boolean[] field_244;
-
-	@Shadow
-	public List<BlockEntity> field_224;
-
-	@Shadow
-	public World world;
-
-	@Shadow
-	private int field_225;
-
-	@Shadow
-	protected abstract void method_306();
-
-	@Shadow
-	private List<BlockEntity> field_228;
-
-	@Shadow
-	public boolean field_223;
-
-	@Shadow
-	private boolean field_227;
-
-	@Shadow
-	public static int chunkUpdates;
-
-	/**
-	 * @author Eloraam
-	 * @reason Minecraft Forge client hooks
-	 */
-	@Overwrite
-	public void method_296() {
-		if (this.field_249) {
-			++chunkUpdates;
-			int i = this.field_231;
-			int j = this.field_232;
-			int k = this.field_233;
-			int l = this.field_231 + this.field_234;
-			int i1 = this.field_232 + this.field_235;
-			int j1 = this.field_233 + this.field_236;
-
-			for (int k1 = 0; k1 < 2; ++k1) {
-				this.field_244[k1] = true;
-			}
-
-			Chunk.field_953 = false;
-			HashSet<BlockEntity> hashset = new HashSet<>(this.field_224);
-			this.field_224.clear();
-			int l1 = 1;
-			WorldPopulationRegion chunkcache = new WorldPopulationRegion(this.world, i - l1, j - l1, k - l1, l + l1, i1 + l1, j1 + l1);
-			BlockRenderer renderblocks = new BlockRenderer(chunkcache);
-
-			for (int i2 = 0; i2 < 2; ++i2) {
-				boolean flag = false;
-				boolean flag1 = false;
-				boolean flag2 = false;
-
-				for (int j2 = j; j2 < i1; ++j2) {
-					for (int k2 = k; k2 < j1; ++k2) {
-						for (int l2 = i; l2 < l; ++l2) {
-							int i3 = chunkcache.getBlockId(l2, j2, k2);
-
-							if (i3 > 0) {
-								if (!flag2) {
-									flag2 = true;
-									GL11.glNewList(this.field_225 + i2, 4864);
-									GL11.glPushMatrix();
-									this.method_306();
-									float f = 1.000001F;
-									GL11.glTranslatef((float) (-this.field_236) / 2.0F, (float) (-this.field_235) / 2.0F, (float) (-this.field_236) / 2.0F);
-									GL11.glScalef(f, f, f);
-									GL11.glTranslatef((float) this.field_236 / 2.0F, (float) this.field_235 / 2.0F, (float) this.field_236 / 2.0F);
-									ForgeHooksClient.beforeRenderPass(i2);
-									Tessellator.INSTANCE.start();
-									Tessellator.INSTANCE.setOffset((double) (-this.field_231), (double) (-this.field_232), (double) (-this.field_233));
-								}
-
-								if (i2 == 0 && Block.HAS_BLOCK_ENTITY[i3]) {
-									BlockEntity tileentity = chunkcache.getBlockEntity(l2, j2, k2);
-
-									if (BlockEntityRenderDispatcher.INSTANCE.hasCustomRenderer(tileentity)) {
-										this.field_224.add(tileentity);
-									}
-								}
-
-								Block block = Block.BY_ID[i3];
-								int j3 = block.getRenderPass();
-
-								if (j3 > i2) {
-									flag = true;
-								}
-
-								if (ForgeHooksClient.canRenderInPass(block, i2)) {
-									ForgeHooksClient.beforeBlockRender(block, renderblocks);
-									flag1 |= renderblocks.render(block, l2, j2, k2);
-									ForgeHooksClient.afterBlockRender(block, renderblocks);
-								}
-							}
-						}
-					}
-				}
-
-				if (flag2) {
-					ForgeHooksClient.afterRenderPass(i2);
-					Tessellator.INSTANCE.tessellate();
-					GL11.glPopMatrix();
-					GL11.glEndList();
-					Tessellator.INSTANCE.setOffset(0.0, 0.0, 0.0);
-				} else {
-					flag1 = false;
-				}
-
-				if (flag1) {
-					this.field_244[i2] = false;
-				}
-
-				if (!flag) {
-					break;
-				}
-			}
-
-			HashSet<BlockEntity> hashset1 = new HashSet<>(this.field_224);
-			hashset1.removeAll(hashset);
-			this.field_228.addAll(hashset1);
-			this.field_224.forEach(hashset::remove);
-			this.field_228.removeAll(hashset);
-			this.field_223 = Chunk.field_953;
-			this.field_227 = true;
+	// @Coerce should be used for flag and flag1 as they are actually booleans, but I couldn't get it to work
+	@Inject(method = "method_296", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/block/Block;getRenderPass()I"))
+	public void method_296(CallbackInfo ci, @Local BlockRenderer renderblocks, @Local(index = 11) int i2, @Local(index = 12) LocalIntRef flag, @Local(index = 13) LocalIntRef flag1, @Local(index = 15) int j2, @Local(index = 16) int k2, @Local(index = 17) int l2, @Local Block block, @Local(index = 20) int j3) {
+		if (j3 > i2) {
+			flag.set(1);
 		}
+
+		if (ForgeHooksClient.canRenderInPass(block, i2)) {
+			ForgeHooksClient.beforeBlockRender(block, renderblocks);
+			flag1.set((flag1.get() == 1 | renderblocks.render(block, l2, j2, k2)) ? 1 : 0);
+			ForgeHooksClient.afterBlockRender(block, renderblocks);
+		}
+	}
+
+	// Set j3 to i2 so the if statement never succeeds
+	@ModifyVariable(method = "method_296", index = 20, at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getRenderPass()I", shift = At.Shift.BY, by = 2))
+	public int method_296$modifyJ3(int j3, @Local(index = 11) int i2) {
+		return i2;
+	}
+
+	// Set flag1 to itself so it doesn't change
+	@Redirect(method = "method_296", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/BlockRenderer;render(Lnet/minecraft/block/Block;III)Z"))
+	public boolean method_296$redirectRender(BlockRenderer instance, Block block, int j, int k, int i) {
+		return false;
 	}
 }
