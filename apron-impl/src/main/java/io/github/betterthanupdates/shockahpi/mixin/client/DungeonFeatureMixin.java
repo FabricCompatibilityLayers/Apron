@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import shockahpi.SAPI;
 
 import net.minecraft.entity.block.ChestBlockEntity;
@@ -15,6 +14,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.feature.DungeonFeature;
 import net.minecraft.world.feature.Feature;
 
+import com.llamalad7.mixinextras.sugar.Local;
+
 @Mixin(DungeonFeature.class)
 public abstract class DungeonFeatureMixin extends Feature {
 
@@ -22,9 +23,8 @@ public abstract class DungeonFeatureMixin extends Feature {
 	 * @author SAPI
 	 * @reason
 	 */
-	@Inject(method = "generate", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/World;getBlockEntity(III)Lnet/minecraft/entity/BlockEntity;", ordinal = 0, shift = At.Shift.BY, by = 2), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-	public void generate(World world, Random random, int i, int j, int k, CallbackInfoReturnable<Boolean> cir,
-						 int l1, int l2, int l3, int l4, int l5, int l6, int l7, int l8, int l9, int l10, ChestBlockEntity chestBlockEntity) {
+	@Inject(method = "generate", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/World;getBlockEntity(III)Lnet/minecraft/entity/BlockEntity;"))
+	public void generate(World world, Random random, int i, int j, int k, CallbackInfoReturnable<Boolean> cir, @Local ChestBlockEntity chestBlockEntity) {
 		for (int i6 = 0; i6 < Math.min(19, SAPI.dungeonGetAmountOfGuaranteed()); ++i6) {
 			ItemStack stack = SAPI.dungeonGetGuaranteed(i6).getStack();
 

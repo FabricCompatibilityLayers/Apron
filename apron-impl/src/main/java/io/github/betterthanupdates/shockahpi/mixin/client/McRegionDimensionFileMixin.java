@@ -15,7 +15,7 @@ import net.minecraft.world.dimension.DimensionFile;
 import net.minecraft.world.dimension.McRegionDimensionFile;
 
 @Mixin(McRegionDimensionFile.class)
-public class McRegionDimensionFileMixin extends DimensionFile {
+public abstract class McRegionDimensionFileMixin extends DimensionFile {
 	public McRegionDimensionFileMixin(File file, String string, boolean bl) {
 		super(file, string, bl);
 	}
