@@ -23,7 +23,7 @@ public abstract class DungeonFeatureMixin extends Feature {
 	 * @author SAPI
 	 * @reason
 	 */
-	@Inject(method = "generate", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/World;getBlockEntity(III)Lnet/minecraft/entity/BlockEntity;"))
+	@Inject(method = "generate", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/World;getBlockEntity(III)Lnet/minecraft/entity/BlockEntity;", ordinal = 0, shift = At.Shift.BY, by = 2))
 	public void generate(World world, Random random, int i, int j, int k, CallbackInfoReturnable<Boolean> cir, @Local ChestBlockEntity chestBlockEntity) {
 		for (int i6 = 0; i6 < Math.min(19, SAPI.dungeonGetAmountOfGuaranteed()); ++i6) {
 			ItemStack stack = SAPI.dungeonGetGuaranteed(i6).getStack();
