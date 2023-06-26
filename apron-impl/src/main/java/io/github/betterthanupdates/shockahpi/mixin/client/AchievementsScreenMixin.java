@@ -6,59 +6,30 @@ import java.util.Random;
 
 import fr.catcore.modremapperapi.api.mixin.Public;
 import org.lwjgl.opengl.GL11;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import shockahpi.SAPI;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.menu.AchievementsScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widgets.OptionButtonWidget;
-import net.minecraft.client.render.RenderHelper;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.entity.ItemRenderer;
-import net.minecraft.client.resource.language.Internationalization;
 import net.minecraft.stat.achievement.Achievement;
 import net.minecraft.stat.achievement.Achievements;
-import net.minecraft.util.io.StatsFileWriter;
-import net.minecraft.util.math.MathHelper;
 
+import com.llamalad7.mixinextras.injector.WrapWithCondition;
+import com.llamalad7.mixinextras.sugar.Local;
 import io.github.betterthanupdates.shockahpi.client.gui.screen.ShockAhPIAchievementsScreen;
 
 @Mixin(AchievementsScreen.class)
 public class AchievementsScreenMixin extends Screen implements ShockAhPIAchievementsScreen {
-	@Shadow
-	private StatsFileWriter statsFileWriter;
-	@Shadow
-	protected int field_2618;
-	@Shadow
-	protected int field_2619;
-	@Shadow
-	@Final
-	private static int field_2631;
-	@Shadow
-	@Final
-	private static int field_2630;
-	@Shadow
-	@Final
-	private static int field_2629;
-	@Shadow
-	@Final
-	private static int field_2628;
-	@Shadow
-	protected double field_2622;
-	@Shadow
-	protected double field_2624;
-	@Shadow
-	protected double field_2623;
-	@Shadow
-	protected double field_2625;
 
 	// SAPI Fields
 	@Unique
@@ -84,203 +55,28 @@ public class AchievementsScreenMixin extends Screen implements ShockAhPIAchievem
 		this.textRenderer.drawText(SAPI.acGetCurrentPageTitle(), this.width / 2 - 69, this.height / 2 + 80, 0);
 	}
 
-	/**
-	 * @author SAPI
-	 * @reason
-	 */
-	@Overwrite
-	protected void method_1998(int i1, int j1, float f) {
-		int k1 = MathHelper.floor(this.field_2622 + (this.field_2624 - this.field_2622) * (double)f);
-		int l1 = MathHelper.floor(this.field_2623 + (this.field_2625 - this.field_2623) * (double)f);
-		if (k1 < field_2628) {
-			k1 = field_2628;
+	@Redirect(method = "method_1998", at = @At(value = "FIELD", target = "Lnet/minecraft/block/Block;texture:I"))
+	public int method_1998$redirectTexture(Block instance, @Local Random random, @Local(index = 12) int k3, @Local(index = 24) int i9, @Local(index = 13) int i4, @Local(index = 22) int l8) {
+		return SAPI.acGetCurrentPage().bgGetSprite(random, k3 + i9, i4 + l8);
+	}
+
+	@WrapWithCondition(method = "method_1998", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/menu/AchievementsScreen;blit(IIIIII)V", ordinal = 0))
+	public boolean method_1998(AchievementsScreen instance, int i, int j, int k, int l, int m, int n, @Local(index = 25) int var25) {
+		return var25 != -1;
+	}
+
+	@Inject(method = "method_1998", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/menu/AchievementsScreen;drawLineHorizontal(IIII)V"))
+	public void method_1998(CallbackInfo ci, @Local Achievement achievement) {
+		this.draw = this.isVisibleLine(achievement);
+	}
+
+	@ModifyVariable(method = "method_1998", index = 16, at = @At(value = "STORE", ordinal = 1), print = true)
+	public int method_1998(int value, @Local Achievement achievement) {
+		if (!this.isVisibleAchievement(achievement, 1)) {
+			return -25;
+		} else {
+			return value;
 		}
-
-		if (l1 < field_2629) {
-			l1 = field_2629;
-		}
-
-		if (k1 >= field_2630) {
-			k1 = field_2630 - 1;
-		}
-
-		if (l1 >= field_2631) {
-			l1 = field_2631 - 1;
-		}
-
-		int i2 = this.client.textureManager.getTextureId("/terrain.png");
-		int j2 = this.client.textureManager.getTextureId("/achievement/bg.png");
-		int k2 = (this.width - this.field_2618) / 2;
-		int l2 = (this.height - this.field_2619) / 2;
-		int i3 = k2 + 16;
-		int j3 = l2 + 17;
-		this.zOffset = 0.0F;
-		GL11.glDepthFunc(518);
-		GL11.glPushMatrix();
-		GL11.glTranslatef(0.0F, 0.0F, -200.0F);
-		GL11.glEnable(3553);
-		GL11.glDisable(2896);
-		GL11.glEnable(32826);
-		GL11.glEnable(2903);
-		this.client.textureManager.bindTexture(i2);
-		int k3 = k1 + 288 >> 4;
-		int i4 = l1 + 288 >> 4;
-		int j4 = (k1 + 288) % 16;
-		int i5 = (l1 + 288) % 16;
-		Random random = new Random();
-
-		int l8;
-		int k4;
-		int j5;
-		for(l8 = 0; l8 * 16 - i5 < 155; ++l8) {
-			float f5 = 0.6F - (float)(i4 + l8) / 25.0F * 0.3F;
-			GL11.glColor4f(f5, f5, f5, 1.0F);
-
-			for(k4 = 0; k4 * 16 - j4 < 224; ++k4) {
-				random.setSeed((long)(1234 + k3 + k4));
-				random.nextInt();
-				j5 = SAPI.acGetCurrentPage().bgGetSprite(random, k3 + k4, i4 + l8);
-				if (j5 != -1) {
-					this.blit(i3 + k4 * 16 - j4, j3 + l8 * 16 - i5, j5 % 16 << 4, j5 >> 4 << 4, 16, 16);
-				}
-			}
-		}
-
-		GL11.glEnable(2929);
-		GL11.glDepthFunc(515);
-		GL11.glDisable(3553);
-
-		int l5;
-		int k6;
-		int k8;
-		int i7;
-		for(l8 = 0; l8 < Achievements.achievements.size(); ++l8) {
-			Achievement ny2 = (Achievement)Achievements.achievements.get(l8);
-			if (ny2.parent != null) {
-				k4 = ny2.tableColumn * 24 - k1 + 11 + i3;
-				j5 = ny2.tableRow * 24 - l1 + 11 + j3;
-				l5 = ny2.parent.tableColumn * 24 - k1 + 11 + i3;
-				k6 = ny2.parent.tableRow * 24 - l1 + 11 + j3;
-				boolean flag = this.statsFileWriter.isAchievementUnlocked(ny2);
-				boolean flag1 = this.statsFileWriter.isAchievementUnlockable(ny2);
-				k8 = Math.sin((double)(System.currentTimeMillis() % 600L) / 600.0 * Math.PI * 2.0) <= 0.6 ? 130 : 255;
-				if (flag) {
-					i7 = -9408400;
-				} else if (flag1) {
-					i7 = '\uff00' + (k8 << 24);
-				} else {
-					i7 = -16777216;
-				}
-
-				this.draw = this.isVisibleLine(ny2);
-				this.drawLineHorizontal(k4, l5, j5, i7);
-				this.drawLineVertical(l5, j5, k6, i7);
-			}
-		}
-
-		Achievement ny1 = null;
-		ItemRenderer bb1 = new ItemRenderer();
-		GL11.glPushMatrix();
-		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
-		RenderHelper.enableLighting();
-		GL11.glPopMatrix();
-		GL11.glDisable(2896);
-		GL11.glEnable(32826);
-		GL11.glEnable(2903);
-
-		int k7;
-		for(k4 = 0; k4 < Achievements.achievements.size(); ++k4) {
-			Achievement ny4 = (Achievement)Achievements.achievements.get(k4);
-			if (this.isVisibleAchievement(ny4, 1)) {
-				l5 = ny4.tableColumn * 24 - k1;
-				k6 = ny4.tableRow * 24 - l1;
-				if (l5 >= -24 && k6 >= -24 && l5 <= 224 && k6 <= 155) {
-					float f2;
-					if (this.statsFileWriter.isAchievementUnlocked(ny4)) {
-						f2 = 1.0F;
-						GL11.glColor4f(f2, f2, f2, 1.0F);
-					} else if (this.statsFileWriter.isAchievementUnlockable(ny4)) {
-						f2 = Math.sin((double)(System.currentTimeMillis() % 600L) / 600.0 * Math.PI * 2.0) >= 0.6 ? 0.8F : 0.6F;
-						GL11.glColor4f(f2, f2, f2, 1.0F);
-					} else {
-						f2 = 0.3F;
-						GL11.glColor4f(f2, f2, f2, 1.0F);
-					}
-
-					this.client.textureManager.bindTexture(j2);
-					i7 = i3 + l5;
-					k7 = j3 + k6;
-					if (ny4.isUnusual()) {
-						this.blit(i7 - 2, k7 - 2, 26, 202, 26, 26);
-					} else {
-						this.blit(i7 - 2, k7 - 2, 0, 202, 26, 26);
-					}
-
-					if (!this.statsFileWriter.isAchievementUnlockable(ny4)) {
-						float f4 = 0.1F;
-						GL11.glColor4f(f4, f4, f4, 1.0F);
-						bb1.field_1707 = false;
-					}
-
-					GL11.glEnable(2896);
-					GL11.glEnable(2884);
-					bb1.method_1487(this.client.textRenderer, this.client.textureManager, ny4.displayItem, i7 + 3, k7 + 3);
-					GL11.glDisable(2896);
-					if (!this.statsFileWriter.isAchievementUnlockable(ny4)) {
-						bb1.field_1707 = true;
-					}
-
-					GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-					if (i1 >= i3 && j1 >= j3 && i1 < i3 + 224 && j1 < j3 + 155 && i1 >= i7 && i1 <= i7 + 22 && j1 >= k7 && j1 <= k7 + 22) {
-						ny1 = ny4;
-					}
-				}
-			}
-		}
-
-		GL11.glDisable(2929);
-		GL11.glEnable(3042);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.client.textureManager.bindTexture(j2);
-		this.blit(k2, l2, 0, 0, this.field_2618, this.field_2619);
-		GL11.glPopMatrix();
-		this.zOffset = 0.0F;
-		GL11.glDepthFunc(515);
-		GL11.glDisable(2929);
-		GL11.glEnable(3553);
-		super.render(i1, j1, f);
-		if (ny1 != null) {
-			Achievement ny3 = ny1;
-			String s1 = ny1.name;
-			String s2 = ny1.getDescription();
-			k6 = i1 + 12;
-			i7 = j1 - 4;
-			if (this.statsFileWriter.isAchievementUnlockable(ny1)) {
-				k7 = Math.max(this.textRenderer.getTextWidth(s1), 120);
-				int j8 = this.textRenderer.method_1902(s2, k7);
-				if (this.statsFileWriter.isAchievementUnlocked(ny1)) {
-					j8 += 12;
-				}
-
-				this.fillGradient(k6 - 3, i7 - 3, k6 + k7 + 3, i7 + j8 + 3 + 12, -1073741824, -1073741824);
-				this.textRenderer.method_1904(s2, k6, i7 + 12, k7, -6250336);
-				if (this.statsFileWriter.isAchievementUnlocked(ny1)) {
-					this.textRenderer.drawTextWithShadow((String)Internationalization.translate("achievement.taken"), k6, i7 + j8 + 4, -7302913);
-				}
-			} else {
-				k7 = Math.max(this.textRenderer.getTextWidth(s1), 120);
-				String s3 = Internationalization.translate("achievement.requires", new Object[]{ny3.parent.name});
-				k8 = this.textRenderer.method_1902(s3, k7);
-				this.fillGradient(k6 - 3, i7 - 3, k6 + k7 + 3, i7 + k8 + 12 + 3, -1073741824, -1073741824);
-				this.textRenderer.method_1904(s3, k6, i7 + 12, k7, -9416624);
-			}
-
-			this.textRenderer.drawTextWithShadow(s1, k6, i7, this.statsFileWriter.isAchievementUnlockable(ny1) ? (ny1.isUnusual() ? -128 : -1) : (ny1.isUnusual() ? -8355776 : -8355712));
-		}
-
-		GL11.glEnable(2929);
-		GL11.glEnable(2896);
-		RenderHelper.disableLighting();
 	}
 
 	@Override
@@ -298,10 +94,10 @@ public class AchievementsScreenMixin extends Screen implements ShockAhPIAchievem
 			paramInt4 = i;
 		}
 
-		float f1 = (float)(paramInt5 >> 24 & 255) / 255.0F;
-		float f2 = (float)(paramInt5 >> 16 & 255) / 255.0F;
-		float f3 = (float)(paramInt5 >> 8 & 255) / 255.0F;
-		float f4 = (float)(paramInt5 & 255) / 255.0F;
+		float f1 = (float) (paramInt5 >> 24 & 0xFF) / 255.0F;
+		float f2 = (float) (paramInt5 >> 16 & 0xFF) / 255.0F;
+		float f3 = (float) (paramInt5 >> 8 & 0xFF) / 255.0F;
+		float f4 = (float) (paramInt5 & 0xFF) / 255.0F;
 		Tessellator localns = Tessellator.INSTANCE;
 		GL11.glEnable(3042);
 		GL11.glDisable(3553);
