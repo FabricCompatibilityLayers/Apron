@@ -18,5 +18,6 @@
     "defaultRequire": 1
   },
   "mixins": [
-  ]
+  ],
+  "plugin": "io.github.betterthanupdates.apron.ApronMixinPlugin"
 }

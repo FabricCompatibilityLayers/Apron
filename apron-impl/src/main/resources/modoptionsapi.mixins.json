@@ -11,5 +11,6 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "plugin": "io.github.betterthanupdates.apron.ApronMixinPlugin"
 }

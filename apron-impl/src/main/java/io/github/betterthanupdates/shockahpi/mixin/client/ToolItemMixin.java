@@ -71,11 +71,11 @@ public abstract class ToolItemMixin extends Item {
 
 	public ToolBase getToolBase() {
 		if (((Object)this) instanceof PickaxeItem) {
-			return ToolBase.Pickaxe;
+			return ToolBase.PICKAXE;
 		} else if (((Object)this) instanceof AxeItem) {
-			return ToolBase.Axe;
+			return ToolBase.AXE;
 		} else {
-			return ((Object)this) instanceof ShovelItem ? ToolBase.Shovel : null;
+			return ((Object)this) instanceof ShovelItem ? ToolBase.SHOVEL : null;
 		}
 	}
 
