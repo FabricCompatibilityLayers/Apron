@@ -27,8 +27,8 @@ public abstract class PortalBlockMixin implements ShockAhPIPortalBlock {
 	public void onEntityCollision(World world, int i, int j, int k, Entity entity) {
 		if (entity.vehicle == null && entity.passenger == null) {
 			if (entity instanceof AbstractClientPlayerEntity) {
-				AbstractClientPlayerEntity entityplayersp = (AbstractClientPlayerEntity) entity;
-				((PlayerBaseSAPI) PlayerAPI.getPlayerBase(entityplayersp, PlayerBaseSAPI.class)).portal = this.getDimNumber();
+				AbstractClientPlayerEntity entityplayersp = (AbstractClientPlayerEntity)entity;
+				((PlayerBaseSAPI)((PlayerBaseSAPI)PlayerAPI.getPlayerBase(entityplayersp, PlayerBaseSAPI.class))).portal = this.getDimNumber();
 			}
 
 			entity.method_1388();

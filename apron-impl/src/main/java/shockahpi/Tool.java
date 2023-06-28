@@ -1,6 +1,7 @@
 package shockahpi;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import forge.ForgeHooks;
 
@@ -40,26 +41,22 @@ public class Tool extends Item {
 		this.defaultSpeed = defaultSpeed;
 	}
 
-	@Override
 	public boolean isRendered3d() {
 		return true;
 	}
 
-	@Override
 	public boolean postHit(ItemStack stack, LivingEntity living, LivingEntity living2) {
 		stack.applyDamage(2, living2);
 		return true;
 	}
 
-	@Override
 	public boolean postMine(ItemStack stack, int blockID, int x, int y, int z, LivingEntity living) {
 		stack.applyDamage(1, living);
 		return true;
 	}
 
-	@Override
 	public int getAttackDamage(Entity entity) {
-		return (int) Math.floor((double) this.baseDamage);
+		return (int)Math.floor((double)this.baseDamage);
 	}
 
 	public float getPower() {
@@ -71,23 +68,29 @@ public class Tool extends Item {
 	}
 
 	public boolean canHarvest(Block block) {
-		if (this.toolBase != null && this.toolBase.canHarvest(block, this.getPower())) {
-			return true;
-		} else {
-			for (Material material : this.mineMaterials) {
+		if (this.toolBase == null || !this.toolBase.canHarvest(block, this.getPower())) {
+			Iterator iterator1 = this.mineMaterials.iterator();
+
+			while (iterator1.hasNext()) {
+				Material material = (Material) iterator1.next();
 				if (material == block.material) {
 					return true;
 				}
 			}
 
-			for (BlockHarvestPower power : this.mineBlocks) {
-				if (block.id == power.blockID || this.getPower() >= power.percentage) {
-					return true;
-				}
-			}
+			iterator1 = this.mineBlocks.iterator();
 
-			return false;
+			BlockHarvestPower power;
+			do {
+				if (!iterator1.hasNext()) {
+					return false;
+				}
+
+				power = (BlockHarvestPower) iterator1.next();
+			} while (block.id != power.blockID && !(this.getPower() >= power.percentage));
+
 		}
+		return true;
 	}
 
 	public float getStrVsBlock(ItemStack itemstack, Block block, int md) {

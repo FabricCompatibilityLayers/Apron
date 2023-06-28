@@ -1,5 +1,7 @@
 package shockahpi;
 
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.Entity;
 import playerapi.PlayerBase;
 
 import net.minecraft.client.Minecraft;
@@ -19,34 +21,31 @@ public class PlayerBaseSAPI extends PlayerBase {
 
 	public boolean onLivingUpdate() {
 		Minecraft mc = this.player.client;
-
 		if (!mc.statFileWriter.isAchievementUnlocked(Achievements.OPEN_INVENTORY)) {
 			mc.achievement.setAchievement(Achievements.OPEN_INVENTORY);
 		}
 
 		this.player.field_505 = this.player.field_504;
-
 		if (this.portal != 0) {
 			DimensionBase dimensionbase = DimensionBase.getDimByNumber(this.portal);
-
+			AbstractClientPlayerEntity var10000;
 			if (this.player.field_512) {
 				if (!this.player.world.isClient && this.player.vehicle != null) {
-					this.player.startRiding(null);
+					this.player.startRiding((Entity)null);
 				}
 
 				if (mc.currentScreen != null) {
-					mc.openScreen(null);
+					mc.openScreen((Screen)null);
 				}
 
 				if (this.player.field_504 == 0.0F) {
 					mc.soundHelper.playSound(dimensionbase.soundTrigger, 1.0F, this.player.rand.nextFloat() * 0.4F + 0.8F);
 				}
 
-				this.player.field_504 += 0.0125F;
-
+				var10000 = this.player;
+				var10000.field_504 += 0.0125F;
 				if (this.player.field_504 >= 1.0F) {
 					this.player.field_504 = 1.0F;
-
 					if (!this.player.world.isClient) {
 						this.player.field_511 = 10;
 						mc.soundHelper.playSound(dimensionbase.soundTravel, 1.0F, this.player.rand.nextFloat() * 0.4F + 0.8F);
@@ -57,7 +56,8 @@ public class PlayerBaseSAPI extends PlayerBase {
 				this.player.field_512 = false;
 			} else {
 				if (this.player.field_504 > 0.0F) {
-					this.player.field_504 -= 0.05F;
+					var10000 = this.player;
+					var10000.field_504 -= 0.05F;
 				}
 
 				if (this.player.field_504 < 0.0F) {
@@ -71,19 +71,14 @@ public class PlayerBaseSAPI extends PlayerBase {
 		}
 
 		this.player.playerKeypressManager.updatePlayer(this.player);
-
 		if (this.player.playerKeypressManager.sneak && this.player.field_1640 < 0.2F) {
 			this.player.field_1640 = 0.2F;
 		}
 
-		this.player
-				.method_1372(this.player.x - (double) this.player.width * 0.35, this.player.boundingBox.minY + 0.5, this.player.z + (double) this.player.width * 0.35);
-		this.player
-				.method_1372(this.player.x - (double) this.player.width * 0.35, this.player.boundingBox.minY + 0.5, this.player.z - (double) this.player.width * 0.35);
-		this.player
-				.method_1372(this.player.x + (double) this.player.width * 0.35, this.player.boundingBox.minY + 0.5, this.player.z - (double) this.player.width * 0.35);
-		this.player
-				.method_1372(this.player.x + (double) this.player.width * 0.35, this.player.boundingBox.minY + 0.5, this.player.z + (double) this.player.width * 0.35);
+		this.player.method_1372(this.player.x - (double)this.player.width * 0.35, this.player.boundingBox.minY + 0.5, this.player.z + (double)this.player.width * 0.35);
+		this.player.method_1372(this.player.x - (double)this.player.width * 0.35, this.player.boundingBox.minY + 0.5, this.player.z - (double)this.player.width * 0.35);
+		this.player.method_1372(this.player.x + (double)this.player.width * 0.35, this.player.boundingBox.minY + 0.5, this.player.z - (double)this.player.width * 0.35);
+		this.player.method_1372(this.player.x + (double)this.player.width * 0.35, this.player.boundingBox.minY + 0.5, this.player.z + (double)this.player.width * 0.35);
 		((PlayerAPIClientPlayerEntity) this.player).superOnLivingUpdate();
 		return true;
 	}

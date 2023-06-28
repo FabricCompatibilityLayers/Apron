@@ -4,7 +4,6 @@ import java.util.Random;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 import shockahpi.SAPI;
 
 import net.minecraft.block.Block;
@@ -18,9 +17,6 @@ import net.minecraft.world.feature.Feature;
 
 @Mixin(DungeonFeature.class)
 public abstract class DungeonFeatureMixin extends Feature {
-	@Shadow
-	protected abstract ItemStack getRandomChestItem(Random random);
-
 	/**
 	 * @author SAPI
 	 * @reason
@@ -32,11 +28,13 @@ public abstract class DungeonFeatureMixin extends Feature {
 		int k = paramRandom.nextInt(2) + 2;
 		int m = 0;
 
-		for (int n = paramInt1 - j - 1; n <= paramInt1 + j + 1; ++n) {
-			for (int i1 = paramInt2 - 1; i1 <= paramInt2 + i + 1; ++i1) {
-				for (int i2 = paramInt3 - k - 1; i2 <= paramInt3 + k + 1; ++i2) {
+		int i1;
+		int i2;
+		int n;
+		for(n = paramInt1 - j - 1; n <= paramInt1 + j + 1; ++n) {
+			for(i1 = paramInt2 - 1; i1 <= paramInt2 + i + 1; ++i1) {
+				for(i2 = paramInt3 - k - 1; i2 <= paramInt3 + k + 1; ++i2) {
 					Material localln = paramfd.getMaterial(n, i1, i2);
-
 					if (i1 == paramInt2 - 1 && !localln.isSolid()) {
 						return false;
 					}
@@ -45,10 +43,7 @@ public abstract class DungeonFeatureMixin extends Feature {
 						return false;
 					}
 
-					if ((n == paramInt1 - j - 1 || n == paramInt1 + j + 1 || i2 == paramInt3 - k - 1 || i2 == paramInt3 + k + 1)
-							&& i1 == paramInt2
-							&& paramfd.isAir(n, i1, i2)
-							&& paramfd.isAir(n, i1 + 1, i2)) {
+					if ((n == paramInt1 - j - 1 || n == paramInt1 + j + 1 || i2 == paramInt3 - k - 1 || i2 == paramInt3 + k + 1) && i1 == paramInt2 && paramfd.isAir(n, i1, i2) && paramfd.isAir(n, i1 + 1, i2)) {
 						++m;
 					}
 				}
@@ -56,15 +51,10 @@ public abstract class DungeonFeatureMixin extends Feature {
 		}
 
 		if (m >= 1 && m <= 5) {
-			for (int n = paramInt1 - j - 1; n <= paramInt1 + j + 1; ++n) {
-				for (int i1 = paramInt2 + i; i1 >= paramInt2 - 1; --i1) {
-					for (int i2 = paramInt3 - k - 1; i2 <= paramInt3 + k + 1; ++i2) {
-						if (n != paramInt1 - j - 1
-								&& i1 != paramInt2 - 1
-								&& i2 != paramInt3 - k - 1
-								&& n != paramInt1 + j + 1
-								&& i1 != paramInt2 + i + 1
-								&& i2 != paramInt3 + k + 1) {
+			for(n = paramInt1 - j - 1; n <= paramInt1 + j + 1; ++n) {
+				for(i1 = paramInt2 + i; i1 >= paramInt2 - 1; --i1) {
+					for(i2 = paramInt3 - k - 1; i2 <= paramInt3 + k + 1; ++i2) {
+						if (n != paramInt1 - j - 1 && i1 != paramInt2 - 1 && i2 != paramInt3 - k - 1 && n != paramInt1 + j + 1 && i1 != paramInt2 + i + 1 && i2 != paramInt3 + k + 1) {
 							paramfd.setBlock(n, i1, i2, 0);
 						} else if (i1 >= 0 && !paramfd.getMaterial(n, i1 - 1, i2).isSolid()) {
 							paramfd.setBlock(n, i1, i2, 0);
@@ -79,14 +69,13 @@ public abstract class DungeonFeatureMixin extends Feature {
 				}
 			}
 
-			for (int n = 0; n < 2; ++n) {
-				for (int i1 = 0; i1 < 3; ++i1) {
-					int i2 = paramInt1 + paramRandom.nextInt(j * 2 + 1) - j;
+			label126:
+			for(n = 0; n < 2; ++n) {
+				for(i1 = 0; i1 < 3; ++i1) {
+					i2 = paramInt1 + paramRandom.nextInt(j * 2 + 1) - j;
 					int i4 = paramInt3 + paramRandom.nextInt(k * 2 + 1) - k;
-
 					if (paramfd.isAir(i2, paramInt2, i4)) {
 						int i5 = 0;
-
 						if (paramfd.getMaterial(i2 - 1, paramInt2, i4).isSolid()) {
 							++i5;
 						}
@@ -105,32 +94,38 @@ public abstract class DungeonFeatureMixin extends Feature {
 
 						if (i5 == 1) {
 							paramfd.setBlock(i2, paramInt2, i4, Block.CHEST.id);
-							ChestBlockEntity localjs = (ChestBlockEntity) paramfd.getBlockEntity(i2, paramInt2, i4);
+							ChestBlockEntity localjs = (ChestBlockEntity)paramfd.getBlockEntity(i2, paramInt2, i4);
 
-							for (int i6 = 0; i6 < 8; ++i6) {
-								ItemStack localiz = this.getRandomChestItem(paramRandom);
-
-								if (localiz != null) {
-									localjs.setInventoryItem(paramRandom.nextInt(localjs.getInventorySize()), localiz);
-								}
-							}
-
-							for (int i6 = 0; i6 < Math.min(19, SAPI.dungeonGetAmountOfGuaranteed()); ++i6) {
-								ItemStack stack = SAPI.dungeonGetGuaranteed(i6).getStack();
-
+							int i6;
+							ItemStack stack;
+							for(i6 = 0; i6 < 8; ++i6) {
+								stack = this.getRandomChestItem(paramRandom);
 								if (stack != null) {
 									localjs.setInventoryItem(paramRandom.nextInt(localjs.getInventorySize()), stack);
 								}
 							}
 
-							break;
+							i6 = 0;
+
+							while(true) {
+								if (i6 >= Math.min(19, SAPI.dungeonGetAmountOfGuaranteed())) {
+									continue label126;
+								}
+
+								stack = SAPI.dungeonGetGuaranteed(i6).getStack();
+								if (stack != null) {
+									localjs.setInventoryItem(paramRandom.nextInt(localjs.getInventorySize()), stack);
+								}
+
+								++i6;
+							}
 						}
 					}
 				}
 			}
 
 			paramfd.setBlock(paramInt1, paramInt2, paramInt3, Block.MOB_SPAWNER.id);
-			MobSpawnerEntity localcy = (MobSpawnerEntity) paramfd.getBlockEntity(paramInt1, paramInt2, paramInt3);
+			MobSpawnerEntity localcy = (MobSpawnerEntity)paramfd.getBlockEntity(paramInt1, paramInt2, paramInt3);
 			localcy.setEntityId(this.getRandomEntity(paramRandom));
 			return true;
 		} else {
@@ -138,14 +133,14 @@ public abstract class DungeonFeatureMixin extends Feature {
 		}
 	}
 
-	//	/**
-	//	 * @author SAPI
-	//	 * @reason
-	//	 */
-	//	@Overwrite
-	//	private ItemStack getRandomChestItem(Random paramRandom) {
-	//		return SAPI.dungeonGetRandomItem();
-	//	}
+	/**
+	 * @author SAPI
+	 * @reason
+	 */
+	@Overwrite
+	private ItemStack getRandomChestItem(Random paramRandom) {
+		return SAPI.dungeonGetRandomItem();
+	}
 
 	/**
 	 * @author SAPI

@@ -11,7 +11,7 @@ import io.github.betterthanupdates.Legacy;
  */
 @Legacy
 public interface IInterceptBlockSet {
-	boolean canIntercept(World world, Loc pos, int meta);
+	boolean canIntercept(World arg, Loc loc, int i);
 
-	int intercept(World world, Loc pos, int meta);
+	int intercept(World arg, Loc loc, int i);
 }

@@ -43,27 +43,25 @@ public class AchievementPage {
 			this.list.add(achievement.id);
 		}
 
-		if (this.id == 0 && FabricLoader.getInstance().isModLoaded("stationapi")) {
-			StationAPIHelper.registerMinecraftAchievement(achievements);
-		}
 	}
 
 	public int bgGetSprite(Random random, int x, int y) {
 		int sprite = Block.SAND.texture;
 		int rnd = random.nextInt(1 + y) + y / 2;
-
-		if (rnd > 37 || y == 35) {
+		if (rnd <= 37 && y != 35) {
+			if (rnd == 22) {
+				sprite = random.nextInt(2) == 0 ? Block.DIAMOND_ORE.texture : Block.REDSTONE_ORE.texture;
+			} else if (rnd == 10) {
+				sprite = Block.IRON_ORE.texture;
+			} else if (rnd == 8) {
+				sprite = Block.COAL_ORE.texture;
+			} else if (rnd > 4) {
+				sprite = Block.STONE.texture;
+			} else if (rnd > 0) {
+				sprite = Block.DIRT.texture;
+			}
+		} else {
 			sprite = Block.BEDROCK.texture;
-		} else if (rnd == 22) {
-			sprite = random.nextInt(2) == 0 ? Block.DIAMOND_ORE.texture : Block.REDSTONE_ORE.texture;
-		} else if (rnd == 10) {
-			sprite = Block.IRON_ORE.texture;
-		} else if (rnd == 8) {
-			sprite = Block.COAL_ORE.texture;
-		} else if (rnd > 4) {
-			sprite = Block.STONE.texture;
-		} else if (rnd > 0) {
-			sprite = Block.DIRT.texture;
 		}
 
 		return sprite;

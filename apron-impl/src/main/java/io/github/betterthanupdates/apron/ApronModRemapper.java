@@ -75,10 +75,6 @@ public final class ApronModRemapper implements ModRemapper {
 	@Override
 	public void registerVisitors(VisitorInfos infos) {
 		String[][] toolFixes = new String[][] {
-			new String[]{"net/minecraft/class_632", "io/github/betterthanupdates/shockahpi/item/ShockAhPIToolItem"},
-			new String[]{"net/minecraft/class_420", "io/github/betterthanupdates/shockahpi/item/ShockAhPIAxeItem"},
-			new String[]{"net/minecraft/class_116", "io/github/betterthanupdates/shockahpi/item/ShockAhPIPickaxeItem"},
-			new String[]{"net/minecraft/class_501", "io/github/betterthanupdates/shockahpi/item/ShockAhPIShovelItem"},
 			new String[]{"net/mine_diver/infsprites/render/Tessellators", "io/github/betterthanupdates/apron/fixes/vanilla/InfSpriteTessellators"}
 		};
 
@@ -93,10 +89,6 @@ public final class ApronModRemapper implements ModRemapper {
 		infos.registerMethodMethodIns(
 				new VisitorInfos.MethodNamed("net/minecraft/class_13", "setRedstoneColors"),
 				new VisitorInfos.MethodNamed("io/github/betterthanupdates/forge/ForgeClientReflection", "BlockRenderer$setRedstoneColors")
-		);
-		infos.registerMethodMethodIns(
-				new VisitorInfos.MethodNamed("net/minecraft/class_50", "getByID"),
-				new VisitorInfos.MethodNamed("shockahpi/DimensionBase", "getByID")
 		);
 
 		infos.registerMethodFieldIns(

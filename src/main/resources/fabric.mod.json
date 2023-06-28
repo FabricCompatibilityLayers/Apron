@@ -30,8 +30,8 @@
   ],
   "contact": {
     "homepage": "https://BetterThanUpdates.github.io/",
-    "sources": "https://github.com/BetterThanUpdates/Apron",
-    "issues": "https://github.com/BetterThanUpdates/Apron/issues"
+    "sources": "https://github.com/thecatcore/Apron",
+    "issues": "https://github.com/thecatcore/Apron/issues"
   },
   "license": "MIT",
   "icon": "assets/apron/icon.png",
@@ -41,7 +41,7 @@
   "depends": {
     "fabricloader": ">=0.13.3",
     "minecraft": "1.0.0-beta.7.3",
-    "mod-remapping-api": "^1.6.0",
+    "mod-remapping-api": ">=1.11.0",
     "legacy-fabric-logger-api-v1": "*"
   },
   "recommends": {
@@ -83,10 +83,6 @@
       "PlayerBaseSAPI": "shockahpi/PlayerBaseSAPI",
       "SAPI": "shockahpi/SAPI",
       "Tool": "shockahpi/Tool",
-      "dq": "io/github/betterthanupdates/shockahpi/item/ShockAhPIToolItem",
-      "ta": "io/github/betterthanupdates/shockahpi/item/ShockAhPIAxeItem",
-      "au": "io/github/betterthanupdates/shockahpi/item/ShockAhPIPickaxeItem",
-      "wc": "io/github/betterthanupdates/shockahpi/item/ShockAhPIShovelItem",
       "IItemTexture": "itemspriteapi/IItemTexture",
       "ItemTexture": "itemspriteapi/ItemTexture",
       "GuiApiHelper": "guiapi/GuiApiHelper",

@@ -6,14 +6,17 @@
   "client": [
     "DimensionFileMixin",
     "DungeonFeatureMixin",
-    "ItemMixin",
     "McRegionDimensionFileMixin",
+    "MultiplayerClientInteractionManagerMixin",
     "PortalBlockMixin",
     "SinglePlayerInteractionManagerMixin",
     "WorldMixin",
-    "MultiplayerClientInteractionManagerMixin"
+    "DimensionMixin",
+    "ToolItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+  ]
 }
