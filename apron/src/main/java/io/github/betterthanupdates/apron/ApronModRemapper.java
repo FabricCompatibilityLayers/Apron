@@ -112,30 +112,34 @@ public final class ApronModRemapper implements ModRemapper {
 				new VisitorInfos.MethodNamed("io/github/betterthanupdates/forge/ForgeReflection", "TrapdoorBlock$disableValidation")
 		);
 
-		infos.registerMethodFieldIns(
-				new VisitorInfos.MethodNamed("net/minecraft/class_197", "mmactive"),
-				new VisitorInfos.MethodNamed("io/github/betterthanupdates/apron/compat/AetherHelper", "mmactive")
-		);
+		for (String fName : new String[] {
+				"mmactive", "renderOption", "themeOption", "musicId", "loadingWorld", "ach"
+		}) {
+			infos.registerMethodFieldIns(
+					new VisitorInfos.MethodNamed("net/minecraft/class_197", fName),
+					new VisitorInfos.MethodNamed("io/github/betterthanupdates/apron/compat/AetherHelper", fName)
+			);
+		}
 
 		infos.registerMethodMethodIns(
 				new VisitorInfos.MethodNamed("overrideapi/utils/Reflection", "findField"),
 				new VisitorInfos.MethodNamed("io/github/betterthanupdates/apron/ReflectionUtils", "getField")
 		);
 
-		infos.registerMethodTypeIns(
-				new VisitorInfos.Type("net/minecraft/uu"),
-				new VisitorInfos.Type("net/minecraft/class_17")
-		);
-
-		infos.registerMethodTypeIns(
-				new VisitorInfos.Type("net/minecraft/gm"),
-				new VisitorInfos.Type("net/minecraft/class_124")
-		);
-
-		infos.registerMethodTypeIns(
-				new VisitorInfos.Type("net/minecraft/yq"),
-				new VisitorInfos.Type("net/minecraft/class_474")
-		);
+//		infos.registerMethodTypeIns(
+//				new VisitorInfos.Type("net/minecraft/uu"),
+//				new VisitorInfos.Type("net/minecraft/class_17")
+//		);
+//
+//		infos.registerMethodTypeIns(
+//				new VisitorInfos.Type("net/minecraft/gm"),
+//				new VisitorInfos.Type("net/minecraft/class_124")
+//		);
+//
+//		infos.registerMethodTypeIns(
+//				new VisitorInfos.Type("net/minecraft/yq"),
+//				new VisitorInfos.Type("net/minecraft/class_474")
+//		);
 	}
 
 	/**

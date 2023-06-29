@@ -24,8 +24,16 @@ public class MixinCompatPlugin implements IMixinConfigPlugin {
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
 		if (mixinClassName.contains("betterthanwolves")) {
 			try {
-				Class.forName("net.minecraft.mod_FCBetterThanWolves", false, getClass().getClassLoader());;
+				Class.forName("net.minecraft.mod_FCBetterThanWolves", false, getClass().getClassLoader());
 				System.out.println("Applying BTW specific mixin: " + mixinClassName);
+				return true;
+			} catch (ClassNotFoundException e) {
+				return false;
+			}
+		} else if (mixinClassName.contains("aether")) {
+			try {
+				Class.forName("net.minecraft.mod_Aether", false, getClass().getClassLoader());
+				System.out.println("Applying Aether specific mixin: " + mixinClassName);
 				return true;
 			} catch (ClassNotFoundException e) {
 				return false;
