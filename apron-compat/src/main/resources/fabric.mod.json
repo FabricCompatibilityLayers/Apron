@@ -38,6 +38,9 @@
   "environment": "*",
   "accessWidener": "apron-compat.accesswidener",
   "entrypoints": {
+    "mod-remapper-api:modremapper": [
+      "io.github.betterthanupdates.apron.compat.ApronCompatRemapper"
+    ]
   },
   "mixins": [
   ],
