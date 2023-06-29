@@ -264,10 +264,6 @@ public class SAPI {
 
 	public static void acPageAdd(AchievementPage acpage) {
 		ACHIEVEMENT_PAGES.add(acpage);
-
-		if (acpage.id != 0 && FabricLoader.getInstance().isModLoaded("stationapi")) {
-			StationAPIHelper.createStAPIAchievementPage(acpage);
-		}
 	}
 
 	public static void acHide(Achievement[] achievements) {
