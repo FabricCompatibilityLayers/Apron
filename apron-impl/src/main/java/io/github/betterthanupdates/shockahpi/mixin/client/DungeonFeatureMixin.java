@@ -47,15 +47,6 @@ public abstract class DungeonFeatureMixin extends Feature {
 	 * @author SAPI
 	 * @reason
 	 */
-	@Overwrite
-	private ItemStack getRandomChestItem(Random paramRandom) {
-		return SAPI.dungeonGetRandomItem();
-	}
-
-	/**
-	 * @author SAPI
-	 * @reason
-	 */
 	@Inject(method = "getRandomEntity", at = @At("HEAD"), cancellable = true)
 	private void getRandomEntity(Random paramRandom, CallbackInfoReturnable<String> cir) {
 		cir.setReturnValue(SAPI.dungeonGetRandomMob());
