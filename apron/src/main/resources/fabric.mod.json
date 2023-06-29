@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "apron-",
+  "id": "apron-impl",
   "version": "${version}",
   "name": "Apron",
   "description": "Apron implementation.",

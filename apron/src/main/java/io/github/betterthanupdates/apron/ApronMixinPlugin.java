@@ -1,5 +1,6 @@
 package io.github.betterthanupdates.apron;
 
+import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import fr.catcore.modremapperapi.utils.MixinUtils;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
@@ -11,7 +12,7 @@ import java.util.Set;
 public class ApronMixinPlugin implements IMixinConfigPlugin {
 	@Override
 	public void onLoad(String mixinPackage) {
-
+		MixinExtrasBootstrap.init();
 	}
 
 	@Override
