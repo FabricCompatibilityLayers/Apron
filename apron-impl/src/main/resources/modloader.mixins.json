@@ -1,8 +1,6 @@
 {
   "required": true,
-  "minVersion": "0.8",
   "package": "io.github.betterthanupdates.modloader.mixin",
-  "compatibilityLevel": "JAVA_8",
   "mixins": [
     "DispenserBlockMixin",
     "FurnaceBlockEntityMixin",
@@ -25,8 +23,5 @@
     "server.ServerWorldSourceMixin",
     "server.TrackedEntityMixin"
   ],
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "plugin": "io.github.betterthanupdates.apron.ApronMixinPlugin"
+  "parent": "apron.parent.mixins.json"
 }

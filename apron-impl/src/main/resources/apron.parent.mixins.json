@@ -1,0 +1,9 @@
+{
+  "minVersion": "0.8",
+  "plugin": "io.github.betterthanupdates.apron.ApronMixinPlugin",
+  "package": "io.github.betterthanupdates.apron.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

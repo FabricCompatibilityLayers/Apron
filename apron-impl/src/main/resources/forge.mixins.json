@@ -1,8 +1,6 @@
 {
   "required": true,
-  "minVersion": "0.8",
   "package": "io.github.betterthanupdates.forge.mixin",
-  "compatibilityLevel": "JAVA_8",
   "mixins": [
     "BlockMixin",
     "BucketItemMixin",
@@ -36,8 +34,5 @@
     "client.TessellatorMixin",
     "client.TextureManagerMixin"
   ],
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "plugin": "io.github.betterthanupdates.apron.ApronMixinPlugin"
+  "parent": "apron.parent.mixins.json"
 }
