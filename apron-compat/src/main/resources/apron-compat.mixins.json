@@ -3,7 +3,8 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "injectors": {
-    "defaultRequire": 1
+    "defaultRequire": 1,
+    "maxShiftBy": 5
   },
   "package": "io.github.betterthanupdates.apron.compat.mixin",
   "mixins": [
@@ -31,5 +32,6 @@
   "plugin": "io.github.betterthanupdates.apron.compat.MixinCompatPlugin",
   "client": [
     "aether.TitleScreenMixin"
-  ]
+  ],
+  "refmap": "apron-compat-refmap.json"
 }
