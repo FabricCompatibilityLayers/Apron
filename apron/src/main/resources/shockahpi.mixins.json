@@ -2,15 +2,16 @@
   "required": true,
   "package": "io.github.betterthanupdates.shockahpi.mixin.client",
   "client": [
+    "AchievementsScreenMixin",
     "DimensionFileMixin",
+    "DimensionMixin",
     "DungeonFeatureMixin",
     "McRegionDimensionFileMixin",
     "MultiplayerClientInteractionManagerMixin",
     "PortalBlockMixin",
     "SinglePlayerInteractionManagerMixin",
-    "WorldMixin",
-    "DimensionMixin",
-    "ToolItemMixin"
+    "ToolItemMixin",
+    "WorldMixin"
   ],
   "parent": "apron.parent.mixins.json"
 }
