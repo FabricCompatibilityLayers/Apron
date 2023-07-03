@@ -262,11 +262,13 @@ public abstract class TitleScreenMixin extends Screen {
 	}
 
 	private void showWorldPreview() {
-		this.client.interactionManager = new SingleplayerInteractionManager(this.client);
-		ModLoader.getMinecraftInstance().options.hideHud = true;
-		this.client.options.thirdPerson = true;
-		this.client.createOrLoadWorld(latestSave.getFileName(), latestSave.getWorldName(), 0L);
-		((WorldAccessor) this.client.world).setAutoSaveInterval(999999999);
+		if (this.latestSave != null) {
+			this.client.interactionManager = new SingleplayerInteractionManager(this.client);
+			this.client.options.hideHud = true;
+			this.client.options.thirdPerson = true;
+			this.client.createOrLoadWorld(latestSave.getFileName(), latestSave.getWorldName(), 0L);
+			((WorldAccessor) this.client.world).setAutoSaveInterval(999999999);
+		}
 	}
 
 	private void hideWorldPreview() {
@@ -276,7 +278,7 @@ public abstract class TitleScreenMixin extends Screen {
 
 	@Override
 	public void renderBackground() {
-		if (renderOption) return;
+		if (renderOption && this.latestSave != null) return;
 
 		if (themeOption) {
 			this.renderAetherBackground();
