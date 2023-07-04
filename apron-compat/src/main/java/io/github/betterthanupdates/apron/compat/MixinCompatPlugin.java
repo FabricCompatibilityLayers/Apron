@@ -17,14 +17,18 @@ public class MixinCompatPlugin implements IMixinConfigPlugin {
 	public MixinCompatPlugin() {
 		COMPAT.put(".betterthanwolves.", "net.minecraft.mod_FCBetterThanWolves");
 		COMPAT.put(".aether.", "net.minecraft.mod_Aether");
-		COMPAT.put(".aethermp.", "net.mine_diver.aethermp.Core");
+		COMPAT.put(".aethermp.", "net.minecraft.mod_AetherMp");
 		COMPAT.put(".betatweaks.", "betatweaks.Utils");
-		COMPAT.put(".hmi.", "hmi.Utils");
-		COMPAT.put(".infsprites.", "net.mine_diver.infsprites.util.Util");
-		COMPAT.put(".overrideapi.", "overrideapi.OverrideAPI");
+		COMPAT.put(".hmi.", "net.minecraft.mod_HowManyItems");
+		COMPAT.put(".infsprites.", "net.minecraft.mod_InfSprites");
+		COMPAT.put(".overrideapi.common.", "overrideapi.utils.EnumHelper");
+		COMPAT.put(".overrideapi.sarcasm.", "overrideapi.proxy.EntityRendererInjector");
+		COMPAT.put(".overrideapi.old.", "overrideapi.info");
 		COMPAT.put(".portalgun.", "net.minecraft.mod_PortalGun");
 		COMPAT.put(".reimap.", "reifnsk.minimap.ReiMinimap");
 		COMPAT.put(".twilightforest.", "net.minecraft.mod_TwilightForest");
+//		COMPAT.put(".concrete.", "net.minecraft.mod_Concrete");
+//		COMPAT.put(".spawneggs.", "net.minecraft.mod_spawnEggs");
 	}
 
 	@Override

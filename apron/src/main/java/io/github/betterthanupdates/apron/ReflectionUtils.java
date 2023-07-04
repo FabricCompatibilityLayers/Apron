@@ -1,9 +1,15 @@
 package io.github.betterthanupdates.apron;
 
+import static fr.catcore.modremapperapi.utils.MappingsUtils.getNativeNamespace;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
+import fr.catcore.modremapperapi.ModRemappingAPI;
+import fr.catcore.modremapperapi.impl.lib.mappingio.tree.MappingTree;
 import fr.catcore.modremapperapi.remapping.RemapUtil;
+import fr.catcore.modremapperapi.utils.MappingsUtils;
 
 import net.minecraft.client.render.Tessellator;
 
@@ -21,6 +27,21 @@ public class ReflectionUtils {
 		}
 
 		return null;
+	}
+
+	public static String getRemappedFieldName(String owner, String fieldName) {
+		int target = MappingsUtils.getMinecraftMappings().getNamespaceId(MappingsUtils.getTargetNamespace());
+		MappingTree.ClassMapping classMapping = MappingsUtils.getMinecraftMappings().getClass(owner.replace(".", "/"), target);
+		if (classMapping != null) {
+			for(MappingTree.FieldMapping fieldDef : classMapping.getFields()) {
+				String fieldSubName = fieldDef.getName(getNativeNamespace());
+				if ((!ModRemappingAPI.BABRIC || fieldSubName != null) && Objects.equals(fieldSubName, fieldName)) {
+					return fieldDef.getName(MappingsUtils.getTargetNamespace());
+				}
+			}
+		}
+
+		return fieldName;
 	}
 
 	public static Object getField(Class<?> clazz, Object obj, String name) {
@@ -50,6 +71,35 @@ public class ReflectionUtils {
 		}
 
 		return null;
+	}
+
+	public static String getRemappedMethodName(String owner, String methodName, String desc) {
+		int target = MappingsUtils.getMinecraftMappings().getNamespaceId(MappingsUtils.getTargetNamespace());
+		MappingTree.ClassMapping classMapping = MappingsUtils.getMinecraftMappings().getClass(owner.replace(".", "/"), target);
+		if (classMapping != null) {
+			for(MappingTree.MethodMapping methodDef : classMapping.getMethods()) {
+				String methodSubName = methodDef.getName(getNativeNamespace());
+				if ((!ModRemappingAPI.BABRIC || methodSubName != null) && Objects.equals(methodSubName, methodName)) {
+					String methodDescriptor = methodDef.getDesc(MappingsUtils.getTargetNamespace());
+					if (methodDescriptor.startsWith(desc)) {
+						return methodDef.getName(MappingsUtils.getTargetNamespace());
+					}
+				}
+			}
+		}
+
+		return methodName;
+	}
+
+	public static boolean isModLoaded(String name) {
+		try {
+			Class.forName("net.minecraft." + name, false, ReflectionUtils.class.getClassLoader());
+			return true;
+		} catch (Exception e) {
+
+		}
+
+		return false;
 	}
 
 	public static Tessellator create() {

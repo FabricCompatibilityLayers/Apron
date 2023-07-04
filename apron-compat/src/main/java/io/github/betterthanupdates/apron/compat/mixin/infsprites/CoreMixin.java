@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
-@Pseudo
 @Mixin(Core.class)
 public abstract class CoreMixin {
 	@ModifyConstant(method = "<clinit>", constant = @Constant(stringValue = "usedTerrainSprites"))
@@ -14,18 +13,13 @@ public abstract class CoreMixin {
 		return "USED_TERRAIN_SPRITES";
 	}
 
-	@ModifyConstant(method = "<clinit>", constant = @Constant(stringValue = "terrainSpritesLeft"))
-	private static String fixTSL(String constant) {
-		return "terrainSpritesLeft";
-	}
-
 	@ModifyConstant(method = "<clinit>", constant = @Constant(stringValue = "usedItemSprites"))
 	private static String fixUIS(String constant) {
 		return "USED_ITEM_SPRITES";
 	}
 
-	@ModifyConstant(method = "<clinit>", constant = @Constant(stringValue = "itemSpritesLeft"))
-	private static String fixISL(String constant) {
-		return "itemSpritesLeft";
+	@ModifyConstant(method = "preInit", remap = false, constant = @Constant(stringValue = "d"))
+	private String preInit$fix(String constant) {
+		return "field_2544";
 	}
 }

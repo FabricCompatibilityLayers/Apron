@@ -8,7 +8,10 @@ dependencies {
     modCompileOnly(files("mods/aether.jar"))
 	modCompileOnly(files("mods/aethermp.jar"))
 	modCompileOnly(files("mods/infsprite.jar"))
-	modCompileOnly(files("mods/overrideapi.jar"))
+	modCompileOnly(files("mods/overrideapi-old.jar"))
+	modCompileOnly(files("mods/overrideapi-sarcasm.jar"))
 	modCompileOnly(files("mods/betterthanwolves.jar"))
 	modCompileOnly(files("mods/hmi.jar"))
+	modCompileOnly(files("mods/concrete.jar"))
+	modCompileOnly(files("mods/spawneggs.jar"))
 }

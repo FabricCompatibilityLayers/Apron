@@ -5,10 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
-import fr.catcore.modremapperapi.remapping.RemapUtil;
 import net.mine_diver.infsprites.api.Identifier;
 import net.mine_diver.infsprites.api.Patchers;
 import net.mine_diver.infsprites.proxy.transform.ProxyTransformer;
@@ -27,9 +25,7 @@ import overrideapi.proxy.asm.tree.FieldNode;
 import overrideapi.proxy.asm.tree.MethodInsnNode;
 import overrideapi.proxy.asm.tree.MethodNode;
 
-import net.minecraft.class_66;
-import net.minecraft.client.render.WorldEventRenderer;
-import net.minecraft.client.texture.TextureManager;
+import io.github.betterthanupdates.apron.ReflectionUtils;
 
 @Mixin(ProxyTransformer.class)
 public abstract class ProxyTransformerMixin {
@@ -46,32 +42,32 @@ public abstract class ProxyTransformerMixin {
 	@Final
 	private static String SHADOW;
 
-	@Shadow(remap = false)
+	@Shadow
 	private static String toTarget(Class<?> owner, FieldNode field) {
 		return null;
 	}
 
-	@Shadow(remap = false)
+	@Shadow
 	private static String toTargetCustomName(Class<?> owner, FieldNode field, String fieldName) {
 		return null;
 	}
 
-	@Shadow(remap = false)
-	private static String toTargetInsn(FieldInsnNode fieldInsn) {
-		return null;
-	}
-
-	@Shadow(remap = false)
+	@Shadow
 	private static String toTarget(Class<?> owner, MethodNode method) {
 		return null;
 	}
 
-	@Shadow(remap = false)
+	@Shadow
 	private static String toTargetCustomName(Class<?> owner, MethodNode method, String methodName) {
 		return null;
 	}
 
-	@Shadow(remap = false)
+	@Shadow
+	private static String toTargetInsn(FieldInsnNode fieldInsn) {
+		return null;
+	}
+
+	@Shadow
 	private static String toTargetInsn(MethodInsnNode methodInsn) {
 		return null;
 	}
@@ -87,6 +83,7 @@ public abstract class ProxyTransformerMixin {
 		classReader.accept(classNode, 0);
 		Map<String, String> shadowFieldRemap = new HashMap();
 		Map<String, String> shadowMethodRemap = new HashMap();
+		log(proxyClass.getName() + " -> " + targetClass.getName());
 		log("Building shadow field remap map...");
 		((List)((List)classNode.fields).stream().filter(field -> ((List)((FieldNode)field).invisibleAnnotations) != null).collect(Collectors.toList()))
 				.forEach(field -> ((List)((FieldNode)field).invisibleAnnotations).stream().filter(ann -> SHADOW.equals(((AnnotationNode)ann).desc)).findFirst().ifPresent(ann -> {
@@ -101,7 +98,7 @@ public abstract class ProxyTransformerMixin {
 							switch(var9) {
 							case "obfuscatedName":
 								if (!Util.workspace) {
-									fieldName = RemapUtil.getRemappedFieldName(targetClass, (String)nan.values.get(i + 1));
+									fieldName = ReflectionUtils.getRemappedFieldName(targetClass.getName(), (String)nan.values.get(i + 1));
 								}
 								break;
 							case "requiredPatcher":
@@ -132,21 +129,7 @@ public abstract class ProxyTransformerMixin {
 							switch(var9) {
 							case "obfuscatedName":
 								if (!Util.workspace) {
-									methodName = (String)nan.values.get(i + 1);
-
-									if (targetClass == TextureManager.class) {
-										if (Objects.equals(methodName, "a")) {
-											methodName = "method_1086";
-										}
-									} else if (targetClass == WorldEventRenderer.class) {
-										if (Objects.equals(methodName, "b")) {
-											methodName = "method_1553";
-										}
-									} else if (targetClass == class_66.class) {
-										if (Objects.equals(methodName, "g")) {
-											methodName = "method_306";
-										}
-									}
+									methodName = ReflectionUtils.getRemappedMethodName(targetClass.getName(), (String)nan.values.get(i + 1), metodh.desc);
 								}
 								break;
 							case "requiredPatcher":

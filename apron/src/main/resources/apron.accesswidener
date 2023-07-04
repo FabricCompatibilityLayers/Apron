@@ -203,3 +203,6 @@ accessible field net/minecraft/entity/Entity rand Ljava/util/Random;
 accessible field net/minecraft/client/entity/player/AbstractClientPlayerEntity client Lnet/minecraft/client/Minecraft;
 accessible field net/minecraft/entity/player/PlayerEntity field_512 Z
 accessible method net/minecraft/client/entity/player/AbstractClientPlayerEntity method_1372 (DDD)Z
+
+## Mods
+mutable field net/minecraft/block/Block FARMLAND Lnet/minecraft/block/Block;

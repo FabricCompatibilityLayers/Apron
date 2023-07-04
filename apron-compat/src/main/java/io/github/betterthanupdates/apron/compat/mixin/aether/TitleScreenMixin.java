@@ -3,6 +3,7 @@ package io.github.betterthanupdates.apron.compat.mixin.aether;
 import java.util.List;
 
 import fr.catcore.modremapperapi.api.mixin.Public;
+import modloader.ModLoader;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,6 +34,7 @@ import net.minecraft.mod_Aether;
 import net.minecraft.world.storage.WorldMetadata;
 import net.minecraft.world.storage.WorldStorage;
 
+import io.github.betterthanupdates.apron.ReflectionUtils;
 import io.github.betterthanupdates.apron.mixin.ButtonWidgetAccessor;
 import io.github.betterthanupdates.apron.mixin.EntityAccessor;
 import io.github.betterthanupdates.apron.mixin.SoundHelperAccessor;
@@ -79,7 +81,11 @@ public abstract class TitleScreenMixin extends Screen {
 
 		mmactive = true;
 		this.client.achievement = new GuiAchievementAether(this.client);
-		this.client.overlay = new GuiIngameAether(this.client);
+
+		if (!ReflectionUtils.isModLoaded("mod_InfSprites")) {
+			System.out.println("Why?");
+			this.setOverlay();
+		}
 
 		if (musicId == -1 && !loadingWorld) {
 			this.client.soundHelper.playSound("aether.music.menu", 1.0F, 1.0F);
@@ -94,6 +100,10 @@ public abstract class TitleScreenMixin extends Screen {
 
 		showWorldPreview();
 		addButtons();
+	}
+
+	private void setOverlay() {
+		this.client.overlay = new GuiIngameAether(this.client);
 	}
 
 	@Inject(method = "render", at = @At("RETURN"))

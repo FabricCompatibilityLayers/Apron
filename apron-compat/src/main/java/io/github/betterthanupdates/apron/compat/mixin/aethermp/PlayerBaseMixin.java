@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
-@Pseudo
 @Mixin(PlayerBaseAetherMp.class)
 public class PlayerBaseMixin {
 
