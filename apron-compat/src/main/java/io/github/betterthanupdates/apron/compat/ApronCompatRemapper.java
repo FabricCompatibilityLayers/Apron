@@ -27,6 +27,7 @@ public class ApronCompatRemapper implements ModRemapper {
 
 	@Override
 	public void registerVisitors(VisitorInfos infos) {
+		// InfSprites
 		String[][] toolFixes = new String[][] {
 				new String[]{"net/mine_diver/infsprites/render/Tessellators", "io/github/betterthanupdates/apron/compat/InfSpriteTessellators"}
 		};
@@ -39,9 +40,20 @@ public class ApronCompatRemapper implements ModRemapper {
 			infos.registerMethodMethodIns(new VisitorInfos.MethodNamed(entry[0], ""), new VisitorInfos.MethodNamed(entry[1], ""));
 		}
 
+		// OverrideApi
 		infos.registerMethodMethodIns(
 				new VisitorInfos.MethodNamed("overrideapi/utils/Reflection", "findField"),
 				new VisitorInfos.MethodNamed("io/github/betterthanupdates/apron/ReflectionUtils", "getField")
+		);
+
+		// How Many Items
+		infos.registerMethodMethodIns(
+				new VisitorInfos.MethodNamed("hmi/Utils", "getField"),
+				new VisitorInfos.MethodNamed("io/github/betterthanupdates/apron/ReflectionUtils", "getField")
+		);
+		infos.registerMethodMethodIns(
+				new VisitorInfos.MethodNamed("hmi/Utils", "getMethod"),
+				new VisitorInfos.MethodNamed("io/github/betterthanupdates/apron/ReflectionUtils", "getMethod")
 		);
 	}
 
