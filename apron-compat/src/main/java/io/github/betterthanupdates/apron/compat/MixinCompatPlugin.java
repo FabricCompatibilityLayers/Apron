@@ -22,7 +22,7 @@ public class MixinCompatPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		if (mixinClassName.contains("betterthanwolves")) {
+		if (mixinClassName.contains(".betterthanwolves.")) {
 			try {
 				Class.forName("net.minecraft.mod_FCBetterThanWolves", false, getClass().getClassLoader());
 				System.out.println("Applying BTW specific mixin: " + mixinClassName);
@@ -30,7 +30,7 @@ public class MixinCompatPlugin implements IMixinConfigPlugin {
 			} catch (ClassNotFoundException e) {
 				return false;
 			}
-		} else if (mixinClassName.contains("aether")) {
+		} else if (mixinClassName.contains(".aether.")) {
 			try {
 				Class.forName("net.minecraft.mod_Aether", false, getClass().getClassLoader());
 				System.out.println("Applying Aether specific mixin: " + mixinClassName);

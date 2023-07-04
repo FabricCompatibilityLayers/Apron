@@ -95,27 +95,6 @@ public final class ApronModRemapper implements ModRemapper {
 				new VisitorInfos.MethodNamed("net/minecraft/class_13", "redstoneColors"),
 				new VisitorInfos.MethodNamed("io/github/betterthanupdates/forge/ForgeClientReflection", "BlockRenderer$redstoneColors")
 		);
-		infos.registerMethodFieldIns(
-				new VisitorInfos.MethodNamed("net/minecraft/class_328", "disableValidation"),
-				new VisitorInfos.MethodNamed("io/github/betterthanupdates/forge/ForgeReflection", "TrapdoorBlock$disableValidation")
-		);
-
-
-
-//		infos.registerMethodTypeIns(
-//				new VisitorInfos.Type("net/minecraft/uu"),
-//				new VisitorInfos.Type("net/minecraft/class_17")
-//		);
-//
-//		infos.registerMethodTypeIns(
-//				new VisitorInfos.Type("net/minecraft/gm"),
-//				new VisitorInfos.Type("net/minecraft/class_124")
-//		);
-//
-//		infos.registerMethodTypeIns(
-//				new VisitorInfos.Type("net/minecraft/yq"),
-//				new VisitorInfos.Type("net/minecraft/class_474")
-//		);
 	}
 
 	/**

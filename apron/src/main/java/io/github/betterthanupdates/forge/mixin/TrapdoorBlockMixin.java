@@ -1,5 +1,6 @@
 package io.github.betterthanupdates.forge.mixin;
 
+import fr.catcore.modremapperapi.api.mixin.Public;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,11 +13,12 @@ import net.minecraft.block.TrapdoorBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 
-import io.github.betterthanupdates.forge.ForgeReflection;
 import io.github.betterthanupdates.forge.world.ForgeWorld;
 
 @Mixin(TrapdoorBlock.class)
 public abstract class TrapdoorBlockMixin extends Block {
+	@Public
+	private static boolean disableValidation = false;
 	protected TrapdoorBlockMixin(int blockId, Material material) {
 		super(blockId, material);
 	}
@@ -38,7 +40,7 @@ public abstract class TrapdoorBlockMixin extends Block {
 	 */
 	@Redirect(method = "onAdjacentBlockUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z"))
 	private boolean forge$disableValidation(World instance, int j, int k, int i) {
-		return !(!ForgeReflection.TrapdoorBlock$disableValidation && !((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, (this.cachedMeta & 3) + 2));
+		return !(!disableValidation && !((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, (this.cachedMeta & 3) + 2));
 	}
 
 	int cachedL;

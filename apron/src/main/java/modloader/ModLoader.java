@@ -620,6 +620,10 @@ public class ModLoader {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T, E> T getPrivateValue(Class<? super E> instanceClass, E instance, String fieldName) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
+		if (instanceClass == ModLoader.class) {
+			if (Objects.equals(fieldName, "usedItemSprites")) fieldName = "USED_ITEM_SPRITES";
+		}
+
 		try {
 			fieldName = RemapUtil.getRemappedFieldName(instanceClass, fieldName);
 			Field f = instanceClass.getDeclaredField(fieldName);

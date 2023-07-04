@@ -15,65 +15,75 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Random;
 
+import io.github.betterthanupdates.apron.compat.betterthanwolves.BTWCakeBlock;
+
 @Mixin(CakeBlock.class)
-public class CakeBlockMixin extends Block {
+public class CakeBlockMixin extends Block implements BTWCakeBlock {
 	protected CakeBlockMixin(int i, Material arg) {
 		super(i, arg);
 	}
 
 	@Override
-	public void onBlockPlaced(World arg, int i, int j, int k) {
-		super.onBlockPlaced(arg, i, j, k);
-		if(arg.method_263(i, j, k)) {
-			setRedstoneOn(arg, i, j, k, true);
-			arg.playSound((double)i + 0.5D, (double)j + 0.5D, (double)k + 0.5D, "mob.ghast.scream", 1.0F, arg.rand.nextFloat() * 0.4F + 0.8F);
+	public void onBlockPlaced(World world, int i, int j, int k) {
+		super.onBlockPlaced(world, i, j, k);
+		boolean bReceivingRedstone = world.method_263(i, j, k);
+		if (bReceivingRedstone) {
+			this.SetRedstoneOn(world, i, j, k, true);
+			world.playSound((double)i + 0.5, (double)j + 0.5, (double)k + 0.5, "mob.ghast.scream", 1.0F, world.rand.nextFloat() * 0.4F + 0.8F);
 		}
 	}
 
 	@ModifyVariable(method = "updateBoundingBox", at = @At("HEAD"), ordinal = 0)
-	private int changeToBTWMedthod_1(int var5, @Local BlockView iblockaccess, @Local int i, @Local int j, @Local int k) {
-		return getEatState(iblockaccess, i, j, k);
+	private int btw$updateBoundingBox(int var5, @Local BlockView iblockaccess, @Local(ordinal = 0) int i, @Local(ordinal = 1) int j, @Local(ordinal = 2) int k) {
+		return this.GetEatState(iblockaccess, i, j, k);
 	}
 
 	@ModifyVariable(method = "getCollisionShape", at = @At("HEAD"), ordinal = 0)
-	private int changeToBTWMedthod_2(int var5, @Local World arg, @Local int i, @Local int j, @Local int k) {
-		return getEatState(arg, i, j, k);
+	private int btw$getCollisionShape(int var5, @Local World arg, @Local(ordinal = 0) int i, @Local(ordinal = 1) int j, @Local(ordinal = 2) int k) {
+		return this.GetEatState(arg, i, j, k);
 	}
 
 	@ModifyVariable(method = "getOutlineShape", at = @At("HEAD"), ordinal = 0)
-	private int changeToBTWMedthod_3(int var5, @Local World arg, @Local int i, @Local int j, @Local int k) {
-		return getEatState(arg, i, j, k);
+	private int btw$getOutlineShape(int var5, @Local World arg, @Local(ordinal = 0) int i, @Local(ordinal = 1) int j, @Local(ordinal = 2) int k) {
+		return this.GetEatState(arg, i, j, k);
+	}
+
+	@ModifyVariable(method = "getTextureForSide(II)I", at = @At("HEAD"), ordinal = 1, argsOnly = true)
+	private int btw$getTextureForSide(int value) {
+		return value & 7;
 	}
 
 	@ModifyVariable(method = "method_1528", at = @At("HEAD"), ordinal = 0)
-	private int changeToBTWMedthod_4(int var6, @Local World arg, @Local int i, @Local int j, @Local int k) {
-		return getEatState(arg, i, j, k) + 1;
+	private int btw$method_1528$1(int var6, @Local World arg, @Local(ordinal = 0) int i, @Local(ordinal = 1) int j, @Local(ordinal = 2) int k) {
+		return this.GetEatState(arg, i, j, k) + 1;
 	}
 
 	@Redirect(method = "method_1528", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setBlockMeta(IIII)V"))
-	private void changeToBTWMedthod_5(World instance, int j, int k, int l, int i, @Local int var6) {
-		setEatState(instance, i, j, k, var6);
+	private void btw$method_1528$2(World instance, int j, int k, int l, int i, @Local(ordinal = 3) int var6) {
+		this.SetEatState(instance, i, j, k, var6);
 	}
 
 	@Inject(method = "onAdjacentBlockUpdate", at = @At("TAIL"))
-	private void addBTWCheck(World arg, int i, int j, int k, int l, CallbackInfo callbackInfo) {
-		if (((CakeBlock)(Object)this).canGrow(arg, i, j, k)) {
-			boolean bOn = isRedstoneOn(arg, i, j, k);
-			boolean bReceivingRedstone = arg.method_263(i, j, k);
+	private void addBTWCheck(World world, int i, int j, int k, int l, CallbackInfo callbackInfo) {
+		if (this.canGrow(world, i, j, k)) {
+			boolean bOn = this.IsRedstoneOn(world, i, j, k);
+			boolean bReceivingRedstone = world.method_263(i, j, k);
 			if (bOn != bReceivingRedstone) {
-				setRedstoneOn(arg, i, j, k, bReceivingRedstone);
+				this.SetRedstoneOn(world, i, j, k, bReceivingRedstone);
 				if (bReceivingRedstone) {
-					arg.playSound((double)i + 0.5, (double)j + 0.5, (double)k + 0.5, "mob.ghast.scream", 1.0F, arg.rand.nextFloat() * 0.4F + 0.8F);
+					world.playSound((double)i + 0.5, (double)j + 0.5, (double)k + 0.5, "mob.ghast.scream", 1.0F, world.rand.nextFloat() * 0.4F + 0.8F);
 				}
 			}
 		}
 	}
 
-	public boolean isRedstoneOn(BlockView iBlockAccess, int i, int j, int k) {
+	@Override
+	public boolean IsRedstoneOn(BlockView iBlockAccess, int i, int j, int k) {
 		return (iBlockAccess.getBlockMeta(i, j, k) & 8) > 0;
 	}
 
-	public void setRedstoneOn(World world, int i, int j, int k, boolean bOn) {
+	@Override
+	public void SetRedstoneOn(World world, int i, int j, int k, boolean bOn) {
 		int iMetaData = world.getBlockMeta(i, j, k) & -9;
 		if (bOn) {
 			iMetaData |= 8;
@@ -82,11 +92,13 @@ public class CakeBlockMixin extends Block {
 		world.setBlockMeta(i, j, k, iMetaData);
 	}
 
-	public int getEatState(BlockView iBlockAccess, int i, int j, int k) {
+	@Override
+	public int GetEatState(BlockView iBlockAccess, int i, int j, int k) {
 		return iBlockAccess.getBlockMeta(i, j, k) & 7;
 	}
 
-	public void setEatState(World world, int i, int j, int k, int state) {
+	@Override
+	public void SetEatState(World world, int i, int j, int k, int state) {
 		int iMetaData = world.getBlockMeta(i, j, k) & 8;
 		iMetaData |= state;
 		world.setBlockMeta(i, j, k, iMetaData);
@@ -94,7 +106,7 @@ public class CakeBlockMixin extends Block {
 
 	@Override
 	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
-		if (isRedstoneOn(world, i, j, k)) {
+		if (this.IsRedstoneOn(world, i, j, k)) {
 			double d = (double)i + 0.5 + ((double)random.nextFloat() - 0.5) * 0.666;
 			double d1 = (double)((float)j) + 0.65;
 			double d2 = (double)k + 0.5 + ((double)random.nextFloat() - 0.5) * 0.666;
@@ -112,6 +124,5 @@ public class CakeBlockMixin extends Block {
 
 			world.addParticle("reddust", d, d1, d2, (double)f1, (double)f2, (double)f3);
 		}
-
 	}
 }
