@@ -1,18 +1,34 @@
 package io.github.betterthanupdates.apron.compat;
 
 import com.llamalad7.mixinextras.MixinExtrasBootstrap;
-import io.github.betterthanupdates.apron.Apron;
+import fr.catcore.modremapperapi.utils.MixinUtils;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class MixinCompatPlugin implements IMixinConfigPlugin {
+	private static final Map<String, String> COMPAT = new HashMap<>();
+
+	public MixinCompatPlugin() {
+		COMPAT.put(".betterthanwolves.", "net.minecraft.mod_FCBetterThanWolves");
+		COMPAT.put(".aether.", "net.minecraft.mod_Aether");
+		COMPAT.put(".aethermp.", "net.mine_diver.aethermp.Core");
+		COMPAT.put(".betatweaks.", "betatweaks.Utils");
+		COMPAT.put(".hmi.", "hmi.Utils");
+		COMPAT.put(".infsprites.", "net.mine_diver.infsprites.util.Util");
+		COMPAT.put(".overrideapi.", "overrideapi.OverrideAPI");
+		COMPAT.put(".portalgun.", "net.minecraft.mod_PortalGun");
+		COMPAT.put(".reimap.", "reifnsk.minimap.ReiMinimap");
+		COMPAT.put(".twilightforest.", "net.minecraft.mod_TwilightForest");
+	}
+
 	@Override
 	public void onLoad(String mixinPackage) {
-		MixinExtrasBootstrap.init();
 	}
 
 	@Override
@@ -22,23 +38,17 @@ public class MixinCompatPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		if (mixinClassName.contains(".betterthanwolves.")) {
-			try {
-				Class.forName("net.minecraft.mod_FCBetterThanWolves", false, getClass().getClassLoader());
-				System.out.println("Applying BTW specific mixin: " + mixinClassName);
-				return true;
-			} catch (ClassNotFoundException e) {
-				return false;
-			}
-		} else if (mixinClassName.contains(".aether.")) {
-			try {
-				Class.forName("net.minecraft.mod_Aether", false, getClass().getClassLoader());
-				System.out.println("Applying Aether specific mixin: " + mixinClassName);
-				return true;
-			} catch (ClassNotFoundException e) {
-				return false;
+		for (Map.Entry<String, String> entry : COMPAT.entrySet()) {
+			if (mixinClassName.contains(entry.getKey())) {
+				try {
+					Class.forName(entry.getValue(), false, getClass().getClassLoader());
+					return true;
+				} catch (ClassNotFoundException e) {
+					return false;
+				}
 			}
 		}
+
 		return true;
 	}
 
@@ -59,6 +69,6 @@ public class MixinCompatPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-
+		MixinUtils.applyASMMagic(targetClassName, targetClass, mixinClassName, mixinInfo);
 	}
 }
