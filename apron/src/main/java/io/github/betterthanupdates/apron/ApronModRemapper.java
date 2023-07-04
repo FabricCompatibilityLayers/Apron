@@ -74,18 +74,6 @@ public final class ApronModRemapper implements ModRemapper {
 
 	@Override
 	public void registerVisitors(VisitorInfos infos) {
-		String[][] toolFixes = new String[][] {
-			new String[]{"net/mine_diver/infsprites/render/Tessellators", "io/github/betterthanupdates/apron/compat/InfSpriteTessellators"}
-		};
-
-		for (String[] entry : toolFixes) {
-			infos.registerSuperType(new VisitorInfos.Type(entry[0]), new VisitorInfos.Type(entry[1]));
-			infos.registerTypeAnnotation(new VisitorInfos.Type(entry[0]), new VisitorInfos.Type(entry[1]));
-			infos.registerMethodTypeIns(new VisitorInfos.Type(entry[0]), new VisitorInfos.Type(entry[1]));
-			infos.registerMethodFieldIns(new VisitorInfos.MethodNamed(entry[0], ""), new VisitorInfos.MethodNamed(entry[1], ""));
-			infos.registerMethodMethodIns(new VisitorInfos.MethodNamed(entry[0], ""), new VisitorInfos.MethodNamed(entry[1], ""));
-		}
-
 		infos.registerMethodMethodIns(
 				new VisitorInfos.MethodNamed("net/minecraft/class_13", "setRedstoneColors"),
 				new VisitorInfos.MethodNamed("io/github/betterthanupdates/forge/ForgeClientReflection", "BlockRenderer$setRedstoneColors")
@@ -112,19 +100,7 @@ public final class ApronModRemapper implements ModRemapper {
 				new VisitorInfos.MethodNamed("io/github/betterthanupdates/forge/ForgeReflection", "TrapdoorBlock$disableValidation")
 		);
 
-		for (String fName : new String[] {
-				"mmactive", "renderOption", "themeOption", "musicId", "loadingWorld", "ach"
-		}) {
-			infos.registerMethodFieldIns(
-					new VisitorInfos.MethodNamed("net/minecraft/class_197", fName),
-					new VisitorInfos.MethodNamed("io/github/betterthanupdates/apron/compat/AetherHelper", fName)
-			);
-		}
 
-		infos.registerMethodMethodIns(
-				new VisitorInfos.MethodNamed("overrideapi/utils/Reflection", "findField"),
-				new VisitorInfos.MethodNamed("io/github/betterthanupdates/apron/ReflectionUtils", "getField")
-		);
 
 //		infos.registerMethodTypeIns(
 //				new VisitorInfos.Type("net/minecraft/uu"),
