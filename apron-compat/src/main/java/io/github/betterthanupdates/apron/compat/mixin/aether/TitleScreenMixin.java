@@ -1,10 +1,8 @@
 package io.github.betterthanupdates.apron.compat.mixin.aether;
 
-import static io.github.betterthanupdates.apron.compat.AetherHelper.*;
-
 import java.util.List;
 
-import modloader.ModLoader;
+import fr.catcore.modremapperapi.api.mixin.Public;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,12 +22,14 @@ import net.minecraft.GuiMultiplayerAether;
 import net.minecraft.GuiSelectWorldAether;
 import net.minecraft.client.SingleplayerInteractionManager;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
+import net.minecraft.client.gui.AchievementWidget;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.menu.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TextRenderer;
 import net.minecraft.client.resource.language.TranslationStorage;
+import net.minecraft.mod_Aether;
 import net.minecraft.world.storage.WorldMetadata;
 import net.minecraft.world.storage.WorldStorage;
 
@@ -45,6 +45,19 @@ public abstract class TitleScreenMixin extends Screen {
 	private ButtonWidget multiplayerButton;
 	private WorldMetadata latestSave;
 	private String hoverText;
+
+	@Public
+	private static boolean mmactive = false;
+	@Public
+	private static boolean renderOption = mod_Aether.worldMenu;
+	@Public
+	private static boolean themeOption = mod_Aether.aetherMenu;
+	@Public
+	private static int musicId = -1;
+	@Public
+	private static boolean loadingWorld = false;
+	@Public
+	private static AchievementWidget ach = null;
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void tick(CallbackInfo ci) {
