@@ -4,5 +4,6 @@
   "client": [
     "AbstractClientPlayerEntityMixin"
   ],
+  "plugin": "io.github.betterthanupdates.apron.ApronMixinPlugin",
   "parent": "apron.parent.mixins.json"
 }

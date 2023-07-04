@@ -12,7 +12,6 @@ import java.util.Set;
 public class ApronMixinPlugin implements IMixinConfigPlugin {
 	@Override
 	public void onLoad(String mixinPackage) {
-		MixinExtrasBootstrap.init();
 	}
 
 	@Override
@@ -22,7 +21,7 @@ public class ApronMixinPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		return false;
+		return true;
 	}
 
 	@Override

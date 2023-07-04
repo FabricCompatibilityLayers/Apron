@@ -34,5 +34,6 @@
     "client.TessellatorMixin",
     "client.TextureManagerMixin"
   ],
+  "plugin": "io.github.betterthanupdates.apron.ApronMixinPlugin",
   "parent": "apron.parent.mixins.json"
 }
