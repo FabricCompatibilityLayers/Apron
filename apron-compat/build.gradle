@@ -19,4 +19,5 @@ dependencies {
 	modCompileOnly(files("mods/somnia.jar"))
 	modCompileOnly(files("mods/aei.jar"))
 	modCompileOnly(files("mods/betterblocks.jar"))
+	modCompileOnly(files("mods/incrediblefungus.jar"))
 }

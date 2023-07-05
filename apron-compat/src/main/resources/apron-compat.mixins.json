@@ -37,6 +37,7 @@
     "betterthanwolves.WolfEntityMixin",
     "concrete.ConcreteMixin",
     "hmi.UtilsMixin",
+    "incrediblefungus.FireBlockMixin",
     "infsprites.CoreMixin",
     "infsprites.ProxyTransformerMixin",
     "infsprites.UtilMixin",
