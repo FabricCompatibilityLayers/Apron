@@ -3,30 +3,28 @@ package io.github.betterthanupdates.apron.compat.mixin.betatweaks;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import betatweaks.Utils;
 import modloader.BaseMod;
 import modloader.ModLoader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import io.github.betterthanupdates.apron.ReflectionUtils;
 
-@Pseudo
-@Mixin(targets = {"betatweaks/Utils"})
+@Mixin(Utils.class)
 public class UtilsMixin {
-	@Inject(target = {@Desc(value = "getField", args = {Class.class, String[].class}, ret = Field.class)},
+	@Inject(method = "getField",
 			cancellable = true, at = @At("HEAD"), remap = false)
 	private static void fixField(Class<?> target, String[] names, CallbackInfoReturnable<Field> ci) {
 		ci.setReturnValue(ReflectionUtils.getField(target, names));
 	}
 
-	@Inject(target = {@Desc(value = "getMethod", args = {Class.class, Class[].class, String[].class}, ret = Method.class)},
+	@Inject(method = "getMethod",
 			cancellable = true, at = @At("HEAD"), remap = false)
 	private static void fixMethod(Class<?> target, Class<?>[] types, String[] names, CallbackInfoReturnable<Method> ci) {
 		ci.setReturnValue(ReflectionUtils.getMethod(target, names, types));
@@ -56,8 +54,8 @@ public class UtilsMixin {
 		}
 	}
 
-	@ModifyArg(target = {@Desc(value = "checkModInstalled", args = {String.class, String.class}, ret = boolean.class)},
-			remap = false, at = @At(value = "INVOKE", desc = @Desc(value = "classExists", args = {String.class}, ret = boolean.class), remap = false))
+	@ModifyArg(method = "checkModInstalled(Ljava/lang/String;Ljava/lang/String;)Z",
+			remap = false, at = @At(value = "INVOKE", target = "Lbetatweaks/Utils;classExists(Ljava/lang/String;)Z", remap = false))
 	private static String fixCheckModInstalled(String name) {
 		if (name.equals("ModLoaderMp")) {
 			name = "modloadermp." + name;

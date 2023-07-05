@@ -18,7 +18,7 @@ public class MixinCompatPlugin implements IMixinConfigPlugin {
 		COMPAT.put(".betterthanwolves.", "net.minecraft.mod_FCBetterThanWolves");
 		COMPAT.put(".aether.", "net.minecraft.mod_Aether");
 		COMPAT.put(".aethermp.", "net.minecraft.mod_AetherMp");
-		COMPAT.put(".betatweaks.", "betatweaks.Utils");
+		COMPAT.put(".betatweaks.", "net.minecraft.mod_BetaTweaks");
 		COMPAT.put(".hmi.", "net.minecraft.mod_HowManyItems");
 		COMPAT.put(".infsprites.", "net.minecraft.mod_InfSprites");
 		COMPAT.put(".overrideapi.common.", "overrideapi.utils.EnumHelper");
