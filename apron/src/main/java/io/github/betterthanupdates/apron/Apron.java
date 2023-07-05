@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 
 import fr.catcore.modremapperapi.utils.Constants;
 import modloader.BaseMod;
+import modloader.ModLoader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -19,7 +20,6 @@ import reforged.ReforgedMod;
 public final class Apron {
 	public static final String MOD_ID = "apron";
 	public static final String NAME = "Apron";
-	public static long fabricModCount = 0, rmlModCount = 0;
 
 	// Logging
 	public static final Logger LOGGER;
@@ -60,11 +60,11 @@ public final class Apron {
 	 * @return a string telling how many mods are loaded from ModLoader
 	 */
 	public static String rmlModsLoaded() {
-		return rmlModCount + " RML";
+		return ModLoader.getLoadedMods().size() + " RML";
 	}
 
 	public static String fabricModsLoaded() {
-		return fabricModCount + " Fabric";
+		return FabricLoader.getInstance().getAllMods().size() + " Fabric";
 	}
 
 	/**
