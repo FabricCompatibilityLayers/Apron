@@ -14,6 +14,7 @@
     "aethermp.PlayerBaseMixin",
     "betatweaks.GuiAPIHandlerMixin",
     "betatweaks.UtilsMixin",
+    "betterblocks.IBetterBlockMixin",
     "betterthanwolves.ArrowEntityMixin",
     "betterthanwolves.BirchTreeFeatureMixin",
     "betterthanwolves.CactusBlockMixin",

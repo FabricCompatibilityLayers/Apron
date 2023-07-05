@@ -28,6 +28,7 @@ public class MixinCompatPlugin implements IMixinConfigPlugin {
 		COMPAT.put(".reimap.", "net.minecraft.mod_ReiMinimap");
 		COMPAT.put(".twilightforest.", "net.minecraft.mod_TwilightForest");
 		COMPAT.put(".somnia.", "net.minecraft.mod_Somnia");
+		COMPAT.put(".betterblocks.", "net.minecraft.mod_BetterBlocks");
 //		COMPAT.put(".aei.", "net.minecraft.mod_AEI");
 //		COMPAT.put(".concrete.", "net.minecraft.mod_Concrete");
 //		COMPAT.put(".spawneggs.", "net.minecraft.mod_spawnEggs");

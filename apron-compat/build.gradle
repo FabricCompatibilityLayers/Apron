@@ -18,4 +18,5 @@ dependencies {
 	modCompileOnly(files("mods/betatweaks.jar"))
 	modCompileOnly(files("mods/somnia.jar"))
 	modCompileOnly(files("mods/aei.jar"))
+	modCompileOnly(files("mods/betterblocks.jar"))
 }
