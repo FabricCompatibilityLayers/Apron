@@ -16,4 +16,5 @@ dependencies {
 	modCompileOnly(files("mods/spawneggs.jar"))
 	modCompileOnly(files("mods/reimap.jar"))
 	modCompileOnly(files("mods/betatweaks.jar"))
+	modCompileOnly(files("mods/somnia.jar"))
 }

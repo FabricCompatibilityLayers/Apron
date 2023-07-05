@@ -45,6 +45,7 @@
     "overrideapi.sarcasm.UtilMixin",
     "portalgun.PortalGunMixin",
     "reimap.ReiMinimapMixin",
+    "somnia.BedBlockMixin",
     "spawneggs.SpawnEggsMixin",
     "twilightforest.TwilightForestMixin"
   ],
