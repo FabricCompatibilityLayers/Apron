@@ -25,7 +25,7 @@ public class MixinCompatPlugin implements IMixinConfigPlugin {
 		COMPAT.put(".overrideapi.sarcasm.", "overrideapi.proxy.EntityRendererInjector");
 		COMPAT.put(".overrideapi.old.", "overrideapi.info");
 		COMPAT.put(".portalgun.", "net.minecraft.mod_PortalGun");
-		COMPAT.put(".reimap.", "reifnsk.minimap.ReiMinimap");
+		COMPAT.put(".reimap.", "net.minecraft.mod_ReiMinimap");
 		COMPAT.put(".twilightforest.", "net.minecraft.mod_TwilightForest");
 //		COMPAT.put(".concrete.", "net.minecraft.mod_Concrete");
 //		COMPAT.put(".spawneggs.", "net.minecraft.mod_spawnEggs");
