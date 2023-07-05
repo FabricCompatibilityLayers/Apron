@@ -70,7 +70,7 @@ public class AchievementsScreenMixin extends Screen implements ShockAhPIAchievem
 		this.draw = this.isVisibleLine(achievement);
 	}
 
-	@ModifyVariable(method = "method_1998", index = 16, at = @At(value = "STORE", ordinal = 1), print = true)
+	@ModifyVariable(method = "method_1998", index = 16, at = @At(value = "STORE", ordinal = 1))
 	public int method_1998(int value, @Local Achievement achievement) {
 		if (!this.isVisibleAchievement(achievement, 1)) {
 			return -25;
