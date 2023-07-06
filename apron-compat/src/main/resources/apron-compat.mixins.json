@@ -41,6 +41,7 @@
     "infsprites.CoreMixin",
     "infsprites.ProxyTransformerMixin",
     "infsprites.UtilMixin",
+    "netherores.NetherOresMixin",
     "overrideapi.common.ReflectionMixin",
     "overrideapi.old.GuiHandlerMixin",
     "overrideapi.old.OverrideAPIMixin",
