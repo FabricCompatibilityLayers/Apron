@@ -83,7 +83,6 @@ public abstract class TitleScreenMixin extends Screen {
 		this.client.achievement = new GuiAchievementAether(this.client);
 
 		if (!ReflectionUtils.isModLoaded("mod_InfSprites")) {
-			System.out.println("Why?");
 			this.setOverlay();
 		}
 
