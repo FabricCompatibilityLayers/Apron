@@ -39,6 +39,9 @@
   "entrypoints": {
     "apron:loading_done": [
       "io.github.betterthanupdates.apron.stapi.LoadingDoneListener"
+    ],
+    "bhcreative:event_bus": [
+      "io.github.betterthanupdates.apron.stapi.CreativeTabsListener"
     ]
   },
   "mixins": [
