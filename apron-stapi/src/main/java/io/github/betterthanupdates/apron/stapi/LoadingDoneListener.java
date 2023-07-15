@@ -2,10 +2,13 @@ package io.github.betterthanupdates.apron.stapi;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
+import net.modificationstation.stationapi.api.registry.DimensionContainer;
+import net.modificationstation.stationapi.api.registry.DimensionRegistry;
 import net.modificationstation.stationapi.api.registry.Identifier;
 import net.modificationstation.stationapi.api.registry.ItemRegistry;
 import net.modificationstation.stationapi.api.registry.ModID;
 import net.modificationstation.stationapi.api.registry.Registry;
+import shockahpi.DimensionBase;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -64,6 +67,15 @@ public class LoadingDoneListener implements Runnable {
 							id,
 							block);
 				});
+			});
+
+			DimensionBase.list.forEach(dimensionBase -> {
+				if (dimensionBase.number == 0 || dimensionBase.number == -1) return;
+
+				String name = dimensionBase.getClass().getSimpleName();
+
+				Registry.register(DimensionRegistry.INSTANCE,
+						ModID.of("mods").id(name), new DimensionContainer<>(dimensionBase::getWorldProvider));
 			});
 
 			if (FabricLoader.getInstance().isModLoaded("hmifabric")) {
