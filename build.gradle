@@ -87,6 +87,11 @@ allprojects {
 				includeGroup 'net.legacyfabric.legacy-fabric-api'
 			}
 		}
+		// Used for StationAPI and HowManyItems.
+		maven {
+			name = 'Glass Snapshots'
+			url = 'https://maven.glass-launcher.net/snapshots'
+		}
 		maven {
 			name = 'Froge'
 			url 'https://maven.minecraftforge.net/'

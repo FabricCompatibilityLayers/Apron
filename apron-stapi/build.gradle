@@ -1,0 +1,23 @@
+version = getSubprojectVersion(this)
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 17
+}
+
+dependencies {
+	implementation "org.slf4j:slf4j-api:1.8.0-beta4"
+	implementation 'org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2'
+
+	modImplementation "net.modificationstation:StationAPI:${project.stapi_version}"
+
+	// Optional, but convenient mods for mod creators and users alike.
+	modImplementation("com.github.calmilamsy:ModMenu:${project.modmenu_version}") {
+		transitive false
+	}
+	modImplementation("net.glasslauncher.mods:GlassConfigAPI:${project.gcapi_version}") {
+		transitive false
+	}
+	modImplementation("net.glasslauncher:HowManyItems-Fabric-Unofficial:${project.howmanyitems_version}") {
+		transitive false
+	}
+}

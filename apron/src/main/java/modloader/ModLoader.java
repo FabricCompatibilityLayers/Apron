@@ -2,6 +2,7 @@ package modloader;
 
 import static io.github.betterthanupdates.apron.Apron.BUILTIN_RML_MODS;
 import static io.github.betterthanupdates.apron.Apron.MOD_CACHE_FOLDER;
+import static io.github.betterthanupdates.apron.LifecycleUtils.CURRENT_MOD;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -36,6 +37,7 @@ import java.util.zip.ZipInputStream;
 import javax.imageio.ImageIO;
 
 import fr.catcore.modremapperapi.remapping.RemapUtil;
+import io.github.betterthanupdates.apron.LifecycleUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
@@ -288,6 +290,8 @@ public class ModLoader {
 			if (props.containsKey(modName) && (props.getProperty(modName).equalsIgnoreCase("no") || props.getProperty(modName).equalsIgnoreCase("off"))) {
 				return;
 			}
+
+			CURRENT_MOD = modName;
 
 			Class<?> modClass = loader.loadClass(name);
 
@@ -774,19 +778,25 @@ public class ModLoader {
 
 			readFromClassPath(source);
 
-			BUILTIN_RML_MODS.forEach(supplier -> addInternalMod(supplier.get()));
+			BUILTIN_RML_MODS.forEach(supplier -> {
+				CURRENT_MOD = supplier.getLeft();
+				addInternalMod(supplier.getRight().get());
+			});
 
 			LOGGER.info("Done initializing.");
+			CURRENT_MOD = null;
 			props.setProperty("loggingLevel", cfgLoggingLevel.getName());
 
 			for (BaseMod mod : MOD_LIST) {
-
+				CURRENT_MOD = mod.getClassName();
 				mod.ModsLoaded();
 
-				if (!props.containsKey(Apron.getOriginalClassName(mod.getClass().getName()))) {
-					props.setProperty(Apron.getOriginalClassName(mod.getClass().getName()), "on");
+				if (!props.containsKey(mod.getClassName())) {
+					props.setProperty(mod.getClassName(), "on");
 				}
 			}
+
+			CURRENT_MOD = null;
 
 			if (APRON.isClient()) {
 				Minecraft client = getMinecraftInstance();
@@ -799,6 +809,8 @@ public class ModLoader {
 
 			initStats();
 			saveConfig();
+
+			LifecycleUtils.triggerModsAllLoadedEvent();
 		} catch (Throwable e) {
 			MOD_LOGGER.throwing("ModLoader", "init", e);
 			ThrowException("ModLoader has failed to initialize.", e);

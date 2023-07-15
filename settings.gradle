@@ -21,3 +21,4 @@ rootProject.name = "Apron"
 
 include "apron"
 include "apron-compat"
+include "apron-stapi"

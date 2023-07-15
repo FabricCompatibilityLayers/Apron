@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "id": "apron-stapi",
+  "version": "${version}",
+  "name": "StAPI compatibility patches for Apron.",
+  "description": "",
+  "authors": [
+    {
+      "name": "Better Than Updates",
+      "contact": {
+        "sources": "https://github.com/BetterThanUpdates/Apron",
+        "issues": "https://github.com/BetterThanUpdates/Apron/issues"
+      }
+    }
+  ],
+  "contributors": [
+    {
+      "name": "CatCore",
+      "contact": {
+        "sources": "https://github.com/arthurbambou/Fabricated-Legacy-Forge",
+        "issues": "https://github.com/arthurbambou/Fabricated-Legacy-Forge/issues"
+      }
+    },
+    {
+      "name": "halotroop2288",
+      "contact": {
+        "email": "carolinejoybell@gmail.com"
+      }
+    }
+  ],
+  "contact": {
+    "homepage": "https://BetterThanUpdates.github.io/",
+    "sources": "https://github.com/BetterThanUpdates/Apron",
+    "issues": "https://github.com/BetterThanUpdates/Apron/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/apron/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "apron:loading_done": [
+      "io.github.betterthanupdates.apron.stapi.LoadingDoneListener"
+    ]
+  },
+  "mixins": [
+    "apron-stapi.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.13.3",
+    "minecraft": "1.0.0-beta.7.3",
+    "mod-remapping-api": "^1.6.0",
+    "legacy-fabric-logger-api-v1": "*",
+    "com_github_llamalad7_mixinextras": "*"
+  }
+}

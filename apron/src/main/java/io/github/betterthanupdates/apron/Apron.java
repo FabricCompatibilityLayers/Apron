@@ -28,8 +28,8 @@ public final class Apron {
 
 	public static final ModContainer MOD_CONTAINER;
 
-	public static final List<Supplier<? extends BaseMod>> BUILTIN_RML_MODS = ImmutableList.of(
-			ReforgedMod::new
+	public static final List<Pair<String, Supplier<? extends BaseMod>>> BUILTIN_RML_MODS = ImmutableList.of(
+			new Pair<>("mod_Reforged", ReforgedMod::new)
 	);
 
 	static {

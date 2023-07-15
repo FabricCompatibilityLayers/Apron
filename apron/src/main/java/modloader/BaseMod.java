@@ -199,4 +199,8 @@ public abstract class BaseMod {
 	 * @return Version string
 	 */
 	public abstract String Version();
+
+	public final String getClassName() {
+		return this.getClass().getSimpleName();
+	}
 }

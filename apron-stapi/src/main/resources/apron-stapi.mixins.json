@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "injectors": {
+    "defaultRequire": 1,
+    "maxShiftBy": 5
+  },
+  "package": "io.github.betterthanupdates.apron.stapi.mixin",
+  "mixins": [
+    "BlockMixin",
+    "ItemMixin"
+  ],
+  "plugin": "io.github.betterthanupdates.apron.stapi.MixinCompatPlugin",
+  "client": [
+  ]
+}
