@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import fr.catcore.modremapperapi.api.mixin.SuperMethod;
+import net.fabricmc.loader.api.FabricLoader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -426,9 +428,16 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity imple
 		}
 	}
 
+	@SuperMethod("superDamageEntity")
+	public abstract void superSuperDamageEntity(int i);
+
 	@Override
 	public void superDamageEntity(int i) {
-		super.applyDamage(i);
+		if (FabricLoader.getInstance().isModLoaded("station-player-api-v0")) {
+			this.superSuperDamageEntity(i);
+		} else {
+			super.applyDamage(i);
+		}
 	}
 
 	@Override
