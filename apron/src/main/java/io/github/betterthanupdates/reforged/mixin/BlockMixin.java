@@ -28,10 +28,10 @@ public abstract class BlockMixin implements ReforgedBlock {
 
 	@Shadow
 	protected abstract int droppedMeta(int i);
-
-	// Reforged fields
-	@Unique
-	private ItemStack currentItemStack;
+//
+//	// Reforged fields
+//	@Unique
+//	private ItemStack currentItemStack;
 
 	@Override
 	public int quantityDropped(int i, Random random) {
@@ -57,35 +57,35 @@ public abstract class BlockMixin implements ReforgedBlock {
 				: this.getDropId(i, random);
 	}
 
-	int cachedL;
-
-	@Inject(method = "beforeDestroyedByExplosion", at = @At("HEAD"))
-	private void reforged$beforeDestroyedByExplosion(World i, int j, int k, int l, int f, float par6, CallbackInfo ci) {
-		this.cachedL = f;
-	}
-
-	@Redirect(method = "beforeDestroyedByExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getDropCount(Ljava/util/Random;)I"))
-	private int reforged$beforeDestroyedByExplosion(Block instance, Random random) {
-		return ((ReforgedBlock) instance).quantityDropped(this.cachedL, random, this.currentItemStack);
-	}
-
-	@Redirect(method = "beforeDestroyedByExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getDropId(ILjava/util/Random;)I"))
-	private int reforged$beforeDestroyedByExplosion(Block instance, int l, Random random) {
-		return ((ReforgedBlock) instance).idDropped(l, random, this.currentItemStack);
-	}
-
-	@Redirect(method = "beforeDestroyedByExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;droppedMeta(I)I"))
-	private int reforged$beforeDestroyedByExplosion(Block instance, int i) {
-		return ((ReforgedBlock) instance).damageDropped(i, this.currentItemStack);
-	}
-
-	@Inject(method = "afterBreak", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;drop(Lnet/minecraft/world/World;IIII)V"))
-	private void reforged$getCurrentItemStack(World arg2, PlayerEntity i, int j, int k, int l, int par6, CallbackInfo ci) {
-		this.currentItemStack = i.getHeldItem();
-	}
-
-	@Inject(method = "afterBreak", at = @At("RETURN"))
-	private void reforged$afterBreak(World arg2, PlayerEntity i, int j, int k, int l, int par6, CallbackInfo ci) {
-		this.currentItemStack = null;
-	}
+//	int cachedL;
+//
+//	@Inject(method = "beforeDestroyedByExplosion", at = @At("HEAD"))
+//	private void reforged$beforeDestroyedByExplosion(World i, int j, int k, int l, int f, float par6, CallbackInfo ci) {
+//		this.cachedL = f;
+//	}
+//
+//	@Redirect(method = "beforeDestroyedByExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getDropCount(Ljava/util/Random;)I"))
+//	private int reforged$beforeDestroyedByExplosion(Block instance, Random random) {
+//		return ((ReforgedBlock) instance).quantityDropped(this.cachedL, random, this.currentItemStack);
+//	}
+//
+//	@Redirect(method = "beforeDestroyedByExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getDropId(ILjava/util/Random;)I"))
+//	private int reforged$beforeDestroyedByExplosion(Block instance, int l, Random random) {
+//		return ((ReforgedBlock) instance).idDropped(l, random, this.currentItemStack);
+//	}
+//
+//	@Redirect(method = "beforeDestroyedByExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;droppedMeta(I)I"))
+//	private int reforged$beforeDestroyedByExplosion(Block instance, int i) {
+//		return ((ReforgedBlock) instance).damageDropped(i, this.currentItemStack);
+//	}
+//
+//	@Inject(method = "afterBreak", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;drop(Lnet/minecraft/world/World;IIII)V"))
+//	private void reforged$getCurrentItemStack(World arg2, PlayerEntity i, int j, int k, int l, int par6, CallbackInfo ci) {
+//		this.currentItemStack = i.getHeldItem();
+//	}
+//
+//	@Inject(method = "afterBreak", at = @At("RETURN"))
+//	private void reforged$afterBreak(World arg2, PlayerEntity i, int j, int k, int l, int par6, CallbackInfo ci) {
+//		this.currentItemStack = null;
+//	}
 }

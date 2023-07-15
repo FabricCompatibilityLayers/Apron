@@ -1,5 +1,6 @@
 package io.github.betterthanupdates.apron.stapi.mixin;
 
+import io.github.betterthanupdates.apron.StAPIBlock;
 import io.github.betterthanupdates.apron.stapi.ApronStAPICompat;
 import io.github.betterthanupdates.apron.stapi.ModContents;
 import net.minecraft.block.Block;
@@ -17,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Block.class)
-public class BlockMixin {
+public class BlockMixin implements StAPIBlock {
 	@Shadow
 	@Final
 	public int id;
@@ -46,5 +47,16 @@ public class BlockMixin {
 
 			currentId = -1;
 		}
+	}
+
+	@Override
+	public int getOriginalBlockId() {
+		if (ApronStAPICompat.isModLoaderTime()) {
+			ModContents currentMod = ApronStAPICompat.getModContent();
+
+			return currentMod.BLOCKS.autoToOriginal.get(this.id);
+		}
+
+		return -1;
 	}
 }

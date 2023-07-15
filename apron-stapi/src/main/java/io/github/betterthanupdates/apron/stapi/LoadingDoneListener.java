@@ -1,5 +1,6 @@
 package io.github.betterthanupdates.apron.stapi;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.registry.Identifier;
 import net.modificationstation.stationapi.api.registry.ItemRegistry;
@@ -64,6 +65,10 @@ public class LoadingDoneListener implements Runnable {
 							block);
 				});
 			});
+
+			if (FabricLoader.getInstance().isModLoaded("hmifabric")) {
+				HMICompat.regenerateRecipeList();
+			}
 		}
 	}
 }

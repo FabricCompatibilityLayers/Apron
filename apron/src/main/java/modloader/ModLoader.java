@@ -38,6 +38,7 @@ import javax.imageio.ImageIO;
 
 import fr.catcore.modremapperapi.remapping.RemapUtil;
 import io.github.betterthanupdates.apron.LifecycleUtils;
+import io.github.betterthanupdates.apron.StAPIBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
@@ -1338,6 +1339,10 @@ public class ModLoader {
 			BlockItem item;
 
 			int newId = id - 256;
+
+//			if (FabricLoader.getInstance().isModLoaded("stationapi")) {
+//				newId = ((StAPIBlock) block).getOriginalBlockId() - 256;
+//			}
 
 			if (itemClass != null) {
 				item = itemClass.getConstructor(Integer.TYPE)
