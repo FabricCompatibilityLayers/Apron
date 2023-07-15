@@ -208,8 +208,12 @@ public class ModLoader {
 		init();
 
 		for (BaseMod mod : MOD_LIST) {
+			CURRENT_MOD = mod.getClassName();
 			mod.AddRenderer(rendererMap);
 		}
+
+		CURRENT_MOD = null;
+		LifecycleUtils.triggerModsAllLoadedEvent();
 	}
 
 	/**

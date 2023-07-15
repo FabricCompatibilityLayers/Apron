@@ -9,6 +9,10 @@ public class ModContentRegistry<T> {
 	public final Map<Integer, Integer> autoToOriginal = new HashMap<>();
 	public final Map<Integer, T> originalToInstance = new HashMap<>();
 	public final Map<Integer, T> autoToInstance = new HashMap<>();
+	public final Map<Integer, Integer> duplicates = new HashMap<>();
+	public final Map<Integer, Integer> duplicatesInverted = new HashMap<>();
+	public final Map<Integer, T> duplicatesInstances = new HashMap<>();
+	public final Map<Integer, T> duplicatesInstancesAuto = new HashMap<>();
 
 	public int register(int originalId, T instance, Supplier<Integer> idSupplier) {
 		if (!originalToAuto.containsKey(originalId)) {
@@ -52,6 +56,14 @@ public class ModContentRegistry<T> {
 	public int registerId(int originalId, Supplier<Integer> idSupplier) {
 		if (!originalToAuto.containsKey(originalId)) {
 			originalToAuto.put(originalId, idSupplier.get());
+		} else {
+			duplicates.put(originalId, originalToAuto.put(originalId, idSupplier.get()));
+			duplicatesInverted.put(duplicates.get(originalId), originalId);
+			autoToOriginal.remove(duplicates.get(originalId));
+
+			duplicatesInstances.put(originalId, originalToInstance.remove(originalId));
+			int newId = duplicates.get(originalId);
+			duplicatesInstancesAuto.put(newId, autoToInstance.remove(newId));
 		}
 
 		return originalToAuto.get(originalId);
