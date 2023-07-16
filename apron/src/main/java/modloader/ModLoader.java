@@ -812,10 +812,10 @@ public class ModLoader {
 				}
 			}
 
+			LifecycleUtils.triggerModsAllLoadedEvent();
+
 			initStats();
 			saveConfig();
-
-			LifecycleUtils.triggerModsAllLoadedEvent();
 		} catch (Throwable e) {
 			MOD_LOGGER.throwing("ModLoader", "init", e);
 			ThrowException("ModLoader has failed to initialize.", e);
@@ -1340,9 +1340,9 @@ public class ModLoader {
 
 			int newId = id - 256;
 
-//			if (FabricLoader.getInstance().isModLoaded("stationapi")) {
-//				newId = ((StAPIBlock) block).getOriginalBlockId() - 256;
-//			}
+			if (FabricLoader.getInstance().isModLoaded("stationapi")) {
+				newId = ((StAPIBlock) block).getOriginalBlockId() - 256;
+			}
 
 			if (itemClass != null) {
 				item = itemClass.getConstructor(Integer.TYPE)
@@ -1351,9 +1351,9 @@ public class ModLoader {
 				item = new BlockItem(newId);
 			}
 
-			if (Block.BY_ID[id] != null && Item.byId[id] == null) {
-				Item.byId[id] = item;
-			}
+//			if (Block.BY_ID[id] != null && Item.byId[id] == null) {
+//				Item.byId[id] = item;
+//			}
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException | InstantiationException
 					| InvocationTargetException | NoSuchMethodException e) {
 			MOD_LOGGER.throwing("ModLoader", "RegisterBlock", e);

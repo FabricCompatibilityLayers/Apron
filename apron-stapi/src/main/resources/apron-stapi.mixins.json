@@ -8,6 +8,7 @@
   },
   "package": "io.github.betterthanupdates.apron.stapi.mixin",
   "mixins": [
+    "BlockItemMixin",
     "BlockMixin",
     "ItemMixin",
     "TabCraftingMixin",

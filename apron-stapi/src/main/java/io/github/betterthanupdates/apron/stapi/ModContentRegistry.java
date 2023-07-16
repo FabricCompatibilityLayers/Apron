@@ -68,4 +68,22 @@ public class ModContentRegistry<T> {
 
 		return originalToAuto.get(originalId);
 	}
+
+	public void changeOriginalId(int oldId, int newId) {
+		if (originalToAuto.containsKey(newId)) {
+			duplicates.put(newId, originalToAuto.remove(newId));
+			duplicatesInverted.put(duplicates.get(newId), autoToOriginal.remove(newId));
+
+			duplicatesInstances.put(newId, originalToInstance.remove(newId));
+			duplicatesInstancesAuto.put(duplicates.get(newId), autoToInstance.remove(duplicates.get(newId)));
+		}
+
+		originalToAuto.put(newId, originalToAuto.remove(oldId));
+
+		autoToOriginal.put(originalToAuto.get(newId), newId);
+
+		originalToInstance.put(newId, originalToInstance.remove(oldId));
+
+		System.out.println("Changed original id of "+ originalToInstance.get(newId) + " from " + oldId + " to " + newId);
+	}
 }
