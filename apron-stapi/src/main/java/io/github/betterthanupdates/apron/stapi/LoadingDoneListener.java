@@ -1,5 +1,7 @@
 package io.github.betterthanupdates.apron.stapi;
 
+import modloader.ModLoader;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.registry.DimensionContainer;
@@ -77,6 +79,10 @@ public class LoadingDoneListener implements Runnable {
 				Registry.register(DimensionRegistry.INSTANCE,
 						ModID.of("mods").id(name), new DimensionContainer<>(dimensionBase::getWorldProvider));
 			});
+
+			if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+				ModLoader.getMinecraftInstance().textureManager.reloadTexturesFromTexturePack();
+			}
 
 			if (FabricLoader.getInstance().isModLoaded("hmifabric")) {
 				HMICompat.regenerateRecipeList();
