@@ -1351,9 +1351,9 @@ public class ModLoader {
 				item = new BlockItem(newId);
 			}
 
-//			if (Block.BY_ID[id] != null && Item.byId[id] == null) {
-//				Item.byId[id] = item;
-//			}
+			if (!FabricLoader.getInstance().isModLoaded("stationapi") && Block.BY_ID[id] != null && Item.byId[id] == null) {
+				Item.byId[id] = item;
+			}
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException | InstantiationException
 					| InvocationTargetException | NoSuchMethodException e) {
 			MOD_LOGGER.throwing("ModLoader", "RegisterBlock", e);
