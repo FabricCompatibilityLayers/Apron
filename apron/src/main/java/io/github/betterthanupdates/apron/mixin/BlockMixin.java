@@ -1,6 +1,6 @@
 package io.github.betterthanupdates.apron.mixin;
 
-import io.github.betterthanupdates.apron.StAPIBlock;
+import io.github.betterthanupdates.stapi.StAPIBlock;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

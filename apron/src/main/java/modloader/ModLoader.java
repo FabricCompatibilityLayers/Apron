@@ -38,7 +38,7 @@ import javax.imageio.ImageIO;
 
 import fr.catcore.modremapperapi.remapping.RemapUtil;
 import io.github.betterthanupdates.apron.LifecycleUtils;
-import io.github.betterthanupdates.apron.StAPIBlock;
+import io.github.betterthanupdates.stapi.StAPIBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.impl.launch.FabricLauncherBase;
@@ -95,6 +95,7 @@ import net.minecraft.world.source.WorldSource;
 import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.apron.Apron;
 import io.github.betterthanupdates.apron.api.ApronApi;
+import io.github.betterthanupdates.stapi.StAPIMinecraftClient;
 
 @SuppressWarnings("unused")
 @Legacy
@@ -376,9 +377,14 @@ public class ModLoader {
 	@SuppressWarnings("unused")
 	public static int addOverride(String fileToOverride, String fileToAdd) {
 		try {
-			int i = getUniqueSpriteIndex(fileToOverride);
-			addOverride(fileToOverride, fileToAdd, i);
-			return i;
+			if (FabricLoader.getInstance().isModLoaded("stationapi")) {
+				return ((StAPIMinecraftClient) getMinecraftInstance())
+						.apron$stapi$registerTextureOverride(fileToOverride, fileToAdd);
+			} else {
+				int i = getUniqueSpriteIndex(fileToOverride);
+				addOverride(fileToOverride, fileToAdd, i);
+				return i;
+			}
 		} catch (Throwable e) {
 			MOD_LOGGER.throwing("ModLoader", "addOverride", e);
 			ThrowException(e);

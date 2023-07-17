@@ -1,6 +1,6 @@
 package io.github.betterthanupdates.apron.stapi.mixin;
 
-import io.github.betterthanupdates.apron.StAPIBlock;
+import io.github.betterthanupdates.stapi.StAPIBlock;
 import io.github.betterthanupdates.apron.stapi.ApronStAPICompat;
 import io.github.betterthanupdates.apron.stapi.ModContents;
 import net.minecraft.block.Block;
@@ -10,7 +10,6 @@ import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.registry.Identifier;
 import net.modificationstation.stationapi.api.registry.ItemRegistry;
 import net.modificationstation.stationapi.api.template.block.BlockTemplate;
-import net.modificationstation.stationapi.api.template.item.ItemTemplate;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

@@ -17,5 +17,6 @@
   ],
   "plugin": "io.github.betterthanupdates.apron.stapi.MixinCompatPlugin",
   "client": [
+    "MinecraftClientMixin"
   ]
 }

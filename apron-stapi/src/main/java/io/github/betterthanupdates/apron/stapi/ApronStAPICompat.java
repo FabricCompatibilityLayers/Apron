@@ -1,5 +1,7 @@
 package io.github.betterthanupdates.apron.stapi;
 
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
+import net.modificationstation.stationapi.api.client.texture.atlas.ExpandableAtlas;
 import net.modificationstation.stationapi.api.registry.ModID;
 
 import java.util.HashMap;
@@ -33,5 +35,28 @@ public class ApronStAPICompat {
 
 	public static Set<Map.Entry<ModID, ModContents>> getModContents() {
 		return MOD_CONTENTS.entrySet();
+	}
+
+	private static int terrainIndex = 3000;
+	private static int itemsIndex = 3000;
+
+	public static int registerTextureOverride(String target, String textureFile) {
+		int textureIndex = -1;
+
+		if ("/terrain.png".equals(target)) {
+			textureIndex = ++terrainIndex;
+			getModContent().TERRAIN.registerTexture(textureIndex, textureFile);
+//			ExpandableAtlas atlas = Atlases.getTerrain();
+		} else if ("/gui/items.png".equals(target)) {
+			textureIndex = ++itemsIndex;
+			getModContent().GUI_ITEMS.registerTexture(textureIndex, textureFile);
+//			ExpandableAtlas atlas = Atlases.getGuiItems();
+		}
+
+		return textureIndex;
+	}
+
+	public static void preloadTexture(String texturePath) {
+
 	}
 }

@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.apron;
+package io.github.betterthanupdates.stapi;
 
 public interface StAPIBlock {
 	default int getOriginalBlockId() {

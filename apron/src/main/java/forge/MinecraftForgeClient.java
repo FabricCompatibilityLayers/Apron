@@ -7,6 +7,7 @@ package forge;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.render.block.BlockRenderer;
@@ -15,6 +16,7 @@ import net.minecraft.item.Item;
 import io.github.betterthanupdates.Legacy;
 import io.github.betterthanupdates.apron.api.ApronApi;
 import io.github.betterthanupdates.apron.impl.client.ApronClientImpl;
+import io.github.betterthanupdates.stapi.StAPIMinecraftClient;
 
 @SuppressWarnings("unused")
 @Environment(EnvType.CLIENT)
@@ -42,7 +44,11 @@ public class MinecraftForgeClient {
 	}
 
 	public static void preloadTexture(String texture) {
-		((ApronClientImpl) ApronApi.getInstance()).getTextureManager().getTextureId(texture);
+		if (FabricLoader.getInstance().isModLoaded("stationapi")) {
+			((StAPIMinecraftClient) ApronApi.getInstance()).apron$stapi$preloadTexture(texture);
+		} else {
+			((ApronClientImpl) ApronApi.getInstance()).getTextureManager().getTextureId(texture);
+		}
 	}
 
 	public static void renderBlock(BlockRenderer blockRenderer, Block block, int x, int y, int z) {
