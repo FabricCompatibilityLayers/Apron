@@ -1,5 +1,6 @@
 package io.github.betterthanupdates.apron.stapi;
 
+import com.google.common.collect.ImmutableList;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
@@ -32,6 +33,25 @@ public class TextureEvent {
 			});
 		});
 
+		ApronStAPICompat.SPRITESHEET_MAP.forEach((texturePath, spritesheetInstance) -> {
+			spritesheetInstance.ITEMS.clear();
+			spritesheetInstance.BLOCKS.clear();
 
+			ExpandableAtlas itemAtlas = Atlases.getGuiItems();
+
+			ImmutableList<Atlas.Sprite> itemSprites = itemAtlas.addSpritesheet(16, spritesheetInstance.HELPER);
+
+			for (int i = 0; i < itemSprites.size(); i++) {
+				spritesheetInstance.ITEMS.put(i, itemSprites.get(i).index);
+			}
+
+			ExpandableAtlas blockAtlas = Atlases.getTerrain();
+
+			ImmutableList<Atlas.Sprite> blockSprites = blockAtlas.addSpritesheet(16, spritesheetInstance.HELPER);
+
+			for (int i = 0; i < blockSprites.size(); i++) {
+				spritesheetInstance.BLOCKS.put(i, blockSprites.get(i).index);
+			}
+		});
 	}
 }

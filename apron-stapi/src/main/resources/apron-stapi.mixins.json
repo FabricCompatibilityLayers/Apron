@@ -8,6 +8,7 @@
   },
   "package": "io.github.betterthanupdates.apron.stapi.mixin",
   "mixins": [
+    "ArsenicDiggingParticleMixin",
     "ArsenicItemRendererMixin",
     "AtlasLoaderMixin",
     "BlockItemMixin",
@@ -21,6 +22,8 @@
   ],
   "plugin": "io.github.betterthanupdates.apron.stapi.MixinCompatPlugin",
   "client": [
+    "BlockRendererMixin",
+    "DiggingParticleEntityAccessor",
     "MinecraftClientMixin"
   ]
 }

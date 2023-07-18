@@ -28,5 +28,7 @@ public class AtlasLoaderMixin {
 			this.sources.addAll(modContents.TERRAIN.GENERATED_ATLASES);
 			this.sources.addAll(modContents.GUI_ITEMS.GENERATED_ATLASES);
 		});
+
+		this.sources.addAll(ApronStAPICompat.ATLAS_SOURCE_LIST);
 	}
 }

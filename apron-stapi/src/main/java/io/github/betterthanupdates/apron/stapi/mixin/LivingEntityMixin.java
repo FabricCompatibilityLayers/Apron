@@ -1,5 +1,6 @@
 package io.github.betterthanupdates.apron.stapi.mixin;
 
+import forge.ITextureProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import io.github.betterthanupdates.apron.stapi.ApronStAPICompat;
+import io.github.betterthanupdates.apron.stapi.SpritesheetInstance;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
@@ -23,12 +25,26 @@ public class LivingEntityMixin {
 
 		int result = cir.getReturnValue();
 
-		if (item instanceof BlockItem) {
-			if (ApronStAPICompat.INDEX_TO_FIXED_BLOCK.containsKey(result)) {
-				result = ApronStAPICompat.INDEX_TO_FIXED_BLOCK.get(result);
+		if (item instanceof ITextureProvider textureProvider) {
+			SpritesheetInstance itemSpritesheet = ApronStAPICompat.SPRITESHEET_MAP.get(textureProvider.getTextureFile());
+
+			if (itemSpritesheet != null) {
+				if (item instanceof BlockItem) {
+					if (itemSpritesheet.BLOCKS.containsKey(result)) {
+						result = itemSpritesheet.BLOCKS.get(result);
+					}
+				} else if (itemSpritesheet.ITEMS.containsKey(result)) {
+					result = itemSpritesheet.ITEMS.get(result);
+				}
 			}
-		} else if (ApronStAPICompat.INDEX_TO_FIXED_ITEM.containsKey(result)) {
-			result =  ApronStAPICompat.INDEX_TO_FIXED_ITEM.get(result);
+		} else {
+			if (item instanceof BlockItem) {
+				if (ApronStAPICompat.INDEX_TO_FIXED_BLOCK.containsKey(result)) {
+					result = ApronStAPICompat.INDEX_TO_FIXED_BLOCK.get(result);
+				}
+			} else if (ApronStAPICompat.INDEX_TO_FIXED_ITEM.containsKey(result)) {
+				result = ApronStAPICompat.INDEX_TO_FIXED_ITEM.get(result);
+			}
 		}
 
 		cir.setReturnValue(result);
