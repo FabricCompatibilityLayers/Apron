@@ -46,20 +46,23 @@ public class BlockItemMixin extends Item {
 	@Inject(method = "getTranslationKey()Ljava/lang/String;", at = @At("HEAD"))
 	private void debug(CallbackInfoReturnable<String> cir) {
 		Identifier id = ItemRegistry.INSTANCE.getId(this);
-		Block block = BlockRegistry.INSTANCE.get(id);
 
-		if (block != null) {
-			if (this.blockId != block.id) {
-				((StationFlatteningBlockItem) this).setBlock(block);
-			}
-		} else if (id.id.endsWith("_")) {
-			Identifier fixId = id.modID.id(id.id.replace("_", ""));
-
-			block = BlockRegistry.INSTANCE.get(fixId);
+		if (id != null) {
+			Block block = BlockRegistry.INSTANCE.get(id);
 
 			if (block != null) {
 				if (this.blockId != block.id) {
 					((StationFlatteningBlockItem) this).setBlock(block);
+				}
+			} else if (id.id.endsWith("_")) {
+				Identifier fixId = id.modID.id(id.id.replace("_", ""));
+
+				block = BlockRegistry.INSTANCE.get(fixId);
+
+				if (block != null) {
+					if (this.blockId != block.id) {
+						((StationFlatteningBlockItem) this).setBlock(block);
+					}
 				}
 			}
 		}
