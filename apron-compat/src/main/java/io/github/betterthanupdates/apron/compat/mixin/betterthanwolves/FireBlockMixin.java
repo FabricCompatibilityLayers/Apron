@@ -25,15 +25,15 @@ import io.github.betterthanupdates.apron.compat.betterthanwolves.BTWFireBlock;
 
 @Mixin(FireBlock.class)
 public class FireBlockMixin implements BTWFireBlock {
-//	@ModifyConstant(method = "<init>", constant = @Constant(intValue = 256, ordinal = 0))
-//	private int btw$changeTo1024_1(int constant) {
-//		return 1024;
-//	}
-//
-//	@ModifyConstant(method = "<init>", constant = @Constant(intValue = 256, ordinal = 1))
-//	private int btw$changeTo1024_2(int constant) {
-//		return 1024;
-//	}
+	@ModifyConstant(method = "<init>", constant = @Constant(intValue = 256, ordinal = 0))
+	private int btw$changeTo1024_1(int constant) {
+		return 1024;
+	}
+
+	@ModifyConstant(method = "<init>", constant = @Constant(intValue = 256, ordinal = 1))
+	private int btw$changeTo1024_2(int constant) {
+		return 1024;
+	}
 
 	@ModifyReturnValue(method = "getRenderType", at = @At("RETURN"))
 	private int btw$getRenderType(int original) {
