@@ -1,5 +1,7 @@
 package io.github.betterthanupdates.apron.stapi;
 
+import static io.github.betterthanupdates.apron.stapi.ApronStAPICompat.LOGGER;
+
 import com.google.common.collect.ImmutableList;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
@@ -20,7 +22,7 @@ public class TextureEvent {
 
 			modContents.GUI_ITEMS.INDEX_TO_FAKE_ID.forEach((i, identifier) -> {
 				Atlas.Sprite sprite = itemAtlas.addTexture(identifier);
-				System.out.println("Item " + sprite.getId() + " " + i + " -> " + sprite.index);
+				LOGGER.info("Item " + sprite.getId() + " " + i + " -> " + sprite.index);
 				ApronStAPICompat.INDEX_TO_FIXED_ITEM.put(i, sprite.index);
 			});
 
@@ -28,7 +30,7 @@ public class TextureEvent {
 
 			modContents.TERRAIN.INDEX_TO_FAKE_ID.forEach((i, identifier) -> {
 				Atlas.Sprite sprite = blockAtlas.addTexture(identifier);
-				System.out.println("Block " + sprite.getId() + " " + i + " -> " + sprite.index);
+				LOGGER.info("Block " + sprite.getId() + " " + i + " -> " + sprite.index);
 				ApronStAPICompat.INDEX_TO_FIXED_BLOCK.put(i, sprite.index);
 			});
 		});

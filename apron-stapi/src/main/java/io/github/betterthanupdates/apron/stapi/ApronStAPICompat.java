@@ -1,11 +1,13 @@
 package io.github.betterthanupdates.apron.stapi;
 
 import net.modificationstation.stationapi.api.client.texture.atlas.AtlasSource;
-import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
-import net.modificationstation.stationapi.api.client.texture.atlas.ExpandableAtlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.UnstitchAtlasSource;
+import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
+import net.modificationstation.stationapi.api.mod.entrypoint.EventBusPolicy;
 import net.modificationstation.stationapi.api.registry.Identifier;
 import net.modificationstation.stationapi.api.registry.ModID;
+import net.modificationstation.stationapi.api.util.Null;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +17,11 @@ import java.util.Set;
 
 import static io.github.betterthanupdates.apron.LifecycleUtils.CURRENT_MOD;
 
+@Entrypoint(eventBus = @EventBusPolicy(registerStatic = false, registerInstance = false))
 public class ApronStAPICompat {
+	@Entrypoint.Logger
+	public static final Logger LOGGER = Null.get();
+
 	public static boolean isModLoaderTime() {
 		return CURRENT_MOD != null;
 	}
@@ -55,6 +61,8 @@ public class ApronStAPICompat {
 	public static int registerTextureOverride(String target, String textureFile) {
 		int textureIndex = -1;
 
+		if (!textureFile.startsWith("/")) textureFile = "/" + textureFile;
+
 		if ("/terrain.png".equals(target)) {
 			textureIndex = ++terrainIndex;
 			getModContent().TERRAIN.registerTexture(textureIndex, textureFile);
@@ -67,6 +75,8 @@ public class ApronStAPICompat {
 	}
 
 	public static void preloadTexture(String texturePath) {
+		if (!texturePath.startsWith("/")) texturePath = "/" + texturePath;
+
 		SPRITESHEET_MAP.put(texturePath, new SpritesheetInstance());
 		SPRITESHEET_MAP.get(texturePath).HELPER = new ItemSpritesheet(texturePath);
 

@@ -1,5 +1,7 @@
 package io.github.betterthanupdates.apron.stapi;
 
+import static io.github.betterthanupdates.apron.stapi.ApronStAPICompat.LOGGER;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -25,7 +27,7 @@ public class ModContentRegistry<T> {
 
 		int newId = originalToAuto.get(originalId);
 
-		System.out.println("Registered " + instance + " original id: " + originalId + " new id: " + newId);
+		LOGGER.info("Registered " + instance + " original id: " + originalId + " new id: " + newId);
 
 		return newId;
 	}
@@ -40,7 +42,7 @@ public class ModContentRegistry<T> {
 		originalToInstance.put(originalId, instance);
 		autoToInstance.put(newId, instance);
 
-		System.out.println("Registered " + instance + " original id: " + originalId + " new id: " + newId);
+		LOGGER.info("Registered " + instance + " original id: " + originalId + " new id: " + newId);
 	}
 
 	public void registerLate(int originalId, int newId, T instance) {
@@ -50,7 +52,7 @@ public class ModContentRegistry<T> {
 		originalToInstance.put(originalId, instance);
 		autoToInstance.put(newId, instance);
 
-		System.out.println("Registered " + instance + " original id: " + originalId + " new id: " + newId);
+		LOGGER.info("Registered " + instance + " original id: " + originalId + " new id: " + newId);
 	}
 
 	public int registerId(int originalId, Supplier<Integer> idSupplier) {
@@ -84,6 +86,6 @@ public class ModContentRegistry<T> {
 
 		originalToInstance.put(newId, originalToInstance.remove(oldId));
 
-		System.out.println("Changed original id of "+ originalToInstance.get(newId) + " from " + oldId + " to " + newId);
+		LOGGER.warn("Changed original id of "+ originalToInstance.get(newId) + " from " + oldId + " to " + newId);
 	}
 }

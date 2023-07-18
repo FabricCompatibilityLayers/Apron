@@ -17,56 +17,6 @@ import io.github.betterthanupdates.apron.stapi.SpritesheetInstance;
 
 @Mixin(BlockRenderer.class)
 public class BlockRendererMixin {
-//	@Redirect(method = {
-//			"method_48", "method_53", "renderFluid", "renderTorchTilted", "renderLadder", "renderFire", "renderLever", "renderRedstoneRepeater"
-//	}, at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getTextureForSide(I)I"))
-//	private int apron$stapi$fixTextureIndex(Block instance, int i) {
-//		int texture = instance.getTextureForSide(i);
-//
-//		if (instance instanceof ITextureProvider textureProvider) {
-//			SpritesheetInstance spritesheetInstance = ApronStAPICompat.SPRITESHEET_MAP.get(textureProvider.getTextureFile());
-//
-//			if (spritesheetInstance != null) {
-//				if (spritesheetInstance.BLOCKS.containsKey(texture)) {
-//					return spritesheetInstance.BLOCKS.get(texture);
-//				}
-//			}
-//		} else if (ApronStAPICompat.INDEX_TO_FIXED_BLOCK.containsKey(texture)) {
-//			return ApronStAPICompat.INDEX_TO_FIXED_BLOCK.get(texture);
-//		}
-//
-//		return texture;
-//	}
-//
-//	@Redirect(method = {
-//			"method_48", "renderFluid", "method_56", "method_47", "renderRedstoneDust"
-//	}, at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getTextureForSide(II)I"))
-//	private int apron$stapi$fixTextureIndex(Block instance, int i, int j) {
-//		int texture = instance.getTextureForSide(i, j);
-//
-//		if (instance instanceof ITextureProvider textureProvider) {
-//			SpritesheetInstance spritesheetInstance = ApronStAPICompat.SPRITESHEET_MAP.get(textureProvider.getTextureFile());
-//
-//			if (spritesheetInstance != null) {
-//				if (spritesheetInstance.BLOCKS.containsKey(texture)) {
-//					return spritesheetInstance.BLOCKS.get(texture);
-//				}
-//			}
-//		} else if (ApronStAPICompat.INDEX_TO_FIXED_BLOCK.containsKey(texture)) {
-//			return ApronStAPICompat.INDEX_TO_FIXED_BLOCK.get(texture);
-//		}
-//
-//		return texture;
-//	}
-//
-//	@Redirect(method = {
-//			"renderRails"
-//	}, at = @At(value = "INVOKE", target = "Lnet/minecraft/block/RailBlock;getTextureForSide(II)I"))
-//	private int apron$stapi$fixTextureIndex(RailBlock instance, int i, int j) {
-//		int texture = instance.getTextureForSide(i, j);
-//
-
-//	}
 	@ModifyVariable(
 			method = {"renderBottomFace", "renderTopFace", "renderEastFace", "renderWestFace", "renderNorthFace", "renderSouthFace"},
 			at = @At(

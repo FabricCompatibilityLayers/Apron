@@ -1,6 +1,6 @@
 package io.github.betterthanupdates.apron.stapi;
 
-import static net.modificationstation.stationapi.api.StationAPI.LOGGER;
+import static io.github.betterthanupdates.apron.stapi.ApronStAPICompat.LOGGER;
 import static net.modificationstation.stationapi.impl.resource.ZipResourcePack.TYPE_NAMESPACE_SPLITTER;
 
 import java.io.InputStream;

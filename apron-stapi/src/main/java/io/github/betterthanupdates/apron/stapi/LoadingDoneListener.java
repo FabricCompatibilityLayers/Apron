@@ -37,7 +37,7 @@ public class LoadingDoneListener implements Runnable {
 		});
 		// Then Register
 		if (lastTotal != totalObjectsNumber.get()) {
-			System.out.println("Warning, some objects were registered later, trying to attribute identifier to them.");
+			ApronStAPICompat.LOGGER.warn("Some objects were registered later, trying to attribute identifier to them.");
 			lastTotal = totalObjectsNumber.get();
 			ApronStAPICompat.getModContents().forEach(entry -> {
 				ModID modID = entry.getKey();
