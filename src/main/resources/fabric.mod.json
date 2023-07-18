@@ -52,6 +52,12 @@
     "modmenu": "^2.0.0",
     "mojangfix": ">=0.5.1"
   },
+  "breaks": {
+    "station-api-base": [
+      "<2.0-PRE2-1.0.0",
+      ">2.0-PRE2-1.0.0"
+    ]
+  },
   "custom": {
     "apron:common": {
       "BaseMod": "modloader/BaseMod",

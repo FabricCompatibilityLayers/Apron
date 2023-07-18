@@ -57,6 +57,7 @@
     "legacy-fabric-logger-api-v1": "*",
     "com_github_llamalad7_mixinextras": "*",
     "stationapi": "*",
+    "station-api-base": "2.0-PRE2-1.0.0",
     "java": ">=17"
   }
 }
