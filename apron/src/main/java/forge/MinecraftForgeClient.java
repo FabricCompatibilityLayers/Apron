@@ -45,7 +45,7 @@ public class MinecraftForgeClient {
 
 	public static void preloadTexture(String texture) {
 		if (FabricLoader.getInstance().isModLoaded("stationapi")) {
-			((StAPIMinecraftClient) ApronApi.getInstance()).apron$stapi$preloadTexture(texture);
+			((StAPIMinecraftClient) ApronApi.getInstance().getGame()).apron$stapi$preloadTexture(texture);
 		} else {
 			((ApronClientImpl) ApronApi.getInstance()).getTextureManager().getTextureId(texture);
 		}

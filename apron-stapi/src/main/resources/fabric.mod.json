@@ -42,6 +42,9 @@
     ],
     "bhcreative:event_bus": [
       "io.github.betterthanupdates.apron.stapi.CreativeTabsListener"
+    ],
+    "stationapi:event_bus_client": [
+      "io.github.betterthanupdates.apron.stapi.TextureEvent"
     ]
   },
   "mixins": [

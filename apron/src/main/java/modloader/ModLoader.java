@@ -1200,6 +1200,7 @@ public class ModLoader {
 					if (source.isDirectory()
 							|| (source.isFile() && (source.getName().endsWith(".jar") || source.getName().endsWith(".zip")))) {
 						FabricLauncherBase.getLauncher().addToClassPath(source.toPath());
+						LifecycleUtils.MOD_FILES.add(source);
 					}
 				}
 			}

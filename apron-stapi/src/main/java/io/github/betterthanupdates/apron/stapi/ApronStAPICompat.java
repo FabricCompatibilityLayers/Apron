@@ -40,6 +40,9 @@ public class ApronStAPICompat {
 	private static int terrainIndex = 3000;
 	private static int itemsIndex = 3000;
 
+	public static final Map<Integer, Integer> INDEX_TO_FIXED_ITEM = new HashMap<>();
+	public static final Map<Integer, Integer> INDEX_TO_FIXED_BLOCK = new HashMap<>();
+
 	public static int registerTextureOverride(String target, String textureFile) {
 		int textureIndex = -1;
 

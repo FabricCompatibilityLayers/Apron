@@ -8,9 +8,13 @@
   },
   "package": "io.github.betterthanupdates.apron.stapi.mixin",
   "mixins": [
+    "ArsenicItemRendererMixin",
+    "AtlasLoaderMixin",
     "BlockItemMixin",
     "BlockMixin",
     "ItemMixin",
+    "LivingEntityMixin",
+    "ResourcePackManagerMixin",
     "TabCraftingMixin",
     "TabMixin",
     "TabSmeltingMixin"
