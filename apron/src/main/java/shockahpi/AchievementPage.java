@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.fabricmc.loader.api.FabricLoader;
+import org.jetbrains.annotations.ApiStatus;
 
 import net.minecraft.block.Block;
 import net.minecraft.stat.achievement.Achievement;
@@ -24,6 +25,7 @@ public class AchievementPage {
 	final int id;
 	public final String title;
 	ArrayList<Integer> list = new ArrayList<>();
+	ArrayList<Achievement> achievements = new ArrayList<>();
 
 	public AchievementPage() {
 		this.id = 0;
@@ -40,6 +42,7 @@ public class AchievementPage {
 	public void addAchievements(Achievement... achievements) {
 		for (Achievement achievement : achievements) {
 			this.list.add(achievement.id);
+			this.achievements.add(achievement);
 		}
 	}
 
@@ -71,5 +74,10 @@ public class AchievementPage {
 
 	public List<Integer> getList() {
 		return Collections.unmodifiableList(this.list);
+	}
+
+	@ApiStatus.Internal
+	public List<Achievement> getAchievements() {
+		return Collections.unmodifiableList(this.achievements);
 	}
 }

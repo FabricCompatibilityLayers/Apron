@@ -11,7 +11,8 @@
     "PortalBlockMixin",
     "SinglePlayerInteractionManagerMixin",
     "ToolItemMixin",
-    "WorldMixin"
+    "WorldMixin",
+    "nostation.AchievementsScreenMixin"
   ],
   "plugin": "io.github.betterthanupdates.apron.ApronMixinPlugin",
   "parent": "apron.parent.mixins.json"

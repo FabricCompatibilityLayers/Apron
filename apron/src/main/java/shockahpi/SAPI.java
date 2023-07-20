@@ -1,10 +1,13 @@
 package shockahpi;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.legacyfabric.fabric.api.logger.v1.Logger;
+import org.jetbrains.annotations.ApiStatus;
+import org.spongepowered.include.com.google.common.collect.ImmutableList;
 import playerapi.PlayerAPI;
 
 import net.minecraft.client.Minecraft;
@@ -313,6 +316,11 @@ public class SAPI {
 		if (acCurrentPage < 0) {
 			acCurrentPage = ACHIEVEMENT_PAGES.size() - 1;
 		}
+	}
+
+	@ApiStatus.Internal
+	public static List<AchievementPage> getPages() {
+		return ImmutableList.<AchievementPage>builder().addAll(ACHIEVEMENT_PAGES).build();
 	}
 
 	static {

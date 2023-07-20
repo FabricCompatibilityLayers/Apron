@@ -3,6 +3,7 @@ package io.github.betterthanupdates.apron.stapi;
 import modloader.ModLoader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.modificationstation.stationapi.api.client.gui.screen.menu.AchievementPage;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.registry.DimensionContainer;
 import net.modificationstation.stationapi.api.registry.DimensionRegistry;
@@ -11,8 +12,13 @@ import net.modificationstation.stationapi.api.registry.ItemRegistry;
 import net.modificationstation.stationapi.api.registry.ModID;
 import net.modificationstation.stationapi.api.registry.Registry;
 import shockahpi.DimensionBase;
+import shockahpi.SAPI;
 
 import java.util.concurrent.atomic.AtomicInteger;
+
+import net.minecraft.stat.achievement.Achievement;
+
+import io.github.betterthanupdates.apron.stapi.mixin.AchievementPageAccessor;
 
 public class LoadingDoneListener implements Runnable {
 	public static int lastTotal = 0;
@@ -71,13 +77,52 @@ public class LoadingDoneListener implements Runnable {
 				});
 			});
 
-			DimensionBase.list.forEach(dimensionBase -> {
-				if (dimensionBase.number == 0 || dimensionBase.number == -1) return;
+//			DimensionBase.list.forEach(dimensionBase -> {
+//				if (dimensionBase.number == 0 || dimensionBase.number == -1) return;
+//
+//				String name = dimensionBase.getClass().getSimpleName();
+//
+//				Registry.register(DimensionRegistry.INSTANCE,
+//						ModID.of("mods").id(name), new DimensionContainer<>(dimensionBase::getWorldProvider));
+//			});
 
-				String name = dimensionBase.getClass().getSimpleName();
+			SAPI.getPages().forEach(page -> {
+				String name = page.title;
 
-				Registry.register(DimensionRegistry.INSTANCE,
-						ModID.of("mods").id(name), new DimensionContainer<>(dimensionBase::getWorldProvider));
+				if ("Minecraft".equals(name)) {
+					for (AchievementPage stPage : AchievementPageAccessor.getPAGES()) {
+						if (stPage.name().equals("station-achievements-v0:minecraft")) {
+							for (Achievement achievement : page.getAchievements())
+								stPage.addAchievements(achievement);
+
+							break;
+						}
+					}
+				} else {
+					boolean found = false;
+					String idTitle = page.title
+							.replace(" ", "_")
+							.replace("&", "and");
+
+					for (AchievementPage stPage : AchievementPageAccessor.getPAGES()) {
+						if (stPage.name().equals("apron:" + idTitle)) {
+							for (Achievement achievement : page.getAchievements())
+								stPage.addAchievements(achievement);
+
+							found = true;
+							break;
+						}
+					}
+
+					if (!found) {
+						AchievementPage stPage = new AchievementPage(ModID.of("apron"), idTitle);
+
+						ModLoader.AddLocalization("stationapi:achievementPage.apron:" + idTitle, page.title);
+
+						for (Achievement achievement : page.getAchievements())
+							stPage.addAchievements(achievement);
+					}
+				}
 			});
 
 			if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {

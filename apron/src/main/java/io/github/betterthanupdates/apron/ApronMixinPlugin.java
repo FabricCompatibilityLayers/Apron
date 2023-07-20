@@ -1,7 +1,7 @@
 package io.github.betterthanupdates.apron;
 
-import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import fr.catcore.modremapperapi.utils.MixinUtils;
+import net.fabricmc.loader.api.FabricLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -21,6 +21,14 @@ public class ApronMixinPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+		if (mixinClassName.contains(".nostation.")) {
+			return !FabricLoader.getInstance().isModLoaded("stationapi");
+		}
+
+		if (mixinClassName.contains(".station.")) {
+			return FabricLoader.getInstance().isModLoaded("stationapi");
+		}
+
 		return true;
 	}
 
