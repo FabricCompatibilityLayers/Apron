@@ -1,19 +1,16 @@
 package io.github.betterthanupdates.apron.stapi.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import forge.ITextureProvider;
 import net.modificationstation.stationapi.impl.client.arsenic.renderer.render.ArsenicItemRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import io.github.betterthanupdates.apron.stapi.ApronStAPICompat;
-import io.github.betterthanupdates.apron.stapi.SpritesheetInstance;
 
 @Mixin(ArsenicItemRenderer.class)
 public class ArsenicItemRendererMixin {
