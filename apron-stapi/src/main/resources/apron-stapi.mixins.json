@@ -16,6 +16,7 @@
     "BlockMixin",
     "ItemMixin",
     "LivingEntityMixin",
+    "PathUtilMixin",
     "ResourcePackManagerMixin",
     "TabCraftingMixin",
     "TabMixin",
