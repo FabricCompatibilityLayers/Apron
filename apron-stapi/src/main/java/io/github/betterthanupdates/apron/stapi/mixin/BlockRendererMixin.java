@@ -30,18 +30,6 @@ public class BlockRendererMixin {
 			argsOnly = true
 	)
 	private int apron$stapi$fixTextureIndex(int texture, @Local(ordinal = 0) Block block) {
-		if (block instanceof ITextureProvider textureProvider) {
-			SpritesheetInstance spritesheetInstance = ApronStAPICompat.SPRITESHEET_MAP.get(textureProvider.getTextureFile());
-
-			if (spritesheetInstance != null) {
-				if (spritesheetInstance.BLOCKS.containsKey(texture)) {
-					return spritesheetInstance.BLOCKS.get(texture);
-				}
-			}
-		} else if (ApronStAPICompat.INDEX_TO_FIXED_BLOCK.containsKey(texture)) {
-			return ApronStAPICompat.INDEX_TO_FIXED_BLOCK.get(texture);
-		}
-
-		return texture;
+		return ApronStAPICompat.fixBlockTexture(texture, block);
 	}
 }

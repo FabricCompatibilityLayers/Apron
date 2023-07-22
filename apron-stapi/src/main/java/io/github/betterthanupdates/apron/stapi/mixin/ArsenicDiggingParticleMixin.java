@@ -18,17 +18,7 @@ import io.github.betterthanupdates.apron.stapi.SpritesheetInstance;
 public class ArsenicDiggingParticleMixin {
 	@Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/modificationstation/stationapi/api/client/texture/atlas/Atlas;getTexture(I)Lnet/modificationstation/stationapi/api/client/texture/atlas/Atlas$Sprite;"))
 	private Atlas.Sprite apron$stapi$fixTextureIndex(Atlas instance, int textureIndex, @Local(ordinal = 0)DiggingParticleEntity entity) {
-		if (((DiggingParticleEntityAccessor) entity).getBlock() instanceof ITextureProvider textureProvider) {
-			SpritesheetInstance spritesheetInstance = ApronStAPICompat.SPRITESHEET_MAP.get(textureProvider.getTextureFile());
-
-			if (spritesheetInstance != null) {
-				if (spritesheetInstance.BLOCKS.containsKey(textureIndex)) {
-					textureIndex = spritesheetInstance.BLOCKS.get(textureIndex);
-				}
-			}
-		} else if (ApronStAPICompat.INDEX_TO_FIXED_BLOCK.containsKey(textureIndex)) {
-			textureIndex = ApronStAPICompat.INDEX_TO_FIXED_BLOCK.get(textureIndex);
-		}
+		textureIndex = ApronStAPICompat.fixBlockTexture(textureIndex, ((DiggingParticleEntityAccessor) entity).getBlock());
 
 		return instance.getTexture(textureIndex);
 	}
