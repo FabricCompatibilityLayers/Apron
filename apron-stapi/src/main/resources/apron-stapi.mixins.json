@@ -16,8 +16,12 @@
     "BlockMixin",
     "ItemMixin",
     "LivingEntityMixin",
+    "McRegionItemStackDamagerSchemaMixin",
+    "McRegionSchemaB1_7_3Mixin",
     "PathUtilMixin",
     "ResourcePackManagerMixin",
+    "StationFlatteningDamagerSchemaB1_7_3Mixin",
+    "StationFlatteningItemStackSchemaMixin",
     "TabCraftingMixin",
     "TabMixin",
     "TabSmeltingMixin"

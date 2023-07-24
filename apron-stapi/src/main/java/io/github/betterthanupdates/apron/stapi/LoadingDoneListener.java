@@ -14,14 +14,60 @@ import net.modificationstation.stationapi.api.registry.Registry;
 import shockahpi.DimensionBase;
 import shockahpi.SAPI;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import net.minecraft.stat.achievement.Achievement;
 
 import io.github.betterthanupdates.apron.stapi.mixin.AchievementPageAccessor;
 
+import static net.modificationstation.stationapi.api.vanillafix.datafixer.schema.StationFlatteningItemStackSchema.putItem;
+import static net.modificationstation.stationapi.api.vanillafix.datafixer.schema.StationFlatteningItemStackSchema.putState;
+
 public class LoadingDoneListener implements Runnable {
 	public static int lastTotal = 0;
+
+	public static final Map<Integer, Identifier> IDS = new HashMap<>();
+	public static final Map<Integer, Boolean> IDS_TYPE = new HashMap<>();
+
+	public static boolean allowConversion = true;
+	public static boolean registeredFixer = false;
+
+	private static void addId(int oldId, Identifier identifier, boolean block) {
+		if (!allowConversion) return;
+
+		if (IDS.containsKey(oldId)) {
+			if (!IDS.get(oldId).toString().equals(identifier.toString())) {
+				allowConversion = false;
+				ApronStAPICompat.LOGGER.warn("Found conflicting ids for items/blocks between mods " + IDS.get(oldId).modID + " and " + identifier.modID + " for id " + oldId);
+			} else {
+				IDS_TYPE.put(oldId, block);
+			}
+		} else {
+			IDS.put(oldId, identifier);
+			IDS_TYPE.put(oldId, block);
+		}
+	}
+
+	public static void registerFixes() {
+		if (!registeredFixer) {
+			registeredFixer = true;
+
+			if (LoadingDoneListener.allowConversion) {
+				LoadingDoneListener.IDS.forEach((old, identifier) -> {
+					boolean block = LoadingDoneListener.IDS_TYPE.get(old);
+
+					if (block) {
+						putState(old, identifier.toString());
+					} else {
+						putItem(old, identifier.toString());
+					}
+				});
+			}
+		}
+	}
+
 	@Override
 	public void run() {
 		AtomicInteger totalObjectsNumber = new AtomicInteger();
@@ -43,7 +89,7 @@ public class LoadingDoneListener implements Runnable {
 		});
 		// Then Register
 		if (lastTotal != totalObjectsNumber.get()) {
-			ApronStAPICompat.LOGGER.warn("Some objects were registered later, trying to attribute identifier to them.");
+			if (lastTotal != 0) ApronStAPICompat.LOGGER.warn("Some objects were registered later, trying to attribute identifier to them.");
 			lastTotal = totalObjectsNumber.get();
 			ApronStAPICompat.getModContents().forEach(entry -> {
 				ModID modID = entry.getKey();
@@ -51,11 +97,14 @@ public class LoadingDoneListener implements Runnable {
 
 				modContents.ITEMS.originalToInstance.forEach((integer, item) -> {
 					Identifier id = Identifier.of(modID, String.valueOf(integer));
-					if (!ItemRegistry.INSTANCE.containsId(id))
+					if (!ItemRegistry.INSTANCE.containsId(id)) {
 						Registry.register(ItemRegistry.INSTANCE,
-							modContents.ITEMS.originalToAuto.get(integer),
-							id,
-							item);
+								modContents.ITEMS.originalToAuto.get(integer),
+								id,
+								item);
+
+						addId(integer, id, false);
+					}
 				});
 				modContents.ITEMS.duplicatesInstances.forEach((integer, item) -> {
 					Identifier id = Identifier.of(modID, integer + "_");
@@ -69,11 +118,14 @@ public class LoadingDoneListener implements Runnable {
 
 				modContents.BLOCKS.originalToInstance.forEach((integer, block) -> {
 					Identifier id = Identifier.of(modID, String.valueOf(integer));
-					if (!BlockRegistry.INSTANCE.containsId(id))
+					if (!BlockRegistry.INSTANCE.containsId(id)) {
 						Registry.register(BlockRegistry.INSTANCE,
-							modContents.BLOCKS.originalToAuto.get(integer),
-							id,
-							block);
+								modContents.BLOCKS.originalToAuto.get(integer),
+								id,
+								block);
+
+						addId(integer, id, true);
+					}
 				});
 			});
 
