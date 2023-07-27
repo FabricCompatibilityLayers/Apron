@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.apron.stapi.mixin;
+package io.github.betterthanupdates.apron.stapi.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.modificationstation.stationapi.impl.client.arsenic.renderer.render.ArsenicItemRenderer;

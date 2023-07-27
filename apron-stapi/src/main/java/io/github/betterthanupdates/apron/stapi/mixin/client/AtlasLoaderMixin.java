@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.apron.stapi.mixin;
+package io.github.betterthanupdates.apron.stapi.mixin.client;
 
 import java.util.List;
 

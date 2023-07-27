@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.apron.stapi;
+package io.github.betterthanupdates.apron.stapi.hmi;
 
 import net.glasslauncher.hmifabric.tabs.TabRegistry;
 

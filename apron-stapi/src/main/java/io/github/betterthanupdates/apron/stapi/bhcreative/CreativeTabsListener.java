@@ -1,7 +1,9 @@
-package io.github.betterthanupdates.apron.stapi;
+package io.github.betterthanupdates.apron.stapi.bhcreative;
 
 import java.util.Map;
 
+import io.github.betterthanupdates.apron.stapi.ApronStAPICompat;
+import io.github.betterthanupdates.apron.stapi.ModContents;
 import modloader.ModLoader;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.item.Item;

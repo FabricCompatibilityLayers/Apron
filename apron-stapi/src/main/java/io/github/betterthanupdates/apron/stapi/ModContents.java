@@ -1,5 +1,6 @@
 package io.github.betterthanupdates.apron.stapi;
 
+import io.github.betterthanupdates.apron.stapi.client.ModTexturesRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 

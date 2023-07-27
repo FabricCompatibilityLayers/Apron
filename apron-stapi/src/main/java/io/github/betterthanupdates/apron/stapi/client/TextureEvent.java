@@ -1,8 +1,10 @@
-package io.github.betterthanupdates.apron.stapi;
+package io.github.betterthanupdates.apron.stapi.client;
 
 import static io.github.betterthanupdates.apron.stapi.ApronStAPICompat.LOGGER;
 
 import com.google.common.collect.ImmutableList;
+import io.github.betterthanupdates.apron.stapi.ApronStAPICompat;
+import io.github.betterthanupdates.apron.stapi.ModContents;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;

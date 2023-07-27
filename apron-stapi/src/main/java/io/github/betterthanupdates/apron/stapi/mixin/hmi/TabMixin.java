@@ -1,6 +1,6 @@
-package io.github.betterthanupdates.apron.stapi.mixin;
+package io.github.betterthanupdates.apron.stapi.mixin.hmi;
 
-import io.github.betterthanupdates.apron.stapi.HMITab;
+import io.github.betterthanupdates.apron.stapi.hmi.HMITab;
 import net.glasslauncher.hmifabric.tabs.Tab;
 import org.spongepowered.asm.mixin.Mixin;
 

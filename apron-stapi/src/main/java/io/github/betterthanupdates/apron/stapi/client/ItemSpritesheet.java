@@ -1,5 +1,6 @@
-package io.github.betterthanupdates.apron.stapi;
+package io.github.betterthanupdates.apron.stapi.client;
 
+import io.github.betterthanupdates.apron.stapi.ApronStAPICompat;
 import net.modificationstation.stationapi.api.client.texture.SpritesheetHelper;
 import net.modificationstation.stationapi.api.registry.Identifier;
 import uk.co.benjiweber.expressions.tuple.BiTuple;

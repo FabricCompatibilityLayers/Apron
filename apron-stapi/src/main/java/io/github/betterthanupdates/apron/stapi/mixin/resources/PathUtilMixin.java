@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.apron.stapi.mixin;
+package io.github.betterthanupdates.apron.stapi.mixin.resources;
 
 import com.mojang.serialization.DataResult;
 import net.modificationstation.stationapi.api.StationAPI;

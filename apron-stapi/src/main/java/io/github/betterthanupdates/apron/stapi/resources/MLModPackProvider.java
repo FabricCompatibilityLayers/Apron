@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.apron.stapi;
+package io.github.betterthanupdates.apron.stapi.resources;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +11,6 @@ import net.modificationstation.stationapi.api.resource.ResourceType;
 import net.modificationstation.stationapi.impl.resource.ResourcePackProfile;
 import net.modificationstation.stationapi.impl.resource.ResourcePackProvider;
 import net.modificationstation.stationapi.impl.resource.ResourcePackSource;
-import net.modificationstation.stationapi.impl.resource.ZippedTexturePackResourcePack;
 
 import io.github.betterthanupdates.apron.LifecycleUtils;
 

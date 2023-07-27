@@ -1,17 +1,15 @@
 package io.github.betterthanupdates.apron.stapi;
 
+import io.github.betterthanupdates.apron.stapi.hmi.HMICompat;
 import modloader.ModLoader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.modificationstation.stationapi.api.client.gui.screen.menu.AchievementPage;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
-import net.modificationstation.stationapi.api.registry.DimensionContainer;
-import net.modificationstation.stationapi.api.registry.DimensionRegistry;
 import net.modificationstation.stationapi.api.registry.Identifier;
 import net.modificationstation.stationapi.api.registry.ItemRegistry;
 import net.modificationstation.stationapi.api.registry.ModID;
 import net.modificationstation.stationapi.api.registry.Registry;
-import shockahpi.DimensionBase;
 import shockahpi.SAPI;
 
 import java.util.HashMap;

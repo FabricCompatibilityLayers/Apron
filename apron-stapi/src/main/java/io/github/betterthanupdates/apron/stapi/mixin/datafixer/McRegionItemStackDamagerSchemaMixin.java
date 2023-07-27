@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.apron.stapi.mixin;
+package io.github.betterthanupdates.apron.stapi.mixin.datafixer;
 
 import com.mojang.datafixers.schemas.Schema;
 import io.github.betterthanupdates.apron.stapi.LoadingDoneListener;

@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.apron.stapi.mixin;
+package io.github.betterthanupdates.apron.stapi.mixin.resources;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import io.github.betterthanupdates.apron.stapi.MLModPackProvider;
+import io.github.betterthanupdates.apron.stapi.resources.MLModPackProvider;
 
 @Mixin(ResourcePackManager.class)
 public class ResourcePackManagerMixin {

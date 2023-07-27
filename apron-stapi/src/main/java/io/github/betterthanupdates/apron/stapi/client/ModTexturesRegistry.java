@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.apron.stapi;
+package io.github.betterthanupdates.apron.stapi.client;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import io.github.betterthanupdates.apron.stapi.ApronStAPICompat;
 import net.modificationstation.stationapi.api.client.texture.atlas.AtlasSource;
 import net.modificationstation.stationapi.api.client.texture.atlas.SingleAtlasSource;
 import net.modificationstation.stationapi.api.registry.Identifier;

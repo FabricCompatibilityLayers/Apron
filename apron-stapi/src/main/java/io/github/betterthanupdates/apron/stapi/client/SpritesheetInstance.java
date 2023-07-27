@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.apron.stapi;
+package io.github.betterthanupdates.apron.stapi.client;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.apron.stapi;
+package io.github.betterthanupdates.apron.stapi.resources;
 
 import static io.github.betterthanupdates.apron.stapi.ApronStAPICompat.LOGGER;
 import static net.modificationstation.stationapi.impl.resource.ZipResourcePack.TYPE_NAMESPACE_SPLITTER;

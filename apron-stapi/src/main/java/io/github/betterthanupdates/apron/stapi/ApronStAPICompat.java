@@ -1,6 +1,8 @@
 package io.github.betterthanupdates.apron.stapi;
 
 import forge.ITextureProvider;
+import io.github.betterthanupdates.apron.stapi.client.ItemSpritesheet;
+import io.github.betterthanupdates.apron.stapi.client.SpritesheetInstance;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;

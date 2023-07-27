@@ -9,27 +9,27 @@
   "package": "io.github.betterthanupdates.apron.stapi.mixin",
   "mixins": [
     "AchievementPageAccessor",
-    "ArsenicDiggingParticleMixin",
-    "ArsenicItemRendererMixin",
-    "AtlasLoaderMixin",
+    "client.ArsenicDiggingParticleMixin",
+    "client.ArsenicItemRendererMixin",
+    "client.AtlasLoaderMixin",
     "BlockItemMixin",
     "BlockMixin",
     "ItemMixin",
-    "LivingEntityMixin",
-    "McRegionItemStackDamagerSchemaMixin",
-    "McRegionSchemaB1_7_3Mixin",
-    "PathUtilMixin",
-    "ResourcePackManagerMixin",
-    "StationFlatteningDamagerSchemaB1_7_3Mixin",
-    "StationFlatteningItemStackSchemaMixin",
-    "TabCraftingMixin",
-    "TabMixin",
-    "TabSmeltingMixin"
+    "client.LivingEntityMixin",
+    "datafixer.McRegionItemStackDamagerSchemaMixin",
+    "datafixer.McRegionSchemaB1_7_3Mixin",
+    "resources.PathUtilMixin",
+    "resources.ResourcePackManagerMixin",
+    "datafixer.StationFlatteningDamagerSchemaB1_7_3Mixin",
+    "datafixer.StationFlatteningItemStackSchemaMixin",
+    "hmi.TabCraftingMixin",
+    "hmi.TabMixin",
+    "hmi.TabSmeltingMixin"
   ],
   "plugin": "io.github.betterthanupdates.apron.stapi.MixinCompatPlugin",
   "client": [
-    "BlockRendererMixin",
-    "DiggingParticleEntityAccessor",
-    "MinecraftClientMixin"
+    "client.BlockRendererMixin",
+    "client.DiggingParticleEntityAccessor",
+    "client.MinecraftClientMixin"
   ]
 }
