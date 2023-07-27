@@ -47,7 +47,8 @@
       "io.github.betterthanupdates.apron.stapi.client.TextureEvent"
     ],
     "stationapi:event_bus": [
-      "io.github.betterthanupdates.apron.stapi.ApronStAPICompat"
+      "io.github.betterthanupdates.apron.stapi.ApronStAPICompat",
+      "io.github.betterthanupdates.apron.stapi.dataconverter.ModDataConverter"
     ]
   },
   "mixins": [
