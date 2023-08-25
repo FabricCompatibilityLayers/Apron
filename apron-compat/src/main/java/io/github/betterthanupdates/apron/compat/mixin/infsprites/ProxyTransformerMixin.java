@@ -42,32 +42,32 @@ public abstract class ProxyTransformerMixin {
 	@Final
 	private static String SHADOW;
 
-	@Shadow
+	@Shadow(remap = false)
 	private static String toTarget(Class<?> owner, FieldNode field) {
 		return null;
 	}
 
-	@Shadow
+	@Shadow(remap = false)
 	private static String toTargetCustomName(Class<?> owner, FieldNode field, String fieldName) {
 		return null;
 	}
 
-	@Shadow
+	@Shadow(remap = false)
 	private static String toTarget(Class<?> owner, MethodNode method) {
 		return null;
 	}
 
-	@Shadow
+	@Shadow(remap = false)
 	private static String toTargetCustomName(Class<?> owner, MethodNode method, String methodName) {
 		return null;
 	}
 
-	@Shadow
+	@Shadow(remap = false)
 	private static String toTargetInsn(FieldInsnNode fieldInsn) {
 		return null;
 	}
 
-	@Shadow
+	@Shadow(remap = false)
 	private static String toTargetInsn(MethodInsnNode methodInsn) {
 		return null;
 	}

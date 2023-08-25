@@ -13,7 +13,7 @@ import io.github.betterthanupdates.apron.stapi.ApronStAPICompat;
 
 @Mixin(ArsenicDiggingParticle.class)
 public class ArsenicDiggingParticleMixin {
-	@Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/modificationstation/stationapi/api/client/texture/atlas/Atlas;getTexture(I)Lnet/modificationstation/stationapi/api/client/texture/atlas/Atlas$Sprite;"))
+	@Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/modificationstation/stationapi/api/client/texture/atlas/Atlas;getTexture(I)Lnet/modificationstation/stationapi/api/client/texture/atlas/Atlas$Sprite;", remap = false))
 	private Atlas.Sprite apron$stapi$fixTextureIndex(Atlas instance, int textureIndex, @Local(ordinal = 0)DiggingParticleEntity entity) {
 		textureIndex = ApronStAPICompat.fixBlockTexture(textureIndex, ((DiggingParticleEntityAccessor) entity).getBlock());
 

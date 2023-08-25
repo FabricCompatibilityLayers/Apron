@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Mixin(TabSmelting.class)
 public abstract class TabSmeltingMixin extends TabWithTexture implements HMITab {
-	@Shadow
+	@Shadow(remap = false)
 	protected Map recipesComplete;
 
 	public TabSmeltingMixin(ModID tabCreator, int slotsPerRecipe, String texturePath, int width, int height, int minPaddingX, int minPaddingY, int textureX, int textureY) {

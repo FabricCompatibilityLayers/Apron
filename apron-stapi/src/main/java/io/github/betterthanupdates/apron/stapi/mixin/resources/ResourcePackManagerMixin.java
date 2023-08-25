@@ -15,7 +15,7 @@ import io.github.betterthanupdates.apron.stapi.resources.MLModPackProvider;
 @Mixin(ResourcePackManager.class)
 public class ResourcePackManagerMixin {
 
-	@Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableSet;copyOf([Ljava/lang/Object;)Lcom/google/common/collect/ImmutableSet;", remap = false))
+	@Redirect(method = "<init>", remap = false, at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableSet;copyOf([Ljava/lang/Object;)Lcom/google/common/collect/ImmutableSet;", remap = false))
 	private ImmutableSet<ResourcePackProvider> addMLProvider(Object[] providers) {
 		List<ResourcePackProvider> newList = new ArrayList<>();
 		for (Object o : providers) {

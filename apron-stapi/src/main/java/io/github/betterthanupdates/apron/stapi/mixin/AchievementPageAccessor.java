@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(AchievementPage.class)
 public interface AchievementPageAccessor {
-	@Accessor
+	@Accessor(remap = false)
 	static List<AchievementPage> getPAGES() {
 		return null;
 	}

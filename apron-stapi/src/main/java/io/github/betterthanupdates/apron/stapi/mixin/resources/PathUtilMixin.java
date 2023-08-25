@@ -13,7 +13,7 @@ import java.util.List;
 
 @Mixin(PathUtil.class)
 public abstract class PathUtilMixin {
-	@Shadow
+	@Shadow(remap = false)
 	public static boolean isFileNameValid(String name) {
 		return false;
 	}

@@ -16,11 +16,11 @@ import io.github.betterthanupdates.apron.stapi.ModContents;
 
 @Mixin(AtlasLoader.class)
 public class AtlasLoaderMixin {
-	@Shadow
+	@Shadow(remap = false)
 	@Final
 	private List<AtlasSource> sources;
 
-	@Inject(method = "<init>", at = @At("RETURN"))
+	@Inject(method = "<init>", at = @At("RETURN"), remap = false)
 	private void apron$addVirtualAtlasSources(List sourcess, CallbackInfo ci) {
 		ApronStAPICompat.getModContents().forEach(entry -> {
 			ModContents modContents = entry.getValue();

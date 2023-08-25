@@ -8,7 +8,7 @@ import net.minecraft.AetherItems;
 
 @Mixin(AetherItems.class)
 public class AetherItemsMixin {
-	@ModifyConstant(method = "<init>", constant = @Constant(stringValue = "mod_TooManyItems"))
+	@ModifyConstant(method = "<init>", constant = @Constant(stringValue = "mod_TooManyItems"), remap = false)
 	private static String fixTMICompat(String constant) {
 		return "net.minecraft.mod_TooManyItems";
 	}

@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(StationFlatteningItemStackSchema.class)
 public abstract class StationFlatteningItemStackSchemaMixin {
-	@Inject(method = "<init>", at = @At("RETURN"))
+	@Inject(method = "<init>", at = @At("RETURN"), remap = false)
 	private void registerModFixes(int versionKey, Schema parent, CallbackInfo ci) {
 		LoadingDoneListener.registerFixes();
 	}

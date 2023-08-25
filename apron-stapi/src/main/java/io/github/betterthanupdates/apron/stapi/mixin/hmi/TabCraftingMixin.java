@@ -14,10 +14,10 @@ import java.util.List;
 
 @Mixin(TabCrafting.class)
 public abstract class TabCraftingMixin extends TabWithTexture implements HMITab {
-	@Shadow
+	@Shadow(remap = false)
 	protected List<Object> recipes;
 
-	@Shadow
+	@Shadow(remap = false)
 	protected List<Object> recipesComplete;
 
 	public TabCraftingMixin(ModID tabCreator, int slotsPerRecipe, String texturePath, int width, int height, int minPaddingX, int minPaddingY, int textureX, int textureY) {
