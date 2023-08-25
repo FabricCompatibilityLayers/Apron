@@ -1378,6 +1378,7 @@ public class ModLoader {
 	public static void RegisterEntityID(Class<? extends Entity> entityClass, String entityName, int entityId) {
 		try {
 			EntityRegistry.register(entityClass, entityName, entityId);
+			LifecycleUtils.MOD_ENTITIES.add(entityName);
 		} catch (IllegalArgumentException e) {
 			MOD_LOGGER.throwing("ModLoader", "RegisterEntityID", e);
 			ThrowException(e);
@@ -1414,6 +1415,7 @@ public class ModLoader {
 			RegisterTileEntity(blockEntityClass, id, null);
 		} else {
 			BlockEntity.register(blockEntityClass, id);
+			LifecycleUtils.MOD_BLOCK_ENTITIES.add(id);
 		}
 	}
 
@@ -1436,6 +1438,7 @@ public class ModLoader {
 				renderers.put(blockEntityClass, renderer);
 				renderer.setRenderDispatcher(ref);
 			}
+			LifecycleUtils.MOD_BLOCK_ENTITIES.add(id);
 		} catch (IllegalArgumentException e) {
 			MOD_LOGGER.throwing("ModLoader", "RegisterTileEntity", e);
 			ThrowException(e);

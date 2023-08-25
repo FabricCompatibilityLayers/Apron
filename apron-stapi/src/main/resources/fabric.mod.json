@@ -41,13 +41,14 @@
       "io.github.betterthanupdates.apron.stapi.LoadingDoneListener"
     ],
     "bhcreative:event_bus": [
-      "io.github.betterthanupdates.apron.stapi.CreativeTabsListener"
+      "io.github.betterthanupdates.apron.stapi.bhcreative.CreativeTabsListener"
     ],
     "stationapi:event_bus_client": [
-      "io.github.betterthanupdates.apron.stapi.TextureEvent"
+      "io.github.betterthanupdates.apron.stapi.client.TextureEvent"
     ],
     "stationapi:event_bus": [
-      "io.github.betterthanupdates.apron.stapi.ApronStAPICompat"
+      "io.github.betterthanupdates.apron.stapi.ApronStAPICompat",
+      "io.github.betterthanupdates.apron.stapi.dataconverter.ModDataConverter"
     ]
   },
   "mixins": [

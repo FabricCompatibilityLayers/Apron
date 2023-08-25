@@ -21,4 +21,6 @@ dependencies {
 	modCompileOnly(files("mods/betterblocks.jar"))
 	modCompileOnly(files("mods/incrediblefungus.jar"))
 	modCompileOnly(files("mods/netherores.jar"))
+	modCompileOnly(files("mods/eqex.jar"))
+	modCompileOnly(files("mods/claysoldier.jar"))
 }

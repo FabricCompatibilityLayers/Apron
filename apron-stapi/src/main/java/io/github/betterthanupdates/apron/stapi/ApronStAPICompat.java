@@ -1,5 +1,11 @@
 package io.github.betterthanupdates.apron.stapi;
 
+import forge.ITextureProvider;
+import io.github.betterthanupdates.apron.stapi.client.ItemSpritesheet;
+import io.github.betterthanupdates.apron.stapi.client.SpritesheetInstance;
+import net.minecraft.block.Block;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.client.texture.atlas.AtlasSource;
 import net.modificationstation.stationapi.api.client.texture.atlas.UnstitchAtlasSource;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
@@ -100,5 +106,57 @@ public class ApronStAPICompat {
 		}
 
 		ATLAS_SOURCE_LIST.add(new UnstitchAtlasSource(texturePathId, regions, divisorSize, divisorSize));
+
+		LOGGER.info("Pre-Loaded texture atlas: " + texturePathId + " for mod " + getModID());
+	}
+
+	public static int fixItemTexture(int original, Item item) {
+		if (item instanceof ITextureProvider textureProvider) {
+			String textureFile = textureProvider.getTextureFile();
+
+			if (!textureFile.startsWith("/")) textureFile = "/" + textureFile;
+
+			SpritesheetInstance itemSpritesheet = ApronStAPICompat.SPRITESHEET_MAP.get(textureFile);
+
+			if (itemSpritesheet != null) {
+				if (item instanceof BlockItem) {
+					if (itemSpritesheet.BLOCKS.containsKey(original)) {
+						return itemSpritesheet.BLOCKS.get(original);
+					}
+				} else if (itemSpritesheet.ITEMS.containsKey(original)) {
+					return itemSpritesheet.ITEMS.get(original);
+				}
+			}
+		} else {
+			if (item instanceof BlockItem) {
+				if (ApronStAPICompat.INDEX_TO_FIXED_BLOCK.containsKey(original)) {
+					return ApronStAPICompat.INDEX_TO_FIXED_BLOCK.get(original);
+				}
+			} else if (ApronStAPICompat.INDEX_TO_FIXED_ITEM.containsKey(original)) {
+				return ApronStAPICompat.INDEX_TO_FIXED_ITEM.get(original);
+			}
+		}
+
+		return original;
+	}
+
+	public static int fixBlockTexture(int texture, Block block) {
+		if (block instanceof ITextureProvider textureProvider) {
+			String textureFile = textureProvider.getTextureFile();
+
+			if (!textureFile.startsWith("/")) textureFile = "/" + textureFile;
+
+			SpritesheetInstance spritesheetInstance = ApronStAPICompat.SPRITESHEET_MAP.get(textureFile);
+
+			if (spritesheetInstance != null) {
+				if (spritesheetInstance.BLOCKS.containsKey(texture)) {
+					return spritesheetInstance.BLOCKS.get(texture);
+				}
+			}
+		} else if (ApronStAPICompat.INDEX_TO_FIXED_BLOCK.containsKey(texture)) {
+			return ApronStAPICompat.INDEX_TO_FIXED_BLOCK.get(texture);
+		}
+
+		return texture;
 	}
 }

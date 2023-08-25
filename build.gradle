@@ -32,24 +32,6 @@ allprojects {
 	group = rootProject.maven_group
 
 	apply plugin: "maven-publish"
-
-	publishing {
-		repositories {
-			if (ENV.MAVEN_URL) {
-				maven {
-					name 'halotroop-blucobalt.dev'
-					url 'https://repo.blucobalt.dev/repository/maven-halotroop'
-					credentials {
-						username ENV.MAVEN_USERNAME
-						password ENV.MAVEN_PASSWORD
-					}
-				}
-			} else {
-				mavenLocal()
-			}
-		}
-	}
-
 	apply plugin: "java-library"
 	//apply plugin: "checkstyle"
 	apply plugin: "babric-loom"
@@ -163,26 +145,23 @@ allprojects {
 		preserveFileTimestamps = false
 		reproducibleFileOrder = true
 	}
+
+	publishing {
+		publications {
+			mavenJava(MavenPublication) {
+				from components.java
+			}
+		}
+
+		repositories {
+		}
+	}
 }
 
 subprojects {
 	dependencies {
 		if (project.name != "apron") {
 			api(project.dependencies.project(path: ":apron", configuration: 'namedElements'))
-		}
-	}
-
-	publishing {
-		publications {
-			mavenJava(MavenPublication) {
-				artifact(remapJar) {
-					builtBy(remapJar)
-				}
-
-				artifact(remapSourcesJar) {
-					builtBy remapSourcesJar
-				}
-			}
 		}
 	}
 
