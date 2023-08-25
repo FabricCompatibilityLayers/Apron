@@ -7,7 +7,7 @@ import uk.co.benjiweber.expressions.tuple.BiTuple;
 
 public class ItemSpritesheet implements SpritesheetHelper {
 	private final String texturePath;
-	protected ItemSpritesheet(String texturePath) {
+	public ItemSpritesheet(String texturePath) {
 		this.texturePath = texturePath;
 	}
 
