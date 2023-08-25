@@ -148,7 +148,7 @@ allprojects {
 //		modRuntimeOnly(group: "remapped.client", name: "reforgedsapi-client")
 		// Todo
 	//	modRuntimeOnly(group: "remapped.server", name: "minecraftforge-server", version: "1.0.7-20110907")
-		modImplementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-fabric:${project.mixin_extras_version}"))
+		implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-fabric:${project.mixin_extras_version}"))
 	}
 
 	tasks.withType(ProcessResources).configureEach {
