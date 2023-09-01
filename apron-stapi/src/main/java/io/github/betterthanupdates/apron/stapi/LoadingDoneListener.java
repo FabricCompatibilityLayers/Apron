@@ -4,6 +4,7 @@ import io.github.betterthanupdates.apron.stapi.hmi.HMICompat;
 import modloader.ModLoader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.stat.achievement.Achievements;
 import net.modificationstation.stationapi.api.client.gui.screen.menu.AchievementPage;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.registry.Identifier;
@@ -12,7 +13,9 @@ import net.modificationstation.stationapi.api.registry.ModID;
 import net.modificationstation.stationapi.api.registry.Registry;
 import shockahpi.SAPI;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -165,7 +168,7 @@ public class LoadingDoneListener implements Runnable {
 					}
 
 					if (!found) {
-						AchievementPage stPage = new AchievementPage(ModID.of("apron"), idTitle);
+						AchievementPage stPage = new AchievementPage(ModID.of("apron").id(idTitle));
 
 						ModLoader.AddLocalization("stationapi:achievementPage.apron:" + idTitle, page.title);
 
@@ -174,6 +177,22 @@ public class LoadingDoneListener implements Runnable {
 					}
 				}
 			});
+
+			List<Achievement> registeredAchievements = new ArrayList<>();
+
+			for (AchievementPage page : AchievementPageAccessor.getPAGES()) {
+				registeredAchievements.addAll(page.getAchievements());
+			}
+
+			for (Achievement achievement : (List<Achievement>) Achievements.achievements) {
+				if (!registeredAchievements.contains(achievement)) {
+					for (AchievementPage page : AchievementPageAccessor.getPAGES()) {
+						if (page.name().equals("station-achievements-v0:minecraft")) {
+							page.addAchievements(achievement);
+						}
+					}
+				}
+			}
 
 			if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
 				ModLoader.getMinecraftInstance().textureManager.reloadTexturesFromTexturePack();
