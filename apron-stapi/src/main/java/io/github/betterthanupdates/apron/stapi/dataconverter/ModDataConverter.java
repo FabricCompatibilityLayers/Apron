@@ -2,7 +2,8 @@ package io.github.betterthanupdates.apron.stapi.dataconverter;
 
 import com.mojang.datafixers.DataFixerBuilder;
 import com.mojang.datafixers.schemas.Schema;
-import io.github.betterthanupdates.apron.stapi.dataconverter.claysoldier.ClaySoldierDataFixer;
+import io.github.betterthanupdates.apron.stapi.dataconverter.claysoldier.ClaySoldierEntityFixer;
+import io.github.betterthanupdates.apron.stapi.dataconverter.claysoldier.ClaySoldierItemFixer;
 import io.github.betterthanupdates.apron.stapi.dataconverter.claysoldier.ClaySoldierSchema;
 import net.fabricmc.loader.api.FabricLoader;
 import net.mine_diver.unsafeevents.listener.EventListener;
@@ -26,7 +27,8 @@ public final class ModDataConverter {
 			DataFixerBuilder builder = new DataFixerBuilder(clayManVersion);
 
 			Schema schema = builder.addSchema(1, ClaySoldierSchema::new);
-			builder.addFixer(new ClaySoldierDataFixer("ClayManToClaySoldierItemFix", schema));
+			builder.addFixer(new ClaySoldierItemFixer("ClayManToClaySoldierItemFix", schema));
+			builder.addFixer(new ClaySoldierEntityFixer("ClayManToClaySoldierEntityFix", schema));
 
 			return builder.buildOptimized(Set.of(TypeReferences.LEVEL), executor);
 		}, clayManVersion);

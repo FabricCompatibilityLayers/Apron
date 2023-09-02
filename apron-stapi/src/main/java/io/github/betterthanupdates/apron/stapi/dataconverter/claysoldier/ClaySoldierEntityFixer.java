@@ -8,9 +8,9 @@ import net.modificationstation.stationapi.api.datafixer.TypeReferences;
 
 import static net.modificationstation.stationapi.impl.vanillafix.datafixer.VanillaDataFixerImpl.STATION_ID;
 
-public class ClaySoldierDataFixer extends DataFix {
+public class ClaySoldierEntityFixer extends DataFix {
     private final String name;
-    public ClaySoldierDataFixer(String name, Schema outputSchema) {
+    public ClaySoldierEntityFixer(String name, Schema outputSchema) {
         super(outputSchema, false);
         this.name = name;
     }
@@ -19,11 +19,11 @@ public class ClaySoldierDataFixer extends DataFix {
     protected TypeRewriteRule makeRule() {
         return writeFixAndRead(
                 this.name,
-                getInputSchema().getType(TypeReferences.ITEM_STACK),
-                getOutputSchema().getType(TypeReferences.ITEM_STACK),
-                dynamic -> dynamic.get(STATION_ID).result().<Dynamic<?>>map(
-                        value -> dynamic.set(STATION_ID, dynamic.createString(
-                                ClaySoldierSchema.convertItemId(value.asString("minecraft:air"))
+                getInputSchema().getType(TypeReferences.ENTITY),
+                getOutputSchema().getType(TypeReferences.ENTITY),
+                dynamic -> dynamic.get("id").result().<Dynamic<?>>map(
+                        value -> dynamic.set("id", dynamic.createString(
+                                ClaySoldierSchema.convertEntityId(value.asString("Pig"))
                         ))
                 ).orElse(dynamic)
         );
