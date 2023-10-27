@@ -275,6 +275,7 @@ public class ModLoader {
 	 */
 	@Environment(EnvType.CLIENT)
 	public static void AddLocalization(String key, String value) {
+		LifecycleUtils.CACHED_TRANSLATIONS.put(key, value);
 		Properties props = TranslationStorage.getInstance().translations;
 
 		if (props != null) {

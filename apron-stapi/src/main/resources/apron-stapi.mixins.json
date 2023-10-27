@@ -12,6 +12,7 @@
     "BlockItemMixin",
     "BlockMixin",
     "ItemMixin",
+    "TranslationStorageAccessor",
     "client.ArsenicDiggingParticleMixin",
     "client.ArsenicItemRendererMixin",
     "client.AtlasLoaderMixin",

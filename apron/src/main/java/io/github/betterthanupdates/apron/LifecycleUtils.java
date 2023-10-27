@@ -2,7 +2,9 @@ package io.github.betterthanupdates.apron;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -18,4 +20,6 @@ public class LifecycleUtils {
 
 	public static final List<String> MOD_ENTITIES = new ArrayList<>();
 	public static final List<String> MOD_BLOCK_ENTITIES = new ArrayList<>();
+
+	public static final Map<String, String> CACHED_TRANSLATIONS = new HashMap<>();
 }

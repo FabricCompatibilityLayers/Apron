@@ -48,7 +48,8 @@
     ],
     "stationapi:event_bus": [
       "io.github.betterthanupdates.apron.stapi.ApronStAPICompat",
-      "io.github.betterthanupdates.apron.stapi.dataconverter.ModDataConverter"
+      "io.github.betterthanupdates.apron.stapi.dataconverter.ModDataConverter",
+      "io.github.betterthanupdates.apron.stapi.resources.ApronResourceEvents"
     ]
   },
   "mixins": [
