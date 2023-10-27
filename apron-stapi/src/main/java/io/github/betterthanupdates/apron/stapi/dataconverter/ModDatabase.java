@@ -7,8 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
+import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.DataFixerBuilder;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.templates.TypeTemplate;
@@ -21,7 +24,7 @@ import io.github.betterthanupdates.apron.stapi.dataconverter.fixer.BlockIdFixer;
 import io.github.betterthanupdates.apron.stapi.dataconverter.fixer.EntityIdFixer;
 import io.github.betterthanupdates.apron.stapi.dataconverter.fixer.ItemIdFixer;
 
-public abstract class ModDatabase {
+public abstract class ModDatabase implements Function<Executor, DataFixer> {
 	private final ModID original, target;
 
 	private final Map<String, String>
@@ -34,32 +37,42 @@ public abstract class ModDatabase {
 		this.target = target;
 	}
 
+	public Schema baseSchema(int version, Schema schema) {
+		return new BaseSchema(version, this, schema);
+	}
+
+	@Override
+	public DataFixer apply(Executor executor) {
+		DataFixerBuilder builder = new DataFixerBuilder(this.getVersion());
+
+		Schema schema = builder.addSchema(1, this::baseSchema);
+		builder.addFixer(new ItemIdFixer(this, schema));
+		builder.addFixer(new EntityIdFixer(this, schema));
+		builder.addFixer(new BlockIdFixer(this, schema));
+
+		return builder.buildOptimized(Set.of(TypeReferences.LEVEL), executor);
+	}
+
 	public void registerDataFixer() {
-		int version = this.isTargetPresent() ? 1 : 0;
-		DataFixers.registerFixer(this.original, executor -> {
-			DataFixerBuilder builder = new DataFixerBuilder(version);
-
-			Schema schema = builder.addSchema(1, (integer, schema1) -> new BaseSchema(integer, this, schema1));
-			builder.addFixer(new ItemIdFixer(this, schema));
-			builder.addFixer(new EntityIdFixer(this, schema));
-			builder.addFixer(new BlockIdFixer(this, schema));
-
-			return builder.buildOptimized(Set.of(TypeReferences.LEVEL), executor);
-		}, version);
+		DataFixers.registerFixer(this.original, this, this.getVersion());
 	}
 
 	public String getName() {
-		return this.original.getName() + "_To_" + this.target.getName();
+		return this.original.toString() + "_To_" + this.target.toString();
 	}
 
 	public boolean isTargetPresent() {
-		return FabricLoader.getInstance().isModLoaded(this.target.getName());
+		return FabricLoader.getInstance().isModLoaded(this.target.toString());
+	}
+
+	public int getVersion() {
+		return this.isTargetPresent() ? 1 : 0;
 	}
 
 	public abstract void register();
 
 	public final Properties loadConfigFile() {
-		return this.loadConfigFile(FabricLoader.getInstance().getConfigDir().resolve(this.original.getName() + ".cfg").toFile());
+		return this.loadConfigFile(FabricLoader.getInstance().getConfigDir().resolve(this.original.toString() + ".cfg").toFile());
 	}
 
 	public final Properties loadConfigFile(File file) {
