@@ -6,20 +6,12 @@
   "description": "A compatibility layer for legacy API mods.",
   "authors": [
     {
-      "name": "Better Than Updates",
-      "contact": {
-        "sources": "https://github.com/BetterThanUpdates/Apron",
-        "issues": "https://github.com/BetterThanUpdates/Apron/issues"
-      }
+      "name": "Better Than Updates"
     }
   ],
   "contributors": [
     {
-      "name": "CatCore",
-      "contact": {
-        "sources": "https://github.com/arthurbambou/Fabricated-Legacy-Forge",
-        "issues": "https://github.com/arthurbambou/Fabricated-Legacy-Forge/issues"
-      }
+      "name": "CatCore"
     },
     {
       "name": "halotroop2288",
@@ -32,7 +24,6 @@
     "AmazigJj"
   ],
   "contact": {
-    "homepage": "https://BetterThanUpdates.github.io/",
     "sources": "https://github.com/thecatcore/Apron",
     "issues": "https://github.com/thecatcore/Apron/issues"
   },
@@ -128,8 +119,8 @@
     },
     "apron:mods": {
       "client": {
-        "ModLoader": "1.7.3+beta.1",
-        "AudioMod": "1.7.3+beta.1",
+        "ModLoader": "1.0.0-beta.7.3",
+        "AudioMod": "1.0.0-beta.7.3",
         "ShockAhPI": "5.1",
         "PlayerAPI": "1.7",
         "Reforged": "1.0.1",
@@ -138,7 +129,7 @@
         "ModOptionsAPI": "0.7"
       },
       "common": {
-        "ModLoaderMP": "1.7.3+beta.1",
+        "ModLoaderMP": "1.0.0-beta.7.3",
         "MinecraftForge": "1.0.6"
       },
       "server": {
