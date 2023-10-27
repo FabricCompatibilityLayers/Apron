@@ -17,6 +17,7 @@ import net.modificationstation.stationapi.api.datafixer.DataFixers;
 import net.modificationstation.stationapi.api.datafixer.TypeReferences;
 import net.modificationstation.stationapi.api.registry.ModID;
 
+import io.github.betterthanupdates.apron.stapi.dataconverter.fixer.BlockIdFixer;
 import io.github.betterthanupdates.apron.stapi.dataconverter.fixer.EntityIdFixer;
 import io.github.betterthanupdates.apron.stapi.dataconverter.fixer.ItemIdFixer;
 
@@ -41,6 +42,7 @@ public abstract class ModDatabase {
 			Schema schema = builder.addSchema(1, (integer, schema1) -> new BaseSchema(integer, this, schema1));
 			builder.addFixer(new ItemIdFixer(this, schema));
 			builder.addFixer(new EntityIdFixer(this, schema));
+			builder.addFixer(new BlockIdFixer(this, schema));
 
 			return builder.buildOptimized(Set.of(TypeReferences.LEVEL), executor);
 		}, version);
@@ -72,8 +74,11 @@ public abstract class ModDatabase {
 	}
 
 	public void item(int old, String id) {
+		this.item(String.valueOf(old), id);
+	}
+	public void item(String old, String id) {
 		this.ITEMS.put(
-				this.original.id(String.valueOf(old)).toString(),
+				this.original.id(old).toString(),
 				this.target.id(id).toString()
 		);
 	}
@@ -83,14 +88,25 @@ public abstract class ModDatabase {
 	}
 
 	public void block(int old, String id) {
+		this.block(String.valueOf(old), id);
+	}
+	public void block(String old, String id) {
 		this.BLOCKS.put(
-				this.original.id(String.valueOf(old)).toString(),
+				this.original.id(old).toString(),
 				this.target.id(id).toString()
 		);
 	}
 
 	public String block(String old) {
 		return this.BLOCKS.getOrDefault(old, old);
+	}
+
+	public void blockAndItem(int old, String id) {
+		this.blockAndItem(String.valueOf(old), id);
+	}
+	public void blockAndItem(String old, String id) {
+		this.block(old, id);
+		this.item(old, id);
 	}
 
 	public void entity(String old, String id) {

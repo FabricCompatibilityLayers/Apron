@@ -145,7 +145,10 @@ public class BaseSchema extends Schema {
         schema.registerType(
                 false,
                 TypeReferences.BLOCK_STATE,
-                DSL::remainder
+				() -> DSL.fields(
+						"Name",
+						TypeReferences.ITEM_NAME.in(schema)
+				)
         );
     }
 }
