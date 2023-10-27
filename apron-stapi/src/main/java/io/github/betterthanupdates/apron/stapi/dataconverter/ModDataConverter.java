@@ -1,36 +1,23 @@
 package io.github.betterthanupdates.apron.stapi.dataconverter;
 
-import com.mojang.datafixers.DataFixerBuilder;
-import com.mojang.datafixers.schemas.Schema;
-import io.github.betterthanupdates.apron.stapi.dataconverter.claysoldier.ClaySoldierEntityFixer;
-import io.github.betterthanupdates.apron.stapi.dataconverter.claysoldier.ClaySoldierItemFixer;
-import io.github.betterthanupdates.apron.stapi.dataconverter.claysoldier.ClaySoldierSchema;
-import net.fabricmc.loader.api.FabricLoader;
+
+import io.github.betterthanupdates.apron.stapi.dataconverter.claysoldier.ClaySoldierDatabase;
 import net.mine_diver.unsafeevents.listener.EventListener;
-import net.modificationstation.stationapi.api.datafixer.DataFixers;
-import net.modificationstation.stationapi.api.datafixer.TypeReferences;
 import net.modificationstation.stationapi.api.event.datafixer.DataFixerRegisterEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.mod.entrypoint.EventBusPolicy;
-import net.modificationstation.stationapi.api.registry.ModID;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entrypoint(eventBus = @EventBusPolicy(registerInstance = false))
 public final class ModDataConverter {
+	private static final List<ModDatabase> datafixers = new ArrayList<>();
 	@EventListener
 	private static void registerFixer(DataFixerRegisterEvent event) {
-		ModID clayManId = ModID.of("mod_ClayMan");
-		int clayManVersion = FabricLoader.getInstance().isModLoaded("claysoldiers") ? 1 : 0;
+		datafixers.add(new ClaySoldierDatabase());
 
-		DataFixers.registerFixer(clayManId, executor -> {
-			DataFixerBuilder builder = new DataFixerBuilder(clayManVersion);
-
-			Schema schema = builder.addSchema(1, ClaySoldierSchema::new);
-			builder.addFixer(new ClaySoldierItemFixer("ClayManToClaySoldierItemFix", schema));
-			builder.addFixer(new ClaySoldierEntityFixer("ClayManToClaySoldierEntityFix", schema));
-
-			return builder.buildOptimized(Set.of(TypeReferences.LEVEL), executor);
-		}, clayManVersion);
+		datafixers.forEach(ModDatabase::register);
+		datafixers.forEach(ModDatabase::registerDataFixer);
 	}
 }

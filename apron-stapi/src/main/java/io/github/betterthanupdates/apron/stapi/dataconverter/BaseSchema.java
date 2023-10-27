@@ -15,8 +15,10 @@ import static net.modificationstation.stationapi.impl.level.FlattenedWorldManage
 import static net.modificationstation.stationapi.impl.vanillafix.datafixer.VanillaDataFixerImpl.STATION_ID;
 
 public class BaseSchema extends Schema {
-    public BaseSchema(int versionKey, Schema parent) {
+	private final ModDatabase database;
+    public BaseSchema(int versionKey, ModDatabase database, Schema parent) {
         super(versionKey, parent);
+		this.database = database;
     }
 
     public static void targetItems(Schema schema, Map<String, Supplier<TypeTemplate>> map, String id) {
@@ -54,6 +56,8 @@ public class BaseSchema extends Schema {
         for (String id : LifecycleUtils.MOD_ENTITIES) {
             registerSimple(map, id);
         }
+
+		this.database.entitySchema(this, map);
 
         return map;
     }
