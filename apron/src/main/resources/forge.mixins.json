@@ -20,26 +20,27 @@
     "item.BucketItemMixin",
     "item.ItemMixin",
     "util.hit.HitResultMixin",
-    "world.explosion.ExplosionMixin",
     "world.WorldMixin",
-    "world.chunk.ChunkMixin"
+    "world.chunk.ChunkMixin",
+    "world.explosion.ExplosionMixin"
   ],
   "client": [
     "client.BlockRendererMixin",
     "client.ClientInteractionManagerMixin",
     "client.GameRendererMixin",
-    "client.MultiplayerClientInteractionManagerMixin",
     "client.ParticleManagerMixin",
     "client.PistonRendererMixin",
     "client.PlayerRendererMixin",
     "client.TessellatorMixin",
-    "client.TextureManagerMixin"
+    "client.TextureManagerMixin",
+    "client.nostation.MultiplayerClientInteractionManagerMixin"
   ],
   "server": [
     "server.class_417Mixin",
     "server.item.ToolItemMixin",
     "server.server.nostation.ServerPlayerView_class_514Mixin",
-    "server.server.player.ServerInteractionManagerMixin"
+    "server.server.player.ServerInteractionManagerMixin",
+    "server.server.player.nostation.ServerInteractionManagerMixin"
   ],
   "plugin": "io.github.betterthanupdates.apron.ApronMixinPlugin",
   "parent": "apron.parent.mixins.json"

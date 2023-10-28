@@ -1,17 +1,25 @@
 package io.github.betterthanupdates.apron.stapi.mixin;
 
+import io.github.betterthanupdates.forge.block.ForgeBlock;
 import io.github.betterthanupdates.stapi.StAPIBlock;
 import io.github.betterthanupdates.apron.stapi.ApronStAPICompat;
 import io.github.betterthanupdates.apron.stapi.ModContents;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.block.BlockState;
+import net.modificationstation.stationapi.api.block.StationFlatteningBlock;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.registry.Identifier;
 import net.modificationstation.stationapi.api.registry.ItemRegistry;
 import net.modificationstation.stationapi.api.template.block.BlockTemplate;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,7 +32,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @Mixin(Block.class)
-public class BlockMixin implements StAPIBlock {
+public abstract class BlockMixin implements StAPIBlock, StationFlatteningBlock, ForgeBlock {
 	@Shadow
 	@Final
 	public int id;
@@ -92,5 +100,17 @@ public class BlockMixin implements StAPIBlock {
 		}
 
 		return originalId;
+	}
+
+	@Override
+	public float calcBlockBreakingDelta(BlockState state, PlayerEntity player, BlockView world, BlockPos pos) {
+		float apronHardness = this.blockStrength((World) world, player, pos.x, pos.y, pos.z);
+
+		float hardness = this.getHardness(state, world, pos);
+		if (hardness < 0.0F) {
+			return Math.max(0.0F, apronHardness);
+		} else {
+			return !player.canHarvest(state) ? Math.max(1.0F / hardness / 100.0F, apronHardness) : Math.max(player.getBlockBreakingSpeed(state) / hardness / 30.0F, apronHardness);
+		}
 	}
 }
