@@ -38,7 +38,7 @@
   "server": [
     "server.class_417Mixin",
     "server.item.ToolItemMixin",
-    "server.server.ServerPlayerView_class_514Mixin",
+    "server.server.nostation.ServerPlayerView_class_514Mixin",
     "server.server.player.ServerInteractionManagerMixin"
   ],
   "plugin": "io.github.betterthanupdates.apron.ApronMixinPlugin",

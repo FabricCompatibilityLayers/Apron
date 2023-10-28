@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin.server.server;
+package io.github.betterthanupdates.forge.mixin.server.server.nostation;
 
 import net.minecraft.server.ServerPlayerView;
 import org.spongepowered.asm.mixin.Mixin;
