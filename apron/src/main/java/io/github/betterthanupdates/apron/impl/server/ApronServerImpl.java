@@ -13,7 +13,6 @@ import net.minecraft.world.World;
 import io.github.betterthanupdates.apron.api.ApronApi;
 
 public final class ApronServerImpl implements ApronApi {
-	private static final MinecraftServer server = (MinecraftServer) FabricLoaderImpl.INSTANCE.getGameInstance();
 
 	@Override
 	public @Nullable Runnable getGame() {

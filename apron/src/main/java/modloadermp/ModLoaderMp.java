@@ -229,7 +229,11 @@ public class ModLoaderMp {
 
 				File file = server.getFile("banned-mods.txt");
 
-				if (!file.exists() || file.createNewFile()) {
+				if (!file.exists()) {
+					file.createNewFile();
+				}
+
+				if (!file.exists()) {
 					Log("Could not get or create banned mods config file.");
 				}
 

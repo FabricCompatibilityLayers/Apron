@@ -6,13 +6,13 @@
     "ItemEntityMixin",
     "ItemMixin",
     "ItemStackMixin",
-    "ButtonWidgetAccessor",
     "EntityAccessor",
-    "SoundHelperAccessor",
     "WorldAccessor"
   ],
   "client": [
     "client.InGameHudMixin",
+    "client.SoundHelperAccessor",
+    "client.ButtonWidgetAccessor",
     "client.TitleScreenMixin"
   ],
   "plugin": "io.github.betterthanupdates.apron.ApronMixinPlugin",

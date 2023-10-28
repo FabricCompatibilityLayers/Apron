@@ -3,7 +3,6 @@ package io.github.betterthanupdates.apron.compat.mixin.aether;
 import java.util.List;
 
 import fr.catcore.modremapperapi.api.mixin.Public;
-import modloader.ModLoader;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,9 +34,9 @@ import net.minecraft.world.storage.WorldMetadata;
 import net.minecraft.world.storage.WorldStorage;
 
 import io.github.betterthanupdates.apron.ReflectionUtils;
-import io.github.betterthanupdates.apron.mixin.ButtonWidgetAccessor;
+import io.github.betterthanupdates.apron.mixin.client.ButtonWidgetAccessor;
 import io.github.betterthanupdates.apron.mixin.EntityAccessor;
-import io.github.betterthanupdates.apron.mixin.SoundHelperAccessor;
+import io.github.betterthanupdates.apron.mixin.client.SoundHelperAccessor;
 import io.github.betterthanupdates.apron.mixin.WorldAccessor;
 
 @Mixin(TitleScreen.class)
