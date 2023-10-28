@@ -1,5 +1,6 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.forge.mixin.block;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import fr.catcore.modremapperapi.api.mixin.Public;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,35 +24,18 @@ public abstract class TrapdoorBlockMixin extends Block {
 		super(blockId, material);
 	}
 
-	int cachedMeta = 0;
-
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Inject(method = "onAdjacentBlockUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getBlockMeta(III)I"))
-	private void forge$onAdjacentBlockUpdate(World i, int j, int k, int l, int par5, CallbackInfo ci) {
-		this.cachedMeta = i.getBlockMeta(j, k, l);
-	}
-
 	/**
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
 	@Redirect(method = "onAdjacentBlockUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z"))
-	private boolean forge$disableValidation(World instance, int j, int k, int i) {
-		return !(!disableValidation && !((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, (this.cachedMeta & 3) + 2));
+	private boolean forge$disableValidation(World instance, int j, int k, int i, @Local(ordinal = 4) int l) {
+		return !(!disableValidation && !((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, (l & 3) + 2));
 	}
 
-	int cachedL;
-
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Inject(method = "canPlaceAt", at = @At("HEAD"))
-	private void forge$canPlaceAt(World i, int j, int k, int l, int par5, CallbackInfoReturnable<Boolean> cir) {
-		this.cachedL = par5;
+	@Inject(method = "canPlaceAt", at = @At("HEAD"), cancellable = true)
+	private void forge$cancelPlacement(World i, int j, int k, int l, int par5, CallbackInfoReturnable<Boolean> cir) {
+		if (disableValidation) cir.setReturnValue(true);
 	}
 
 	/**
@@ -59,7 +43,7 @@ public abstract class TrapdoorBlockMixin extends Block {
 	 * @reason implement Forge hooks
 	 */
 	@Redirect(method = "canPlaceAt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;canSuffocate(III)Z"))
-	private boolean forge$isBlockSolidOnSide(World instance, int j, int k, int i) {
-		return ((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, this.cachedL);
+	private boolean forge$isBlockSolidOnSide(World instance, int j, int k, int i, @Local(ordinal = 3) int l) {
+		return ((ForgeWorld) instance).isBlockSolidOnSide(j, k, i, l);
 	}
 }

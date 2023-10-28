@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.forge.mixin.block;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

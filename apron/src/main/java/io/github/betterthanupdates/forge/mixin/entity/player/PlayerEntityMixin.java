@@ -1,5 +1,7 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.forge.mixin.entity.player;
 
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import forge.ArmorProperties;
 import forge.ForgeHooks;
 import forge.ISpecialArmor;
@@ -86,15 +88,13 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 		}
 	}
 
-	ItemStack orig;
-
 	/**
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
 	@Inject(method = "breakHeldItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/PlayerInventory;setInventoryItem(ILnet/minecraft/item/ItemStack;)V"))
-	private void forge$breakHeldItem$Head(CallbackInfo ci) {
-		this.orig = this.inventory.getHeldItem();
+	private void forge$breakHeldItem$Head(CallbackInfo ci, @Share("orig") LocalRef<ItemStack> ref) {
+		ref.set(this.inventory.getHeldItem());
 	}
 
 	/**
@@ -102,8 +102,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ForgePla
 	 * @reason implement Forge hooks
 	 */
 	@Inject(method = "breakHeldItem", at = @At(value = "RETURN"))
-	private void forge$breakHeldItem$Return(CallbackInfo ci) {
-		ForgeHooks.onDestroyCurrentItem((PlayerEntity) (Object) this, this.orig);
+	private void forge$breakHeldItem$Return(CallbackInfo ci, @Share("orig") LocalRef<ItemStack> ref) {
+		ForgeHooks.onDestroyCurrentItem((PlayerEntity) (Object) this, ref.get());
 	}
 
 	/**

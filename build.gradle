@@ -128,8 +128,8 @@ allprojects {
 	// 	modRuntimeOnly(group: "remapped.client", name: "guiapi0.11.0", version: "1.7")
 	//	modRuntimeOnly(group: "remapped.client", name: "modoptionsapi", version: "v0.7")
 //		modRuntimeOnly(group: "remapped.client", name: "reforgedsapi-client")
+//		modRuntimeOnly(group: "remapped.server", name: "minecraftforge-server", version: "1.0.7-20110907")
 		// Todo
-	//	modRuntimeOnly(group: "remapped.server", name: "minecraftforge-server", version: "1.0.7-20110907")
 		implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-fabric:${project.mixin_extras_version}"))
 	}
 

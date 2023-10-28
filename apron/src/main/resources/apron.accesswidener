@@ -204,5 +204,8 @@ accessible field net/minecraft/client/entity/player/AbstractClientPlayerEntity c
 accessible field net/minecraft/entity/player/PlayerEntity field_512 Z
 accessible method net/minecraft/client/entity/player/AbstractClientPlayerEntity method_1372 (DDD)Z
 
+## Forge Server
+accessible class net/minecraft/server/ServerPlayerView$class_514
+
 ## Mods
 mutable field net/minecraft/block/Block FARMLAND Lnet/minecraft/block/Block;

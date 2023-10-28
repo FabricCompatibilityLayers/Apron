@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.forge.mixin.block;
 
 import forge.ForgeHooks;
 import net.fabricmc.api.EnvType;

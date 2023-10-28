@@ -6,8 +6,11 @@
 package forge;
 
 import io.github.betterthanupdates.Legacy;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 @Legacy
+@Environment(EnvType.CLIENT)
 public interface IArmorTextureProvider {
 	String getArmorTextureFile();
 }

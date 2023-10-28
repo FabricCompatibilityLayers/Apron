@@ -1,19 +1,25 @@
 package io.github.betterthanupdates.forge.item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
-public class ToolEffectiveness {
+public class ToolEffectiveness extends ArrayList<Object> {
 	public int blockId;
 	public int meta;
 	public String toolType;
 
 	public ToolEffectiveness(final int blockId, final int meta, final String toolType) {
+		super();
 		this.blockId = blockId;
 		this.meta = meta;
 		this.toolType = toolType;
+
+		this.add(this.blockId);
+		this.add(this.meta);
+		this.add(this.toolType);
 	}
 
 	@Override

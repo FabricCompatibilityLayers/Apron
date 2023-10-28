@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.forge.mixin.container.slot;
 
 import forge.ForgeHooks;
 import modloader.ModLoader;

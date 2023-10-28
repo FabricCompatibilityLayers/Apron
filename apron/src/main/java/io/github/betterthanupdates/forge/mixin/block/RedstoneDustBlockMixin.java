@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin;
+package io.github.betterthanupdates.forge.mixin.block;
 
 import forge.IConnectRedstone;
 import org.spongepowered.asm.mixin.Mixin;
