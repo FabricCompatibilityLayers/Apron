@@ -23,4 +23,10 @@ dependencies {
 	modCompileOnly(files("mods/netherores.jar"))
 	modCompileOnly(files("mods/eqex.jar"))
 	modCompileOnly(files("mods/claysoldier.jar"))
+
+	modCompileOnly(files("mods/client/buildcraft-client-A-core-2.1.1.jar"))
+	modCompileOnly(files("mods/client/buildcraft-client-B-builders-2.1.1.jar"))
+	modCompileOnly(files("mods/client/buildcraft-client-B-energy-2.1.1.jar"))
+	modCompileOnly(files("mods/client/buildcraft-client-B-factory-2.1.1.jar"))
+	modCompileOnly(files("mods/client/buildcraft-client-B-transport-2.1.1.jar"))
 }
