@@ -37,9 +37,6 @@ public class ItemStackMixin {
 
 	@Inject(method = "writeNBT", at = @At("HEAD"))
 	private void fixNbtId(CompoundTag par1, CallbackInfoReturnable<CompoundTag> cir) {
-		System.out.println("Id:" + this.itemId);
-		if (this.itemId < Item.byId.length) System.out.println("Item:" + Item.byId[this.itemId]);
-		if (this.itemId < Block.BY_ID.length) System.out.println("Block:" + Block.BY_ID[this.itemId]);
 		if (ItemRegistry.INSTANCE.get(this.itemId) == null) {
 			if (this.itemId < Block.BY_ID.length && Block.BY_ID[this.itemId] != null) this.apron$fixId(Block.BY_ID[this.itemId]);
 		}
