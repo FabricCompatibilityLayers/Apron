@@ -11,11 +11,4 @@ import io.github.betterthanupdates.apron.item.ItemConvertible;
 
 @Mixin(ItemEntity.class)
 public class ItemEntityMixin implements ItemConvertible {
-	@Shadow
-	public ItemStack stack;
-
-	@Override
-	public Item asItem() {
-		return ((ItemConvertible) (Object) this.stack).asItem();
-	}
 }

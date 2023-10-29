@@ -31,6 +31,7 @@ public class LoadingDoneListener implements Runnable {
 
 	public static final Map<Integer, Identifier> IDS = new HashMap<>();
 	public static final Map<Integer, Boolean> IDS_TYPE = new HashMap<>();
+	public static final List<LateUpdate> LATE_UPDATES = new ArrayList<>();
 
 	public static boolean allowConversion = true;
 	public static boolean registeredFixer = false;
@@ -92,6 +93,7 @@ public class LoadingDoneListener implements Runnable {
 		if (lastTotal != totalObjectsNumber.get()) {
 			if (lastTotal != 0) ApronStAPICompat.LOGGER.warn("Some objects were registered later, trying to attribute identifier to them.");
 			lastTotal = totalObjectsNumber.get();
+
 			ApronStAPICompat.getModContents().forEach(entry -> {
 				ModID modID = entry.getKey();
 				ModContents modContents = entry.getValue();
@@ -129,6 +131,8 @@ public class LoadingDoneListener implements Runnable {
 					}
 				});
 			});
+
+			LATE_UPDATES.forEach(LateUpdate::update);
 
 //			DimensionBase.list.forEach(dimensionBase -> {
 //				if (dimensionBase.number == 0 || dimensionBase.number == -1) return;
@@ -202,5 +206,9 @@ public class LoadingDoneListener implements Runnable {
 				HMICompat.regenerateRecipeList();
 			}
 		}
+	}
+
+	public static interface LateUpdate {
+		void update();
 	}
 }

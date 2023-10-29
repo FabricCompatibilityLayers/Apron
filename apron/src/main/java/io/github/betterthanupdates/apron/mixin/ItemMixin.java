@@ -8,8 +8,4 @@ import io.github.betterthanupdates.apron.item.ItemConvertible;
 
 @Mixin(Item.class)
 public class ItemMixin implements ItemConvertible {
-	@Override
-	public Item asItem() {
-		return ((Item) (Object) this);
-	}
 }

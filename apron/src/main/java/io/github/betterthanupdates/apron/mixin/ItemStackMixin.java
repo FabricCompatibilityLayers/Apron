@@ -10,11 +10,4 @@ import io.github.betterthanupdates.apron.item.ItemConvertible;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin implements ItemConvertible {
-	@Shadow
-	public abstract Item getItem();
-
-	@Override
-	public Item asItem() {
-		return this.getItem();
-	}
 }

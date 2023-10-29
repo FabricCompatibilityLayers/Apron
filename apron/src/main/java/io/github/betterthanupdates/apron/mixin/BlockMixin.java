@@ -12,12 +12,4 @@ import io.github.betterthanupdates.apron.item.ItemConvertible;
 
 @Mixin(Block.class)
 public class BlockMixin implements ItemConvertible, StAPIBlock {
-	@Shadow
-	@Final
-	public int id;
-
-	@Override
-	public Item asItem() {
-		return Item.byId[this.id];
-	}
 }
