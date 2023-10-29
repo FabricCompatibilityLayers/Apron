@@ -1,5 +1,6 @@
 package io.github.betterthanupdates.modoptionsapi.mixin.client;
 
+import modoptionsapi.ModOptionsAPI;
 import modoptionsapi.gui.ModMenu;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,7 +15,8 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 public class PauseMenuMixin extends Screen {
 	@Inject(method = "initVanillaScreen", at = @At("RETURN"))
 	private void modoptionsapi$addButton(CallbackInfo ci) {
-		this.buttons.add(new ButtonWidget(30, this.width / 2 - 100, this.height / 4 + 148 + -16, "Mod World Options"));
+		if (ModOptionsAPI.getAllMods().length > 0)
+			this.buttons.add(new ButtonWidget(30, this.width / 2 - 100, this.height / 4 + 148 + -16, "Mod World Options"));
 	}
 
 	@Inject(method = "buttonClicked", at = @At("RETURN"))
