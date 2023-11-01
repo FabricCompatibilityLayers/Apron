@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "injectors": {
+    "defaultRequire": 1,
+    "maxShiftBy": 5
+  },
+  "package": "io.github.betterthanupdates.apron.stapi.compat.mixin",
+  "mixins": [
+  ],
+  "plugin": "io.github.betterthanupdates.apron.compat.MixinCompatPlugin",
+  "client": [
+    "client.buildcraft.transport.RenderPipeMixin"
+  ],
+  "refmap": "apron-stapi-compat-refmap.json"
+}

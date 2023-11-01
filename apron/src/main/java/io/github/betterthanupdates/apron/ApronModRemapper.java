@@ -29,8 +29,10 @@ public final class ApronModRemapper implements ModRemapper {
 	}
 
 	private Path getLibPath(String name) {
-		return MOD_CONTAINER.findPath("./libs/" + name + ".zip").orElse(getLibDevPath(name));
-	}
+		return MOD_CONTAINER.findPath("./libs/" + name + ".zip")
+				.orElseGet(() -> getLibDevPath(name));
+
+    }
 
 	private Path getLibDevPath(String name) {
 		return MOD_CONTAINER.findPath("./../../../original/" + getEnvironment().name().toLowerCase() + "/" + name + ".zip").orElseThrow(RuntimeException::new);

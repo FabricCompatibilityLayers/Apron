@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "id": "apron-stapi-compat",
+  "version": "${version}",
+  "name": "Mod-specific compatibility patches for Apron and StAPI.",
+  "description": "",
+  "authors": [
+    {
+      "name": "Better Than Updates"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "CatCore"
+    },
+    {
+      "name": "halotroop2288",
+      "contact": {
+        "email": "carolinejoybell@gmail.com"
+      }
+    }
+  ],
+  "contact": {
+    "sources": "https://github.com/thecatcore/Apron",
+    "issues": "https://github.com/thecatcore/Apron/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/apron/icon.png",
+  "environment": "*",
+  "accessWidener": "apron-stapi-compat.accesswidener",
+  "entrypoints": {
+    "mod-remapper-api:modremapper": [
+      "io.github.betterthanupdates.apron.stapi.compat.ApronStAPICompatRemapper"
+    ]
+  },
+  "mixins": [
+  ],
+  "depends": {
+    "fabricloader": ">=0.13.3",
+    "minecraft": "1.0.0-beta.7.3",
+    "mod-remapping-api": "^1.6.0",
+    "legacy-fabric-logger-api-v1": "*",
+    "com_github_llamalad7_mixinextras": "*",
+    "stationapi": "*",
+    "station-api-base": "2.0-PRE2-1.0.0",
+    "java": ">=17"
+  }
+}

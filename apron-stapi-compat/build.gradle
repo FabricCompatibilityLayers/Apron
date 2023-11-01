@@ -1,0 +1,58 @@
+version = getSubprojectVersion(this)
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 17
+}
+
+loom {
+//	accessWidenerPath = file("src/main/resources/apron-stapi-compat.accesswidener")
+}
+
+dependencies {
+	implementation "org.slf4j:slf4j-api:1.8.0-beta4"
+	implementation 'org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2'
+
+	modImplementation "net.modificationstation:StationAPI:${project.stapi_version}"
+
+	// Optional, but convenient mods for mod creators and users alike.
+	modImplementation("com.github.calmilamsy:ModMenu:${project.modmenu_version}") {
+		transitive false
+	}
+	modImplementation("net.glasslauncher.mods:GlassConfigAPI:${project.gcapi_version}") {
+		transitive false
+	}
+	modImplementation("net.glasslauncher:HowManyItems-Fabric-Unofficial:${project.howmanyitems_version}") {
+		transitive false
+	}
+	modImplementation ("com.github.paulevsGitch:BHCreative:${project.bhcreative_version}") {
+		transitive false
+	}
+
+	api(project(path: ":apron-compat", configuration: 'namedElements'))
+	api(project(path: ":apron-stapi", configuration: 'namedElements'))
+
+//    modCompileOnly(files("mods/aether.jar"))
+//	modCompileOnly(files("mods/aethermp.jar"))
+//	modCompileOnly(files("mods/infsprite.jar"))
+//	modCompileOnly(files("mods/overrideapi-old.jar"))
+//	modCompileOnly(files("mods/overrideapi-sarcasm.jar"))
+//	modCompileOnly(files("mods/betterthanwolves.jar"))
+//	modCompileOnly(files("mods/hmi.jar"))
+//	modCompileOnly(files("mods/concrete.jar"))
+//	modCompileOnly(files("mods/spawneggs.jar"))
+//	modCompileOnly(files("mods/reimap.jar"))
+//	modCompileOnly(files("mods/betatweaks.jar"))
+//	modCompileOnly(files("mods/somnia.jar"))
+//	modCompileOnly(files("mods/aei.jar"))
+//	modCompileOnly(files("mods/betterblocks.jar"))
+//	modCompileOnly(files("mods/incrediblefungus.jar"))
+//	modCompileOnly(files("mods/netherores.jar"))
+//	modCompileOnly(files("mods/eqex.jar"))
+//	modCompileOnly(files("mods/claysoldier.jar"))
+
+	modCompileOnly(files("mods/client/buildcraft-client-A-core-2.1.1.jar"))
+	modCompileOnly(files("mods/client/buildcraft-client-B-builders-2.1.1.jar"))
+	modCompileOnly(files("mods/client/buildcraft-client-B-energy-2.1.1.jar"))
+	modCompileOnly(files("mods/client/buildcraft-client-B-factory-2.1.1.jar"))
+	modCompileOnly(files("mods/client/buildcraft-client-B-transport-2.1.1.jar"))
+}
