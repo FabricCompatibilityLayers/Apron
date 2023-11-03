@@ -33,7 +33,9 @@
     "client.PlayerRendererMixin",
     "client.TessellatorMixin",
     "client.TextureManagerMixin",
-    "client.nostation.MultiplayerClientInteractionManagerMixin"
+    "client.VanillaTessellatorMixin",
+    "client.nostation.MultiplayerClientInteractionManagerMixin",
+    "client.nostation.SinglePlayerInteractionManagerMixin"
   ],
   "server": [
     "server.class_417Mixin",

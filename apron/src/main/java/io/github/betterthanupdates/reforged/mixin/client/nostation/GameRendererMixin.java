@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.reforged.mixin.client;
+package io.github.betterthanupdates.reforged.mixin.client.nostation;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

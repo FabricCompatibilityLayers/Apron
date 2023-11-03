@@ -1,14 +1,11 @@
 package io.github.betterthanupdates.forge.mixin.client.nostation;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.ClientInteractionManager;
@@ -26,39 +23,14 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 		super(client);
 	}
 
-	@Unique
-	int cachedMeta = 0;
-
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Inject(method = "breakBlock", at = @At("HEAD"))
-	private void forge$method_1716(int i, int j, int k, int l, CallbackInfoReturnable<Boolean> cir) {
-		this.cachedMeta = this.client.world.getBlockMeta(i, j, k);
-	}
-
 	/**
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
 	@Redirect(method = "breakBlock", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/client/entity/player/AbstractClientPlayerEntity;canRemoveBlock(Lnet/minecraft/block/Block;)Z"))
-	private boolean forge$method_1716(AbstractClientPlayerEntity instance, Block block) {
-		return ((ForgeBlock) block).canHarvestBlock(instance, this.cachedMeta);
-	}
-
-	int cachedI, cachedJ, cachedK;
-
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Inject(method = "destroyFireAndBreakBlock", at = @At("HEAD"))
-	private void forge$method_1707(int i, int j, int k, int l, CallbackInfo ci) {
-		this.cachedI = i;
-		this.cachedJ = j;
-		this.cachedK = k;
+	private boolean forge$method_1716(AbstractClientPlayerEntity instance, Block block, @Local(ordinal = 5) int meta) {
+		return ((ForgeBlock) block).canHarvestBlock(instance, meta);
 	}
 
 	/**
@@ -66,21 +38,8 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 	 * @reason implement Forge hooks
 	 */
 	@Redirect(method = "destroyFireAndBreakBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F"))
-	private float forge$method_1707(Block instance, PlayerEntity playerEntity) {
-		return ((ForgeBlock) instance).blockStrength(this.client.world, playerEntity, this.cachedI, this.cachedJ, this.cachedK);
-	}
-
-	int cachedI2, cachedJ2, cachedK2;
-
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Inject(method = "dig", at = @At("HEAD"))
-	private void forge$method_1721(int i, int j, int k, int l, CallbackInfo ci) {
-		this.cachedI2 = i;
-		this.cachedJ2 = j;
-		this.cachedK2 = k;
+	private float forge$method_1707(Block instance, PlayerEntity playerEntity, @Local(ordinal = 0) int i, @Local(ordinal = 1) int j, @Local(ordinal = 2) int k) {
+		return ((ForgeBlock) instance).blockStrength(this.client.world, playerEntity, i, j, k);
 	}
 
 	/**
@@ -88,7 +47,7 @@ public class SinglePlayerInteractionManagerMixin extends ClientInteractionManage
 	 * @reason implement Forge hooks
 	 */
 	@Redirect(method = "dig", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getHardness(Lnet/minecraft/entity/player/PlayerEntity;)F"))
-	private float forge$method_1721(Block instance, PlayerEntity playerEntity) {
-		return ((ForgeBlock) instance).blockStrength(this.client.world, playerEntity, this.cachedI2, this.cachedJ2, this.cachedK2);
+	private float forge$method_1721(Block instance, PlayerEntity playerEntity, @Local(ordinal = 0) int i, @Local(ordinal = 1) int j, @Local(ordinal = 2) int k) {
+		return ((ForgeBlock) instance).blockStrength(this.client.world, playerEntity, i, j, k);
 	}
 }

@@ -3,6 +3,9 @@ package io.github.betterthanupdates.forge.mixin.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import forge.BlockTextureParticles;
 import forge.ITextureProvider;
 import net.fabricmc.api.EnvType;
@@ -70,10 +73,10 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Redirect(method = "method_324", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/particle/ParticleEntity;method_2002(Lnet/minecraft/client/render/Tessellator;FFFFFF)V", ordinal = 0))
-	private void forge$method_2002(ParticleEntity entityfx, Tessellator tessellator, float f, float f1, float f5, float f2, float f3, float f4) {
+	@WrapOperation(method = "method_324", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/particle/ParticleEntity;method_2002(Lnet/minecraft/client/render/Tessellator;FFFFFF)V", ordinal = 0))
+	private void forge$method_2002(ParticleEntity entityfx, Tessellator tessellator, float f, float f1, float f5, float f2, float f3, float f4, Operation<Void> operation) {
 		if (!(entityfx instanceof DiggingParticleEntity)) {
-			entityfx.method_2002(tessellator, f, f1, f5, f2, f3, f4);
+			operation.call(entityfx, tessellator, f, f1, f5, f2, f3, f4);
 		}
 	}
 
@@ -117,41 +120,13 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 		this.effectList.clear();
 	}
 
-	Block cachedBlock;
-
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Inject(method = "addBlockBreakParticles", at = @At("HEAD"))
-	private void forge$addBlockBreakParticles(int j, int k, int l, int m, int par5, CallbackInfo ci) {
-		if (m != 0) {
-			this.cachedBlock = Block.BY_ID[m];
-		}
-	}
-
 	/**
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
 	@Redirect(method = "addBlockBreakParticles", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/ParticleManager;addParticle(Lnet/minecraft/client/entity/particle/ParticleEntity;)V"))
-	private void forge$addBlockBreakParticles(ParticleManager instance, ParticleEntity particleEntity) {
-		((ForgeParticleManager) instance).addDigParticleEffect((DiggingParticleEntity) particleEntity, this.cachedBlock);
-	}
-
-	Block cachedBlock2;
-
-	/**
-	 * @author Eloraam
-	 * @reason implement Forge hooks
-	 */
-	@Inject(method = "addBlockClickParticle", at = @At("HEAD"))
-	private void forge$addBlockClickParticle(int j, int k, int l, int par4, CallbackInfo ci) {
-		int id = this.world.getBlockId(j, k, l);
-
-		if (id != 0) {
-			this.cachedBlock2 = Block.BY_ID[id];
-		}
+	private void forge$addBlockBreakParticles(ParticleManager instance, ParticleEntity particleEntity, @Local(ordinal = 0) Block block) {
+		((ForgeParticleManager) instance).addDigParticleEffect((DiggingParticleEntity) particleEntity, block);
 	}
 
 	/**
@@ -159,8 +134,8 @@ public abstract class ParticleManagerMixin implements ForgeParticleManager {
 	 * @reason implement Forge hooks
 	 */
 	@Redirect(method = "addBlockClickParticle", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/ParticleManager;addParticle(Lnet/minecraft/client/entity/particle/ParticleEntity;)V"))
-	private void forge$addBlockClickParticle(ParticleManager instance, ParticleEntity particleEntity) {
-		((ForgeParticleManager) instance).addDigParticleEffect((DiggingParticleEntity) particleEntity, this.cachedBlock2);
+	private void forge$addBlockClickParticle(ParticleManager instance, ParticleEntity particleEntity, @Local(ordinal = 0) Block block) {
+		((ForgeParticleManager) instance).addDigParticleEffect((DiggingParticleEntity) particleEntity, block);
 	}
 
 	@Override

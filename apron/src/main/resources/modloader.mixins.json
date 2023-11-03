@@ -4,7 +4,8 @@
   "mixins": [
     "DispenserBlockMixin",
     "FurnaceBlockEntityMixin",
-    "FurnaceOutputSlotMixin"
+    "FurnaceOutputSlotMixin",
+    "nostation.VanillaFurnaceBlockEntityMixin"
   ],
   "client": [
     "client.ClientPlayPacketHandlerMixin",

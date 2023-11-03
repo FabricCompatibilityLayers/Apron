@@ -3,12 +3,14 @@
   "package": "io.github.betterthanupdates.reforged.mixin",
   "mixins": [
     "BlockMixin",
+    "FurnaceBlockEntityMixin",
     "ItemMixin",
     "ShearsItemMixin",
     "SheepEntityMixin",
     "SmeltingRecipeRegistryMixin"
   ],
   "client": [
+    "client.nostation.GameRendererMixin",
     "client.MultiplayerClientInteractionManagerMixin",
     "client.SinglePlayerInteractionManagerMixin"
   ],

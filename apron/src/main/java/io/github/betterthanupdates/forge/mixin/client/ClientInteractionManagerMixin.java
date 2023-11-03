@@ -50,9 +50,9 @@ public class ClientInteractionManagerMixin {
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Redirect(method = "useItemOnBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;useOnBlock(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/world/World;IIII)Z"))
-	private boolean forge$onDestroyCurrentItem(ItemStack instance, PlayerEntity arg2, World world, int j, int k, int l, int i) {
-		if (!instance.useOnBlock(arg2, world, j, k, l, i)) {
+	@WrapOperation(method = "useItemOnBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;useOnBlock(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/world/World;IIII)Z"))
+	private boolean forge$onDestroyCurrentItem(ItemStack instance, PlayerEntity arg2, World world, int j, int k, int l, int i, Operation<Boolean> operation) {
+		if (!operation.call(instance, arg2, world, j, k, l, i)) {
 			return false;
 		} else {
 			if (instance.count == 0) {
