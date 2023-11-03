@@ -1,5 +1,6 @@
 package io.github.betterthanupdates.forge.mixin.client;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import forge.ForgeHooks;
 import forge.IUseItemFirst;
 import net.fabricmc.api.EnvType;
@@ -22,16 +23,10 @@ public class ClientInteractionManagerMixin {
 	 * @author Eloraam
 	 * @reason implement Forge hooks
 	 */
-	@Inject(method = "method_1712", at = @At("RETURN"))
-	private void forge$method_1712(PlayerEntity player, World world, ItemStack itemstack, CallbackInfoReturnable<Boolean> cir) {
-		int i = itemstack.count;
-		ItemStack itemstack1 = itemstack.use(world, player);
-
-		if (itemstack1 != itemstack || itemstack1 != null && itemstack1.count != i) {
-			if (itemstack1.count == 0) {
-				ForgeHooks.onDestroyCurrentItem(player, itemstack1);
-			}
-		}
+	@Inject(method = "method_1712", at = @At(value = "RETURN", ordinal = 0))
+	private void forge$method_1712(PlayerEntity player, World world, ItemStack itemstack,
+								   CallbackInfoReturnable<Boolean> cir, @Local(ordinal = 1) ItemStack itemstack1) {
+		ForgeHooks.onDestroyCurrentItem(player, itemstack1);
 	}
 
 	/**
