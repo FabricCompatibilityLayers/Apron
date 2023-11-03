@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "apron-stapi-compat",
   "version": "${version}",
-  "name": "Mod-specific compatibility patches for Apron and StAPI.",
-  "description": "",
+  "name": "Apron StationAPI Compatibility",
+  "description": "Mod-specific compatibility patches for Apron and StAPI.",
   "contributors": [
     "CatCore"
   ],
