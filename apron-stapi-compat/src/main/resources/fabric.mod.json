@@ -4,8 +4,10 @@
   "version": "${version}",
   "name": "Apron StationAPI Compatibility",
   "description": "Mod-specific compatibility patches for Apron and StAPI.",
-  "contributors": [
+  "authors": [
     "CatCore"
+  ],
+  "contributors": [
   ],
   "contact": {
     "sources": "https://github.com/thecatcore/Apron",

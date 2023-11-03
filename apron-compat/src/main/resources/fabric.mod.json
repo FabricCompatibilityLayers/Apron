@@ -5,7 +5,9 @@
   "name": "Apron Compatibility",
   "description": "Mod-specific compatibility patches for Apron.",
   "contributors": [
-    "CatCore"
+    "CatCore",
+    "VendoAU",
+    "ClickNinYT"
   ],
   "contact": {
     "sources": "https://github.com/thecatcore/Apron",
