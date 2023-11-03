@@ -2,23 +2,10 @@
   "schemaVersion": 1,
   "id": "apron-compat",
   "version": "${version}",
-  "name": "Mod-specific compatibility patches for Apron.",
-  "description": "",
-  "authors": [
-    {
-      "name": "Better Than Updates"
-    }
-  ],
+  "name": "Apron Compatibility",
+  "description": "Mod-specific compatibility patches for Apron.",
   "contributors": [
-    {
-      "name": "CatCore"
-    },
-    {
-      "name": "halotroop2288",
-      "contact": {
-        "email": "carolinejoybell@gmail.com"
-      }
-    }
+    "CatCore"
   ],
   "contact": {
     "sources": "https://github.com/thecatcore/Apron",
