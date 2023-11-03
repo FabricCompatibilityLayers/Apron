@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(RenderPipe.class)
+@Mixin(value = RenderPipe.class, remap = false)
 public class RenderPipeMixin {
 	@Redirect(method = "doRenderItem", remap = false,
 			at = @At(value = "INVOKE", remap = false,
@@ -72,11 +72,11 @@ public class RenderPipeMixin {
 
 	@WrapOperation(method = "doRenderItem", remap = false,
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Tessellator;vertex(DDDDD)V",
-			ordinal = 0))
+			ordinal = 0, remap = true))
 	private void fixItemTexture0(Tessellator instance, double x, double y, double z, double u, double v,
 								 Operation<Void> operation, @Share("sprite") LocalRef<Sprite> ref) {
 		Sprite sprite = ref.get();
-		operation.call(instance, x, y, z, sprite.getMinU(), sprite.getMaxV());
+		operation.call(instance, x, y, z, (double)sprite.getMinU(), (double)sprite.getMaxV());
 	}
 
 	@WrapOperation(method = "doRenderItem", remap = false,
@@ -85,7 +85,7 @@ public class RenderPipeMixin {
 	private void fixItemTexture1(Tessellator instance, double x, double y, double z, double u, double v,
 								 Operation<Void> operation, @Share("sprite")LocalRef<Sprite> ref) {
 		Sprite sprite = ref.get();
-		operation.call(instance, x, y, z, sprite.getMaxU(), sprite.getMaxV());
+		operation.call(instance, x, y, z, (double)sprite.getMaxU(), (double)sprite.getMaxV());
 	}
 
 	@WrapOperation(method = "doRenderItem", remap = false,
@@ -94,7 +94,7 @@ public class RenderPipeMixin {
 	private void fixItemTexture2(Tessellator instance, double x, double y, double z, double u, double v,
 								 Operation<Void> operation, @Share("sprite")LocalRef<Sprite> ref) {
 		Sprite sprite = ref.get();
-		operation.call(instance, x, y, z, sprite.getMaxU(), sprite.getMinV());
+		operation.call(instance, x, y, z, (double)sprite.getMaxU(), (double)sprite.getMinV());
 	}
 
 	@WrapOperation(method = "doRenderItem", remap = false,
@@ -103,6 +103,6 @@ public class RenderPipeMixin {
 	private void fixItemTexture3(Tessellator instance, double x, double y, double z, double u, double v,
 								 Operation<Void> operation, @Share("sprite")LocalRef<Sprite> ref) {
 		Sprite sprite = ref.get();
-		operation.call(instance, x, y, z, sprite.getMinU(), sprite.getMinV());
+		operation.call(instance, x, y, z, (double)sprite.getMinU(), (double)sprite.getMinV());
 	}
 }
