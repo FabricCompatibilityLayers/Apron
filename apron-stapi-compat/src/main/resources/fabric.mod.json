@@ -10,15 +10,7 @@
     }
   ],
   "contributors": [
-    {
-      "name": "CatCore"
-    },
-    {
-      "name": "halotroop2288",
-      "contact": {
-        "email": "carolinejoybell@gmail.com"
-      }
-    }
+    "CatCore"
   ],
   "contact": {
     "sources": "https://github.com/thecatcore/Apron",
