@@ -15,12 +15,13 @@ import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.DataFixerBuilder;
 import com.mojang.datafixers.schemas.Schema;
 import com.mojang.datafixers.types.templates.TypeTemplate;
+import com.mojang.serialization.Dynamic;
 import net.fabricmc.loader.api.FabricLoader;
 import net.modificationstation.stationapi.api.datafixer.DataFixers;
 import net.modificationstation.stationapi.api.datafixer.TypeReferences;
 import net.modificationstation.stationapi.api.registry.ModID;
 
-import io.github.betterthanupdates.apron.stapi.dataconverter.fixer.BlockIdFixer;
+import io.github.betterthanupdates.apron.stapi.dataconverter.fixer.BlockStateFixer;
 import io.github.betterthanupdates.apron.stapi.dataconverter.fixer.EntityIdFixer;
 import io.github.betterthanupdates.apron.stapi.dataconverter.fixer.ItemIdFixer;
 
@@ -48,7 +49,7 @@ public abstract class ModDatabase implements Function<Executor, DataFixer> {
 		Schema schema = builder.addSchema(1, this::baseSchema);
 		builder.addFixer(new ItemIdFixer(this, schema));
 		builder.addFixer(new EntityIdFixer(this, schema));
-		builder.addFixer(new BlockIdFixer(this, schema));
+		builder.addFixer(new BlockStateFixer(this, schema));
 
 		return builder.buildOptimized(Set.of(TypeReferences.LEVEL), executor);
 	}
@@ -138,5 +139,17 @@ public abstract class ModDatabase implements Function<Executor, DataFixer> {
 			schema.registerSimple(map, entry.getKey());
 			schema.registerSimple(map, entry.getValue());
 		}
+	}
+
+	public Dynamic<?> blockState(String id, Dynamic<?> dynamic) {
+		return dynamic;
+	}
+
+	public boolean hasBlockOld(String id) {
+		return this.BLOCKS.containsKey(id);
+	}
+
+	public boolean hasBlockNew(String id) {
+		return this.BLOCKS.containsValue(id);
 	}
 }
