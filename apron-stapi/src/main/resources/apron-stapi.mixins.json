@@ -15,7 +15,6 @@
     "ItemStackMixin",
     "SchemaAccessor",
     "TranslationStorageAccessor",
-    "client.ArsenicDiggingParticleMixin",
     "client.ArsenicItemRendererMixin",
     "client.AtlasLoaderMixin",
     "client.LivingEntityMixin",
@@ -33,7 +32,7 @@
   "plugin": "io.github.betterthanupdates.apron.stapi.MixinCompatPlugin",
   "client": [
     "client.BlockRendererMixin",
-    "client.DiggingParticleEntityAccessor",
+    "client.DiggingParticleEntityMixin",
     "client.MinecraftClientMixin"
   ]
 }
