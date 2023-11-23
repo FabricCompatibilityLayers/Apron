@@ -10,8 +10,8 @@ import net.modificationstation.stationapi.api.client.texture.atlas.AtlasSource;
 import net.modificationstation.stationapi.api.client.texture.atlas.UnstitchAtlasSource;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.mod.entrypoint.EventBusPolicy;
-import net.modificationstation.stationapi.api.registry.Identifier;
-import net.modificationstation.stationapi.api.registry.ModID;
+import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.api.util.Null;
 import org.apache.logging.log4j.Logger;
 
@@ -32,13 +32,13 @@ public class ApronStAPICompat {
 		return CURRENT_MOD != null;
 	}
 
-	public static ModID getModID() {
-		return ModID.of(CURRENT_MOD);
+	public static Namespace getModID() {
+		return Namespace.of(CURRENT_MOD);
 	}
 
-	private static final Map<ModID, ModContents> MOD_CONTENTS = new HashMap<>();
+	private static final Map<Namespace, ModContents> MOD_CONTENTS = new HashMap<>();
 
-	public static ModContents getModContent(ModID modID) {
+	public static ModContents getModContent(Namespace modID) {
 		if (!MOD_CONTENTS.containsKey(modID)) {
 			MOD_CONTENTS.put(modID, new ModContents());
 		}
@@ -50,7 +50,7 @@ public class ApronStAPICompat {
 		return getModContent(getModID());
 	}
 
-	public static Set<Map.Entry<ModID, ModContents>> getModContents() {
+	public static Set<Map.Entry<Namespace, ModContents>> getModContents() {
 		return MOD_CONTENTS.entrySet();
 	}
 

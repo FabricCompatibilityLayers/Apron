@@ -3,7 +3,7 @@ package io.github.betterthanupdates.apron.stapi.client;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.modificationstation.stationapi.api.registry.Identifier;
+import net.modificationstation.stationapi.api.util.Identifier;
 
 public class SpritesheetInstance {
 	public final Map<Integer, Integer> ITEMS = new HashMap<>();

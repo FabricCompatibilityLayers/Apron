@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import net.modificationstation.stationapi.api.registry.Identifier;
-import net.modificationstation.stationapi.api.registry.ModID;
 import net.modificationstation.stationapi.api.resource.InputSupplier;
 import net.modificationstation.stationapi.api.resource.ResourceType;
+import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.Namespace;
 import net.modificationstation.stationapi.impl.resource.AbstractFileResourcePack;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +21,7 @@ public class MLModResourcePack extends AbstractFileResourcePack {
 	}
 
 	private static String toPath(ResourceType type, Identifier id) {
-		return String.format(Locale.ROOT, "%s/%s/%s", type.getDirectory(), id.modID, id.id);
+		return String.format(Locale.ROOT, "%s/%s/%s", type.getDirectory(), id.namespace, id.path);
 	}
 
 	@Override
@@ -47,15 +47,15 @@ public class MLModResourcePack extends AbstractFileResourcePack {
 	}
 
 	@Override
-	public void findResources(ResourceType type, ModID namespace, String prefix, ResultConsumer consumer) {
+	public void findResources(ResourceType type, Namespace namespace, String prefix, ResultConsumer consumer) {
 		for (MLZipPack pack : packs) {
 			pack.findResources(type, namespace, prefix, consumer);
 		}
 	}
 
 	@Override
-	public Set<ModID> getNamespaces(ResourceType type) {
-		HashSet<ModID> list = new HashSet<>();
+	public Set<Namespace> getNamespaces(ResourceType type) {
+		HashSet<Namespace> list = new HashSet<>();
 
 		for (MLZipPack pack : packs) {
 			list.addAll(pack.getNamespaces(type));

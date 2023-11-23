@@ -26,7 +26,6 @@
     "hmi.TabMixin",
     "hmi.TabSmeltingMixin",
     "registry.DynamicRegistryManager_EntryMixin",
-    "resources.PathUtilMixin",
     "resources.ResourcePackManagerMixin"
   ],
   "plugin": "io.github.betterthanupdates.apron.stapi.MixinCompatPlugin",

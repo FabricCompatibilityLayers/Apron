@@ -9,8 +9,8 @@ import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import net.modificationstation.stationapi.api.registry.Identifier;
-import net.modificationstation.stationapi.api.registry.ModID;
+import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.Namespace;
 import paulevs.bhcreative.api.SimpleTab;
 import paulevs.bhcreative.registry.TabRegistryEvent;
 
@@ -18,7 +18,7 @@ public class CreativeTabsListener {
 	@EventListener
 	public void onTabInit(TabRegistryEvent event) {
 		ApronStAPICompat.getModContents().forEach(entry -> {
-			ModID modID = entry.getKey();
+			Namespace modID = entry.getKey();
 			ModContents modContents = entry.getValue();
 
 			if (!modContents.ITEMS.originalToInstance.isEmpty()) {

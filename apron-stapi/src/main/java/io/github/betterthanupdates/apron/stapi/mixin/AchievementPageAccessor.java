@@ -2,7 +2,7 @@ package io.github.betterthanupdates.apron.stapi.mixin;
 
 import java.util.List;
 
-import net.modificationstation.stationapi.api.client.gui.screen.menu.AchievementPage;
+import net.modificationstation.stationapi.api.client.gui.screen.achievement.AchievementPage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 

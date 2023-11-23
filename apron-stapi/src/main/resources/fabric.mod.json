@@ -36,13 +36,12 @@
     "apron-stapi.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.13.3",
+    "fabricloader": ">0.14.23",
     "minecraft": "1.0.0-beta.7.3",
     "mod-remapping-api": "^1.6.0",
     "legacy-fabric-logger-api-v1": "*",
     "com_github_llamalad7_mixinextras": "*",
-    "stationapi": "*",
-    "station-api-base": "2.0-PRE2-1.0.0",
+    "stationapi": ">=2.0-alpha.1",
     "java": ">=17"
   }
 }

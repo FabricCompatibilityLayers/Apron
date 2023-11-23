@@ -19,21 +19,21 @@ import com.mojang.serialization.Dynamic;
 import net.fabricmc.loader.api.FabricLoader;
 import net.modificationstation.stationapi.api.datafixer.DataFixers;
 import net.modificationstation.stationapi.api.datafixer.TypeReferences;
-import net.modificationstation.stationapi.api.registry.ModID;
+import net.modificationstation.stationapi.api.util.Namespace;
 
 import io.github.betterthanupdates.apron.stapi.dataconverter.fixer.BlockStateFixer;
 import io.github.betterthanupdates.apron.stapi.dataconverter.fixer.EntityIdFixer;
 import io.github.betterthanupdates.apron.stapi.dataconverter.fixer.ItemIdFixer;
 
 public abstract class ModDatabase implements Function<Executor, DataFixer> {
-	private final ModID original, target;
+	private final Namespace original, target;
 
 	private final Map<String, String>
 			ITEMS = new HashMap<>(),
 			BLOCKS = new HashMap<>(),
 			ENTITIES = new HashMap<>();
 
-	public ModDatabase(ModID original, ModID target) {
+	public ModDatabase(Namespace original, Namespace target) {
 		this.original = original;
 		this.target = target;
 	}

@@ -7,8 +7,8 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.item.StationFlatteningBlockItem;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
-import net.modificationstation.stationapi.api.registry.Identifier;
 import net.modificationstation.stationapi.api.registry.ItemRegistry;
+import net.modificationstation.stationapi.api.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -54,8 +54,8 @@ public class BlockItemMixin extends Item {
 				if (this.blockId != block.id) {
 					((StationFlatteningBlockItem) this).setBlock(block);
 				}
-			} else if (id.id.endsWith("_")) {
-				Identifier fixId = id.modID.id(id.id.replace("_", ""));
+			} else if (id.path.endsWith("_")) {
+				Identifier fixId = id.namespace.id(id.path.replace("_", ""));
 
 				block = BlockRegistry.INSTANCE.get(fixId);
 

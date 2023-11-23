@@ -5,12 +5,13 @@ import modloader.ModLoader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.stat.achievement.Achievements;
-import net.modificationstation.stationapi.api.client.gui.screen.menu.AchievementPage;
+
+import net.modificationstation.stationapi.api.client.gui.screen.achievement.AchievementPage;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
-import net.modificationstation.stationapi.api.registry.Identifier;
 import net.modificationstation.stationapi.api.registry.ItemRegistry;
-import net.modificationstation.stationapi.api.registry.ModID;
 import net.modificationstation.stationapi.api.registry.Registry;
+import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.Namespace;
 import shockahpi.SAPI;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class LoadingDoneListener implements Runnable {
 		if (IDS.containsKey(oldId)) {
 			if (!IDS.get(oldId).toString().equals(identifier.toString())) {
 				allowConversion = false;
-				ApronStAPICompat.LOGGER.warn("Found conflicting ids for items/blocks between mods " + IDS.get(oldId).modID + " and " + identifier.modID + " for id " + oldId);
+				ApronStAPICompat.LOGGER.warn("Found conflicting ids for items/blocks between mods " + IDS.get(oldId).namespace + " and " + identifier.namespace + " for id " + oldId);
 			} else {
 				IDS_TYPE.put(oldId, block);
 			}
@@ -95,7 +96,7 @@ public class LoadingDoneListener implements Runnable {
 			lastTotal = totalObjectsNumber.get();
 
 			ApronStAPICompat.getModContents().forEach(entry -> {
-				ModID modID = entry.getKey();
+				Namespace modID = entry.getKey();
 				ModContents modContents = entry.getValue();
 
 				modContents.ITEMS.originalToInstance.forEach((integer, item) -> {
@@ -172,7 +173,7 @@ public class LoadingDoneListener implements Runnable {
 					}
 
 					if (!found) {
-						AchievementPage stPage = new AchievementPage(ModID.of("apron").id(idTitle));
+						AchievementPage stPage = new AchievementPage(Namespace.of("apron").id(idTitle));
 
 						ModLoader.AddLocalization("stationapi:achievementPage.apron:" + idTitle, page.title);
 

@@ -2,10 +2,8 @@ package io.github.betterthanupdates.apron.stapi.mixin.hmi;
 
 import io.github.betterthanupdates.apron.stapi.hmi.HMITab;
 import net.glasslauncher.hmifabric.tabs.TabCrafting;
-import net.glasslauncher.hmifabric.tabs.TabWithTexture;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeRegistry;
-import net.modificationstation.stationapi.api.registry.ModID;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
@@ -13,16 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(TabCrafting.class)
-public abstract class TabCraftingMixin extends TabWithTexture implements HMITab {
+public abstract class TabCraftingMixin implements HMITab {
 	@Shadow(remap = false)
 	protected List<Object> recipes;
 
 	@Shadow(remap = false)
 	protected List<Object> recipesComplete;
-
-	public TabCraftingMixin(ModID tabCreator, int slotsPerRecipe, String texturePath, int width, int height, int minPaddingX, int minPaddingY, int textureX, int textureY) {
-		super(tabCreator, slotsPerRecipe, texturePath, width, height, minPaddingX, minPaddingY, textureX, textureY);
-	}
 
 	@Override
 	public void apron$updateRecipeList() {

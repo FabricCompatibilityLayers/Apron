@@ -9,8 +9,8 @@ import java.util.Optional;
 import io.github.betterthanupdates.apron.stapi.ApronStAPICompat;
 import net.modificationstation.stationapi.api.client.texture.atlas.AtlasSource;
 import net.modificationstation.stationapi.api.client.texture.atlas.SingleAtlasSource;
-import net.modificationstation.stationapi.api.registry.Identifier;
-import net.modificationstation.stationapi.api.registry.ModID;
+import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.Namespace;
 
 public class ModTexturesRegistry {
 	private final String folderName;
@@ -24,7 +24,7 @@ public class ModTexturesRegistry {
 	}
 
 	public void registerTexture(int id, String texture) {
-		ModID modID = ApronStAPICompat.getModID();
+		Namespace modID = ApronStAPICompat.getModID();
 
 		Identifier identifier = modID.id(this.folderName + "/" + texture.replace("/", "__"));
 

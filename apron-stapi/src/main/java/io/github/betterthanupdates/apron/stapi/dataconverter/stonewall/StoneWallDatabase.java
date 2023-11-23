@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import com.mojang.serialization.Dynamic;
 import net.modificationstation.stationapi.api.nbt.NbtOps;
-import net.modificationstation.stationapi.api.registry.ModID;
+import net.modificationstation.stationapi.api.util.Namespace;
 
 import net.minecraft.util.io.CompoundTag;
 
@@ -12,7 +12,7 @@ import io.github.betterthanupdates.apron.stapi.dataconverter.ModDatabase;
 
 public class StoneWallDatabase extends ModDatabase {
 	public StoneWallDatabase() {
-		super(ModID.of("mod_StoneWall"), ModID.of("stonewall"));
+		super(Namespace.of("mod_StoneWall"), Namespace.of("stonewall"));
 	}
 
 	@Override

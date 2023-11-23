@@ -1,12 +1,12 @@
 package io.github.betterthanupdates.apron.stapi.dataconverter.claysoldier;
 
-import net.modificationstation.stationapi.api.registry.ModID;
+import net.modificationstation.stationapi.api.util.Namespace;
 
 import io.github.betterthanupdates.apron.stapi.dataconverter.ModDatabase;
 
 public class ClaySoldierDatabase extends ModDatabase {
 	public ClaySoldierDatabase() {
-		super(ModID.of("mod_ClayMan"), ModID.of("claysoldiers"));
+		super(Namespace.of("mod_ClayMan"), Namespace.of("claysoldiers"));
 	}
 
 	@Override

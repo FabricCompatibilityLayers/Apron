@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static net.modificationstation.stationapi.impl.level.FlattenedWorldManager.SECTIONS;
 import static net.modificationstation.stationapi.impl.vanillafix.datafixer.VanillaDataFixerImpl.STATION_ID;
+import static net.modificationstation.stationapi.impl.world.FlattenedWorldManager.SECTIONS;
 
 public class BaseSchema extends Schema {
 	public static final DSL.TypeReference BLOCK_NAME = () -> "block_name";
