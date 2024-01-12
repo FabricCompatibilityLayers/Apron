@@ -35,13 +35,9 @@
   "depends": {
     "fabricloader": ">0.14.23",
     "minecraft": "1.0.0-beta.7.3",
-    "mod-remapping-api": ">=1.12.0",
+    "mod-remapping-api": ">=1.18.0",
     "legacy-fabric-logger-api-v1": "*",
-    "com_github_llamalad7_mixinextras": "*"
-  },
-  "recommends": {
-    "modmenu": "^2.0.0",
-    "mojangfix": ">=0.5.1"
+    "com_github_llamalad7_mixinextras": ">=0.2.1"
   },
   "breaks": {
     "station-api-base": [
