@@ -2,9 +2,9 @@
 ## To be released
 
 ### Added
-- Now using MixinExtras
+- Now using MixinExtras `0.2.1+`
 - Compatibility fixes for a lot of mods in vanilla setup
-- Compatibility with StationAPI
+- Compatibility with StationAPI `2.0-alpha.1.1+`
 - Compatibility fixes between StationAPI and ML mods
 ### Changed/Fix
 - Converted most mixins to make use of MixinExtras features
@@ -12,12 +12,11 @@
 - Replaced most @Overwrites to ensure better compatibility with other mods
 - Fix mod count always being 0 in F3 overlay.
 - Fix StackOverflow when player takes damage and StAPI is installed.
-- StAPI Compatibility has been fully redesigned.
 - Fix tons of server side crashes.
 - Hide Mod Options API and GuiAPI when there is nothing to show.
 - Fix bucket use action being triggered twice.
-### Removed
-(None)
+- Update to loader `0.14.24+`
+- Update MRAPI to `1.18.0+`
 
 ### ModLoader mods compatibility changes
 - Aether
