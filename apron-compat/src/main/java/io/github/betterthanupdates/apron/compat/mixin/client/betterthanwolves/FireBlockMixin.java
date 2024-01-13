@@ -3,6 +3,7 @@ package io.github.betterthanupdates.apron.compat.mixin.client.betterthanwolves;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import net.minecraft.FCBlockBBQ;
 import net.minecraft.block.Block;
 import net.minecraft.block.FireBlock;
@@ -13,9 +14,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Random;
@@ -24,31 +23,21 @@ import io.github.betterthanupdates.apron.compat.betterthanwolves.BTWFireBlock;
 
 @Mixin(FireBlock.class)
 public class FireBlockMixin implements BTWFireBlock {
-	@ModifyConstant(method = "<init>", constant = @Constant(intValue = 256, ordinal = 0))
-	private int btw$changeTo1024_1(int constant) {
-		return 1024;
-	}
-
-	@ModifyConstant(method = "<init>", constant = @Constant(intValue = 256, ordinal = 1))
-	private int btw$changeTo1024_2(int constant) {
-		return 1024;
-	}
-
 	@ModifyReturnValue(method = "getRenderType", at = @At("RETURN"))
 	private int btw$getRenderType(int original) {
 		return mod_FCBetterThanWolves.iCustomFireRenderID;
 	}
 
 	@Inject(method = "onScheduledTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/FireBlock;canPlaceAt(Lnet/minecraft/world/World;III)Z", shift = At.Shift.BY, by = 3), cancellable = true)
-	private void addBTWFireCheck(World arg, int i, int j, int k, Random random, CallbackInfo callbackInfo, @Local(ordinal = 3) int var6) {
+	private void addBTWFireCheck(World arg, int i, int j, int k, Random random, CallbackInfo callbackInfo, @Local(ordinal = 3) LocalIntRef var6) {
 		if(arg.getBlockId(i, j - 1, k) == mod_FCBetterThanWolves.fcBBQ.id) {
 			if(!((FCBlockBBQ)mod_FCBetterThanWolves.fcBBQ).IsBBQLit(arg, i, j - 1, k)) {
 				arg.setBlock(i, j, k, 0);
 				callbackInfo.cancel();
 			}
-			var6 = 1;
+			var6.set(1);
 		} else if(arg.getBlockId(i, j - 1, k) == mod_FCBetterThanWolves.fcStokedFire.id) {
-			var6 = 1;
+			var6.set(1);
 		}
 	}
 

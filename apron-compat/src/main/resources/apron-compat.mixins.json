@@ -39,6 +39,7 @@
     "client.betterthanwolves.SugarCaneBlockMixin",
     "client.betterthanwolves.TallGrassBlockMixin",
     "client.betterthanwolves.WolfEntityMixin",
+    "client.betterthanwolves.nostation.FireBlockMixin",
     "client.concrete.ConcreteMixin",
     "client.eqex.BlockAggregatorMixin",
     "client.eqex.BlockAlchestMixin",
