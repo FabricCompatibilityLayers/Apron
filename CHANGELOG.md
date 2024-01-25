@@ -1,5 +1,5 @@
 # Changelogs
-## To be released
+## 2.0.0
 
 ### Added
 - Now using MixinExtras `0.2.1+`
