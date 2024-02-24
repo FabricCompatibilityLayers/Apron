@@ -104,11 +104,11 @@ public class ModLoader {
 	static final ApronApi APRON = ApronApi.getInstance();
 
 	@Environment(EnvType.CLIENT)
-	private static final List<TextureBinder> ANIM_LIST = new LinkedList<>();
+	private static List<TextureBinder> ANIM_LIST;
 	@Environment(EnvType.CLIENT)
-	private static final Map<Integer, BaseMod> BLOCK_MODELS = new HashMap<>();
+	private static Map<Integer, BaseMod> BLOCK_MODELS;
 	@Environment(EnvType.CLIENT)
-	private static final Map<Integer, Boolean> BLOCK_SPECIAL_INV = new HashMap<>();
+	private static Map<Integer, Boolean> BLOCK_SPECIAL_INV;
 	private static final File CONFIG_DIR = FabricLoader.getInstance().getConfigDir().toFile();
 	private static final File CONFIG_FILE = new File(CONFIG_DIR, "ModLoader.cfg");
 	public static Level cfgLoggingLevel = Level.FINER;
@@ -118,11 +118,11 @@ public class ModLoader {
 	private static int highestEntityId = 3000;
 	private static final Map<BaseMod, Boolean> inGameHooks = new HashMap<>();
 	@Environment(EnvType.CLIENT)
-	private static final Map<BaseMod, Boolean> inGUIHooks = new HashMap<>();
+	private static Map<BaseMod, Boolean> inGUIHooks;
 	private static int itemSpriteIndex = 0;
 	private static int itemSpritesLeft = 0;
 	@Environment(EnvType.CLIENT)
-	private static final Map<BaseMod, Map<KeyBinding, boolean[]>> keyList = new HashMap<>();
+	private static Map<BaseMod, Map<KeyBinding, boolean[]>> keyList;
 	private static final File LOG_FILE = new File(FabricLoader.getInstance().getGameDir().toFile(), "ModLoader.txt");
 	private static final java.util.logging.Logger MOD_LOGGER = java.util.logging.Logger.getLogger("ModLoader");
 	public static final Logger LOGGER = Apron.getLogger("ModLoader");
@@ -134,12 +134,24 @@ public class ModLoader {
 	private static int terrainSpriteIndex = 0;
 	private static int terrainSpritesLeft = 0;
 	@Environment(EnvType.CLIENT)
-	private static String texPack = null;
+	private static String texPack;
 	@Environment(EnvType.CLIENT)
-	private static boolean texturesAdded = false;
+	private static boolean texturesAdded;
 	private static final boolean[] USED_ITEM_SPRITES = new boolean[256];
 	private static final boolean[] USED_TERRAIN_SPRITES = new boolean[256];
 	public static final String VERSION = APRON.getModLoaderVersion();
+
+	static {
+		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+			ANIM_LIST = new LinkedList<>();
+			BLOCK_MODELS = new HashMap<>();
+			BLOCK_SPECIAL_INV = new HashMap<>();
+			inGUIHooks = new HashMap<>();
+			keyList = new HashMap<>();
+			texPack = null;
+			texturesAdded = false;
+		}
+	}
 
 	/**
 	 * Used to give your achievement a readable name and description.

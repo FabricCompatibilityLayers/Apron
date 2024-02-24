@@ -9,6 +9,7 @@ import java.util.Map;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.PacketHandler;
 import net.minecraft.packet.AbstractPacket;
 import net.minecraft.server.entity.player.ServerPlayerEntity;
@@ -28,7 +29,13 @@ public class ModLoaderPacket extends AbstractPacket {
 	public float[] dataFloat = new float[0];
 	public String[] dataString = new String[0];
 	@Environment(EnvType.SERVER)
-	private static final Map<PacketHandler, ServerPlayerEntity> playerMap = new HashMap<>();
+	private static Map<PacketHandler, ServerPlayerEntity> playerMap;
+
+	static {
+		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+			playerMap = new HashMap<>();
+		}
+	}
 
 	public ModLoaderPacket() {
 	}

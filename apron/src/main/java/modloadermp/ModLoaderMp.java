@@ -15,6 +15,7 @@ import modloader.BaseMod;
 import modloader.ModLoader;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.Minecraft;
@@ -46,17 +47,29 @@ public class ModLoaderMp {
 	public static final String VERSION = APRON.getModLoaderMPVersion();
 	private static boolean hasInit = false;
 	@Environment(EnvType.CLIENT)
-	private static boolean packet230Received = false;
+	private static boolean packet230Received;
 	@Environment(EnvType.CLIENT)
-	private static final Map<Integer, NetClientHandlerEntity> NET_CLIENT_HANDLER_MAP = new HashMap<>();
+	private static Map<Integer, NetClientHandlerEntity> NET_CLIENT_HANDLER_MAP;
 	@Environment(EnvType.CLIENT)
-	private static final Map<Integer, BaseModMp> GUI_MOD_MAP = new HashMap<>();
+	private static Map<Integer, BaseModMp> GUI_MOD_MAP;
 	@Environment(EnvType.SERVER)
-	private static final Map<Class<? extends Entity>, AbstractMap.SimpleEntry<Integer, Integer>> entityTrackerMap = new HashMap<>();
+	private static Map<Class<? extends Entity>, AbstractMap.SimpleEntry<Integer, Integer>> entityTrackerMap;
 	@Environment(EnvType.SERVER)
-	private static final Map<Class<? extends Entity>, EntityTrackerEntry> entityTrackerEntryMap = new HashMap<>();
+	private static Map<Class<? extends Entity>, EntityTrackerEntry> entityTrackerEntryMap;
 	@Environment(EnvType.SERVER)
-	private static final List<String> bannedMods = new ArrayList<>();
+	private static List<String> bannedMods;
+
+	static {
+		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+			packet230Received = false;
+			NET_CLIENT_HANDLER_MAP = new HashMap<>();
+			GUI_MOD_MAP = new HashMap<>();
+		} else {
+			entityTrackerMap = new HashMap<>();
+			entityTrackerEntryMap = new HashMap<>();
+			bannedMods = new ArrayList<>();
+		}
+	}
 
 	@Environment(EnvType.CLIENT)
 	public static void Init() {
