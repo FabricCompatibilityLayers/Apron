@@ -1,4 +1,8 @@
 # Changelogs
+## 2.0.1
+- Fix crash on startup when using loader 0.15+
+- Fix textures in non StAPI environment
+
 ## 2.0.0
 
 ### Added
