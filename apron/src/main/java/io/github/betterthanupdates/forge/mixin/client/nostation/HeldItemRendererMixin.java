@@ -1,4 +1,4 @@
-package io.github.betterthanupdates.forge.mixin.client;
+package io.github.betterthanupdates.forge.mixin.client.nostation;
 
 import forge.ForgeHooksClient;
 import forge.ICustomItemRenderer;
