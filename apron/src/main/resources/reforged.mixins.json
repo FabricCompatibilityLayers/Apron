@@ -12,6 +12,7 @@
   "client": [
     "client.nostation.GameRendererMixin",
     "client.MultiplayerInteractionManagerMixin",
+    "client.RenderWorldLastMixin",
     "client.SingleplayerInteractionManagerMixin"
   ],
   "plugin": "io.github.betterthanupdates.apron.ApronMixinPlugin",
