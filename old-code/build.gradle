@@ -1,0 +1,216 @@
+//file:noinspection GradlePackageVersionRange
+plugins {
+	id "java-library"
+	id "fabric-loom" version "1.9-SNAPSHOT" apply false
+	id "babric-loom-extension" version "1.9-SNAPSHOT" apply false
+	id "maven-publish"
+}
+
+def ENV = System.getenv()
+
+def moduleDependencies(project, List<String> depNames) {
+	def deps = depNames.iterator().collect { project.dependencies.project(path: ":$it", configuration: 'namedElements') }
+
+	project.dependencies {
+		deps.each {
+			api it
+		}
+	}
+}
+
+allprojects {
+	apply plugin: "maven-publish"
+	apply plugin: "java-library"
+	apply plugin: "fabric-loom"
+	apply plugin: "babric-loom-extension"
+
+	version = project.mod_version
+	group = project.maven_group
+
+	repositories {
+		mavenCentral()
+		maven {
+			name 'Babric'
+			url 'https://maven.glass-launcher.net/babric'
+			content {
+				includeGroup 'babric'
+				includeGroup 'org.lwjgl.lwjgl'
+			}
+		}
+		maven {
+			name 'Legacy Fabric'
+			url "https://repo.legacyfabric.net/repository/legacyfabric/"
+			content {
+				includeGroup 'net.legacyfabric'
+				includeGroup 'net.legacyfabric.legacy-fabric-api'
+			}
+		}
+		// Used for StationAPI and HowManyItems.
+		maven {
+			name = 'Glass Snapshots'
+			url = 'https://maven.glass-launcher.net/snapshots'
+		}
+		maven {
+			name = 'Froge'
+			url 'https://maven.minecraftforge.net/'
+		}
+		// Used for mappings.
+		maven {
+			name = 'Glass Releases'
+			url = 'https://maven.glass-launcher.net/releases'
+		}
+
+		maven {
+			name 'Modrinth'
+			url 'https://api.modrinth.com/maven'
+			content {
+				includeGroup 'maven.modrinth'
+			}
+		}
+		maven { url = "https://maven.bawnorton.com/releases" }
+		maven {
+			name 'JitPack'
+			url 'https://jitpack.io'
+		}
+
+		flatDir {
+			dirs rootProject.rootDir.toString() + "/remapped/client"
+			dirs rootProject.rootDir.toString() + "/remapped/server"
+			dirs rootProject.rootDir.toString() + "/libs"
+		}
+	}
+
+	loom {
+		enableTransitiveAccessWideners = true
+	}
+
+	dependencies {
+		minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+		mappings loom.layered {
+			it.mappings "net.glasslauncher:biny:${rootProject.mappings}:v2"
+			it.mappings file("${rootProject.projectDir}/mappings/mod-mappings.tiny")
+		}
+		modApi "net.fabricmc:fabric-loader:${rootProject.loader_version}"
+
+		modApi("net.legacyfabric.legacy-fabric-api:legacy-fabric-logger-api-v1:${rootProject.lfapi_version}")
+
+		// Done
+	//	modRuntimeOnly(group: "remapped.client", name: "modloader", version: "b1.7.3")
+	//	modRuntimeOnly(group: "remapped.client", name: "modloadermp-1.7.3-unofficial", version: "v2")
+//		modRuntimeOnly(group: "remapped.server", name: "modloadermp-1.7.3-unofficial-server", version: "v2")
+	//	modRuntimeOnly(group: "remapped.client", name: "reforged-client", version: "1.0.1")
+	//	modRuntimeOnly(group: "remapped.client", name: "audiomod", version: "b1.7.3")
+//		modRuntimeOnly(group: "remapped.client", name: "shockahpi", version: "r5.1")
+	//	modRuntimeOnly(group: "remapped.client", name: "playerapi-1.7.3", version: "v1.7")
+	//	modRuntimeOnly(group: "remapped.client", name: "itemspriteapi", version: "v1.2")
+	// 	modRuntimeOnly(group: "remapped.client", name: "guiapi0.11.0", version: "1.7")
+	//	modRuntimeOnly(group: "remapped.client", name: "modoptionsapi", version: "v0.7")
+//		modRuntimeOnly(group: "remapped.client", name: "reforgedsapi-client")
+//		modRuntimeOnly(group: "remapped.server", name: "minecraftforge-server", version: "1.0.7-20110907")
+		// Todo
+//		implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-fabric:${project.mixin_extras_version}"))
+		implementation("com.github.thecatcore.CursedMixinExtensions:fabric:1.0.0")
+		implementation("com.github.thecatcore:WFVAIO:1.1.0")
+		implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:0.2.0"))
+	}
+
+	processResources {
+		inputs.property "version", project.version
+
+		filesMatching("fabric.mod.json") {
+			expand "version": project.version
+		}
+	}
+
+	tasks.withType(JavaCompile).configureEach {
+		it.options.encoding = "UTF-8"
+		it.options.release = 8
+		sourceCompatibility = JavaVersion.VERSION_1_8
+		targetCompatibility = JavaVersion.VERSION_1_8
+	}
+
+	java {
+		// Must be added before the split source sets are setup.
+		withSourcesJar()
+	}
+
+	tasks.withType(JavaCompile) {
+		options.deprecation = true
+	}
+}
+
+base {
+	archivesName = project.archives_base_name
+}
+
+dependencies {
+	afterEvaluate {
+		subprojects.each {
+			api project(path: "${it.path}", configuration: "namedElements")
+		}
+	}
+
+//	implementation "org.slf4j:slf4j-api:1.8.0-beta4"
+//	implementation 'org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2'
+//
+//	modRuntimeOnly "net.modificationstation:StationAPI:${project.stapi_version}"
+//
+//	// Optional, but convenient mods for mod creators and users alike.
+//	modRuntimeOnly("com.github.calmilamsy:ModMenu:${project.modmenu_version}") {
+//		transitive false
+//	}
+//	modRuntimeOnly("net.glasslauncher.mods:GlassConfigAPI:${project.gcapi_version}") {
+//		transitive false
+//	}
+//	modRuntimeOnly("net.glasslauncher:HowManyItems-Fabric-Unofficial:${project.howmanyitems_version}") {
+//		transitive false
+//	}
+//	modRuntimeOnly ("com.github.paulevsGitch:BHCreative:${project.bhcreative_version}") {
+//		transitive false
+//	}
+}
+
+subprojects {
+	dependencies {
+		if (project.name != "apron") {
+			api(project.dependencies.project(path: ":apron", configuration: 'namedElements'))
+		}
+	}
+
+	javadoc.enabled = false
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${base.archivesName.get()}" }
+	}
+	from("FORGE_LICENSE")
+	from("PAULSCODE_LICENSE")
+
+	from("./original/client") { into("libs") }
+	from("./original/server") { into("libs") }
+}
+
+remapJar {
+	afterEvaluate {
+		subprojects.each {
+			// Include the jar from the sub project.
+			nestedJars.from project("${it.path}").tasks.getByName("remapJar")
+		}
+	}
+}
+
+// configure the maven publication
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+
+	// select the repositories you want to publish to
+	repositories {
+		// uncomment to publish to the local maven
+		// mavenLocal()
+	}
+}
