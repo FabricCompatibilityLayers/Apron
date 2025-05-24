@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "modloader",
+  "version": "${version}",
+  "name": "ModLoader",
+  "description": "",
+  "authors": [
+    {
+      "name": "CatCore"
+    }
+  ],
+  "contributors": [],
+  "contact": {
+    "sources": "https://github.com/FabricCompatibilityLayers/Apron",
+    "issues": "https://github.com/FabricCompatibilityLayers/Apron/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/apron/icon.png",
+  "environment": "*",
+  "entrypoints": {},
+  "mixins": [
+    "modloader.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.10"
+  },
+  "accessWidener": "modloader.accesswidener"
+}

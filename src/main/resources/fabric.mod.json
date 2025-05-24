@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "apron",
+  "version": "${version}",
+  "name": "Apron",
+  "description": "A compatibility layer for legacy API mods.",
+  "authors": [
+    {
+      "name": "Better Than Updates"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "CatCore"
+    },
+    "VendoAU",
+    "FishiaT",
+    "AmazigJj"
+  ],
+  "contact": {
+    "sources": "https://github.com/FabricCompatibilityLayers/Apron",
+    "issues": "https://github.com/FabricCompatibilityLayers/Apron/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/apron/icon.png",
+  "environment": "*",
+  "entrypoints": {},
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">0.16.0",
+    "minecraft": "1.0.0-beta.7.3",
+    "mod-remapping-api": ">=1.22.1",
+    "legacy-fabric-logger-api-v1": "*"
+  },
+  "breaks": {
+    "station-api-base": [
+      "2.0-PRE2-1.0.0",
+      "<2.0.0-alpha.3"
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "required": true,
+  "package": "io.github.fabriccompatibilitylayers.modloader.mixin",
+  "plugin": "io.github.fabriccompatibilitylayers.modloader.ModLoaderMixinPlugin",
+  "compatibilityLevel": "JAVA_8",
+  "mixinextras": {
+    "minVersion": "0.5.0-rc.2"
+  },
+  "server": [
+  ],
+  "mixins": [
+    "client.modloader.AchievementAccessor",
+    "client.modloader.BlockRenderManagerAccessor",
+    "client.modloader.BlockRenderManagerMixin",
+    "client.modloader.ChunkCacheMixin",
+    "client.modloader.CraftingRecipeManagerAccessor",
+    "client.modloader.CraftingResultSlotMixin",
+    "client.modloader.CrashReportPanelMixin",
+    "client.modloader.DispenserBlockMixin",
+    "client.modloader.EntityRegistryAccessor",
+    "client.modloader.EntityRenderDispatcherMixin",
+    "client.modloader.FurnaceBlockEntityMixin",
+    "client.modloader.FurnaceOutputSlotMixin",
+    "client.modloader.ItemEntityMixin",
+    "client.modloader.StatAccessor",
+    "client.modloader.StatsAccessor",
+    "client.modloader.TranslationStorageAccessor"
+  ],
+  "client": [
+    "client.modloader.MinecraftAccessor",
+    "client.modloader.TextureManagerAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
