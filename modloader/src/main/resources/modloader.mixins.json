@@ -24,11 +24,14 @@
     "client.modloader.ItemEntityMixin",
     "client.modloader.StatAccessor",
     "client.modloader.StatsAccessor",
-    "client.modloader.TranslationStorageAccessor"
+    "client.modloader.TranslationStorageAccessor",
+    "client.modloadermp.ClientNetworkHandlerMixin",
+    "client.modloadermp.PacketAccessor"
   ],
   "client": [
     "client.modloader.MinecraftAccessor",
-    "client.modloader.TextureManagerAccessor"
+    "client.modloader.TextureManagerAccessor",
+    "client.modloadermp.DisconnectedScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
