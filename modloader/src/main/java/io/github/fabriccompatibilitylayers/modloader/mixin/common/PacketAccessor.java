@@ -1,4 +1,4 @@
-package io.github.fabriccompatibilitylayers.modloader.mixin.client.modloadermp;
+package io.github.fabriccompatibilitylayers.modloader.mixin.common;
 
 import net.minecraft.network.packet.Packet;
 import org.spongepowered.asm.mixin.Mixin;

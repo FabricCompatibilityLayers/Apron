@@ -1,11 +1,19 @@
 package modloadermp;
 
+import io.github.fabriccompatibilitylayers.modloader.ApronModLoader;
+import io.github.fabriccompatibilitylayers.modloader.mixin.server.ServerPlayNetworkHandlerAccessor;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.NetworkHandler;
 import net.minecraft.network.packet.Packet;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Packet230ModLoader extends Packet {
 	private static final int MAX_DATA_LENGTH = 65535;
@@ -14,6 +22,14 @@ public class Packet230ModLoader extends Packet {
 	public int[] dataInt = new int[0];
 	public float[] dataFloat = new float[0];
 	public String[] dataString = new String[0];
+	@Environment(EnvType.SERVER)
+	private static Map playerMap;
+
+	static {
+		if (!ApronModLoader.IS_CLIENT) {
+			playerMap = new HashMap();
+		}
+	}
 
 	public void read(DataInputStream datainputstream) {
 		try {
@@ -117,7 +133,17 @@ public class Packet230ModLoader extends Packet {
 	}
 
 	public void apply(NetworkHandler nethandler) {
-		ModLoaderMp.HandleAllPackets(this);
+		if (ApronModLoader.IS_CLIENT) ModLoaderMp.HandleAllPackets(this);
+		else {
+			ServerPlayerEntity entityplayermp = null;
+			if (playerMap.containsKey(nethandler)) {
+				entityplayermp = (ServerPlayerEntity)playerMap.get(nethandler);
+			} else if (nethandler instanceof ServerPlayNetworkHandler) {
+				entityplayermp = ((ServerPlayNetworkHandlerAccessor) nethandler).getPlayer();
+			}
+
+			ModLoaderMp.HandleAllPackets(this, entityplayermp);
+		}
 	}
 
 	public int size() {

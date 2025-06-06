@@ -7,31 +7,41 @@
     "minVersion": "0.5.0-rc.2"
   },
   "server": [
+    "server.EntityTrackerEntryMixin",
+    "server.EntityTrackerMixin",
+    "server.MinecraftServerMixin",
+    "server.ServerChunkCacheMixin",
+    "server.ServerCommandHandlerMixin",
+    "server.ServerLoginNetworkHandlerMixin",
+    "server.ServerPlayerEntityAccessor",
+    "server.ServerPlayNetworkHandlerAccessor"
   ],
   "mixins": [
-    "client.modloader.AchievementAccessor",
+    "common.AchievementAccessor",
+    "common.CraftingRecipeManagerAccessor",
+    "common.CraftingResultSlotMixin",
+    "common.DispenserBlockMixin",
+    "common.EntityRegistryAccessor",
+    "common.FurnaceBlockEntityMixin",
+    "common.FurnaceOutputSlotMixin",
+    "common.PacketAccessor",
+    "common.StatAccessor",
+    "common.StatsAccessor"
+  ],
+  "client": [
     "client.modloader.BlockRenderManagerAccessor",
     "client.modloader.BlockRenderManagerMixin",
     "client.modloader.ChunkCacheMixin",
-    "client.modloader.CraftingRecipeManagerAccessor",
-    "client.modloader.CraftingResultSlotMixin",
     "client.modloader.CrashReportPanelMixin",
-    "client.modloader.DispenserBlockMixin",
-    "client.modloader.EntityRegistryAccessor",
     "client.modloader.EntityRenderDispatcherMixin",
     "client.modloader.FurnaceBlockEntityMixin",
-    "client.modloader.FurnaceOutputSlotMixin",
     "client.modloader.ItemEntityMixin",
-    "client.modloader.StatAccessor",
-    "client.modloader.StatsAccessor",
-    "client.modloader.TranslationStorageAccessor",
-    "client.modloadermp.ClientNetworkHandlerMixin",
-    "client.modloadermp.PacketAccessor"
-  ],
-  "client": [
     "client.modloader.MinecraftAccessor",
     "client.modloader.TextureManagerAccessor",
-    "client.modloadermp.DisconnectedScreenMixin"
+    "client.modloader.TranslationStorageAccessor",
+    "client.modloadermp.ClientNetworkHandlerMixin",
+    "client.modloadermp.DisconnectedScreenMixin",
+    "client.modloadermp.MultiplayerScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -7,12 +7,15 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import modloader.ModLoader;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.entity.FurnaceBlockEntity;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
+@Environment(EnvType.CLIENT)
 @Mixin(FurnaceBlockEntity.class)
 public class FurnaceBlockEntityMixin {
 	@Shadow
@@ -35,15 +38,5 @@ public class FurnaceBlockEntityMixin {
 	private void modloader$FixItemCount(ItemStack instance, int value, Operation<Void> original,
 										@Local ItemStack localiz) {
 		original.call(instance, instance.count + localiz.count);
-	}
-
-	@ModifyReturnValue(method = "getFuelTime", at = @At(value = "RETURN", ordinal = 6))
-	private int modloader$AddAllFuel(int original,
-									 @Local int j) {
-		if (original == 0) {
-			return ModLoader.AddAllFuel(j);
-		}
-
-		return original;
 	}
 }

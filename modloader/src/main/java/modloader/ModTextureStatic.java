@@ -1,5 +1,7 @@
 package modloader;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.texture.DynamicTexture;
 import org.lwjgl.opengl.GL11;
 
@@ -7,6 +9,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 
+@Environment(EnvType.CLIENT)
 public class ModTextureStatic extends DynamicTexture {
 	private boolean oldanaglyph;
 	private int[] pixels;

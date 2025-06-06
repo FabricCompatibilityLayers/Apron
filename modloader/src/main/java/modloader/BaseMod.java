@@ -1,5 +1,7 @@
 package modloader;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -9,6 +11,7 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
@@ -20,6 +23,7 @@ public abstract class BaseMod {
 		return 0;
 	}
 
+	@Environment(EnvType.CLIENT)
 	public void AddRenderer(Map<Class<? extends Entity>, EntityRenderer> renderers) {
 	}
 
@@ -33,26 +37,36 @@ public abstract class BaseMod {
 	public void GenerateSurface(World world, Random random, int chunkX, int chunkZ) {
 	}
 
+	@Environment(EnvType.CLIENT)
 	public void KeyboardEvent(KeyBinding event) {
+	}
+
+	@Environment(EnvType.SERVER)
+	public void OnTickInGame(MinecraftServer minecraftserver) {
 	}
 
 	public void ModsLoaded() {
 	}
 
+	@Environment(EnvType.CLIENT)
 	public boolean OnTickInGame(Minecraft game) {
 		return false;
 	}
 
+	@Environment(EnvType.CLIENT)
 	public boolean OnTickInGUI(Minecraft game, Screen gui) {
 		return false;
 	}
 
+	@Environment(EnvType.CLIENT)
 	public void RegisterAnimation(Minecraft game) {
 	}
 
+	@Environment(EnvType.CLIENT)
 	public void RenderInvBlock(BlockRenderManager renderer, Block block, int metadata, int modelID) {
 	}
 
+	@Environment(EnvType.CLIENT)
 	public boolean RenderWorldBlock(BlockRenderManager renderer, BlockView world, int x, int y, int z, Block block, int modelID) {
 		return false;
 	}

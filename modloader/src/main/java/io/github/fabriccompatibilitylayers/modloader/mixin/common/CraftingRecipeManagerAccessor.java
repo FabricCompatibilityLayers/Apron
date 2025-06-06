@@ -1,4 +1,4 @@
-package io.github.fabriccompatibilitylayers.modloader.mixin.client.modloader;
+package io.github.fabriccompatibilitylayers.modloader.mixin.common;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.CraftingRecipeManager;

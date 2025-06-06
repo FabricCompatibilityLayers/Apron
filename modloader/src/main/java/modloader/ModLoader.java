@@ -7,9 +7,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,15 +28,19 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import javax.imageio.ImageIO;
 
-import io.github.fabriccompatibilitylayers.modloader.mixin.client.modloader.AchievementAccessor;
+import io.github.fabriccompatibilitylayers.modloader.ApronModLoader;
+import io.github.fabriccompatibilitylayers.modloader.mixin.common.AchievementAccessor;
 import io.github.fabriccompatibilitylayers.modloader.mixin.client.modloader.BlockRenderManagerAccessor;
-import io.github.fabriccompatibilitylayers.modloader.mixin.client.modloader.CraftingRecipeManagerAccessor;
-import io.github.fabriccompatibilitylayers.modloader.mixin.client.modloader.EntityRegistryAccessor;
+import io.github.fabriccompatibilitylayers.modloader.mixin.common.CraftingRecipeManagerAccessor;
+import io.github.fabriccompatibilitylayers.modloader.mixin.common.EntityRegistryAccessor;
 import io.github.fabriccompatibilitylayers.modloader.mixin.client.modloader.MinecraftAccessor;
-import io.github.fabriccompatibilitylayers.modloader.mixin.client.modloader.StatAccessor;
-import io.github.fabriccompatibilitylayers.modloader.mixin.client.modloader.StatsAccessor;
+import io.github.fabriccompatibilitylayers.modloader.mixin.common.StatAccessor;
+import io.github.fabriccompatibilitylayers.modloader.mixin.common.StatsAccessor;
 import io.github.fabriccompatibilitylayers.modloader.mixin.client.modloader.TextureManagerAccessor;
 import io.github.fabriccompatibilitylayers.modloader.mixin.client.modloader.TranslationStorageAccessor;
+import io.github.fabriccompatibilitylayers.modloader.mixin.server.ServerPlayerEntityAccessor;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.achievement.Achievement;
 import net.minecraft.block.Block;
@@ -53,6 +54,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.texture.DynamicTexture;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.Session;
@@ -61,12 +63,17 @@ import net.minecraft.entity.EntityRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.s2c.play.OpenScreenS2CPacket;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.CraftingRecipeManager;
 import net.minecraft.recipe.SmeltingRecipeManager;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.stat.ItemOrBlockStat;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.crash.CrashReport;
@@ -77,15 +84,21 @@ import net.minecraft.world.biome.EntitySpawnGroup;
 import net.minecraft.world.biome.HellBiome;
 import net.minecraft.world.biome.SkyBiome;
 import net.minecraft.world.chunk.ChunkSource;
+import net.minecraft.world.gen.chunk.NetherChunkGenerator;
+import net.minecraft.world.gen.chunk.OverworldChunkGenerator;
 import org.lwjgl.input.Keyboard;
 
 public final class ModLoader {
-	private static final List<DynamicTexture> animList = new LinkedList<>();
-	private static final Map<Integer, BaseMod> blockModels = new HashMap<>();
-	private static final Map<Integer, Boolean> blockSpecialInv = new HashMap<>();
+	@Environment(EnvType.CLIENT)
+	private static List<DynamicTexture> animList;
+	@Environment(EnvType.CLIENT)
+	private static Map<Integer, BaseMod> blockModels;
+	@Environment(EnvType.CLIENT)
+	private static Map<Integer, Boolean> blockSpecialInv;
 	private static final File cfgdir = FabricLoader.getInstance().getConfigDir().toFile();
 	private static final File cfgfile;
 	public static Level cfgLoggingLevel;
+	@Environment(EnvType.CLIENT)
 	private static Map<String, Class<? extends Entity>> classMap;
 	private static long clock;
 	public static final boolean DEBUG = false;
@@ -93,12 +106,17 @@ public final class ModLoader {
 	private static boolean hasInit;
 	private static int highestEntityId;
 	private static final Map<BaseMod, Boolean> inGameHooks;
-	private static final Map<BaseMod, Boolean> inGUIHooks;
-	private static Minecraft instance;
+	@Environment(EnvType.CLIENT)
+	private static Map<BaseMod, Boolean> inGUIHooks;
+	@Environment(EnvType.CLIENT)
+	private static Minecraft clientInstance;
+	@Environment(EnvType.SERVER)
+	private static MinecraftServer serverInstance;
 	private static int itemSpriteIndex;
 	private static int itemSpritesLeft;
-	private static final Map<BaseMod, Map<KeyBinding, boolean[]>> keyList;
-	private static final File logfile;
+	@Environment(EnvType.CLIENT)
+	private static Map<BaseMod, Map<KeyBinding, boolean[]>> keyList;
+	private static File logfile;
 	private static final Logger logger;
 	private static FileHandler logHandler;
 	private static final File modDir;
@@ -109,52 +127,67 @@ public final class ModLoader {
 	private static Biome[] standardBiomes;
 	private static int terrainSpriteIndex;
 	private static int terrainSpritesLeft;
+	@Environment(EnvType.CLIENT)
 	private static String texPack;
+	@Environment(EnvType.CLIENT)
 	private static boolean texturesAdded;
 	private static final boolean[] usedItemSprites;
 	private static final boolean[] usedTerrainSprites;
-	public static final String VERSION = "ModLoader Beta 1.7.3";
+	public static final String VERSION;
 
 	static {
 		cfgfile = new File(cfgdir, "ModLoader.cfg");
 		cfgLoggingLevel = Level.FINER;
-		classMap = null;
 		clock = 0L;
 		field_modifiers = null;
 		hasInit = false;
 		highestEntityId = 3000;
 		inGameHooks = new HashMap<>();
-		inGUIHooks = new HashMap<>();
-		instance = null;
 		itemSpriteIndex = 0;
 		itemSpritesLeft = 0;
-		keyList = new HashMap<>();
-		logfile = FabricLoader.getInstance().getGameDir().resolve("ModLoader.txt").toFile();
 		logger = Logger.getLogger("ModLoader");
 		logHandler = null;
-		modDir = new File(Minecraft.getRunDirectory(), "/mods/");
+		logfile = FabricLoader.getInstance().getGameDir().resolve("ModLoader.txt").toFile();
+		modDir = FabricLoader.getInstance().getGameDir().resolve("mods").toFile();
 		modList = new LinkedList<>();
 		nextBlockModelID = 1000;
 		overrides = new HashMap<>();
 		props = new Properties();
 		terrainSpriteIndex = 0;
 		terrainSpritesLeft = 0;
-		texPack = null;
-		texturesAdded = false;
 		usedItemSprites = new boolean[256];
 		usedTerrainSprites = new boolean[256];
+
+		if (ApronModLoader.IS_CLIENT) {
+			VERSION = "ModLoader Beta 1.7.3";
+			animList = new LinkedList<>();
+			blockModels = new HashMap<>();
+			blockSpecialInv = new HashMap<>();
+			classMap = null;
+			inGUIHooks = new HashMap<>();
+			clientInstance = null;
+			keyList = new HashMap<>();
+			texPack = null;
+			texturesAdded = false;
+		} else {
+			VERSION = "ModLoader Server Beta 1.6.6v4";
+		}
 	}
 
 	public static void AddAchievementDesc(Achievement achievement, String name, String description) {
 		try {
 			if (achievement.stringId.contains(".")) {
 				String[] split = achievement.stringId.split("\\.");
-				if (split.length == 2) {
+				if (split.length == 2 || !ApronModLoader.IS_CLIENT) {
 					String key = split[1];
-					AddLocalization("achievement." + key, name);
-					AddLocalization("achievement." + key + ".desc", description);
-					((StatAccessor) achievement).setStringId(TranslationStorage.getInstance().get("achievement." + key));
-					((AchievementAccessor) achievement).setTranslationKey(TranslationStorage.getInstance().get("achievement." + key + ".desc"));
+
+					if (ApronModLoader.IS_CLIENT) {
+						AddLocalization("achievement." + key, name);
+						AddLocalization("achievement." + key + ".desc", description);
+					}
+
+					((StatAccessor) achievement).setStringId(translate("achievement." + key));
+					((AchievementAccessor) achievement).setTranslationKey(translate("achievement." + key + ".desc"));
 				} else {
 					((StatAccessor) achievement).setStringId(name);
 					((AchievementAccessor) achievement).setTranslationKey(description);
@@ -183,6 +216,7 @@ public final class ModLoader {
 		return result;
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static void AddAllRenderers(Map<Class<? extends Entity>, EntityRenderer> o) {
 		if (!hasInit) {
 			init();
@@ -194,6 +228,7 @@ public final class ModLoader {
 		}
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static void addAnimation(DynamicTexture anim) {
 		logger.finest("Adding animation " + anim.toString());
 
@@ -208,6 +243,8 @@ public final class ModLoader {
 	}
 
 	public static int AddArmor(String armor) {
+		if (!ApronModLoader.IS_CLIENT) return -1;
+
 		try {
 			List<String> existingArmorList = Arrays.asList(PlayerEntityRenderer.armorTextureNames);
 			List<String> combinedList = new ArrayList<>(existingArmorList);
@@ -226,6 +263,7 @@ public final class ModLoader {
 		return -1;
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static void AddLocalization(String key, String value) {
 		((TranslationStorageAccessor) TranslationStorage.getInstance())
 				.getTranslations()
@@ -254,6 +292,7 @@ public final class ModLoader {
 				modList.add(mod);
 				logger.fine("Mod Loaded: \"" + mod + "\" from " + filename);
 				System.out.println("Mod Loaded: " + mod);
+				if (!ApronModLoader.IS_CLIENT) MinecraftServer.LOGGER.info("Mod Loaded: " + mod);
 			}
 		} catch (Throwable e) {
 			logger.fine("Failed to load mod from \"" + filename + "\"");
@@ -264,6 +303,7 @@ public final class ModLoader {
 
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static void AddName(Object instance, String name) {
 		String tag = null;
 		if (instance instanceof Item) {
@@ -408,12 +448,18 @@ public final class ModLoader {
 		return logger;
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static Minecraft getMinecraftInstance() {
-		if (instance == null) {
-			instance = (Minecraft) FabricLoader.getInstance().getGameInstance();
+		if (clientInstance == null) {
+			clientInstance = (Minecraft) FabricLoader.getInstance().getGameInstance();
 		}
 
-		return instance;
+		return clientInstance;
+	}
+
+	@Environment(EnvType.SERVER)
+	public static MinecraftServer getMinecraftServerInstance() {
+		return serverInstance;
 	}
 
 	public static <T, E> T getPrivateValue(Class<? super E> instanceclass, E instance, int fieldindex) throws IllegalArgumentException, SecurityException, NoSuchFieldException {
@@ -442,8 +488,12 @@ public final class ModLoader {
 
 	public static int getUniqueBlockModelID(BaseMod mod, boolean full3DItem) {
 		int id = nextBlockModelID++;
-		blockModels.put(id, mod);
-		blockSpecialInv.put(id, full3DItem);
+
+		if (ApronModLoader.IS_CLIENT) {
+			blockModels.put(id, mod);
+			blockSpecialInv.put(id, full3DItem);
+		}
+
 		return id;
 	}
 
@@ -515,9 +565,11 @@ public final class ModLoader {
 			}
 		}
 
-		instance = MinecraftAccessor.getInstance();
-		instance.gameRenderer = new EntityRendererProxy(instance);
-		classMap = EntityRegistryAccessor.getIdToClassMap();
+		if (ApronModLoader.IS_CLIENT) {
+			clientInstance = MinecraftAccessor.getInstance();
+//			clientInstance.gameRenderer = new EntityRendererProxy(clientInstance);
+			classMap = EntityRegistryAccessor.getIdToClassMap();
+		}
 
 		try {
 			field_modifiers = Field.class.getDeclaredField("modifiers");
@@ -529,7 +581,7 @@ public final class ModLoader {
 				Class<?> fieldType = field.getType();
 				if ((field.getModifiers() & 8) != 0 && fieldType.isAssignableFrom(Biome.class)) {
 					Biome biome = (Biome) field.get(null);
-					if (!(biome instanceof HellBiome) && !(biome instanceof SkyBiome)) {
+					if (!(biome instanceof HellBiome) && (!ApronModLoader.IS_CLIENT || !(biome instanceof SkyBiome))) {
 						biomes.add(biome);
 					}
 				}
@@ -543,12 +595,22 @@ public final class ModLoader {
 		}
 
 		try {
-			loadConfig();
+			try {
+				loadConfig();
+			} catch (IOException ioexception) {
+				if (!ioexception.getMessage().contains("No such file or directory")) {
+					throw ioexception;
+				}
+
+				String s2 = "Error loading ModLoader config. Check the common problems section in the ModLoaderMP thread.";
+				ThrowException(new RuntimeException(s2, ioexception));
+			}
+
 			if (props.containsKey("loggingLevel")) {
 				cfgLoggingLevel = Level.parse(props.getProperty("loggingLevel"));
 			}
 
-			if (props.containsKey("grassFix")) {
+			if (ApronModLoader.IS_CLIENT && props.containsKey("grassFix")) {
 				BlockRenderManagerAccessor.setCfgGrassFix(Boolean.parseBoolean(props.getProperty("grassFix")));
 			}
 
@@ -559,14 +621,15 @@ public final class ModLoader {
 				logger.addHandler(logHandler);
 			}
 
-			logger.fine("ModLoader Beta 1.7.3 Initializing...");
-			System.out.println("ModLoader Beta 1.7.3 Initializing...");
+			logger.fine(VERSION + " Initializing...");
+			System.out.println(VERSION + " Initializing...");
+			if (!ApronModLoader.IS_CLIENT) MinecraftServer.LOGGER.info(VERSION + " Initializing...");
 			modDir.mkdirs();
 			readFromModFolder(modDir);
 			readFromClassPath();
 			System.out.println("Done.");
 			props.setProperty("loggingLevel", cfgLoggingLevel.getName());
-			props.setProperty("grassFix", Boolean.toString(BlockRenderManagerAccessor.getCfgGrassFix()));
+			if (ApronModLoader.IS_CLIENT) props.setProperty("grassFix", Boolean.toString(BlockRenderManagerAccessor.getCfgGrassFix()));
 
 			for(BaseMod mod : modList) {
 				mod.ModsLoaded();
@@ -575,8 +638,11 @@ public final class ModLoader {
 				}
 			}
 
-			instance.options.allKeys = RegisterAllKeys(instance.options.allKeys);
-			instance.options.load();
+			if (ApronModLoader.IS_CLIENT) {
+				clientInstance.options.allKeys = RegisterAllKeys(clientInstance.options.allKeys);
+				clientInstance.options.load();
+			}
+
 			initStats();
 			saveConfig();
 		} catch (Throwable e) {
@@ -593,7 +659,7 @@ public final class ModLoader {
 	private static void initStats() {
 		for(int id = 0; id < Block.BLOCKS.length; ++id) {
 			if (!StatsAccessor.getIdToStatMap().containsKey(16777216 + id) && Block.BLOCKS[id] != null && Block.BLOCKS[id].isTrackingStatistics()) {
-				String str = TranslationStorage.getInstance().get("stat.mineBlock", Block.BLOCKS[id].getTranslatedName());
+				String str = translate("stat.mineBlock", Block.BLOCKS[id].getTranslatedName());
 				Stats.MINE_BLOCK[id] = (new ItemOrBlockStat(16777216 + id, str, id)).addStat();
 				Stats.BLOCK_MINED_STATS.add(Stats.MINE_BLOCK[id]);
 			}
@@ -601,7 +667,7 @@ public final class ModLoader {
 
 		for(int id = 0; id < Item.ITEMS.length; ++id) {
 			if (!StatsAccessor.getIdToStatMap().containsKey(16908288 + id) && Item.ITEMS[id] != null) {
-				String str = TranslationStorage.getInstance().get("stat.useItem", Item.ITEMS[id].getTranslatedName());
+				String str = translate("stat.useItem", Item.ITEMS[id].getTranslatedName());
 				Stats.USED[id] = (new ItemOrBlockStat(16908288 + id, str, id)).addStat();
 				if (id >= Block.BLOCKS.length) {
 					Stats.ITEM_STATS.add(Stats.USED[id]);
@@ -609,7 +675,7 @@ public final class ModLoader {
 			}
 
 			if (!StatsAccessor.getIdToStatMap().containsKey(16973824 + id) && Item.ITEMS[id] != null && Item.ITEMS[id].isDamageable()) {
-				String str = TranslationStorage.getInstance().get("stat.breakItem", Item.ITEMS[id].getTranslatedName());
+				String str = translate("stat.breakItem", Item.ITEMS[id].getTranslatedName());
 				Stats.BROKEN[id] = (new ItemOrBlockStat(16973824 + id, str, id)).addStat();
 			}
 		}
@@ -626,13 +692,14 @@ public final class ModLoader {
 
 		for(int id : idHashSet) {
 			if (!StatsAccessor.getIdToStatMap().containsKey(16842752 + id) && Item.ITEMS[id] != null) {
-				String str = TranslationStorage.getInstance().get("stat.craftItem", Item.ITEMS[id].getTranslatedName());
+				String str = translate("stat.craftItem", Item.ITEMS[id].getTranslatedName());
 				Stats.CRAFTED[id] = (new ItemOrBlockStat(16842752 + id, str, id)).addStat();
 			}
 		}
 
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static boolean isGUIOpen(Class<? extends Screen> gui) {
 		Minecraft game = getMinecraftInstance();
 		if (gui == null) {
@@ -646,7 +713,7 @@ public final class ModLoader {
 		Class<?> chk = null;
 
 		try {
-			chk = Class.forName(modname);
+			chk = Class.forName(modname, false, ModLoader.class.getClassLoader());
 		} catch (ClassNotFoundException var4) {
 			return false;
 		}
@@ -674,6 +741,7 @@ public final class ModLoader {
 		}
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static BufferedImage loadImage(TextureManager texCache, String path) throws Exception {
 		InputStream input = ((TextureManagerAccessor) texCache).getTexturePacks().selected.getResource(path);
 		if (input == null) {
@@ -695,6 +763,7 @@ public final class ModLoader {
 
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static void OnTick(Minecraft game) {
 		if (!hasInit) {
 			init();
@@ -752,6 +821,7 @@ public final class ModLoader {
 		clock = newclock;
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static void OpenGUI(PlayerEntity player, Screen gui) {
 		if (!hasInit) {
 			init();
@@ -767,25 +837,55 @@ public final class ModLoader {
 		}
 	}
 
+	@Environment(EnvType.SERVER)
+	public static void OnTick(MinecraftServer minecraftserver) {
+		if (!hasInit) {
+			init();
+			logger.fine("Initialized");
+		}
+
+		long l = 0L;
+		if (minecraftserver.worlds != null && minecraftserver.worlds[0] != null) {
+			l = minecraftserver.worlds[0].getTime();
+
+			for(Map.Entry<BaseMod, Boolean> entry : inGameHooks.entrySet()) {
+				if (clock != l || !(Boolean)entry.getValue()) {
+					entry.getKey().OnTickInGame(minecraftserver);
+				}
+			}
+		}
+
+		clock = l;
+	}
+
 	public static void PopulateChunk(ChunkSource generator, int chunkX, int chunkZ, World world) {
 		if (!hasInit) {
 			init();
 			logger.fine("Initialized");
 		}
 
-		Random rnd = new Random(world.getSeed());
-		long xSeed = rnd.nextLong() / 2L * 2L + 1L;
-		long zSeed = rnd.nextLong() / 2L * 2L + 1L;
-		rnd.setSeed((long)chunkX * xSeed + (long)chunkZ * zSeed ^ world.getSeed());
+		if (ApronModLoader.IS_CLIENT) {
+			Random rnd = new Random(world.getSeed());
+			long xSeed = rnd.nextLong() / 2L * 2L + 1L;
+			long zSeed = rnd.nextLong() / 2L * 2L + 1L;
+			rnd.setSeed((long) chunkX * xSeed + (long) chunkZ * zSeed ^ world.getSeed());
 
-		for(BaseMod mod : modList) {
-			if (generator.getDebugInfo().equals("RandomLevelSource")) {
-				mod.GenerateSurface(world, rnd, chunkX << 4, chunkZ << 4);
-			} else if (generator.getDebugInfo().equals("HellRandomLevelSource")) {
-				mod.GenerateNether(world, rnd, chunkX << 4, chunkZ << 4);
+			for (BaseMod mod : modList) {
+				if (generator.getDebugInfo().equals("RandomLevelSource")) {
+					mod.GenerateSurface(world, rnd, chunkX << 4, chunkZ << 4);
+				} else if (generator.getDebugInfo().equals("HellRandomLevelSource")) {
+					mod.GenerateNether(world, rnd, chunkX << 4, chunkZ << 4);
+				}
+			}
+		} else {
+			for(BaseMod basemod : modList) {
+				if (generator instanceof OverworldChunkGenerator) {
+					basemod.GenerateSurface(world, world.random, chunkX, chunkZ);
+				} else if (generator instanceof NetherChunkGenerator) {
+					basemod.GenerateNether(world, world.random, chunkX, chunkZ);
+				}
 			}
 		}
-
 	}
 
 	private static void readFromClassPath() {
@@ -809,6 +909,7 @@ public final class ModLoader {
 					modList.add(modInstance);
 					logger.fine("Mod Loaded: \"" + modInstance + "\" from mod " + mod.getProvider().getMetadata().getId());
 					System.out.println("Mod Loaded: " + modInstance);
+					if (!ApronModLoader.IS_CLIENT) MinecraftServer.LOGGER.info("Mod Loaded: " + mod);
 				}
 			} catch (Throwable e) {
 				logger.fine("Failed to load mod from mod \"" + mod.getProvider().getMetadata().getId() + "\"");
@@ -820,7 +921,7 @@ public final class ModLoader {
 	}
 
 	private static void readFromModFolder(File folder) throws IOException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException {
-		ClassLoader loader = Minecraft.class.getClassLoader();
+		ClassLoader loader = ModLoader.class.getClassLoader();
 
 		if (!folder.isDirectory()) {
 			throw new IllegalArgumentException("folder must be a Directory.");
@@ -882,6 +983,7 @@ public final class ModLoader {
 		}
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static KeyBinding[] RegisterAllKeys(KeyBinding[] w) {
 		List<KeyBinding> combinedList = new LinkedList<>(Arrays.asList(w));
 
@@ -892,6 +994,7 @@ public final class ModLoader {
 		return combinedList.toArray(new KeyBinding[0]);
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static void RegisterAllTextureOverrides(TextureManager texCache) {
 		animList.clear();
 		Minecraft game = getMinecraftInstance();
@@ -934,7 +1037,7 @@ public final class ModLoader {
 				throw new IllegalArgumentException("block parameter cannot be null.");
 			}
 
-			Session.CREATIVE_INVENTORY.add(block);
+			if (ApronModLoader.IS_CLIENT) Session.CREATIVE_INVENTORY.add(block);
 			int id = block.id;
 			BlockItem item;
 			if (itemclass != null) {
@@ -963,6 +1066,7 @@ public final class ModLoader {
 		}
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static void RegisterKey(BaseMod mod, KeyBinding keyHandler, boolean allowRepeat) {
 		Map<KeyBinding, boolean[]> keyMap = keyList.get(mod);
 		if (keyMap == null) {
@@ -974,9 +1078,19 @@ public final class ModLoader {
 	}
 
 	public static void RegisterTileEntity(Class<? extends BlockEntity> tileEntityClass, String id) {
-		RegisterTileEntity(tileEntityClass, id, null);
+		if (ApronModLoader.IS_CLIENT) {
+			RegisterTileEntity(tileEntityClass, id, null);
+		} else {
+			try {
+				BlockEntity.create(tileEntityClass, id);
+			} catch (IllegalArgumentException e) {
+				logger.throwing("ModLoader", "RegisterTileEntity", e);
+				ThrowException(e);
+			}
+		}
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static void RegisterTileEntity(Class<? extends BlockEntity> tileEntityClass, String id, BlockEntityRenderer renderer) {
 		try {
 			BlockEntity.create(tileEntityClass, id);
@@ -1029,6 +1143,7 @@ public final class ModLoader {
 
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static boolean RenderBlockIsItemFull3D(int modelID) {
 		if (!blockSpecialInv.containsKey(modelID)) {
 			return modelID == 16;
@@ -1037,6 +1152,7 @@ public final class ModLoader {
 		}
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static void RenderInvBlock(BlockRenderManager renderer, Block block, int metadata, int modelID) {
 		BaseMod mod = blockModels.get(modelID);
 		if (mod != null) {
@@ -1044,6 +1160,7 @@ public final class ModLoader {
 		}
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static boolean RenderWorldBlock(BlockRenderManager renderer, BlockView world, int x, int y, int z, Block block, int modelID) {
 		BaseMod mod = blockModels.get(modelID);
 		return mod != null && mod.RenderWorldBlock(renderer, world, x, y, z, block, modelID);
@@ -1070,6 +1187,7 @@ public final class ModLoader {
 
 	}
 
+	@Environment(EnvType.CLIENT)
 	public static void SetInGUIHook(BaseMod mod, boolean enable, boolean useClock) {
 		if (enable) {
 			inGUIHooks.put(mod, useClock);
@@ -1205,11 +1323,18 @@ public final class ModLoader {
 	}
 
 	public static void ThrowException(String message, Throwable e) {
-		Minecraft game = getMinecraftInstance();
-		if (game != null) {
-			game.handleCrash(new CrashReport(message, e));
+		if (ApronModLoader.IS_CLIENT) {
+			Minecraft game = getMinecraftInstance();
+			if (game != null) {
+				game.handleCrash(new CrashReport(message, e));
+			} else {
+				throw new RuntimeException(e);
+			}
 		} else {
-			throw new RuntimeException(e);
+			e.printStackTrace();
+			logger.log(Level.SEVERE, "Unexpected exception", e);
+			MinecraftServer.LOGGER.throwing("ModLoader", message, e);
+			throw new RuntimeException(message, e);
 		}
 	}
 
@@ -1218,6 +1343,50 @@ public final class ModLoader {
 	}
 
 	private ModLoader() {
+	}
+
+	@Environment(EnvType.SERVER)
+	public static void Init(MinecraftServer minecraftserver) {
+		serverInstance = minecraftserver;
+
+		init();
+	}
+
+	@Environment(EnvType.SERVER)
+	public static void OpenGUI(PlayerEntity entityplayer, int i, Inventory iinventory, ScreenHandler container) {
+		if (!hasInit) {
+			init();
+		}
+
+		if (entityplayer instanceof ServerPlayerEntity) {
+			ServerPlayerEntity entityplayermp = (ServerPlayerEntity)entityplayer;
+
+			((ServerPlayerEntityAccessor) entityplayermp).invokeIncrementScreenHandlerSyncId();
+			int j = ((ServerPlayerEntityAccessor) entityplayermp).getScreenHandlerSyncId();
+			entityplayermp.networkHandler.sendPacket(new OpenScreenS2CPacket(j, i, iinventory.getName(), iinventory.size()));
+			entityplayermp.currentScreenHandler = container;
+			entityplayermp.currentScreenHandler.syncId = j;
+			entityplayermp.currentScreenHandler.addListener(entityplayermp);
+		}
+
+	}
+
+	// MERGED JAR SUPPORT
+
+	private static String translate(String key) {
+		if (ApronModLoader.IS_CLIENT) {
+			return TranslationStorage.getInstance().get(key);
+		} else {
+			return I18n.getTranslation(key);
+		}
+	}
+
+	private static String translate(String key, Object... format) {
+		if (ApronModLoader.IS_CLIENT) {
+			return TranslationStorage.getInstance().get(key, format);
+		} else {
+			return I18n.getTranslation(key, format);
+		}
 	}
 }
 

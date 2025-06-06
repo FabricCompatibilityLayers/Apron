@@ -1,4 +1,4 @@
-package io.github.fabriccompatibilitylayers.modloader.mixin.client.modloader;
+package io.github.fabriccompatibilitylayers.modloader.mixin.common;
 
 import net.minecraft.achievement.Achievement;
 import org.spongepowered.asm.mixin.Mixin;

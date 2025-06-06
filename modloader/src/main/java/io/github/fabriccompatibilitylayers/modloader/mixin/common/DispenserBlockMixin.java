@@ -1,4 +1,4 @@
-package io.github.fabriccompatibilitylayers.modloader.mixin.client.modloader;
+package io.github.fabriccompatibilitylayers.modloader.mixin.common;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import modloader.ModLoader;
