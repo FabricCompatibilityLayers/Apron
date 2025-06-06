@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'xyz.wagyourtail.unimined' version '1.4.999.1' apply false
+	id 'xyz.wagyourtail.unimined' version '1.4.1-SNAPSHOT' apply false
 }
 
 group project.maven_group
@@ -77,6 +77,18 @@ allprojects {
 //		}
 
 		implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.5.0-rc.2"))
+
+		// Babric mods&co
+		implementation "org.slf4j:slf4j-api:1.8.0-beta4"
+		implementation 'org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2'
+		implementation "blue.endless:jankson:1.2.1"
+
+//		modImplementation "net.modificationstation:StationAPI:${project.stapi_version}"
+
+		// Babric ModMenu
+		modImplementation("net.glasslauncher.mods:ModMenu:1.8.5-beta.11") {
+			transitive false
+		}
 	}
 
 	java {
@@ -107,7 +119,9 @@ subprojects.forEach {
 dependencies {
 	clientOfficialImplementation "risugami:modloader:b1.7.3"
 	clientOfficialImplementation "modloadermp:modloadermp:b1.7.3:client"
+	clientOfficialImplementation "net.minecraftforge:forge:b1.7.3-1.0.7:client@zip"
 	serverOfficialImplementation "modloadermp:modloadermp:b1.7.3:server"
+	serverOfficialImplementation "net.minecraftforge:forge:b1.7.3-1.0.7:server@zip"
 
 	afterEvaluate {
 		subprojects.forEach {

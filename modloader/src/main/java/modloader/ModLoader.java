@@ -42,6 +42,7 @@ import io.github.fabriccompatibilitylayers.modloader.mixin.server.ServerPlayerEn
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.impl.launch.FabricLauncherBase;
 import net.minecraft.achievement.Achievement;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
@@ -955,6 +956,7 @@ public final class ModLoader {
 						}
 					} else {
 						logger.finer("Zip found.");
+						FabricLauncherBase.getLauncher().addToClassPath(source.toPath());
 						InputStream input = Files.newInputStream(source.toPath());
 						ZipInputStream zip = new ZipInputStream(input);
 						ZipEntry entry = null;

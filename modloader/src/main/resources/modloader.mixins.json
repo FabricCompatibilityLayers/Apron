@@ -41,7 +41,8 @@
     "client.modloader.TranslationStorageAccessor",
     "client.modloadermp.ClientNetworkHandlerMixin",
     "client.modloadermp.DisconnectedScreenMixin",
-    "client.modloadermp.MultiplayerScreenMixin"
+    "client.modloadermp.MultiplayerScreenMixin",
+    "client.modmenu.babric.ModListWidgetMixin"
   ],
   "injectors": {
     "defaultRequire": 1
