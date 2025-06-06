@@ -20,6 +20,7 @@ allprojects {
 	unimined.legacyFabricMaven()
 	unimined.modrinthMaven()
 	unimined.wagYourMaven("releases")
+	unimined.ornitheMaven()
 	unimined.jitpack()
 
 	configurations {
@@ -27,6 +28,10 @@ allprojects {
 		serverOfficialImplementation
 		modImplementation.extendsFrom clientOfficialImplementation
 		modImplementation.extendsFrom serverOfficialImplementation
+		clientOrnitheImplementation
+		serverOrnitheImplementation
+		modImplementation.extendsFrom clientOrnitheImplementation
+		modImplementation.extendsFrom serverOrnitheImplementation
 	}
 
 	unimined.minecraft(sourceSets.main, true) {
@@ -35,6 +40,18 @@ allprojects {
 		mappings {
 			babricIntermediary()
 			biny(project.mappings_version)
+			mapping("net.ornithemc:calamus-intermediary:b1.7.3-client:v2", "calamusClient") {
+				provides("calamusClient", false)
+				mapNamespace("official", "clientOfficial")
+				mapNamespace("intermediary", "calamusClient")
+				requires("clientOfficial")
+			}
+			mapping("net.ornithemc:calamus-intermediary:b1.7.3-server:v2", "calamusServer") {
+				provides("calamusServer", false)
+				mapNamespace("official", "serverOfficial")
+				mapNamespace("intermediary", "calamusServer")
+				requires("serverOfficial")
+			}
 		}
 
 		legacyFabric {
@@ -54,6 +71,14 @@ allprojects {
 
 		mods.remap(configurations.serverOfficialImplementation) {
 			namespace("serverOfficial")
+		}
+
+		mods.remap(configurations.clientOrnitheImplementation) {
+			namespace("calamusClient")
+		}
+
+		mods.remap(configurations.serverOrnitheImplementation) {
+			namespace("calamusServer")
 		}
 	}
 
@@ -86,9 +111,12 @@ allprojects {
 //		modImplementation "net.modificationstation:StationAPI:${project.stapi_version}"
 
 		// Babric ModMenu
-		modImplementation("net.glasslauncher.mods:ModMenu:1.8.5-beta.11") {
+		modImplementation("net.glasslauncher.mods:ModMenu:${project.babric_modmenu_version}") {
 			transitive false
 		}
+
+		// Ornithe Gen1
+		clientOrnitheImplementation("com.terraformersmc:modmenu:${project.ornithe_modmenu_version}+mc${project.minecraft_version}")
 	}
 
 	java {

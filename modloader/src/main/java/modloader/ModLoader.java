@@ -29,6 +29,7 @@ import java.util.zip.ZipInputStream;
 import javax.imageio.ImageIO;
 
 import io.github.fabriccompatibilitylayers.modloader.ApronModLoader;
+import io.github.fabriccompatibilitylayers.modloader.compat.modmenu.ornithe.OrnitheModMenuCompat;
 import io.github.fabriccompatibilitylayers.modloader.mixin.common.AchievementAccessor;
 import io.github.fabriccompatibilitylayers.modloader.mixin.client.modloader.BlockRenderManagerAccessor;
 import io.github.fabriccompatibilitylayers.modloader.mixin.common.CraftingRecipeManagerAccessor;
@@ -646,6 +647,10 @@ public final class ModLoader {
 
 			initStats();
 			saveConfig();
+
+			if (FabricLoader.getInstance().isModLoaded("modmenu")) {
+				OrnitheModMenuCompat.init();
+			}
 		} catch (Throwable e) {
 			logger.throwing("ModLoader", "init", e);
 			ThrowException("ModLoader has failed to initialize.", e);
